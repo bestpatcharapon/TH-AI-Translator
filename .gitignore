@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+
+.ocr/
+node_modules/
+.ruff_cache/
+playwright-report/
+test-results/

@@ -1,0 +1,14 @@
+{
+  "name": "th-ai-translator",
+  "private": true,
+  "scripts": {
+    "check": "node scripts/check-frontend.cjs",
+    "format": "prettier --write static/*.js static/style.css static/index.html scripts/*.cjs tests/browser/*.cjs package.json .prettierrc.json",
+    "format:check": "prettier --check static/*.js static/style.css static/index.html scripts/*.cjs tests/browser/*.cjs package.json .prettierrc.json",
+    "test:browser": "node tests/browser/feature-isolation.cjs && node tests/browser/menu.cjs && node tests/browser/studio.cjs && node tests/browser/practical.cjs && node tests/browser/cleanup.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1",
+    "prettier": "3.9.10"
+  }
+}

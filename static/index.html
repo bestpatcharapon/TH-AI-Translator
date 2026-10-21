@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#211f1b" />
+    <title>TH AI Translator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&family=Noto+Sans+SC:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-logo" viewBox="0 0 24 24">
+        <path d="M9 16 5 20v-5a7 7 0 1 1 12-5" />
+        <path d="M12 7a6 6 0 0 1 7 9v4l-4-3h-3a5 5 0 0 1-3-9" />
+      </symbol>
+      <symbol id="icon-moon" viewBox="0 0 24 24">
+        <path d="M20.8 13a9 9 0 0 1-9.8-9.8A9 9 0 1 0 20.8 13Z" />
+      </symbol>
+      <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path
+          d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
+        />
+      </symbol>
+      <symbol id="icon-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <ellipse cx="12" cy="12" rx="4" ry="9" />
+        <path d="M3 12h18" />
+      </symbol>
+      <symbol id="icon-more" viewBox="0 0 24 24">
+        <circle cx="12" cy="5" r="1" />
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="12" cy="19" r="1" />
+      </symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" /></symbol>
+      <symbol id="icon-swap" viewBox="0 0 24 24">
+        <path d="M4 8h16m-5-5 5 5-5 5M20 16H4m5-5-5 5 5 5" />
+      </symbol>
+      <symbol id="icon-volume" viewBox="0 0 24 24">
+        <path d="m11 4-6 5H2v6h3l6 5V4Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" />
+      </symbol>
+      <symbol id="icon-copy" viewBox="0 0 24 24">
+        <rect x="8" y="8" width="12" height="13" rx="2" />
+        <path d="M16 8V3H3v13h5" />
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></symbol>
+      <symbol id="icon-text" viewBox="0 0 24 24"><path d="M4 5h16M12 5v15m-4 0h8" /></symbol>
+      <symbol id="icon-image" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="3" />
+        <circle cx="9" cy="9" r="2" />
+        <path d="m3 17 5-5 4 4 4-6 5 7" />
+      </symbol>
+      <symbol id="icon-document" viewBox="0 0 24 24">
+        <path d="M5 2h9l5 5v15H5V2Zm9 0v6h5M8 12h8m-8 4h8" />
+      </symbol>
+      <symbol id="icon-live" viewBox="0 0 24 24">
+        <path d="M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14M8 8a6 6 0 0 0 0 8m8-8a6 6 0 0 1 0 8" />
+        <rect x="10" y="9" width="4" height="6" rx="2" />
+      </symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24">
+        <path d="M20 4v6h-6M4 20v-6h6M5 8a8 8 0 0 1 13-3l2 3M4 16l2 3a8 8 0 0 0 13-3" />
+      </symbol>
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z" />
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 11v6m0-10v.1" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" /></symbol>
+      <symbol id="icon-sparkles" viewBox="0 0 24 24">
+        <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Zm7-2v4m-2-2h4" />
+      </symbol>
+      <symbol id="icon-reply" viewBox="0 0 24 24">
+        <path d="M20 11a9 9 0 1 0-15 7l-2 4 6-2a9 9 0 0 0 11-9ZM7 8h8m-8 4h6" />
+      </symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24">
+        <path d="M4 6h4l2-3h4l2 3h4v15H4V6Z" />
+        <circle cx="12" cy="13" r="4" />
+      </symbol>
+      <symbol id="icon-expand" viewBox="0 0 24 24">
+        <path d="M14 3h7v7M10 21H3v-7M21 3l-8 8M3 21l8-8" />
+      </symbol>
+      <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7" />
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" /></symbol>
+      <symbol id="icon-mic" viewBox="0 0 24 24">
+        <rect x="9" y="2" width="6" height="13" rx="3" />
+        <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" />
+      </symbol>
+    </svg>
+
+    <main class="translator">
+      <header class="app-header">
+        <a class="brand" href="/" aria-label="TH AI Translator home"
+          ><span class="brand-icon"
+            ><svg><use href="#icon-logo" /></svg
+          ></span>
+          <h1>TH AI Translator</h1></a
+        >
+        <div class="header-actions">
+          <button
+            id="theme"
+            class="icon-button"
+            type="button"
+            aria-label="Switch to light theme"
+            title="Switch theme"
+            aria-pressed="false"
+          >
+            <svg class="theme-icon theme-sun" aria-hidden="true"><use href="#icon-sun" /></svg
+            ><svg class="theme-icon theme-moon" aria-hidden="true"><use href="#icon-moon" /></svg>
+          </button>
+          <button
+            id="ui-language"
+            class="locale-button"
+            type="button"
+            aria-label="Change interface language"
+          >
+            <svg><use href="#icon-globe" /></svg><span>English</span>
+          </button>
+          <div class="settings-wrap">
+            <button
+              id="settings-toggle"
+              class="icon-button"
+              type="button"
+              aria-label="Translation settings"
+              aria-expanded="false"
+              aria-controls="settings"
+              aria-haspopup="dialog"
+            >
+              <svg><use href="#icon-more" /></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <header id="live-header" class="live-header" hidden>
+        <button id="live-back" class="icon-button" type="button" aria-label="Back to translator">
+          <svg><use href="#icon-arrow" /></svg>
+        </button>
+        <div class="live-heading">
+          <h1 data-i18n="live">Live Chat</h1>
+          <p data-i18n="twoLanguage">Two-language conversation</p>
+        </div>
+        <button
+          id="live-audio"
+          class="icon-button"
+          type="button"
+          aria-label="Read translations aloud"
+          aria-pressed="true"
+        >
+          <svg><use href="#icon-volume" /></svg>
+        </button>
+        <button id="clear-chat" class="icon-button" type="button" aria-label="Clear chat">
+          <svg><use href="#icon-trash" /></svg>
+        </button>
+        <button
+          id="live-settings-toggle"
+          class="icon-button"
+          type="button"
+          aria-label="Menu"
+          aria-controls="settings"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+        >
+          <svg><use href="#icon-more" /></svg>
+        </button>
+      </header>
+      <div class="language-controls">
+        <div class="language-picker">
+          <span id="source-flag" class="flag" aria-hidden="true">🇹🇭</span>
+          <span class="language-label"
+            ><strong id="source-name">Thai</strong><span id="source-native">ไทย</span></span
+          >
+          <svg class="chevron"><use href="#icon-chevron" /></svg>
+          <select id="source" aria-label="Source language"></select>
+        </div>
+        <button
+          id="swap"
+          class="icon-button swap-button"
+          type="button"
+          aria-label="Swap languages"
+          title="Swap languages"
+        >
+          <svg><use href="#icon-swap" /></svg>
+        </button>
+        <div class="language-picker">
+          <span id="target-flag" class="flag" aria-hidden="true">🇬🇧</span>
+          <span class="language-label"
+            ><strong id="target-name">English</strong><span id="target-native">English</span></span
+          >
+          <svg class="chevron"><use href="#icon-chevron" /></svg>
+          <select id="target" aria-label="Translation language"></select>
+        </div>
+      </div>
+
+      <section id="photo-mode" class="photo-mode" hidden aria-labelledby="photo-heading">
+        <h2 id="photo-heading" data-i18n="translation">Translation</h2>
+        <input id="photo-file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+        <div id="photo-empty" class="photo-empty">
+          <p class="photo-eyebrow" data-i18n="photoEyebrow">AI PHOTO TRANSLATION</p>
+          <span class="photo-hero-icon"
+            ><svg><use href="#icon-image" /></svg
+          ></span>
+          <h3 data-i18n="photoTitle">Translate text in photos</h3>
+          <p class="photo-intro" data-i18n="photoIntro">
+            Snap or choose a menu, sign or document and see the translation right on the photo.
+          </p>
+          <div class="photo-upload-actions">
+            <button id="photo-choose" class="photo-primary" type="button">
+              <svg><use href="#icon-image" /></svg
+              ><span data-i18n="photoChoose">Choose image</span></button
+            ><button id="photo-camera" class="outline-button" type="button">
+              <svg><use href="#icon-camera" /></svg><span data-i18n="photoCamera">Use camera</span>
+            </button>
+          </div>
+          <p class="photo-help" data-i18n="photoHelp">
+            Choose a photo and see its translation on the image.
+          </p>
+          <p class="photo-formats" data-i18n="photoFormats">PNG, JPEG, WebP · up to 10 MB</p>
+        </div>
+        <div id="photo-result" class="photo-result" hidden>
+          <div id="photo-preview" class="photo-preview">
+            <div id="photo-main-stage" class="photo-stage"></div>
+            <div id="photo-loading" class="photo-loading" hidden>
+              <span class="photo-spinner" aria-hidden="true"></span
+              ><span data-i18n="photoProcessing">Reading and translating your photo…</span
+              ><span id="photo-elapsed"></span
+              ><button
+                id="photo-cancel"
+                class="outline-button"
+                type="button"
+                data-i18n="photoCancel"
+              >
+                Cancel
+              </button>
+            </div>
+            <div id="photo-error" class="photo-error" role="alert" tabindex="-1" hidden>
+              <strong data-i18n="photoNotCompleted">Translation not completed</strong>
+              <p id="photo-error-message"></p>
+              <p id="photo-retry-wait"></p>
+              <button
+                id="photo-retry"
+                class="outline-button"
+                type="button"
+                data-i18n="retry"
+                hidden
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button id="photo-original" type="button" aria-pressed="false">
+              <svg><use href="#icon-image" /></svg
+              ><span data-i18n="photoOriginal">Original photo</span></button
+            ><button id="photo-fullscreen" type="button">
+              <svg><use href="#icon-expand" /></svg
+              ><span data-i18n="photoFullscreen">Full screen</span></button
+            ><button id="photo-change" type="button">
+              <svg><use href="#icon-camera" /></svg
+              ><span data-i18n="photoChange">Change photo</span>
+            </button>
+          </div>
+          <button id="photo-remove" class="photo-remove" type="button">
+            <svg><use href="#icon-trash" /></svg><span data-i18n="photoRemove">Remove photo</span>
+          </button>
+          <details id="photo-audit-details" class="studio-back" hidden>
+            <summary id="photo-audit-summary"></summary>
+            <div id="photo-audit-content"></div>
+          </details>
+          <div class="photo-result-footer">
+            <button id="photo-download" class="text-button" type="button" hidden>
+              <svg><use href="#icon-download" /></svg
+              ><span data-i18n="photoDownload">Download translated image</span>
+            </button>
+          </div>
+        </div>
+        <p id="photo-status" class="feature-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="file-tools" class="file-tools" hidden aria-label="Upload a file">
+        <input id="file-input" type="file" hidden />
+        <button id="choose-file" class="upload-zone" type="button">
+          <svg id="upload-icon"><use href="#icon-image" /></svg>
+          <strong id="upload-title">Choose an image</strong>
+          <span id="upload-hint">PNG, JPEG or WebP · up to 10 MB</span>
+        </button>
+        <div id="file-preview" class="file-preview" hidden>
+          <img id="image-preview" alt="Selected image" hidden /><span id="file-name"></span
+          ><button id="retry-file" type="button" class="text-button" data-i18n="retry" hidden>
+            Retry</button
+          ><button id="remove-file" type="button" class="text-button" data-i18n="remove">
+            Remove
+          </button>
+        </div>
+        <p id="file-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="chat-area" class="chat-area" hidden aria-label="Translated conversation">
+        <div id="chat-messages" class="chat-messages" role="log" aria-live="polite">
+          <p id="chat-empty" data-i18n="chatEmpty">Your conversation will appear here.</p>
+        </div>
+        <div class="live-composer">
+          <div class="live-typing">
+            <span data-i18n="typingIn">Typing in</span>
+            <div class="speaker-options">
+              <button
+                id="speaker-forward"
+                class="speaker-choice selected"
+                type="button"
+                aria-pressed="true"
+              ></button
+              ><button
+                id="speaker-reverse"
+                class="speaker-choice"
+                type="button"
+                aria-pressed="false"
+              ></button>
+            </div>
+          </div>
+          <div id="live-input-row" class="live-input-row">
+            <button id="live-send" class="live-send" type="button" aria-label="Send">
+              <svg viewBox="0 0 24 24"><path d="m3 10 18-7-7 18-3-8-8-3Zm8 3L21 3" /></svg>
+            </button>
+          </div>
+          <div class="live-microphones">
+            <button id="live-mic-forward" class="live-mic" type="button" aria-pressed="false">
+              <svg><use href="#icon-mic" /></svg><span>Thai</span></button
+            ><button id="live-mic-reverse" class="live-mic" type="button" aria-pressed="false">
+              <svg><use href="#icon-mic" /></svg><span>English</span>
+            </button>
+          </div>
+          <p id="live-status" class="feature-status" role="status" aria-live="polite"></p>
+        </div>
+        <input id="auto-speak" type="checkbox" checked hidden />
+      </section>
+
+      <div class="panels">
+        <section class="panel source-panel" aria-labelledby="source-heading">
+          <div class="panel-heading">
+            <h2 id="source-heading" data-i18n="source">Source</h2>
+            <button id="clear" class="text-button" type="button" data-i18n="clear">Clear</button>
+          </div>
+          <textarea
+            dir="auto"
+            id="input"
+            aria-labelledby="source-heading"
+            placeholder="Type or paste text to translate..."
+            maxlength="30000"
+            spellcheck="false"
+          ></textarea>
+          <div id="source-insights" class="source-insights" hidden>
+            <p id="pronunciation" lang="en" hidden></p>
+            <div
+              id="source-alternatives"
+              class="suggestion-chips"
+              aria-label="Alternative phrasings"
+            ></div>
+          </div>
+          <p id="source-info-status" class="feature-status" role="status" aria-live="polite"></p>
+          <div class="panel-footer">
+            <button
+              id="speak-source"
+              class="speaker-button"
+              type="button"
+              aria-label="Listen to source text"
+            >
+              <svg><use href="#icon-volume" /></svg>
+            </button>
+            <span id="count" class="count" hidden>0 / 5000</span>
+            <button id="translate" class="translate-button" type="button" hidden>
+              <span data-i18n="translate">Translate</span><svg><use href="#icon-arrow" /></svg>
+            </button>
+          </div>
+        </section>
+        <section class="panel output-panel" aria-labelledby="translation-heading" aria-busy="false">
+          <div class="panel-heading">
+            <h2 id="translation-heading" data-i18n="translation">Translation</h2>
+            <button id="download" class="text-button" type="button" data-i18n="download" hidden>
+              Download
+            </button>
+          </div>
+          <strong id="output-language" class="output-language" hidden></strong>
+          <textarea
+            dir="auto"
+            id="output"
+            aria-labelledby="translation-heading"
+            readonly
+          ></textarea>
+          <div id="translation-tools" class="translation-tools" hidden>
+            <div class="translation-icons">
+              <button
+                id="copy"
+                class="speaker-button"
+                type="button"
+                aria-label="Copy translation"
+                title="Copy translation"
+                hidden
+              >
+                <svg><use href="#icon-copy" /></svg>
+              </button>
+              <button
+                id="speak-output"
+                class="speaker-button"
+                type="button"
+                aria-label="Listen to translation"
+                title="Listen to translation"
+                hidden
+              >
+                <svg><use href="#icon-volume" /></svg>
+              </button>
+              <button
+                id="regenerate"
+                class="speaker-button"
+                type="button"
+                aria-label="Translate again"
+                title="Translate again"
+              >
+                <svg><use href="#icon-refresh" /></svg>
+              </button>
+              <button
+                id="save-translation"
+                class="speaker-button"
+                type="button"
+                aria-label="Save translation"
+                title="Save translation"
+                aria-pressed="false"
+              >
+                <svg><use href="#icon-star" /></svg>
+              </button>
+            </div>
+            <div class="review-buttons">
+              <button
+                id="explain"
+                class="outline-button"
+                type="button"
+                aria-expanded="false"
+                aria-controls="explanation-panel"
+              >
+                <svg><use href="#icon-info" /></svg><span data-i18n="why">Why this?</span>
+              </button>
+              <button
+                id="check-translation"
+                class="outline-button"
+                type="button"
+                aria-expanded="false"
+                aria-controls="check-panel"
+              >
+                <svg><use href="#icon-check" /></svg
+                ><span data-i18n="checkTranslation">Check translation</span>
+              </button>
+              <button
+                id="open-studio"
+                class="outline-button studio-open"
+                type="button"
+                aria-expanded="false"
+                aria-controls="translation-studio"
+              >
+                <svg><use href="#icon-sparkles" /></svg
+                ><span data-i18n="deepReview">Deep review</span>
+              </button>
+            </div>
+            <button id="studio-audit-badge" class="audit-badge" type="button" hidden></button>
+            <section
+              id="explanation-panel"
+              class="assistant-panel"
+              hidden
+              aria-label="Translation explanation"
+            >
+              <h3 data-i18n="explanation">Translation explanation</h3>
+              <p id="explanation-text" role="status" aria-live="polite"></p>
+            </section>
+            <section
+              id="check-panel"
+              class="assistant-panel"
+              hidden
+              aria-label="Translation review"
+            >
+              <h3 id="check-heading" data-i18n="aiReview">AI review</h3>
+              <p id="check-text" role="status" aria-live="polite"></p>
+              <p id="check-revision" hidden></p>
+              <button
+                id="apply-revision"
+                class="outline-button"
+                type="button"
+                data-i18n="applyRevision"
+                hidden
+              >
+                Use suggested translation
+              </button>
+            </section>
+          </div>
+          <div class="panel-footer output-footer">
+            <span id="status" role="status" aria-live="polite"></span>
+          </div>
+          <section
+            id="translation-studio"
+            class="translation-studio"
+            aria-labelledby="studio-heading"
+            hidden
+          >
+            <header class="studio-header">
+              <div>
+                <p class="studio-eyebrow">TRANSLATION STUDIO</p>
+                <h3 id="studio-heading" data-i18n="studioHeading">Make every word count</h3>
+              </div>
+              <button
+                id="studio-close"
+                class="speaker-button"
+                type="button"
+                aria-label="Close review"
+              >
+                <svg><use href="#icon-close" /></svg>
+              </button>
+            </header>
+            <div id="studio-audit" class="studio-audit"></div>
+            <div class="studio-controls">
+              <button id="studio-analyze" class="reply-primary" type="button">
+                <svg><use href="#icon-sparkles" /></svg
+                ><span data-i18n="analyzeMeaning">Analyze meaning</span></button
+              ><button
+                id="studio-cancel"
+                class="outline-button"
+                type="button"
+                data-i18n="cancelReview"
+                hidden
+              >
+                Cancel</button
+              ><button
+                id="studio-undo"
+                class="outline-button"
+                type="button"
+                data-i18n="undoTranslation"
+                hidden
+              >
+                Undo wording change
+              </button>
+            </div>
+            <p class="studio-note" data-i18n="studioNote">
+              AI review and back-translation are clues for review, not a guarantee of accuracy.
+            </p>
+            <p id="studio-status" class="feature-status" role="status" aria-live="polite"></p>
+            <div id="studio-analysis"></div>
+            <section class="studio-compare">
+              <h4 data-i18n="compareHeading">Compare another translation</h4>
+              <p class="studio-note" data-i18n="compareNote">
+                Paste another translation. The reviewer sees randomly ordered A/B labels, without
+                system names.
+              </p>
+              <label class="sr-only" for="studio-other" data-i18n="otherTranslation"
+                >Another translation</label
+              ><textarea
+                id="studio-other"
+                dir="auto"
+                maxlength="9000"
+                placeholder="Paste another translation…"
+              ></textarea
+              ><button id="studio-compare" class="outline-button" type="button">
+                <svg><use href="#icon-swap" /></svg
+                ><span data-i18n="compareTranslations">Compare translations</span>
+              </button>
+              <div id="studio-comparison"></div>
+            </section>
+            <button id="studio-export" class="outline-button" type="button" hidden>
+              <svg><use href="#icon-download" /></svg
+              ><span data-i18n="exportReview">Export review</span>
+            </button>
+          </section>
+          <section id="reply-section" class="reply-section" hidden aria-labelledby="reply-heading">
+            <div class="reply-heading">
+              <svg><use href="#icon-reply" /></svg>
+              <h3 id="reply-heading" data-i18n="reply">Reply</h3>
+              <span data-i18n="replySubtitle">Translate a reply · Suggestions</span>
+            </div>
+            <p id="reply-instructions"></p>
+            <button id="suggest-replies" class="outline-button" type="button">
+              <svg><use href="#icon-sparkles" /></svg
+              ><span data-i18n="suggestReplies">Suggest 3 replies</span>
+            </button>
+            <div id="reply-suggestions" class="reply-suggestions"></div>
+            <label for="reply-input" class="sr-only" data-i18n="yourReply">Your reply</label>
+            <textarea
+              dir="auto"
+              id="reply-input"
+              class="reply-input"
+              maxlength="5000"
+              placeholder="Type your reply..."
+            ></textarea>
+            <button id="translate-reply" class="reply-primary" type="button">
+              <svg><use href="#icon-arrow" /></svg
+              ><span data-i18n="translateReply">Translate reply</span>
+            </button>
+            <p id="reply-status" class="feature-status" role="status" aria-live="polite"></p>
+            <div id="reply-result" class="reply-result" hidden>
+              <strong id="reply-language"></strong>
+              <p id="reply-output"></p>
+              <div class="reply-result-actions">
+                <button
+                  id="copy-reply"
+                  class="speaker-button"
+                  type="button"
+                  aria-label="Copy translated reply"
+                >
+                  <svg><use href="#icon-copy" /></svg></button
+                ><button
+                  id="speak-reply"
+                  class="speaker-button"
+                  type="button"
+                  aria-label="Listen to translated reply"
+                >
+                  <svg><use href="#icon-volume" /></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+
+      <section
+        id="additional-results"
+        class="additional-results"
+        aria-label="Additional translations"
+        hidden
+      ></section>
+      <p id="voice-status" class="voice-status" role="status" aria-live="polite"></p>
+      <footer class="bottom-bar">
+        <nav class="mode-nav" aria-label="Translation modes">
+          <button class="mode active" data-mode="text" type="button" aria-current="page">
+            <svg><use href="#icon-text" /></svg><span data-i18n="text">Text</span>
+          </button>
+          <button class="mode" data-mode="image" type="button">
+            <svg><use href="#icon-image" /></svg><span data-i18n="image">Image</span>
+          </button>
+          <span class="mic-space" aria-hidden="true"></span>
+          <button class="mode" data-mode="document" type="button">
+            <svg><use href="#icon-document" /></svg><span data-i18n="document">Document</span>
+          </button>
+          <button class="mode" data-mode="live" type="button">
+            <svg><use href="#icon-live" /></svg><span data-i18n="live">Live Chat</span>
+          </button>
+        </nav>
+        <button
+          id="microphone"
+          class="microphone"
+          type="button"
+          aria-label="Dictate source text"
+          aria-pressed="false"
+          title="Dictate source text"
+        >
+          <svg><use href="#icon-mic" /></svg>
+        </button>
+      </footer>
+    </main>
+    <dialog id="settings" class="menu-dialog" aria-labelledby="menu-heading">
+      <div class="menu-header">
+        <h2 id="menu-heading" data-i18n="menu">Menu</h2>
+        <button id="menu-close" class="icon-button" type="button" aria-label="Close menu">
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="menu-content">
+        <section class="menu-translation">
+          <h3 data-i18n="translation">Translation</h3>
+          <label class="menu-setting"
+            ><span
+              ><svg><use href="#icon-sparkles" /></svg><span data-i18n="style">Style</span></span
+            ><select id="tone">
+              <option value="natural" data-i18n="natural">Natural</option>
+              <option value="friendly" data-i18n="friendly">Friendly</option>
+              <option value="formal" data-i18n="formal">Formal</option>
+              <option value="casual" data-i18n="casual">Casual</option>
+            </select></label
+          >
+          <label class="menu-setting"
+            ><span
+              ><svg><use href="#icon-reply" /></svg><span data-i18n="context">Context</span></span
+            ><select id="translation-context">
+              <option value="general" data-i18n="general">General</option>
+              <option value="travel" data-i18n="travel">Travel</option>
+              <option value="work" data-i18n="work">Work</option>
+              <option value="study" data-i18n="study">Study</option>
+              <option value="conversation" data-i18n="conversation">Conversation</option>
+              <option value="restaurant" data-i18n="restaurant">Food &amp; restaurants</option>
+              <option value="shopping" data-i18n="shopping">Shopping</option>
+              <option value="health" data-i18n="health">Symptoms &amp; healthcare</option>
+            </select></label
+          >
+          <p id="scenario-help" class="menu-help" aria-live="polite"></p>
+          <input
+            id="extra-context"
+            class="menu-input"
+            type="text"
+            maxlength="1000"
+            aria-label="Extra context"
+            placeholder="Extra context (optional), e.g. replying to a friend"
+          />
+          <label class="menu-checkbox"
+            ><input id="multiple-languages" type="checkbox" /><span data-i18n="multipleLanguages"
+              >Translate into several languages</span
+            ></label
+          >
+          <div id="additional-language-options" hidden>
+            <p class="menu-help" data-i18n="additionalHelp">
+              Choose up to 3 additional target languages.
+            </p>
+            <input
+              id="additional-search"
+              class="menu-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search languages…"
+              aria-label="Search additional languages"
+            />
+            <div id="additional-targets" class="additional-targets"></div>
+            <p id="additional-count" class="menu-help" role="status"></p>
+          </div>
+        </section>
+        <details id="glossary-editor" class="glossary-editor">
+          <summary>
+            <span data-i18n="myTerminology">My terminology</span
+            ><span id="glossary-count">0 / 30</span>
+          </summary>
+          <p class="menu-help" data-i18n="glossaryHelp">
+            Set preferred translations for product names and specialist terms. Saved separately for
+            this feature.
+          </p>
+          <div id="glossary-list"></div>
+          <form id="glossary-form">
+            <label for="glossary-source" data-i18n="sourceTerm">Original term</label
+            ><input
+              id="glossary-source"
+              class="menu-input"
+              type="text"
+              maxlength="120"
+              required
+            /><label for="glossary-target" data-i18n="preferredTerm">Preferred translation</label
+            ><input
+              id="glossary-target"
+              class="menu-input"
+              type="text"
+              maxlength="120"
+              required
+            /><label for="glossary-language" data-i18n="targetTermLanguage">Target language</label
+            ><select id="glossary-language" class="menu-input"></select
+            ><button id="glossary-add" class="outline-button" type="submit" data-i18n="addTerm">
+              Add term
+            </button>
+          </form>
+          <p id="glossary-status" class="feature-status" role="status" aria-live="polite"></p>
+        </details>
+        <section class="menu-history">
+          <h3 data-i18n="historyFavorites">History &amp; favorites</h3>
+          <div class="history-toolbar">
+            <label class="menu-checkbox"
+              ><input id="history-favorites" type="checkbox" /><span data-i18n="favoritesOnly"
+                >Favorites only</span
+              ></label
+            ><button id="history-clear" class="outline-button" type="button">
+              <svg><use href="#icon-trash" /></svg><span data-i18n="clearAll">Clear all</span>
+            </button>
+          </div>
+          <input
+            id="history-search"
+            class="menu-input"
+            type="search"
+            autocomplete="off"
+            placeholder="Search your translations…"
+            aria-label="Search your translations"
+          />
+          <p class="menu-help" data-i18n="starToKeep">Star a translation to keep it.</p>
+          <p id="menu-status" class="feature-status" role="status" aria-live="polite"></p>
+          <div id="history-list"></div>
+        </section>
+        <button id="show-saved" class="outline-button" type="button" hidden>
+          <span data-i18n="savedTranslations">Saved translations</span>
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="language-dialog"
+      class="language-dialog"
+      aria-labelledby="language-dialog-title"
+      tabindex="-1"
+    >
+      <div class="language-dialog-header">
+        <h2 id="language-dialog-title">Translate from</h2>
+        <button id="language-dialog-close" class="icon-button" type="button" aria-label="Close">
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <label class="language-search"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 4 4" /></svg
+        ><input
+          id="language-search"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search languages"
+          aria-controls="language-options"
+          placeholder="Search languages, e.g. Japanese"
+      /></label>
+      <div
+        id="language-options"
+        class="language-options"
+        role="listbox"
+        aria-labelledby="language-dialog-title"
+      ></div>
+      <p id="language-availability" class="language-availability"></p>
+      <p id="language-no-results" class="language-no-results" role="status" hidden></p>
+    </dialog>
+    <dialog
+      id="live-message-dialog"
+      class="live-message-dialog"
+      aria-labelledby="live-message-heading"
+    >
+      <div class="saved-header">
+        <h2 id="live-message-heading" data-i18n="translation">Translation</h2>
+        <button id="live-message-close" class="speaker-button" type="button" aria-label="Close">
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <p id="live-message-translation"></p>
+      <p id="live-message-original"></p>
+      <p id="live-message-direction"></p>
+      <button id="live-message-speak" class="outline-button" type="button">
+        <svg><use href="#icon-volume" /></svg><span data-i18n="listen">Listen</span>
+      </button>
+      <button id="live-message-copy" class="outline-button" type="button">
+        <svg><use href="#icon-copy" /></svg><span data-i18n="copy">Copy</span>
+      </button>
+    </dialog>
+    <dialog id="photo-viewer" class="photo-viewer" aria-label="Full screen photo">
+      <div class="photo-viewer-toolbar">
+        <button
+          id="photo-viewer-original"
+          class="outline-button"
+          type="button"
+          data-i18n="photoOriginal"
+        >
+          Original photo
+        </button>
+        <div class="photo-zoom-controls">
+          <button id="photo-zoom-out" type="button" aria-label="Zoom out">−</button
+          ><output id="photo-zoom-level">100%</output
+          ><button id="photo-zoom-in" type="button" aria-label="Zoom in">+</button>
+        </div>
+        <button
+          id="photo-viewer-close"
+          class="speaker-button"
+          type="button"
+          aria-label="Close full screen"
+        >
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div id="photo-viewer-scroll" class="photo-viewer-scroll">
+        <div id="photo-viewer-stage" class="photo-stage"></div>
+      </div>
+    </dialog>
+    <dialog
+      id="photo-camera-dialog"
+      class="photo-camera-dialog"
+      aria-labelledby="photo-camera-heading"
+    >
+      <div class="saved-header">
+        <h2 id="photo-camera-heading" data-i18n="photoCamera">Use camera</h2>
+        <button
+          id="photo-camera-close"
+          class="speaker-button"
+          type="button"
+          aria-label="Close camera"
+        >
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <video id="photo-camera-video" autoplay muted playsinline></video>
+      <p id="photo-camera-status" class="feature-status" role="status"></p>
+      <button id="photo-capture" class="photo-primary" type="button" disabled>
+        <svg><use href="#icon-camera" /></svg><span data-i18n="photoCapture">Take photo</span>
+      </button>
+    </dialog>
+    <dialog id="photo-label-dialog" class="saved-dialog" aria-labelledby="photo-label-heading">
+      <div class="saved-header">
+        <h2 id="photo-label-heading" data-i18n="translation">Translation</h2>
+        <button
+          id="photo-label-close"
+          class="speaker-button"
+          type="button"
+          aria-label="Close translation"
+        >
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <p id="photo-label-text"></p>
+      <button id="photo-label-copy" class="outline-button" type="button" data-i18n="copy">
+        Copy</button
+      ><button
+        id="photo-label-speak"
+        class="speaker-button"
+        type="button"
+        aria-label="Listen to this translation"
+      >
+        <svg><use href="#icon-volume" /></svg>
+      </button>
+      <p id="photo-label-status" class="feature-status" role="status"></p>
+    </dialog>
+    <dialog id="saved-dialog" class="saved-dialog" aria-labelledby="saved-heading">
+      <div class="saved-header">
+        <h2 id="saved-heading" data-i18n="savedTranslations">Saved translations</h2>
+        <button
+          id="close-saved"
+          class="speaker-button"
+          type="button"
+          aria-label="Close saved translations"
+        >
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <p class="saved-note" data-i18n="savedNote">Saved on this browser.</p>
+      <div id="saved-list"></div>
+    </dialog>
+    <script src="/api/language-catalog.js"></script>
+    <script src="/static/workspaces.js"></script>
+    <script src="/static/app.js"></script>
+    <script src="/static/enhancements.js"></script>
+    <script src="/static/photo.js"></script>
+    <script src="/static/live.js"></script>
+    <script src="/static/languages.js"></script>
+    <script src="/static/voice.js"></script>
+    <script src="/static/menu.js"></script>
+    <script src="/static/studio.js"></script>
+  </body>
+</html>
