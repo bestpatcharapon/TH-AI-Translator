@@ -1,0 +1,22 @@
+{
+  "source": "เรื่องนี้มันลูบหน้าปะจมูก ผมเลยไม่อยากเข้าไปยุ่ง",
+  "translation": "This is a conflict of interest, so I don't want to get involved.",
+  "quality_review": {
+    "applied": true,
+    "issues": [
+      {
+        "draft_quote": "flattery and meddling",
+        "explanation": "The Thai idiom 'ลูบหน้าปะจมูก' means to be in a delicate situation involving people you know well or are related to, often creating a conflict of interest or awkwardness when dealing with wrongdoing, rather than 'flattery and meddling'.",
+        "kind": "meaning",
+        "source_quote": "ลูบหน้าปะจมูก"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite",
+    "provider": "gemini",
+    "status": "revised",
+    "triggers": [
+      "negation_or_exception"
+    ]
+  },
+  "scope": "Live localhost hybrid smoke; one sentence, not an accuracy score."
+}

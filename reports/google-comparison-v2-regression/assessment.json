@@ -1,0 +1,70 @@
+{
+  "assessor": "Assistant qualitative bilingual inspection; no independent human raters, no blind judging, no population accuracy percentage. Relative clarity includes fluency as well as faithfulness.",
+  "counts": {
+    "close": 7,
+    "app_clearer": 4,
+    "app_clearer_with_caveat": 1
+  },
+  "cases": [
+    {
+      "id": "01-routine",
+      "verdict": "close",
+      "note_th": "ร้าน ไม่ถูกสมมติเป็น restaurant แล้ว ทั้งคู่ใช้ shop"
+    },
+    {
+      "id": "02-indirect-request",
+      "verdict": "close",
+      "note_th": "คำขอสุภาพและเงื่อนไขเมื่อสะดวกใกล้เคียงกัน"
+    },
+    {
+      "id": "03-idiom",
+      "verdict": "app_clearer",
+      "note_th": "แอปถ่ายทอดสำนวนเป็นการทำงานให้ดูดี Google ยังเป็นผักชีจริง ข้อนี้ใช้ปรับหมายเหตุภาษาแล้ว จึงเป็น regression"
+    },
+    {
+      "id": "04-negation",
+      "verdict": "close",
+      "note_th": "เงื่อนไขห้ามโอนก่อนรับ invoice ถูกทั้งคู่"
+    },
+    {
+      "id": "05-numbers-time",
+      "verdict": "close",
+      "note_th": "วันที่ เวลา เงินมัดจำ และยอดคงเหลือถูกทั้งคู่ รูปแบบเวลา 18:45 กับ 6:45pm เท่ากัน"
+    },
+    {
+      "id": "06-ambiguous-pronouns",
+      "verdict": "close",
+      "note_th": "คงคำกล่าวและไม่เติมว่าสิ่งที่จะจัดการคืออะไร"
+    },
+    {
+      "id": "07-informal-metaphor",
+      "verdict": "app_clearer",
+      "note_th": "แอปใช้ piled work on me และ head was spinning เป็นประโยคงานที่สื่อความท่วมท้นได้ ส่วน Google ใช้ threw me at work"
+    },
+    {
+      "id": "08-northern-thai",
+      "verdict": "app_clearer",
+      "note_th": "แอปคงรูปคำถาม Have you eaten rice yet? Google ยังเป็นคำสั่ง Eat rice and check. ข้อนี้ใช้พัฒนาหมายเหตุภาษาแล้ว"
+    },
+    {
+      "id": "09-english-idiom",
+      "verdict": "app_clearer_with_caveat",
+      "note_th": "แอปเป็นไทยที่ใช้พูดได้ แต่ยังเดาว่าต้องยกกล่อง ต้นฉบับอาจเป็นการช่วยแพ็กหรือจัดกล่องได้"
+    },
+    {
+      "id": "10-polite-refusal",
+      "verdict": "app_clearer",
+      "note_th": "แอปใช้ เกรงว่า โดยไม่ใส่ ผม/ดิฉัน แต่การตรวจเพิ่มเติมรอบนี้ unavailable จึงไม่อ้างว่าได้ยืนยันคำแปล"
+    },
+    {
+      "id": "11-frequency",
+      "verdict": "close",
+      "note_th": "ทั้งคู่ใช้ วันเว้นวัน ถูกแล้ว แอปยังมีเครื่องหมาย 。 ท้ายข้อความ ซึ่งควรปรับรูปแบบต่อ"
+    },
+    {
+      "id": "12-deadline",
+      "verdict": "close",
+      "note_th": "ทั้งคู่คงการเปลี่ยนจากศุกร์เป็นพุธได้"
+    }
+  ]
+}

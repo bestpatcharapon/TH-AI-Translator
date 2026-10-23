@@ -1,0 +1,104 @@
+{
+  "scope": "Six real hybrid Thai-English requests; qualitative inspection only, not a general accuracy benchmark. Cache bypassed.",
+  "results": [
+    {
+      "source": "ตรวจบัญชีบริษัทญาติทีไรก็ลูบหน้าปะจมูกทุกที",
+      "http": 200,
+      "translation": "Whenever I audit a relative's company, my hands are always tied.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "end up being lenient",
+            "explanation": "The idiom 'ลูบหน้าปะจมูก' refers to the dilemma of having one's hands tied or facing a conflict of interest due to personal connections, rather than actively stating that the speaker actually went easy on them or was lenient.",
+            "kind": "meaning",
+            "source_quote": "ลูบหน้าปะจมูก"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 2.322
+    },
+    {
+      "source": "เขาต้องตัดสินคดีของเพื่อนสนิท เลยลูบหน้าปะจมูก",
+      "http": 200,
+      "translation": "He has to rule on his close friend's case, so he's in a conflict of interest.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 1.602
+    },
+    {
+      "source": "ไม่ต้องเกรงใจ หยิบเพิ่มได้เลย",
+      "http": 200,
+      "translation": "Don't worry about it—just go ahead and take more.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 1.509
+    },
+    {
+      "source": "ผมเกรงใจที่จะรบกวนคุณนอกเวลางาน",
+      "http": 200,
+      "translation": "I’m hesitant to bother you outside of work hours.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 1.724
+    },
+    {
+      "source": "อย่าเพิ่งโอนเงินจนกว่าจะได้รับสินค้า",
+      "http": 200,
+      "translation": "Don't make the payment until you receive the product.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "seconds": 1.307
+    },
+    {
+      "source": "ข้าวต้มใส่ผักชีโรยหน้า ราคา 50 บาท",
+      "http": 200,
+      "translation": "Congee with coriander garnish  \nPrice 50 baht",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "unavailable",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 1.537
+    }
+  ]
+}

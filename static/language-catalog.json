@@ -47,7 +47,7 @@
     "voice": "zh-TW-HsiaoChenNeural",
     "transcribe": true,
     "whisper": "zh",
-    "ocr": null,
+    "ocr": "chi_tra",
     "rtl": false,
     "flagName": "Taiwan"
   },
@@ -151,7 +151,7 @@
     "voice": "af-ZA-AdriNeural",
     "transcribe": true,
     "whisper": "af",
-    "ocr": null,
+    "ocr": "afr",
     "rtl": false,
     "flagName": "South Africa"
   },
@@ -164,7 +164,7 @@
     "voice": "sq-AL-AnilaNeural",
     "transcribe": true,
     "whisper": "sq",
-    "ocr": null,
+    "ocr": "sqi",
     "rtl": false,
     "flagName": "Albania"
   },
@@ -177,7 +177,7 @@
     "voice": "am-ET-MekdesNeural",
     "transcribe": true,
     "whisper": "am",
-    "ocr": null,
+    "ocr": "amh",
     "rtl": false,
     "flagName": "Ethiopia"
   },
@@ -190,7 +190,7 @@
     "voice": "ar-DZ-AminaNeural",
     "transcribe": true,
     "whisper": "ar",
-    "ocr": null,
+    "ocr": "ara",
     "rtl": true,
     "flagName": "Saudi Arabia"
   },
@@ -203,7 +203,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "hy",
-    "ocr": null,
+    "ocr": "hye",
     "rtl": false,
     "flagName": "Armenia"
   },
@@ -216,7 +216,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "as",
-    "ocr": null,
+    "ocr": "asm",
     "rtl": false,
     "flagName": "India"
   },
@@ -229,7 +229,7 @@
     "voice": "az-AZ-BanuNeural",
     "transcribe": true,
     "whisper": "az",
-    "ocr": null,
+    "ocr": "aze",
     "rtl": false,
     "flagName": "Azerbaijan"
   },
@@ -255,7 +255,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "eu",
-    "ocr": null,
+    "ocr": "eus",
     "rtl": false,
     "flagName": "Basque Country"
   },
@@ -268,7 +268,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "be",
-    "ocr": null,
+    "ocr": "bel",
     "rtl": false,
     "flagName": "Belarus"
   },
@@ -281,7 +281,7 @@
     "voice": "bn-BD-NabanitaNeural",
     "transcribe": true,
     "whisper": "bn",
-    "ocr": null,
+    "ocr": "ben",
     "rtl": false,
     "flagName": "Bangladesh"
   },
@@ -294,7 +294,7 @@
     "voice": "bs-BA-VesnaNeural",
     "transcribe": true,
     "whisper": "bs",
-    "ocr": null,
+    "ocr": "bos",
     "rtl": false,
     "flagName": "Bosnia and Herzegovina"
   },
@@ -307,7 +307,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "br",
-    "ocr": null,
+    "ocr": "bre",
     "rtl": false,
     "flagName": "France"
   },
@@ -320,7 +320,7 @@
     "voice": "bg-BG-KalinaNeural",
     "transcribe": true,
     "whisper": "bg",
-    "ocr": null,
+    "ocr": "bul",
     "rtl": false,
     "flagName": "Bulgaria"
   },
@@ -333,7 +333,7 @@
     "voice": "my-MM-NilarNeural",
     "transcribe": true,
     "whisper": "my",
-    "ocr": null,
+    "ocr": "mya",
     "rtl": false,
     "flagName": "Myanmar"
   },
@@ -346,7 +346,7 @@
     "voice": "ca-ES-JoanaNeural",
     "transcribe": true,
     "whisper": "ca",
-    "ocr": null,
+    "ocr": "cat",
     "rtl": false,
     "flagName": "Catalonia"
   },
@@ -372,7 +372,7 @@
     "voice": "hr-HR-GabrijelaNeural",
     "transcribe": true,
     "whisper": "hr",
-    "ocr": null,
+    "ocr": "hrv",
     "rtl": false,
     "flagName": "Croatia"
   },
@@ -385,7 +385,7 @@
     "voice": "cs-CZ-VlastaNeural",
     "transcribe": true,
     "whisper": "cs",
-    "ocr": null,
+    "ocr": "ces",
     "rtl": false,
     "flagName": "Czech Republic"
   },
@@ -398,7 +398,7 @@
     "voice": "da-DK-ChristelNeural",
     "transcribe": true,
     "whisper": "da",
-    "ocr": null,
+    "ocr": "dan",
     "rtl": false,
     "flagName": "Denmark"
   },
@@ -411,7 +411,7 @@
     "voice": "nl-BE-DenaNeural",
     "transcribe": true,
     "whisper": "nl",
-    "ocr": null,
+    "ocr": "nld",
     "rtl": false,
     "flagName": "Netherlands"
   },
@@ -424,7 +424,7 @@
     "voice": "et-EE-AnuNeural",
     "transcribe": true,
     "whisper": "et",
-    "ocr": null,
+    "ocr": "est",
     "rtl": false,
     "flagName": "Estonia"
   },
@@ -437,7 +437,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "fo",
-    "ocr": null,
+    "ocr": "fao",
     "rtl": false,
     "flagName": "Faroe Islands"
   },
@@ -450,7 +450,7 @@
     "voice": "fi-FI-NooraNeural",
     "transcribe": true,
     "whisper": "fi",
-    "ocr": null,
+    "ocr": "fin",
     "rtl": false,
     "flagName": "Finland"
   },
@@ -463,7 +463,7 @@
     "voice": "gl-ES-SabelaNeural",
     "transcribe": true,
     "whisper": "gl",
-    "ocr": null,
+    "ocr": "glg",
     "rtl": false,
     "flagName": "Galicia"
   },
@@ -476,7 +476,7 @@
     "voice": "ka-GE-EkaNeural",
     "transcribe": true,
     "whisper": "ka",
-    "ocr": null,
+    "ocr": "kat",
     "rtl": false,
     "flagName": "Georgia"
   },
@@ -489,7 +489,7 @@
     "voice": "el-GR-AthinaNeural",
     "transcribe": true,
     "whisper": "el",
-    "ocr": null,
+    "ocr": "ell",
     "rtl": false,
     "flagName": "Greece"
   },
@@ -502,7 +502,7 @@
     "voice": "gu-IN-DhwaniNeural",
     "transcribe": true,
     "whisper": "gu",
-    "ocr": null,
+    "ocr": "guj",
     "rtl": false,
     "flagName": "India"
   },
@@ -515,7 +515,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "ht",
-    "ocr": null,
+    "ocr": "hat",
     "rtl": false,
     "flagName": "Haiti"
   },
@@ -554,7 +554,7 @@
     "voice": "he-IL-HilaNeural",
     "transcribe": true,
     "whisper": "he",
-    "ocr": null,
+    "ocr": "heb",
     "rtl": true,
     "flagName": "Israel"
   },
@@ -567,7 +567,7 @@
     "voice": "hi-IN-SwaraNeural",
     "transcribe": true,
     "whisper": "hi",
-    "ocr": null,
+    "ocr": "hin",
     "rtl": false,
     "flagName": "India"
   },
@@ -580,7 +580,7 @@
     "voice": "hu-HU-NoemiNeural",
     "transcribe": true,
     "whisper": "hu",
-    "ocr": null,
+    "ocr": "hun",
     "rtl": false,
     "flagName": "Hungary"
   },
@@ -593,7 +593,7 @@
     "voice": "is-IS-GudrunNeural",
     "transcribe": true,
     "whisper": "is",
-    "ocr": null,
+    "ocr": "isl",
     "rtl": false,
     "flagName": "Iceland"
   },
@@ -606,7 +606,7 @@
     "voice": "id-ID-GadisNeural",
     "transcribe": true,
     "whisper": "id",
-    "ocr": null,
+    "ocr": "ind",
     "rtl": false,
     "flagName": "Indonesia"
   },
@@ -619,7 +619,7 @@
     "voice": "ga-IE-OrlaNeural",
     "transcribe": false,
     "whisper": "ga",
-    "ocr": null,
+    "ocr": "gle",
     "rtl": false,
     "flagName": "Ireland"
   },
@@ -632,7 +632,7 @@
     "voice": "it-IT-ElsaNeural",
     "transcribe": true,
     "whisper": "it",
-    "ocr": null,
+    "ocr": "ita",
     "rtl": false,
     "flagName": "Italy"
   },
@@ -645,7 +645,7 @@
     "voice": "jv-ID-SitiNeural",
     "transcribe": true,
     "whisper": "jw",
-    "ocr": null,
+    "ocr": "jav",
     "rtl": false,
     "flagName": "Indonesia"
   },
@@ -658,7 +658,7 @@
     "voice": "kn-IN-SapnaNeural",
     "transcribe": true,
     "whisper": "kn",
-    "ocr": null,
+    "ocr": "kan",
     "rtl": false,
     "flagName": "India"
   },
@@ -671,7 +671,7 @@
     "voice": "kk-KZ-AigulNeural",
     "transcribe": true,
     "whisper": "kk",
-    "ocr": null,
+    "ocr": "kaz",
     "rtl": false,
     "flagName": "Kazakhstan"
   },
@@ -684,7 +684,7 @@
     "voice": "km-KH-SreymomNeural",
     "transcribe": true,
     "whisper": "km",
-    "ocr": null,
+    "ocr": "khm",
     "rtl": false,
     "flagName": "Cambodia"
   },
@@ -697,7 +697,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "ky",
-    "ocr": null,
+    "ocr": "kir",
     "rtl": false,
     "flagName": "Kyrgyzstan"
   },
@@ -723,7 +723,7 @@
     "voice": "lo-LA-KeomanyNeural",
     "transcribe": true,
     "whisper": "lo",
-    "ocr": null,
+    "ocr": "lao",
     "rtl": false,
     "flagName": "Laos"
   },
@@ -736,7 +736,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "la",
-    "ocr": null,
+    "ocr": "lat",
     "rtl": false,
     "flagName": "Holy See"
   },
@@ -749,7 +749,7 @@
     "voice": "lv-LV-EveritaNeural",
     "transcribe": true,
     "whisper": "lv",
-    "ocr": null,
+    "ocr": "lav",
     "rtl": false,
     "flagName": "Latvia"
   },
@@ -775,7 +775,7 @@
     "voice": "lt-LT-OnaNeural",
     "transcribe": true,
     "whisper": "lt",
-    "ocr": null,
+    "ocr": "lit",
     "rtl": false,
     "flagName": "Lithuania"
   },
@@ -788,7 +788,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "lb",
-    "ocr": null,
+    "ocr": "ltz",
     "rtl": false,
     "flagName": "Luxembourg"
   },
@@ -801,7 +801,7 @@
     "voice": "mk-MK-MarijaNeural",
     "transcribe": true,
     "whisper": "mk",
-    "ocr": null,
+    "ocr": "mkd",
     "rtl": false,
     "flagName": "North Macedonia"
   },
@@ -827,7 +827,7 @@
     "voice": "ms-MY-YasminNeural",
     "transcribe": true,
     "whisper": "ms",
-    "ocr": null,
+    "ocr": "msa",
     "rtl": false,
     "flagName": "Malaysia"
   },
@@ -840,7 +840,7 @@
     "voice": "ml-IN-SobhanaNeural",
     "transcribe": true,
     "whisper": "ml",
-    "ocr": null,
+    "ocr": "mal",
     "rtl": false,
     "flagName": "India"
   },
@@ -853,7 +853,7 @@
     "voice": "mt-MT-GraceNeural",
     "transcribe": true,
     "whisper": "mt",
-    "ocr": null,
+    "ocr": "mlt",
     "rtl": false,
     "flagName": "Malta"
   },
@@ -866,7 +866,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "mi",
-    "ocr": null,
+    "ocr": "mri",
     "rtl": false,
     "flagName": "New Zealand"
   },
@@ -879,7 +879,7 @@
     "voice": "mr-IN-AarohiNeural",
     "transcribe": true,
     "whisper": "mr",
-    "ocr": null,
+    "ocr": "mar",
     "rtl": false,
     "flagName": "India"
   },
@@ -892,7 +892,7 @@
     "voice": "mn-MN-YesuiNeural",
     "transcribe": true,
     "whisper": "mn",
-    "ocr": null,
+    "ocr": "mon",
     "rtl": false,
     "flagName": "Mongolia"
   },
@@ -905,7 +905,7 @@
     "voice": "ne-NP-HemkalaNeural",
     "transcribe": true,
     "whisper": "ne",
-    "ocr": null,
+    "ocr": "nep",
     "rtl": false,
     "flagName": "Nepal"
   },
@@ -918,7 +918,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "no",
-    "ocr": null,
+    "ocr": "nor",
     "rtl": false,
     "flagName": "Norway"
   },
@@ -931,7 +931,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "nn",
-    "ocr": null,
+    "ocr": "nor",
     "rtl": false,
     "flagName": "Norway"
   },
@@ -944,7 +944,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "oc",
-    "ocr": null,
+    "ocr": "oci",
     "rtl": false,
     "flagName": "France"
   },
@@ -957,7 +957,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "or",
-    "ocr": null,
+    "ocr": "ori",
     "rtl": false,
     "flagName": "India"
   },
@@ -970,7 +970,7 @@
     "voice": "ps-AF-LatifaNeural",
     "transcribe": true,
     "whisper": "ps",
-    "ocr": null,
+    "ocr": "pus",
     "rtl": true,
     "flagName": "Afghanistan"
   },
@@ -983,7 +983,7 @@
     "voice": "fa-IR-DilaraNeural",
     "transcribe": true,
     "whisper": "fa",
-    "ocr": null,
+    "ocr": "fas",
     "rtl": true,
     "flagName": "Iran"
   },
@@ -996,7 +996,7 @@
     "voice": "pl-PL-ZofiaNeural",
     "transcribe": true,
     "whisper": "pl",
-    "ocr": null,
+    "ocr": "pol",
     "rtl": false,
     "flagName": "Poland"
   },
@@ -1009,7 +1009,7 @@
     "voice": "pt-BR-ThalitaMultilingualNeural",
     "transcribe": true,
     "whisper": "pt",
-    "ocr": null,
+    "ocr": "por",
     "rtl": false,
     "flagName": "Portugal"
   },
@@ -1022,7 +1022,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "pa",
-    "ocr": null,
+    "ocr": "pan",
     "rtl": false,
     "flagName": "India"
   },
@@ -1035,7 +1035,7 @@
     "voice": "ro-RO-AlinaNeural",
     "transcribe": true,
     "whisper": "ro",
-    "ocr": null,
+    "ocr": "ron",
     "rtl": false,
     "flagName": "Romania"
   },
@@ -1048,7 +1048,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "sa",
-    "ocr": null,
+    "ocr": "san",
     "rtl": false,
     "flagName": "India"
   },
@@ -1061,7 +1061,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "gd",
-    "ocr": null,
+    "ocr": "gla",
     "rtl": false,
     "flagName": "Scotland"
   },
@@ -1074,7 +1074,7 @@
     "voice": "sr-RS-SophieNeural",
     "transcribe": true,
     "whisper": "sr",
-    "ocr": null,
+    "ocr": "srp",
     "rtl": false,
     "flagName": "Serbia"
   },
@@ -1100,7 +1100,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "sd",
-    "ocr": null,
+    "ocr": "snd",
     "rtl": true,
     "flagName": "Pakistan"
   },
@@ -1113,7 +1113,7 @@
     "voice": "si-LK-ThiliniNeural",
     "transcribe": true,
     "whisper": "si",
-    "ocr": null,
+    "ocr": "sin",
     "rtl": false,
     "flagName": "Sri Lanka"
   },
@@ -1126,7 +1126,7 @@
     "voice": "sk-SK-ViktoriaNeural",
     "transcribe": true,
     "whisper": "sk",
-    "ocr": null,
+    "ocr": "slk",
     "rtl": false,
     "flagName": "Slovakia"
   },
@@ -1139,7 +1139,7 @@
     "voice": "sl-SI-PetraNeural",
     "transcribe": true,
     "whisper": "sl",
-    "ocr": null,
+    "ocr": "slv",
     "rtl": false,
     "flagName": "Slovenia"
   },
@@ -1178,7 +1178,7 @@
     "voice": "su-ID-TutiNeural",
     "transcribe": true,
     "whisper": "su",
-    "ocr": null,
+    "ocr": "sun",
     "rtl": false,
     "flagName": "Indonesia"
   },
@@ -1191,7 +1191,7 @@
     "voice": "sw-KE-ZuriNeural",
     "transcribe": true,
     "whisper": "sw",
-    "ocr": null,
+    "ocr": "swa",
     "rtl": false,
     "flagName": "Tanzania"
   },
@@ -1204,7 +1204,7 @@
     "voice": "sv-SE-SofieNeural",
     "transcribe": true,
     "whisper": "sv",
-    "ocr": null,
+    "ocr": "swe",
     "rtl": false,
     "flagName": "Sweden"
   },
@@ -1217,7 +1217,7 @@
     "voice": "fil-PH-BlessicaNeural",
     "transcribe": true,
     "whisper": "tl",
-    "ocr": null,
+    "ocr": "fil",
     "rtl": false,
     "flagName": "Philippines"
   },
@@ -1230,7 +1230,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "tg",
-    "ocr": null,
+    "ocr": "tgk",
     "rtl": false,
     "flagName": "Tajikistan"
   },
@@ -1243,7 +1243,7 @@
     "voice": "ta-IN-PallaviNeural",
     "transcribe": true,
     "whisper": "ta",
-    "ocr": null,
+    "ocr": "tam",
     "rtl": false,
     "flagName": "India"
   },
@@ -1256,7 +1256,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "tt",
-    "ocr": null,
+    "ocr": "tat",
     "rtl": false,
     "flagName": "Russia"
   },
@@ -1269,7 +1269,7 @@
     "voice": "te-IN-ShrutiNeural",
     "transcribe": true,
     "whisper": "te",
-    "ocr": null,
+    "ocr": "tel",
     "rtl": false,
     "flagName": "India"
   },
@@ -1282,7 +1282,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "bo",
-    "ocr": null,
+    "ocr": "bod",
     "rtl": false,
     "flagName": "China"
   },
@@ -1295,7 +1295,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "ti",
-    "ocr": null,
+    "ocr": "tir",
     "rtl": false,
     "flagName": "Eritrea"
   },
@@ -1308,7 +1308,7 @@
     "voice": "tr-TR-EmelNeural",
     "transcribe": true,
     "whisper": "tr",
-    "ocr": null,
+    "ocr": "tur",
     "rtl": false,
     "flagName": "Türkiye"
   },
@@ -1334,7 +1334,7 @@
     "voice": "uk-UA-PolinaNeural",
     "transcribe": true,
     "whisper": "uk",
-    "ocr": null,
+    "ocr": "ukr",
     "rtl": false,
     "flagName": "Ukraine"
   },
@@ -1347,7 +1347,7 @@
     "voice": "ur-IN-GulNeural",
     "transcribe": true,
     "whisper": "ur",
-    "ocr": null,
+    "ocr": "urd",
     "rtl": true,
     "flagName": "Pakistan"
   },
@@ -1360,7 +1360,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "ug",
-    "ocr": null,
+    "ocr": "uig",
     "rtl": true,
     "flagName": "China"
   },
@@ -1373,7 +1373,7 @@
     "voice": "uz-UZ-MadinaNeural",
     "transcribe": true,
     "whisper": "uz",
-    "ocr": null,
+    "ocr": "uzb",
     "rtl": false,
     "flagName": "Uzbekistan"
   },
@@ -1386,7 +1386,7 @@
     "voice": "cy-GB-NiaNeural",
     "transcribe": true,
     "whisper": "cy",
-    "ocr": null,
+    "ocr": "cym",
     "rtl": false,
     "flagName": "Wales"
   },
@@ -1399,7 +1399,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "yi",
-    "ocr": null,
+    "ocr": "yid",
     "rtl": true,
     "flagName": "Israel"
   },
@@ -1412,7 +1412,7 @@
     "voice": null,
     "transcribe": true,
     "whisper": "yo",
-    "ocr": null,
+    "ocr": "yor",
     "rtl": false,
     "flagName": "Nigeria"
   },
@@ -1464,7 +1464,7 @@
     "voice": null,
     "transcribe": false,
     "whisper": "dv",
-    "ocr": null,
+    "ocr": "div",
     "rtl": true,
     "flagName": "Maldives"
   }

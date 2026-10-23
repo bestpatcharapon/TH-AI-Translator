@@ -1,0 +1,81 @@
+{
+  "assessor": "Assistant qualitative bilingual inspection; no independent human raters, no blind judging, no population accuracy percentage. Relative clarity includes fluency as well as faithfulness.",
+  "counts": {
+    "app_clearer": 7,
+    "close": 5,
+    "both_problematic": 1,
+    "both_need_fluency": 1
+  },
+  "cases": [
+    {
+      "id": "01-travel-condition",
+      "verdict": "app_clearer",
+      "note_th": "two seats on a bus รักษาจำนวนที่นั่ง Google two buses เปลี่ยนเป็นจำนวนรถ"
+    },
+    {
+      "id": "02-appointment-change",
+      "verdict": "app_clearer",
+      "note_th": "move ถูกกว่า postpone เมื่อเปลี่ยนจาก 3pm เป็น 2:30pm ซึ่งเร็วขึ้น ทั้งคู่คงเวลาตัวเลข"
+    },
+    {
+      "id": "03-polite-pass",
+      "verdict": "close",
+      "note_th": "ทั้งคู่คงว่าไม่แย่ แต่ผู้พูดขอผ่านหากคิวยาว แอป place กว้างกว่า shop ตามบริบทที่ยังไม่ระบุชนิดร้าน"
+    },
+    {
+      "id": "04-unseen-thai-idiom",
+      "verdict": "both_problematic",
+      "note_th": "Google แปลสำนวนเป็นการแตะหน้า/จมูก แอปเข้าใจปัญหาเส้นสายมากขึ้นแต่ getting a free pass เติมผลลัพธ์ว่าได้รับการยกเว้น ซึ่งต้นฉบับยังไม่ได้ยืนยัน ทั้งคู่ยังควรแก้"
+    },
+    {
+      "id": "05-tentative-promise",
+      "verdict": "close",
+      "note_th": "ทั้งคู่แยกการรับปากว่าจะเสร็จออกจากแค่จะพยายามทำให้ทันได้"
+    },
+    {
+      "id": "06-no-pressure",
+      "verdict": "app_clearer",
+      "note_th": "No need to feel obliged ใกล้เจตนาไม่ต้องเกรงใจ มากกว่า Don’t be considerate ที่กลับกลายเป็นไม่ต้องเอาใจใส่ผู้อื่น"
+    },
+    {
+      "id": "07-indirect-draft-request",
+      "verdict": "app_clearer",
+      "note_th": "แอปเป็นคำขอให้ช่วยดูร่างตามหน้าที่ของ I was wondering ส่วน Google ยังใช้ ฉันสงสัย โดยตรง"
+    },
+    {
+      "id": "08-refund-status",
+      "verdict": "both_need_fluency",
+      "note_th": "ทั้งคู่ยังสื่อว่ากำลังตรวจสถานะได้ แต่ เงินคืนได้ผ่าน/การคืนเงินได้ผ่านไปแล้ว ไม่ลื่นไหล ควรเป็น ตรวจสอบว่าดำเนินการคืนเงินสำเร็จแล้วหรือยัง"
+    },
+    {
+      "id": "09-unless-cancel",
+      "verdict": "close",
+      "note_th": "ทั้งคู่รักษาข้อยกเว้น supplier ยืนยันว่าจะมาถึงไม่ทัน เป็นเงื่อนไขการยกเลิกได้"
+    },
+    {
+      "id": "10-cover-shift",
+      "verdict": "app_clearer",
+      "note_th": "แอปตีความ cover a shift เป็นการช่วยทำกะ Google ยังใช้ ครอบคลุมกะ ตามตัวอักษร"
+    },
+    {
+      "id": "11-no-conclusion",
+      "verdict": "app_clearer",
+      "note_th": "แอปเก็บมุมมองของเธอและการยังไม่ได้ฟัง Google เรื่องราวของเธอ/ไม่เคยได้ยิน กว้างและแข็งกว่าเล็กน้อย จัดเป็นความต่างด้านการใช้คำมากกว่าความผิดรุนแรง"
+    },
+    {
+      "id": "12-fee-exception",
+      "verdict": "close",
+      "note_th": "ทั้งคู่รักษาหลังวันที่ 1 มิถุนายน และยกเว้นการจองเดิม ไม่เปลี่ยนเป็นตั้งแต่วันที่ 1"
+    },
+    {
+      "id": "13-northern-sentence",
+      "verdict": "app_clearer",
+      "note_th": "แอปได้ตลาดและร่มพร้อมเงื่อนไขฝน Google กลายเป็นชื่อ Pen ตัดตลาดออก และแปลจ้องเป็น stare"
+    },
+    {
+      "id": "14-isan-question",
+      "verdict": "close",
+      "note_th": "ทั้งคู่คงคำถามและเชิญมากินเมื่อยังไม่ได้กิน แอปเก็บ together ชัดกว่า แต่ไม่ถือว่าต่างพอจะชี้ขาด"
+    }
+  ]
+}

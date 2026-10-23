@@ -10,6 +10,12 @@ Object.assign(COPY.en, {
   recordIn: "Record in",
   stopAndSend: "Stop recording and send",
   sameChatLanguage: "Choose two different languages for the conversation.",
+  reviewVoice: "Check microphone text before sending",
+  meaningNeedsContext: "Please clarify the meaning before translating:",
+  meaningReviewUnavailable:
+    "Translation ready. The additional meaning check could not be completed; review important details.",
+  voiceReview: "Check or edit what was heard, then press Send.",
+  voiceUncertain: "Some audio was unclear. Check or edit the text, or record again before sending.",
 });
 Object.assign(COPY.th, {
   twoLanguage: "ใช้ 6 ข้อความล่าสุดช่วยเข้าใจบริบท",
@@ -22,6 +28,11 @@ Object.assign(COPY.th, {
   recordIn: "บันทึกเสียงภาษา",
   stopAndSend: "หยุดบันทึกและส่ง",
   sameChatLanguage: "กรุณาเลือกสองภาษาที่ต่างกันสำหรับสนทนา",
+  reviewVoice: "ตรวจข้อความจากไมค์ก่อนส่ง",
+  meaningNeedsContext: "กรุณาอธิบายความหมายเพิ่มเติมก่อนแปล:",
+  meaningReviewUnavailable: "แปลแล้ว แต่ตรวจความหมายเพิ่มเติมไม่สำเร็จ กรุณาตรวจรายละเอียดสำคัญ",
+  voiceReview: "ตรวจหรือแก้ข้อความที่ได้ยิน แล้วกดส่ง",
+  voiceUncertain: "มีเสียงบางช่วงไม่ชัด ตรวจหรือแก้ข้อความ หรือบันทึกใหม่ก่อนส่ง",
 });
 const liveInputAnchor = document.createComment("Translation text input");
 inputEl.before(liveInputAnchor);
@@ -71,6 +82,7 @@ window.visualViewport?.addEventListener("resize", sizeLiveViewport);
 function refreshLiveMode() {
   const active = mode === "live";
   $("live-header").hidden = !active;
+  if (active) $("live-review-voice").checked = activeFeature().voiceReview === true;
   if (active !== liveOpen) {
     if (active) {
       $("live-input-row").prepend(inputEl);
@@ -92,6 +104,9 @@ function refreshLiveMode() {
 document.addEventListener("mode:change", refreshLiveMode);
 document.addEventListener("languages:change", updateLiveControls);
 document.addEventListener("interface:change", updateLiveControls);
+$("live-review-voice").addEventListener("change", () => {
+  if (mode === "live") activeFeature().voiceReview = $("live-review-voice").checked;
+});
 new MutationObserver(updateLiveControls).observe($("microphone"), {
   attributes: true,
   attributeFilter: ["aria-pressed"],

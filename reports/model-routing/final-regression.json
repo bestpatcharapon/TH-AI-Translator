@@ -1,0 +1,77 @@
+{
+  "scope": "Three real requests after final register guard; not a general accuracy score.",
+  "results": [
+    {
+      "source_language": "ko",
+      "target_language": "th",
+      "source": "아직 결제하지 않았어요. 내일 결제할게요.",
+      "http": 200,
+      "translation": "ยังไม่ได้ชำระเงิน  \nพรุ่งนี้จะชำระเงิน",
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "reason": "invalid_review",
+        "status": "unavailable",
+        "triggers": [
+          "multilingual_negation"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "seconds": 2.365
+    },
+    {
+      "source_language": "ja",
+      "target_language": "th",
+      "source": "予約をキャンセルしないでください。時間だけ変更したいです。",
+      "http": 200,
+      "translation": "กรุณาอย่ายกเลิกการจอง  \nฉันต้องการเปลี่ยนเวลาเท่านั้น",
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "reason": "invalid_review",
+        "status": "unavailable",
+        "triggers": [
+          "multilingual_negation",
+          "multilingual_condition"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "seconds": 1.952
+    },
+    {
+      "source_language": "th",
+      "target_language": "en",
+      "source": "มัดจำ 500 บาท หักจากยอดรวม 1,500 บาท เหลือจ่าย 1,000 บาท",
+      "http": 200,
+      "translation": "Deposit of 500 baht, deducted from the total of 1,500 baht, leaving 1,000 baht to be paid.",
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "time_or_quantity_relationship"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "seconds": 1.433
+    }
+  ]
+}

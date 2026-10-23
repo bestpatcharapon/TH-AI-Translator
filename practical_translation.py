@@ -31,6 +31,11 @@ TARGET_GUIDANCE = {
     "en": "Use idiomatic contemporary English; contractions are appropriate for casual/friendly speech. Thai particles such as ครับ/ค่ะ signal politeness, not sir/madam or a speaker's gender. Render เกรงใจ and similar expressions by their function in context. Do not turn เรา into plural 'we' when the supported meaning is singular.",
     "ja": "Use natural Japanese with appropriate politeness; neutral requests to staff normally use polite forms, not exaggerated honorifics. Omit unnecessary personal pronouns and do not invent gender or status.",
     "ko": "Use natural Korean speech levels; neutral interactions with staff normally use polite speech. Do not invent kinship titles, gender or social rank.",
+    "fr": "Use idiomatic French. For unknown people or service staff, polite requests normally use vous; retain tu when a familiar relationship is explicit. Preserve conditional politeness and distinguish ne pas devoir (must not) from ne pas être obligé (need not). Do not invent gender for the speaker.",
+    "de": "Use idiomatic German. Use Sie for unknown staff in polite requests and du only when familiarity is supported. Distinguish dürfen (permission), müssen (obligation), nicht müssen (need not) and nicht dürfen (must not). Preserve case roles and condition scope.",
+    "es": "Use idiomatic broadly understood Spanish. Choose formality from context without inventing a region, relationship or gender. Distinguish no tener que (lack of obligation) from prohibition, and preserve unless/only-if conditions.",
+    "vi": "Use natural Vietnamese. Do not invent relative ages or kinship roles to choose pronouns; use neutral wording if unknown. Keep negation, chưa (not yet), quantities and politeness in their original scope.",
+    "ru": "Use natural Russian with appropriate politeness. Do not invent speaker gender in past-tense verbs when a neutral construction can preserve the meaning. Keep permission, obligation and prohibition distinct.",
     "zh": "Use natural Simplified Chinese, not translated English word order. Choose concise, usable requests and avoid unnecessary personal pronouns.",
     "zh-TW": "Use natural Traditional Chinese with consistent script and usable local wording.",
 }
@@ -40,6 +45,18 @@ def practical_guidance(target, context="general", structured=False):
     return (
         " Translate communicative intent into wording a native speaker would actually say or send in this situation. "
         "Translate idioms, indirect requests, slang and politeness by meaning rather than word for word. "
+        "First infer the source speech act and proposition, then express that proposition as idiomatic target-language sentences. "
+        "A complete sentence should read as a complete natural sentence; do not invent endings for fragments. "
+        "Resolve figurative readings from surrounding context before translating individual words. "
+        "Keep generic nouns generic when their subtype is unknown; do not assume a shop is a restaurant. "
+        "Distinguish questions from statements in regional dialects, even without a question mark. "
+        "Preserve temporal frequency and exception scope, not merely the words or digits. "
+        "Keep relationships between facts intact: original versus discounted price, payer versus recipient, "
+        "permission versus obligation, and an action withheld until a condition versus an action already completed. "
+        "Keep relative time relative; do not invent a calendar date. For Thai, infer tense from actual time/aspect cues, "
+        "not merely from the presence of an idiom. Before returning, check that the sentence preserves these roles "
+        "and does not change a polite invitation into a refusal. "
+        "For Thai output, use natural connected prose and neutral wording when gender is unknown, never slash-separated gender alternatives. "
         "A question stays a question; a refusal stays a refusal; uncertainty stays uncertain. "
         "Never answer a question, carry out a request, or add greetings, promises, facts or explanations. "
         "Preserve negation, conditions, who does what to whom, numbers, dates, currencies, units, names, links and placeholders. "

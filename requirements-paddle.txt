@@ -1,0 +1,4 @@
+# CPU inference, tested together with the bundled PP-OCRv6 / Thai v5 models.
+paddleocr==3.7.0
+paddlex[ocr-core]==3.7.2
+paddlepaddle==3.3.0

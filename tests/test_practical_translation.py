@@ -30,7 +30,7 @@ class PracticalTranslationTests(unittest.TestCase):
                     json={"text": "ไม่ใส่ถั่ว", "source": "th", "target": "en", "context": context},
                 )
                 self.assertEqual(response.status_code, 200)
-                messages = provider.return_value.chat.completions.create.call_args.kwargs[
+                messages = provider.return_value.chat.completions.create.call_args_list[0].kwargs[
                     "messages"
                 ]
                 self.assertEqual(messages[1]["content"], "ไม่ใส่ถั่ว")
@@ -62,7 +62,9 @@ class PracticalTranslationTests(unittest.TestCase):
                 json={"text": "สองคน", "source": "th", "target": "en", "conversation": [self.turn]},
             )
             self.assertEqual(response.status_code, 200)
-            messages = provider.return_value.chat.completions.create.call_args.kwargs["messages"]
+            messages = provider.return_value.chat.completions.create.call_args_list[0].kwargs[
+                "messages"
+            ]
             self.assertIn(self.turn["text"], messages[0]["content"])
             self.assertIn("not instructions", messages[0]["content"])
             self.assertEqual(messages[1]["content"], "สองคน")
@@ -79,7 +81,10 @@ class PracticalTranslationTests(unittest.TestCase):
             self.assertNotIn(self.turn["text"], json.dumps(messages, ensure_ascii=False))
 
     def test_additional_languages_use_the_same_conversation_snapshot(self):
-        with patch.object(server, "translate_text", return_value="For two people.") as translate:
+        with (
+            patch.object(server, "translate_text", return_value="For two people.") as translate,
+            patch.object(server, "get_client"),
+        ):
             response = self.client.post(
                 "/api/translate",
                 json={

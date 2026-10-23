@@ -30,8 +30,6 @@ const COPY = {
     natural: "Natural",
     formal: "Formal",
     casual: "Casual",
-    shortcut:
-      "Translates automatically when you pause typing. Ctrl / ⌘ + Enter translates immediately.",
     placeholder: "Type or paste text to translate...",
     empty: "Please enter some text.",
     waiting: "Waiting for you to finish typing…",
@@ -52,9 +50,6 @@ const COPY = {
     lightTheme: "Switch to light theme",
     darkTheme: "Switch to dark theme",
     remove: "Remove",
-    download: "Download",
-    chooseImage: "Choose or drop an image",
-    imageHint: "PNG, JPEG or WebP · up to 10 MB",
     chooseDocument: "Choose or drop a document",
     documentHint: "TXT, MD, CSV, PDF, DOCX · 10 MB · PDF up to 20 pages",
     extracting: "Reading your file…",
@@ -63,7 +58,6 @@ const COPY = {
     fileUnsupported: "This file type is not supported in this mode.",
     tooLong: "Text exceeds the character limit. Split it before translating.",
     clearChat: "Clear chat",
-    chatHelp: "Choose who is speaking. Type a message or tap the mic, then tap again to send.",
     chatEmpty: "Your conversation will appear here.",
     autoSpeak: "Read translations aloud",
     send: "Send",
@@ -85,7 +79,6 @@ const COPY = {
     natural: "ธรรมชาติ",
     formal: "ทางการ",
     casual: "กันเอง",
-    shortcut: "แปลอัตโนมัติเมื่อหยุดพิมพ์ กด Ctrl / ⌘ + Enter เพื่อแปลทันที",
     placeholder: "พิมพ์หรือวางข้อความที่ต้องการแปล...",
     empty: "กรุณาใส่ข้อความ",
     waiting: "รอพิมพ์เสร็จแล้วแปลอัตโนมัติ…",
@@ -106,9 +99,6 @@ const COPY = {
     lightTheme: "เปลี่ยนเป็นธีมสว่าง",
     darkTheme: "เปลี่ยนเป็นธีมเข้ม",
     remove: "นำออก",
-    download: "ดาวน์โหลด",
-    chooseImage: "เลือกรูปภาพหรือลากไฟล์มาวาง",
-    imageHint: "PNG, JPEG หรือ WebP · สูงสุด 10 MB",
     chooseDocument: "เลือกเอกสารหรือลากไฟล์มาวาง",
     documentHint: "TXT, MD, CSV, PDF, DOCX · 10 MB · PDF สูงสุด 20 หน้า",
     extracting: "กำลังอ่านข้อความจากไฟล์…",
@@ -117,7 +107,6 @@ const COPY = {
     fileUnsupported: "โหมดนี้ไม่รองรับไฟล์ประเภทนี้",
     tooLong: "ข้อความเกินขีดจำกัด กรุณาแบ่งข้อความก่อนแปล",
     clearChat: "ล้างแชท",
-    chatHelp: "เลือกฝั่งผู้พูด พิมพ์ข้อความหรือกดไมค์ แล้วกดอีกครั้งเพื่อส่ง",
     chatEmpty: "บทสนทนาของคุณจะแสดงที่นี่",
     autoSpeak: "อ่านคำแปลออกเสียง",
     send: "ส่ง",
@@ -126,6 +115,8 @@ const COPY = {
     chooseSpeaker: "กรุณาเลือกภาษาต้นทางเพื่อสนทนาแปลสองทาง",
   },
 };
+Object.assign(COPY.en, { doneIn: "Translation complete · {seconds}s" });
+Object.assign(COPY.th, { doneIn: "แปลแล้ว · {seconds} วินาที" });
 let locale = "en",
   mode = "text",
   reverseSpeaker = false;
@@ -134,7 +125,7 @@ let selectedFilename = "",
 const activeFeature = () => featureWorkspaces.get(mode);
 let composing = false,
   compositionOwner = null;
-const AUTO_TRANSLATE_DELAY = 800;
+const AUTO_TRANSLATE_DELAY = 450;
 let recorder = null,
   mediaStream = null,
   recordTimer = null,
@@ -167,6 +158,7 @@ function fileStatus(message = "", error = false) {
 function updateInput() {
   inputEl.maxLength = maxInput();
   const text = inputEl.value;
+  $("clear").hidden = text.length === 0;
   let words = text.trim().split(/\s+/u).filter(Boolean).length;
   try {
     if (Intl.Segmenter)
@@ -188,7 +180,7 @@ function updateInput() {
   translateBtn.hidden = !inputEl.value.trim();
 }
 function updateOutput() {
-  for (const id of ["copy", "download", "speak-output"]) $(id).hidden = !outputEl.value;
+  for (const id of ["copy", "speak-output"]) $(id).hidden = !outputEl.value;
 }
 function cancelAutoTranslation() {
   clearTimeout(activeFeature().timer);
@@ -275,6 +267,9 @@ async function responseJson(response) {
 function translationOptions() {
   const preferences = activeFeature().preferences;
   return {
+    ...(typeof thaiTranslationOptions === "function" ? thaiTranslationOptions() : {}),
+    cache_scope: mode,
+    defer_additional: true,
     context: preferences.context,
     extra_context: preferences.extraContext,
     glossary: activeFeature().glossary.map((entry) => ({ ...entry })),
@@ -334,7 +329,7 @@ targetEl.value = "en";
 updateLanguages();
 updateInput();
 
-async function translate() {
+async function translate({ refresh = false } = {}) {
   if (mode === "image") {
     document.dispatchEvent(new CustomEvent("photo:translate"));
     return;
@@ -389,16 +384,27 @@ async function translate() {
   document.querySelector(".output-panel").setAttribute("aria-busy", "true");
   setStatus(t("loading"));
   if (!isChat) document.dispatchEvent(new CustomEvent("translation:invalidated"));
+  const started = performance.now();
   try {
     const data = await responseJson(
       await fetch("/api/translate", {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, source, target, tone, ...options }),
+        body: JSON.stringify({ text, source, target, tone, ...options, cache_bypass: refresh }),
       })
     );
     if (!ownsOperation(controller)) return;
+    if (data.interpretation?.status === "needs_context") {
+      document.dispatchEvent(new CustomEvent("thai:result", { detail: data.interpretation }));
+      setStatus(t("thaiNeedContext"));
+      return;
+    }
+    if (data.quality_review?.status === "needs_context") {
+      setStatus(`${t("meaningNeedsContext")} ${data.quality_review.question || ""}`, true);
+      inputEl.focus();
+      return;
+    }
     const detail = {
       text,
       translation: data.translation,
@@ -410,6 +416,8 @@ async function translate() {
       audit: data.audit || null,
       sourceLanguage: data.source_language || source,
       feature: mode,
+      interpretation: data.interpretation || null,
+      quality_review: data.quality_review || null,
     };
     if (!isChat) commitTranslation(detail);
     else {
@@ -426,6 +434,10 @@ async function translate() {
       updateInput();
       if ($("auto-speak").checked) speak(data.translation, target);
     }
+    setStatus(t("doneIn").replace("{seconds}", ((performance.now() - started) / 1000).toFixed(1)));
+    if (["unavailable", "rejected", "length_limit"].includes(data.quality_review?.status))
+      setStatus(t("meaningReviewUnavailable"));
+    document.dispatchEvent(new CustomEvent("thai:result", { detail: data.interpretation || null }));
   } catch (error) {
     if (error.name !== "AbortError" && ownsOperation(controller))
       setStatus(error.message || t("failed"), true);
@@ -468,8 +480,6 @@ function removeFile() {
   $("file-preview").hidden = true;
   $("retry-file").hidden = true;
   $("file-name").textContent = "";
-  $("image-preview").hidden = true;
-  $("image-preview").removeAttribute("src");
   fileStatus();
 }
 function clearText() {
@@ -507,22 +517,6 @@ async function copyText(text) {
   }
 }
 $("copy").addEventListener("click", () => copyText(outputEl.value));
-$("download").addEventListener("click", () => {
-  if (!outputEl.value) return;
-  const url = URL.createObjectURL(
-    new Blob(["\uFEFF", outputEl.value], { type: "text/plain;charset=utf-8" })
-  );
-  const link = document.createElement("a");
-  link.href = url;
-  const base = selectedFilename
-    ? selectedFilename.replace(/\.[^.]+$/, "").replace(/[\\/:*?"<>|]/g, "_")
-    : "translation";
-  link.download = `${base}-${targetEl.value}.txt`;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
 $("swap").addEventListener("click", () => {
   stopRecording(true);
   stopAudio();
@@ -560,12 +554,8 @@ function refreshMode() {
   $("photo-mode").hidden = mode !== "image";
   $("file-tools").hidden = mode !== "document";
   $("chat-area").hidden = mode !== "live";
-  $("upload-title").textContent = t(mode === "image" ? "chooseImage" : "chooseDocument");
-  $("upload-hint").textContent = t(mode === "image" ? "imageHint" : "documentHint");
-  $("upload-icon")
-    .querySelector("use")
-    .setAttribute("href", mode === "image" ? "#icon-image" : "#icon-document");
-  $("file-input").accept = ".txt,.md,.csv,.pdf,.docx";
+  $("upload-title").textContent = t("chooseDocument");
+  $("upload-hint").textContent = t("documentHint");
   $("microphone").disabled = mode === "image";
   $("show-saved").hidden = true;
   $("source-heading").textContent = t(mode === "live" ? "message" : "source");
@@ -625,7 +615,6 @@ function switchFeature(nextMode) {
   $("file-name").textContent = selectedFilename;
   $("file-preview").hidden = !activeFeature().documentFile;
   $("retry-file").hidden = !activeFeature().needsExtraction;
-  $("image-preview").hidden = true;
   fileStatus(view.fileStatus, view.fileError);
   setStatus(view.status, view.statusError);
   voiceStatus();
@@ -752,13 +741,13 @@ function renderTurn(turn) {
     extra.className = "chat-additional";
     extra.dir = "auto";
     extra.lang = result.target;
-    extra.textContent = `${LANGUAGES[result.target][0]} · ${result.translation || result.error}`;
+    extra.textContent = `${LANGUAGES[result.target][0]} · ${result.pending ? t("loading") : result.translation || result.error}`;
     card.append(extra);
-    if (result.error) {
+    if (result.error || result.pending) {
       const retry = document.createElement("button");
       retry.type = "button";
       retry.className = "outline-button";
-      retry.textContent = t("retry");
+      retry.textContent = t(result.pending ? "loading" : "retry");
       retry.addEventListener("click", () =>
         document.dispatchEvent(
           new CustomEvent("chat:retry-additional", {
@@ -767,6 +756,14 @@ function renderTurn(turn) {
         )
       );
       card.append(retry);
+      if (result.pending)
+        queueMicrotask(() =>
+          document.dispatchEvent(
+            new CustomEvent("chat:retry-additional", {
+              detail: { turn, result, text: extra, button: retry },
+            })
+          )
+        );
     }
   }
   if (turn.audit?.status === "review") {
@@ -895,10 +892,10 @@ $("speak-output").addEventListener("click", () =>
   speak(outputEl.value, activeLanguages()[1], $("speak-output"))
 );
 
-function setMicrophoneState(state, stream = null) {
+function setMicrophoneState(state, stream = null, onLevel = null) {
   $("microphone").dataset.voiceState = state;
   document.dispatchEvent(
-    new CustomEvent("voice:state", { detail: { state, stream, reversed: reverseSpeaker } })
+    new CustomEvent("voice:state", { detail: { state, stream, reversed: reverseSpeaker, onLevel } })
   );
 }
 function releaseMicrophone() {
@@ -943,7 +940,14 @@ $("microphone").addEventListener("click", async () => {
   const [language] = activeLanguages();
   const live = mode === "live";
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        channelCount: { ideal: 1 },
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      },
+    });
     if (epoch !== recordingEpoch) {
       stream.getTracks().forEach((track) => track.stop());
       return;
@@ -952,8 +956,12 @@ $("microphone").addEventListener("click", async () => {
     const mimeType = ["audio/webm;codecs=opus", "audio/mp4", "audio/ogg;codecs=opus"].find((type) =>
       MediaRecorder.isTypeSupported(type)
     );
-    const recording = new MediaRecorder(stream, mimeType ? { mimeType } : {}),
-      parts = [];
+    const recording = new MediaRecorder(stream, {
+        ...(mimeType ? { mimeType } : {}),
+        audioBitsPerSecond: 128000,
+      }),
+      parts = [],
+      signal = { samples: 0, peak: 0 };
     recorder = recording;
     recording.ondataavailable = (event) => {
       if (event.data.size) parts.push(event.data);
@@ -966,7 +974,7 @@ $("microphone").addEventListener("click", async () => {
       if (epoch !== recordingEpoch) return;
       releaseMicrophone();
       const blob = new Blob(parts, { type: recording.mimeType });
-      if (!blob.size) {
+      if (!blob.size || (signal.samples >= 5 && signal.peak < 0.00001)) {
         voiceStatus(t("noSpeech"), true);
         return;
       }
@@ -992,6 +1000,20 @@ $("microphone").addEventListener("click", async () => {
         invalidateTranslation();
         updateInput();
         voiceStatus();
+        if (data.review_required || (live && activeFeature().voiceReview === true)) {
+          voiceStatus(t(data.review_required ? "voiceUncertain" : "voiceReview"));
+          inputEl.focus();
+          return;
+        }
+        if (
+          ["text", "live"].includes(mode) &&
+          ["th", "auto"].includes(language) &&
+          activeFeature().thai.mode !== "standard"
+        ) {
+          voiceStatus(t("thaiReviewTranscript"));
+          inputEl.focus();
+          return;
+        }
         if (live) await translate();
         else {
           inputEl.focus();
@@ -1006,7 +1028,10 @@ $("microphone").addEventListener("click", async () => {
     };
     recording.start();
     $("microphone").setAttribute("aria-pressed", "true");
-    setMicrophoneState("recording", stream);
+    setMicrophoneState("recording", stream, (rms) => {
+      signal.samples++;
+      signal.peak = Math.max(signal.peak, rms);
+    });
     voiceStatus(t("recording"));
     recordTimer = setTimeout(() => stopRecording(), 60000);
   } catch {
@@ -1032,8 +1057,8 @@ function updateThemeLabel() {
   document.querySelector('meta[name="theme-color"]').content = light ? "#f6f3ed" : "#211f1b";
 }
 try {
-  if (localStorage.getItem("translator-theme") === "light")
-    document.documentElement.dataset.theme = "light";
+  const savedTheme = localStorage.getItem("translator-theme");
+  if (savedTheme === "light") document.documentElement.dataset.theme = "light";
 } catch {
   /* Optional preference storage. */
 }
@@ -1088,6 +1113,10 @@ $("settings-toggle").addEventListener("click", () => {
   document.dispatchEvent(new CustomEvent("menu:open"));
 });
 $("menu-close").addEventListener("click", closeSettings);
+$("settings").addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeSettings();
+});
 $("settings").addEventListener("close", () =>
   $("settings-toggle").setAttribute("aria-expanded", "false")
 );

@@ -6,7 +6,7 @@ Object.assign(COPY.en, {
   photoChoose: "Choose image",
   photoCamera: "Use camera",
   photoHelp: "Choose a photo and see its translation on the image.",
-  photoFormats: "PNG, JPEG, WebP · up to 10 MB",
+  photoFormats: "PNG, JPEG, WebP, HEIC/HEIF · up to 10 MB",
   photoOriginal: "Original photo",
   photoTranslated: "Translated photo",
   photoFullscreen: "Full screen",
@@ -15,6 +15,13 @@ Object.assign(COPY.en, {
   photoDownload: "Download translated image",
   photoProcessing: "Reading and translating your photo…",
   photoDone: "Translation is on the photo. Tap a label or open full screen to read it.",
+  photoTarget: "Translate into {language} · Change",
+  photoDoneCount: "Translated {count} text areas into {language}. Tap a label to read it.",
+  photoReview: "{count} text areas need checking. Open the readings below or use a clearer photo.",
+  photoReadings: "Read all translations ({count})",
+  photoReadingUnclear: "Text unclear — check the original photo",
+  photoNumbersKept: "Prices, numbers, times and contact details are kept from the original photo.",
+  photoUnchanged: "No text changed. Check the source language or try a clearer photo.",
   photoCapture: "Take photo",
   photoCameraLoading: "Opening camera…",
   photoCameraError:
@@ -28,7 +35,7 @@ Object.assign(COPY.th, {
   photoChoose: "เลือกรูปภาพ",
   photoCamera: "ใช้กล้อง",
   photoHelp: "เลือกรูป แล้วดูคำแปลที่วางบนข้อความในภาพ",
-  photoFormats: "PNG, JPEG, WebP · สูงสุด 10 MB",
+  photoFormats: "PNG, JPEG, WebP, HEIC/HEIF · สูงสุด 10 MB",
   photoOriginal: "รูปต้นฉบับ",
   photoTranslated: "รูปที่แปลแล้ว",
   photoFullscreen: "เต็มหน้าจอ",
@@ -37,6 +44,14 @@ Object.assign(COPY.th, {
   photoDownload: "ดาวน์โหลดรูปที่แปลแล้ว",
   photoProcessing: "กำลังอ่านข้อความและแปลบนภาพ…",
   photoDone: "แปลบนรูปแล้ว กดข้อความหรือเปิดเต็มจอเพื่ออ่านให้ชัดขึ้น",
+  photoTarget: "แปลเป็น{language} · เปลี่ยนภาษา",
+  photoDoneCount: "แปลเป็น{language}แล้ว {count} ส่วน แตะข้อความเพื่ออ่านให้ชัดขึ้น",
+  photoReview: "มี {count} ส่วนที่ยังอ่านไม่ชัด เปิดรายการด้านล่างเพื่อตรวจ หรือใช้รูปที่ชัดขึ้น",
+  photoReadings: "อ่านคำแปลทั้งหมด ({count})",
+  photoReadingUnclear: "ยังอ่านไม่ชัด กรุณาเทียบกับรูปต้นฉบับ",
+  photoNumbersKept: "คงราคา ตัวเลข เวลา และข้อมูลติดต่อจากภาพต้นฉบับ",
+  photoUnchanged:
+    "ยังไม่มีข้อความที่เปลี่ยนเป็นคำแปล ลองเลือกภาษาต้นทางให้ตรงกับข้อความหรือใช้รูปที่ชัดขึ้น",
   photoCapture: "ถ่ายภาพ",
   photoCameraLoading: "กำลังเปิดกล้อง…",
   photoCameraError:
@@ -139,6 +154,62 @@ function photoStatus(message = "", error = false) {
   $("photo-status").textContent = message;
   $("photo-status").classList.toggle("error", error);
 }
+function photoCompletionStatus() {
+  if (photoData?.review_required) {
+    photoStatus(t("photoReview").replace("{count}", String(photoData.review_required)), true);
+    return;
+  }
+  const unchanged = photoData?.translated_regions === 0;
+  const message = unchanged
+    ? t("photoUnchanged")
+    : photoData?.translated_regions != null
+      ? t("photoDoneCount")
+          .replace("{count}", String(photoData.translated_regions))
+          .replace("{language}", languageName(photoData.target_language))
+      : t("photoDone");
+  photoStatus(message, unchanged);
+}
+function openPhotoReading(region, data) {
+  if (mode !== "image" || photoData !== data) return;
+  photoActiveLabel = region;
+  $("photo-label-text").textContent = region.reading_review
+    ? t("photoReadingUnclear")
+    : region.translation;
+  $("photo-label-text").lang = data.target_language;
+  $("photo-label-text").dir = "auto";
+  $("photo-label-status").textContent = "";
+  $("photo-label-dialog").showModal();
+}
+function renderPhotoReadings() {
+  const data = photoData,
+    list = $("photo-readings-list");
+  const readings = data?.regions?.filter((region) => !region.preserve_original) || [];
+  $("photo-readings").hidden = !readings.length;
+  list.replaceChildren();
+  if (!data) return;
+  $("photo-readings-title").textContent = t("photoReadings").replace(
+    "{count}",
+    String(readings.length)
+  );
+  if (data.review_required) $("photo-readings").open = true;
+  for (const region of readings) {
+    const row = document.createElement("button"),
+      source = document.createElement("small"),
+      output = document.createElement("strong");
+    row.type = "button";
+    row.disabled = !!region.reading_review;
+    row.className = "photo-reading";
+    source.textContent = region.text;
+    source.dir = "auto";
+    output.textContent = region.reading_review ? t("photoReadingUnclear") : region.translation;
+    output.lang = data.target_language;
+    output.dir = "auto";
+    row.classList.toggle("needs-review", !!region.reading_review);
+    row.append(source, output);
+    row.addEventListener("click", () => openPhotoReading(region, data));
+    list.append(row);
+  }
+}
 function cancelPhotoRequest() {
   photoDownloadEpoch++;
   $("photo-download").disabled = false;
@@ -201,16 +272,49 @@ function labelRect(region, regions, width, height) {
 }
 function fitPhotoLabel(button, originalHeight) {
   const content = button.firstElementChild;
-  let size = Math.min(42, Math.max(8, originalHeight * 0.85));
-  button.style.fontSize = `${size}px`;
-  while (
-    size > 6 &&
-    (content.scrollHeight > button.clientHeight - 2 || content.scrollWidth > button.clientWidth - 4)
-  ) {
-    size -= 0.5;
-    button.style.fontSize = `${size}px`;
+  let low = 12,
+    high = Math.floor(Math.min(42, Math.max(8, originalHeight * 0.85)) * 2),
+    best = 12;
+  // Find the largest fitting half-pixel size without dozens of forced layouts per label.
+  while (low <= high) {
+    const middle = Math.floor((low + high) / 2);
+    button.style.fontSize = `${middle / 2}px`;
+    if (
+      content.scrollHeight <= button.clientHeight - 2 &&
+      content.scrollWidth <= button.clientWidth - 4
+    ) {
+      best = middle;
+      low = middle + 1;
+    } else {
+      high = middle - 1;
+    }
   }
+  const size = best / 2;
+  button.style.fontSize = `${size}px`;
   button.dataset.fontSize = String(size);
+}
+function photoProtectedBoxes(data) {
+  const boxes = [
+    ...(data.protected_boxes || []),
+    ...data.regions.filter((region) => region.preserve_original),
+  ];
+  return boxes
+    .filter((box) => [box.x, box.y, box.width, box.height].every(Number.isFinite))
+    .map((box) => {
+      const x = Math.max(0, Math.floor(box.x)),
+        y = Math.max(0, Math.floor(box.y));
+      return {
+        x,
+        y,
+        width: Math.min(data.width - x, Math.ceil(box.width)),
+        height: Math.min(data.height - y, Math.ceil(box.height)),
+      };
+    })
+    .filter((box) => box.width > 0 && box.height > 0);
+}
+function drawProtectedPhotoAreas(context, image, data) {
+  for (const { x, y, width, height } of photoProtectedBoxes(data))
+    context.drawImage(image, x, y, width, height, x, y, width, height);
 }
 function renderPhotoStage(id) {
   const stage = $(id);
@@ -232,7 +336,9 @@ function renderPhotoStage(id) {
   const labels = [];
   for (const region of data.regions) {
     if (
-      /^[\d\s.,+()/-]+$/.test(region.translation) &&
+      region.preserve_original ||
+      /\p{N}/u.test(region.text) ||
+      region.reading_review ||
       region.translation.trim() === region.text.trim()
     )
       continue;
@@ -247,22 +353,31 @@ function renderPhotoStage(id) {
     label.style.background = region.background;
     label.style.color = region.foreground;
     label.lang = data.target_language;
+    label.dir = "auto";
     label.setAttribute("aria-label", region.translation);
     label.title = region.translation;
     const content = document.createElement("span");
     content.textContent = region.translation;
     label.append(content);
-    label.addEventListener("click", () => {
-      photoActiveLabel = region;
-      $("photo-label-text").textContent = region.translation;
-      $("photo-label-text").lang = data.target_language;
-      $("photo-label-status").textContent = "";
-      $("photo-label-dialog").showModal();
-    });
+    label.addEventListener("click", () => openPhotoReading(region, data));
     overlay.append(label);
     labels.push([label, region]);
   }
   stage.append(overlay);
+  if (photoProtectedBoxes(data).length) {
+    const protection = document.createElement("canvas");
+    protection.className = "photo-protected";
+    protection.width = data.width;
+    protection.height = data.height;
+    protection.setAttribute("aria-hidden", "true");
+    overlay.append(protection);
+    const restore = () => {
+      if (photoData === data && stage.contains(protection))
+        drawProtectedPhotoAreas(protection.getContext("2d"), image, data);
+    };
+    if (image.complete && image.naturalWidth) restore();
+    else image.addEventListener("load", restore, { once: true });
+  }
   const resize = () => {
     overlay.style.transform = `scale(${stage.clientWidth / data.width})`;
     labels.forEach(([label, region]) => fitPhotoLabel(label, region.height));
@@ -277,6 +392,13 @@ function renderPhotoStage(id) {
   });
 }
 function renderPhoto() {
+  $("photo-number-note").hidden = !photoData || !photoProtectedBoxes(photoData).length;
+  $("photo-number-note").textContent = t("photoNumbersKept");
+  $("photo-target-language").textContent = t("photoTarget").replace(
+    "{language}",
+    languageName(targetEl.value)
+  );
+  renderPhotoReadings();
   $("photo-empty").hidden = !!photoFile;
   $("photo-result").hidden = !photoFile;
   renderPhotoStage("photo-main-stage");
@@ -294,7 +416,10 @@ async function importPhoto(file) {
     photoStatus(t("fileTooLarge"), true);
     return;
   }
-  if (!/image\/(png|jpeg|webp)/i.test(file.type) && !/\.(png|jpe?g|webp)$/i.test(file.name)) {
+  if (
+    !/^image\/(png|jpeg|webp|heic|heif)(-sequence)?$/i.test(file.type) &&
+    !/\.(png|jpe?g|webp|heic|heif)$/i.test(file.name)
+  ) {
     photoStatus(t("fileUnsupported"), true);
     return;
   }
@@ -304,12 +429,44 @@ async function importPhoto(file) {
   stopRecording(true);
   if (photoUrl) URL.revokeObjectURL(photoUrl);
   photoFile = file;
-  photoUrl = URL.createObjectURL(file);
+  const needsPreview = /^image\/hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name);
+  photoUrl = needsPreview ? null : URL.createObjectURL(file);
   photoData = null;
   showingOriginal = false;
   completedPhotoSettings = "";
   $("photo-retry").hidden = true;
   renderPhoto();
+  if (needsPreview) {
+    const epoch = photoEpoch,
+      controller = new AbortController();
+    photoRequest = controller;
+    setPhotoBusy(true);
+    photoStatus(t("photoProcessing"));
+    const timeout = setTimeout(() => controller.abort(), 30000);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const response = await fetch("/api/photo-preview", {
+        method: "POST",
+        body: form,
+        signal: controller.signal,
+      });
+      if (!response.ok) await responseJson(response);
+      const blob = await response.blob();
+      if (epoch !== photoEpoch || mode !== "image") return;
+      photoUrl = URL.createObjectURL(blob);
+      renderPhoto();
+    } catch (error) {
+      if (epoch === photoEpoch && mode === "image") {
+        setPhotoBusy(false);
+        showPhotoError(error.name === "AbortError" ? t("photoTimeout") : error.message);
+      }
+      return;
+    } finally {
+      clearTimeout(timeout);
+      if (epoch === photoEpoch) photoRequest = null;
+    }
+  }
   await translatePhoto();
 }
 async function translatePhoto() {
@@ -339,6 +496,7 @@ async function translatePhoto() {
   form.append("target", targetEl.value);
   form.append("tone", tone);
   form.append("context", options.context);
+  form.append("defer_additional", String(options.defer_additional));
   form.append("extra_context", options.extra_context);
   form.append("additional_targets", JSON.stringify(options.additional_targets));
   form.append("glossary", JSON.stringify(options.glossary));
@@ -351,23 +509,24 @@ async function translatePhoto() {
     photoData = data;
     completedPhotoSettings = signature;
     renderPhoto();
-    photoStatus(t("photoDone"));
-    document.dispatchEvent(
-      new CustomEvent("history:record", {
-        detail: {
-          feature: "image",
-          text: data.regions.map((region) => region.text).join("\n"),
-          translation: data.regions.map((region) => region.translation).join("\n"),
-          source: data.source_language,
-          sourceLanguage: data.source_language,
-          target: targetEl.value,
-          tone,
-          ...options,
-          audit: data.audit || null,
-          additional_translations: data.additional_translations || [],
-        },
-      })
-    );
+    photoCompletionStatus();
+    if (!data.review_required)
+      document.dispatchEvent(
+        new CustomEvent("history:record", {
+          detail: {
+            feature: "image",
+            text: data.regions.map((region) => region.text).join("\n"),
+            translation: data.regions.map((region) => region.translation).join("\n"),
+            source: data.source_language,
+            sourceLanguage: data.source_language,
+            target: targetEl.value,
+            tone,
+            ...options,
+            audit: data.audit || null,
+            additional_translations: data.additional_translations || [],
+          },
+        })
+      );
   } catch (error) {
     if (epoch === photoEpoch && mode === "image") {
       if (timedOut) showPhotoError(t("photoTimeout"));
@@ -405,6 +564,7 @@ function clearPhoto() {
   renderPhoto();
 }
 $("photo-choose").addEventListener("click", () => $("photo-file-input").click());
+$("photo-target-language").addEventListener("click", () => $("target-picker").click());
 $("photo-change").addEventListener("click", () => $("photo-file-input").click());
 $("photo-file-input").addEventListener("change", () => {
   const file = $("photo-file-input").files[0];
@@ -505,10 +665,13 @@ $("photo-download").addEventListener("click", async () => {
     canvas.width = data.width;
     canvas.height = data.height;
     const context = canvas.getContext("2d");
+    context.direction = LANGUAGE_CATALOG[data.target_language]?.rtl ? "rtl" : "ltr";
     context.drawImage(image, 0, 0);
     for (const region of data.regions) {
       if (
-        /^[\d\s.,+()/-]+$/.test(region.translation) &&
+        region.preserve_original ||
+        /\p{N}/u.test(region.text) ||
+        region.reading_review ||
         region.translation.trim() === region.text.trim()
       )
         continue;
@@ -537,6 +700,7 @@ $("photo-download").addEventListener("click", async () => {
       );
       context.restore();
     }
+    drawProtectedPhotoAreas(context, image, data);
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     if (!blob) throw new Error();
     if (!ownsDownload()) return;
@@ -616,6 +780,10 @@ $("photo-capture").addEventListener("click", async () => {
   if (blob) importPhoto(new File([blob], "camera.jpg", { type: "image/jpeg" }));
 });
 function schedulePhotoSettings() {
+  $("photo-target-language").textContent = t("photoTarget").replace(
+    "{language}",
+    languageName(targetEl.value)
+  );
   if (mode !== "image" || !photoFile) return;
   cancelPhotoRequest();
   photoData = null;
@@ -652,7 +820,7 @@ document.addEventListener("mode:change", () => {
 document.addEventListener("interface:change", () => {
   renderPhoto();
   if (photoRequest) photoStatus(t("photoProcessing"));
-  else if (photoData) photoStatus(t("photoDone"));
+  else if (photoData) photoCompletionStatus();
 });
 window.addEventListener("pagehide", () => {
   cancelPhotoRequest();

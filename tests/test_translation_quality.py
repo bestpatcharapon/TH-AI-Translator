@@ -131,6 +131,20 @@ class TranslationQualityTests(unittest.TestCase):
         self.assertEqual(clean["status"], "clear")
         self.assertEqual(audit_translation("ราคา๕๐๐บาท", "500 baht", "en", [])["status"], "clear")
 
+    def test_thousands_separators_are_formatting_but_wrong_amounts_still_flagged(self):
+        source = "ราคา 1500 บาท ไม่ใช่ 150 เวลา 10:30"
+        clean = audit_translation(source, "1,500 baht, not 150, at 10:30", "en", [])
+        self.assertEqual(clean["status"], "clear")
+        self.assertEqual(
+            audit_translation("price 1,500.50 USD", "ราคา 1500.50 ดอลลาร์", "th", [])["status"],
+            "clear",
+        )
+        wrong = audit_translation(source, "15,000 baht, not 150, at 10:30", "en", [])
+        self.assertEqual(wrong["issues"][0]["missing"], ["1500"])
+        self.assertEqual(wrong["issues"][0]["added"], ["15000"])
+        # Decimal commas are not grouping separators.
+        self.assertEqual(audit_translation("1,5 kg", "15 kg", "en", [])["status"], "review")
+
     def test_audit_and_glossary_validation_need_no_model(self):
         with patch.object(server, "get_client") as client:
             result = self.client.post("/api/audit", json=self.body)
@@ -160,7 +174,7 @@ class TranslationQualityTests(unittest.TestCase):
             self.assertEqual(result.status_code, 200)
             self.assertIn(
                 "quotation",
-                client.return_value.chat.completions.create.call_args.kwargs["messages"][0][
+                client.return_value.chat.completions.create.call_args_list[0].kwargs["messages"][0][
                     "content"
                 ],
             )

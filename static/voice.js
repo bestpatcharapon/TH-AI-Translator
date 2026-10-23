@@ -82,9 +82,9 @@ function paintVoiceState() {
   }
   updateVoiceLabels();
 }
-function startVoiceMeter(stream) {
+function startVoiceMeter(stream, onLevel) {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass || reducedVoiceMotion.matches) return;
+  if (!AudioContextClass) return;
   try {
     voiceContext = new AudioContextClass();
     voiceSource = voiceContext.createMediaStreamSource(stream);
@@ -93,7 +93,7 @@ function startVoiceMeter(stream) {
     voiceAnalyser.smoothingTimeConstant = 0.75;
     voiceSource.connect(voiceAnalyser);
     const bins = new Uint8Array(voiceAnalyser.frequencyBinCount),
-      samples = new Uint8Array(voiceAnalyser.fftSize);
+      samples = new Float32Array(voiceAnalyser.fftSize);
     activeVoiceButtons().forEach((button) => button.classList.add("mic-measured"));
     const context = voiceContext;
     context.resume().catch(() => {
@@ -103,18 +103,18 @@ function startVoiceMeter(stream) {
     const draw = () => {
       if (!voiceAnalyser || voiceState !== "recording") return;
       voiceAnalyser.getByteFrequencyData(bins);
-      voiceAnalyser.getByteTimeDomainData(samples);
-      const rms = Math.sqrt(
-        samples.reduce((sum, value) => sum + ((value - 128) / 128) ** 2, 0) / samples.length
-      );
+      voiceAnalyser.getFloatTimeDomainData(samples);
+      const rms = Math.sqrt(samples.reduce((sum, value) => sum + value ** 2, 0) / samples.length);
+      onLevel?.(rms);
       const level = Math.min(1, rms * 7);
-      activeVoiceButtons().forEach((button) =>
-        button.querySelectorAll(".mic-wave i").forEach((bar, index) => {
-          const frequency = bins[2 + index * 4] / 255;
-          const scale = 0.15 + 0.85 * Math.min(1, level * 0.65 + frequency * 0.6);
-          bar.style.setProperty("--voice-scale", scale.toFixed(3));
-        })
-      );
+      if (!reducedVoiceMotion.matches)
+        activeVoiceButtons().forEach((button) =>
+          button.querySelectorAll(".mic-wave i").forEach((bar, index) => {
+            const frequency = bins[2 + index * 4] / 255;
+            const scale = 0.15 + 0.85 * Math.min(1, level * 0.65 + frequency * 0.6);
+            bar.style.setProperty("--voice-scale", scale.toFixed(3));
+          })
+        );
       voiceFrame = requestAnimationFrame(draw);
     };
     voiceFrame = requestAnimationFrame(draw);
@@ -134,7 +134,7 @@ document.addEventListener("voice:state", ({ detail }) => {
     voiceElapsed.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   };
   updateElapsed();
-  startVoiceMeter(detail.stream);
+  startVoiceMeter(detail.stream, detail.onLevel);
   voiceClock = setInterval(updateElapsed, 1000);
 });
 document.addEventListener("interface:change", updateVoiceLabels);

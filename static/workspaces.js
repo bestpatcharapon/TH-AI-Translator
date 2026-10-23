@@ -8,8 +8,18 @@ function createWorkspace(name) {
     needsExtraction: false,
     assistantRequests: new Map(),
     sourceInfoCache: new Map(),
+    sourceInfoTimer: null,
     assistant: null,
     glossary: [],
+    voiceReview: false,
+    thai: {
+      mode: "standard",
+      lexicon: [],
+      result: null,
+      clarification: "",
+      request: null,
+      draft: { term: "", meaning: "", dialect: "slang", example: "" },
+    },
     studio: {
       open: false,
       analysis: null,

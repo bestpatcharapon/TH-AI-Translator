@@ -1,0 +1,89 @@
+{
+  "scope": "Six real hybrid Thai-English requests; qualitative inspection only, not a general accuracy benchmark. Cache bypassed.",
+  "results": [
+    {
+      "source": "ตรวจบัญชีบริษัทญาติทีไรก็ลูบหน้าปะจมูกทุกที",
+      "http": 200,
+      "translation": "Whenever I audit a relative’s company, they always butter me up.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "seconds": 1.214
+    },
+    {
+      "source": "เขาต้องตัดสินคดีของเพื่อนสนิท เลยลูบหน้าปะจมูก",
+      "http": 200,
+      "translation": "Since he had to decide his close friend's case, he rubbed his face and nose.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "seconds": 0.775
+    },
+    {
+      "source": "ไม่ต้องเกรงใจ หยิบเพิ่มได้เลย",
+      "http": 200,
+      "translation": "Don't hold back—feel free to take more.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "seconds": 1.924
+    },
+    {
+      "source": "ผมเกรงใจที่จะรบกวนคุณนอกเวลางาน",
+      "http": 200,
+      "translation": "I’m hesitant to bother you outside of work hours.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "seconds": 0.756
+    },
+    {
+      "source": "อย่าเพิ่งโอนเงินจนกว่าจะได้รับสินค้า",
+      "http": 200,
+      "translation": "Don't make the payment until you receive the product.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "seconds": 1.615
+    },
+    {
+      "source": "ข้าวต้มใส่ผักชีโรยหน้า ราคา 50 บาท",
+      "http": 200,
+      "translation": "Rice porridge topped with coriander, 50 baht.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "unavailable",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "seconds": 1.305
+    }
+  ]
+}

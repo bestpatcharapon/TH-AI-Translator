@@ -1,0 +1,94 @@
+{
+  "scope": "Synthetic TTS, clean audio, single runs. Not real accented/noisy microphone speech or a Google comparison.",
+  "samples": [
+    {
+      "language": "th",
+      "expected": "ขอจองโต๊ะสำหรับสองคนตอนหนึ่งทุ่มครึ่งครับ",
+      "readings": {
+        "whisper-large-v3-turbo": {
+          "text": "ขอจ้องโต๊ะสำหรับ 2 คนตอน 1 ทุ่มครึ่งครับ",
+          "model": "whisper-large-v3-turbo",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.391
+        },
+        "whisper-large-v3": {
+          "text": "ขอจ้องโต๊ะสำหรับสองคนตอนหนึ่งทุ่มครึ่งครับ",
+          "model": "whisper-large-v3",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.371
+        }
+      },
+      "translation_http_status": 200,
+      "translation": "I'd like to reserve a table for two at 7:30 pm."
+    },
+    {
+      "language": "th",
+      "expected": "ผมแพ้ถั่วลิสง กรุณาอย่าใส่ถั่วและน้ำมันถั่วครับ",
+      "readings": {
+        "whisper-large-v3-turbo": {
+          "text": "ผมแพ้ถวริสงกรุณาอย่าใส่ถัว และน้ำมันถัวครับ",
+          "model": "whisper-large-v3-turbo",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.395
+        },
+        "whisper-large-v3": {
+          "text": "ผมแพ้ถั่วลิสงกรุณาอย่าใส่ถั่ว และน้ำมันถั่วครับ",
+          "model": "whisper-large-v3",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.395
+        }
+      },
+      "translation_http_status": 200,
+      "translation": "I'm allergic to peanuts, so please don't add peanuts or peanut oil."
+    },
+    {
+      "language": "en",
+      "expected": "The fare is one hundred and fifty baht, not fifty baht.",
+      "readings": {
+        "whisper-large-v3-turbo": {
+          "text": "The fare is 150 baht, not 50 baht.",
+          "model": "whisper-large-v3-turbo",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.449
+        },
+        "whisper-large-v3": {
+          "text": "The fare is 150 baht, not 50 baht.",
+          "model": "whisper-large-v3",
+          "review_required": false,
+          "review_reasons": [],
+          "seconds": 0.354
+        }
+      },
+      "translation_http_status": 200,
+      "translation": "ค่าโดยสาร 150 บาท ไม่ใช่ 50 บาท."
+    }
+  ],
+  "silence": {
+    "http_status": 400,
+    "result": {
+      "error": "ไม่พบเสียงพูด กรุณาตรวจไมโครโฟนแล้วบันทึกใหม่"
+    }
+  },
+  "translation_checks": [
+    {
+      "text": "ผมเป็นคนไทย",
+      "translation": "I’m Thai.",
+      "http_status": 200
+    },
+    {
+      "text": "I like people who...",
+      "translation": "ชอบคนที่…",
+      "http_status": 200
+    },
+    {
+      "text": "ไว้ค่อยว่ากันนะ",
+      "translation": "We'll talk about it later, okay?",
+      "http_status": 200
+    }
+  ]
+}

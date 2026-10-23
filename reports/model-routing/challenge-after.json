@@ -1,0 +1,450 @@
+{
+  "created": "2026-10-23T20:46:57.639098+00:00",
+  "scope": "Sixteen real hybrid requests including eight source languages. Sequential requests, cache bypassed. Includes draft and optional review latency. Not a blind human accuracy rating; checklist is not an automatic score.",
+  "median_seconds": 1.7145000000000001,
+  "interval_seconds": 4,
+  "results": [
+    {
+      "id": "conditional-payment",
+      "source": "th",
+      "target": "en",
+      "text": "โอนได้ก็ต่อเมื่อได้รับสินค้าแล้วเท่านั้น",
+      "check": "Payment is permitted only after receipt, not before; retain only.",
+      "http": 200,
+      "translation": "Payment can be made only after the goods have been received.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "You can only make the payment after you receive the goods.",
+            "explanation": "The source text is impersonal (passive/unspecified agent) and does not explicitly address the user as 'You'. A more neutral formulation preserves the impersonal structure.",
+            "kind": "participants",
+            "source_quote": "โอนได้ก็ต่อเมื่อได้รับสินค้าแล้วเท่านั้น"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "condition_or_health"
+        ]
+      },
+      "seconds": 2.271
+    },
+    {
+      "id": "permission-obligation",
+      "source": "th",
+      "target": "en",
+      "text": "ไม่จำเป็นต้องจ่ายวันนี้ แต่ห้ามจ่ายช้ากว่าวันศุกร์",
+      "check": "Today is optional, Friday is the latest allowed day.",
+      "http": 200,
+      "translation": "You don’t need to pay today, but you can’t pay later than Friday.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "seconds": 1.705
+    },
+    {
+      "id": "refund-condition",
+      "source": "en",
+      "target": "th",
+      "text": "You can return either item, but not both, provided the seal is intact.",
+      "check": "One of the items can be returned; not both; intact seal is a condition.",
+      "http": 200,
+      "translation": "คุณสามารถคืนได้หนึ่งรายการหรืออีกรายการหนึ่ง แต่ไม่สามารถคืนได้ทั้งสองรายการ หากซีลยังคงอยู่ในสภาพสมบูรณ์",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ]
+      },
+      "seconds": 1.721
+    },
+    {
+      "id": "smart-contraction",
+      "source": "en",
+      "target": "th",
+      "text": "We wouldn’t charge you unless you’d approved the estimate.",
+      "check": "Charge depends on approval; preserve conditional meaning, not actual payment.",
+      "http": 200,
+      "translation": "เราจะไม่เรียกเก็บเงินจากคุณ เว้นแต่คุณได้อนุมัติประมาณการแล้ว.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ]
+      },
+      "seconds": 2.371
+    },
+    {
+      "id": "price-roles",
+      "source": "th",
+      "target": "en",
+      "text": "มัดจำ 500 บาท หักจากยอดรวม 1,500 บาท เหลือจ่าย 1,000 บาท",
+      "check": "500 deposit is included in total 1500, with 1000 outstanding.",
+      "http": 200,
+      "translation": "Deposit 500 baht, deducted from the total of 1,500 baht, leaving 1,000 baht to be paid.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "reason": "invalid_review",
+        "status": "unavailable",
+        "triggers": [
+          "time_or_quantity_relationship"
+        ]
+      },
+      "seconds": 1.708
+    },
+    {
+      "id": "reschedule-direction",
+      "source": "en",
+      "target": "th",
+      "text": "Move the appointment from 14:30 to 15:00, not the other way around.",
+      "check": "Original 14:30, new 15:00; no reversal.",
+      "http": 200,
+      "translation": "ย้ายนัดจาก 14:30 ไปเป็น 15:00 ไม่ใช่กลับกัน.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "time_or_quantity_relationship"
+        ]
+      },
+      "seconds": 1.516
+    },
+    {
+      "id": "relative-time",
+      "source": "th",
+      "target": "en",
+      "text": "วันมะรืนส่งได้ แต่ยังยืนยันเวลาไม่ได้",
+      "check": "Day after tomorrow, delivery time still unconfirmed; no invented date.",
+      "http": 200,
+      "translation": "We can deliver the day after tomorrow, but we can’t confirm the time yet.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "uncertainty_or_permission",
+          "time_or_quantity_relationship"
+        ]
+      },
+      "seconds": 1.347
+    },
+    {
+      "id": "participant-roles",
+      "source": "th",
+      "target": "en",
+      "text": "ฉันให้เขายืมเงิน ไม่ใช่เขาให้ฉันยืม",
+      "check": "Speaker is the lender, other person is borrower.",
+      "http": 200,
+      "translation": "I lent him money, not the other way around.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "seconds": 1.329
+    },
+    {
+      "id": "japanese-negative",
+      "source": "ja",
+      "target": "th",
+      "text": "予約をキャンセルしないでください。時間だけ変更したいです。",
+      "check": "Do not cancel the reservation; change only the time.",
+      "http": 200,
+      "translation": "กรุณาอย่ายกเลิกการจอง  \nฉันต้องการเปลี่ยนเวลาเท่านั้น",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "multilingual_negation",
+          "multilingual_condition"
+        ]
+      },
+      "seconds": 1.491
+    },
+    {
+      "id": "chinese-exception",
+      "source": "zh",
+      "target": "th",
+      "text": "除了周日，我们每天都营业。",
+      "check": "Open every day except Sunday, not only Sunday.",
+      "http": 200,
+      "translation": "ยกเว้นวันอาทิตย์ เราเปิดทำการทุกวัน",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "multilingual_condition"
+        ]
+      },
+      "seconds": 2.386
+    },
+    {
+      "id": "korean-not-yet",
+      "source": "ko",
+      "target": "th",
+      "text": "아직 결제하지 않았어요. 내일 결제할게요.",
+      "check": "Not paid yet; intends to pay tomorrow.",
+      "http": 200,
+      "translation": "ยังไม่ได้ชำระเงินค่ะ พรุ่งนี้จะชำระเงินค่ะ",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "พรุ่งนี้จะชำระให้ค่ะ",
+            "explanation": "The draft translates '결제할게요' (I will pay) as 'ชำระให้' (pay for [someone]), which adds an unintended benefactor meaning. It should be simply 'ชำระเงินค่ะ' or 'จ่ายค่ะ'.",
+            "kind": "addition",
+            "source_quote": "내일 결제할게요."
+          },
+          {
+            "draft_quote": "ยังไม่ได้ชำระเงินนะ",
+            "explanation": "The particle 'นะ' in the draft adds a slightly assertive or colloquial nuance not strictly present in the neutral polite Korean statement. A polite ending like 'ค่ะ' matches the speaker's tone better.",
+            "kind": "fluency",
+            "source_quote": "아직 결제하지 않았어요."
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "multilingual_negation"
+        ]
+      },
+      "seconds": 2.085
+    },
+    {
+      "id": "german-unless",
+      "source": "de",
+      "target": "th",
+      "text": "Ich komme nur, wenn der Zug pünktlich ist.",
+      "check": "Will come only if train is on time; not unconditional.",
+      "http": 200,
+      "translation": "ฉันจะมาก็ต่อเมื่อรถไฟมาตรงเวลาเท่านั้น",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "ฉันจะมาถึงเฉพาะเมื่อ",
+            "explanation": "The draft translates 'Ich komme' as 'มาถึง' (arrive) instead of 'มา' (come), and 'nur, wenn' is better rendered as 'ก็ต่อเมื่อ...เท่านั้น' to preserve the precise conditional restriction.",
+            "kind": "meaning",
+            "source_quote": "Ich komme nur, wenn"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "multilingual_condition"
+        ]
+      },
+      "seconds": 2.797
+    },
+    {
+      "id": "french-prohibition",
+      "source": "fr",
+      "target": "th",
+      "text": "Vous ne devez pas payer avant la livraison.",
+      "check": "Must not pay before delivery; not merely optional payment.",
+      "http": 200,
+      "translation": "คุณต้องไม่จ่ายเงินก่อนการจัดส่ง",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "คุณไม่ควร",
+            "explanation": "The French phrase 'ne pas devoir' expresses an obligation or prohibition ('must not'), whereas 'ไม่ควร' in Thai means 'should not', which weakens the prohibition.",
+            "kind": "meaning",
+            "source_quote": "Vous ne devez pas"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "multilingual_negation"
+        ]
+      },
+      "seconds": 2.16
+    },
+    {
+      "id": "spanish-unless",
+      "source": "es",
+      "target": "th",
+      "text": "No canceles la reserva a menos que yo te lo pida.",
+      "check": "Do not cancel unless speaker asks.",
+      "http": 200,
+      "translation": "อย่ายกเลิกการจอง เว้นแต่ฉันจะขอให้คุณทำ",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "multilingual_condition"
+        ]
+      },
+      "seconds": 2.144
+    },
+    {
+      "id": "literal-food-control",
+      "source": "th",
+      "target": "en",
+      "text": "ข้าวต้มโรยผักชี ถ้วยละ 50 บาท",
+      "check": "Literal coriander garnish and 50 per bowl, no figurative criticism.",
+      "http": 200,
+      "translation": "Cilantro-topped rice porridge, 50 baht per bowl.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "seconds": 0.492
+    },
+    {
+      "id": "plain-fast-control",
+      "source": "th",
+      "target": "en",
+      "text": "ขอบคุณสำหรับความช่วยเหลือ แล้วเจอกันพรุ่งนี้ครับ",
+      "check": "Thanks and see you tomorrow; no additional promises or details.",
+      "http": 200,
+      "translation": "Thank you for your help. See you tomorrow.",
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "seconds": 0.524
+    }
+  ]
+}

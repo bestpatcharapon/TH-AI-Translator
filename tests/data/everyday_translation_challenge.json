@@ -1,0 +1,18 @@
+[
+ {"id":"conditional-payment","source":"th","target":"en","text":"โอนได้ก็ต่อเมื่อได้รับสินค้าแล้วเท่านั้น","check":"Payment is permitted only after receipt, not before; retain only."},
+ {"id":"permission-obligation","source":"th","target":"en","text":"ไม่จำเป็นต้องจ่ายวันนี้ แต่ห้ามจ่ายช้ากว่าวันศุกร์","check":"Today is optional, Friday is the latest allowed day."},
+ {"id":"refund-condition","source":"en","target":"th","text":"You can return either item, but not both, provided the seal is intact.","check":"One of the items can be returned; not both; intact seal is a condition."},
+ {"id":"smart-contraction","source":"en","target":"th","text":"We wouldn’t charge you unless you’d approved the estimate.","check":"Charge depends on approval; preserve conditional meaning, not actual payment."},
+ {"id":"price-roles","source":"th","target":"en","text":"มัดจำ 500 บาท หักจากยอดรวม 1,500 บาท เหลือจ่าย 1,000 บาท","check":"500 deposit is included in total 1500, with 1000 outstanding."},
+ {"id":"reschedule-direction","source":"en","target":"th","text":"Move the appointment from 14:30 to 15:00, not the other way around.","check":"Original 14:30, new 15:00; no reversal."},
+ {"id":"relative-time","source":"th","target":"en","text":"วันมะรืนส่งได้ แต่ยังยืนยันเวลาไม่ได้","check":"Day after tomorrow, delivery time still unconfirmed; no invented date."},
+ {"id":"participant-roles","source":"th","target":"en","text":"ฉันให้เขายืมเงิน ไม่ใช่เขาให้ฉันยืม","check":"Speaker is the lender, other person is borrower."},
+ {"id":"japanese-negative","source":"ja","target":"th","text":"予約をキャンセルしないでください。時間だけ変更したいです。","check":"Do not cancel the reservation; change only the time."},
+ {"id":"chinese-exception","source":"zh","target":"th","text":"除了周日，我们每天都营业。","check":"Open every day except Sunday, not only Sunday."},
+ {"id":"korean-not-yet","source":"ko","target":"th","text":"아직 결제하지 않았어요. 내일 결제할게요.","check":"Not paid yet; intends to pay tomorrow."},
+ {"id":"german-unless","source":"de","target":"th","text":"Ich komme nur, wenn der Zug pünktlich ist.","check":"Will come only if train is on time; not unconditional."},
+ {"id":"french-prohibition","source":"fr","target":"th","text":"Vous ne devez pas payer avant la livraison.","check":"Must not pay before delivery; not merely optional payment."},
+ {"id":"spanish-unless","source":"es","target":"th","text":"No canceles la reserva a menos que yo te lo pida.","check":"Do not cancel unless speaker asks."},
+ {"id":"literal-food-control","source":"th","target":"en","text":"ข้าวต้มโรยผักชี ถ้วยละ 50 บาท","check":"Literal coriander garnish and 50 per bowl, no figurative criticism."},
+ {"id":"plain-fast-control","source":"th","target":"en","text":"ขอบคุณสำหรับความช่วยเหลือ แล้วเจอกันพรุ่งนี้ครับ","check":"Thanks and see you tomorrow; no additional promises or details."}
+]

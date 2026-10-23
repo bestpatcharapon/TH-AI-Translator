@@ -55,7 +55,7 @@ class LanguageCoverageTests(unittest.TestCase):
         from test_photo_translation import image_file
 
         with (
-            patch("photo_translation.photo_language", return_value="lo"),
+            patch("photo_translation.photo_language", return_value="haw"),
             patch("photo_translation.positioned_text") as ocr,
             patch.object(server, "get_client"),
         ):
@@ -97,7 +97,7 @@ class LanguageCoverageTests(unittest.TestCase):
             self.assertIn("พิมพ์", result.json["error"])
             result = self.client.post(
                 "/api/photo-translate",
-                data={"source": "lo", "target": "th", "file": (io.BytesIO(b"photo"), "photo.png")},
+                data={"source": "haw", "target": "th", "file": (io.BytesIO(b"photo"), "photo.png")},
             )
             self.assertEqual(result.status_code, 400)
             self.assertIn("รูป", result.json["error"])

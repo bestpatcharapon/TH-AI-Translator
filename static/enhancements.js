@@ -138,6 +138,8 @@ function resizeOutput() {
 }
 function resetFeatures() {
   featureRevision++;
+  clearTimeout(activeFeature().sourceInfoTimer);
+  activeFeature().sourceInfoTimer = null;
   assistantRequests().forEach((controller) => controller.abort());
   assistantRequests().clear();
   currentTranslation = null;
@@ -243,6 +245,9 @@ async function loadSourceInfo() {
     currentTranslation.context,
     currentTranslation.extra_context,
     currentTranslation.glossary,
+    currentTranslation.thai_mode,
+    currentTranslation.thai_lexicon,
+    currentTranslation.thai_clarification,
     locale,
   ]);
   if (sourceCache().has(key)) {
@@ -319,9 +324,12 @@ document.addEventListener("translation:complete", (event) => {
   for (const id of ["translation-tools", "output-language", "reply-section"]) $(id).hidden = false;
   refreshFeatureLabels();
   resizeOutput();
-  loadSourceInfo();
+  activeFeature().sourceInfoTimer = setTimeout(() => {
+    activeFeature().sourceInfoTimer = null;
+    loadSourceInfo();
+  }, 350);
 });
-$("regenerate").addEventListener("click", translate);
+$("regenerate").addEventListener("click", () => translate({ refresh: true }));
 $("explain").addEventListener("click", async () => {
   const panel = $("explanation-panel");
   if ($("explanation-text").textContent && !$("explanation-text").classList.contains("error")) {
@@ -408,6 +416,7 @@ $("translate-reply").addEventListener("click", async () => {
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          cache_scope: mode,
           text,
           source,
           target,
@@ -592,6 +601,8 @@ const assistantTextIds = [
   "reply-status",
 ];
 document.addEventListener("mode:leaving", () => {
+  clearTimeout(activeFeature().sourceInfoTimer);
+  activeFeature().sourceInfoTimer = null;
   if (assistantRequests().has("source_info")) featureStatus("source-info-status");
   if (assistantRequests().has("reply") || assistantRequests().has("replies"))
     featureStatus("reply-status");

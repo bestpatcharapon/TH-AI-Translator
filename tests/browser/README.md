@@ -1,5 +1,15 @@
 # Browser regression checks
 
+`semantic-review.cjs` checks that ambiguous text stays editable and is not sent or
+saved as a chat turn, corrected wording reaches the conversation, and a failed
+meaning review is disclosed without leaking its status into another feature.
+
+`voice-quality.cjs` checks real browser recording with fake microphone input: audio
+capture settings, automatic send by default, optional transcript review, editing, uncertainty even with
+automatic send enabled, independent preferences, and rejection of a silent audio
+stream before an API request. Speech/translation responses are mocked here; real
+provider examples are recorded separately in `reports/voice-quality-synthetic.json`.
+
 Run the Flask app first (`.venv/bin/python app.py`). The isolation check mocks AI,
 file extraction, photo translation and audio endpoints; it does not consume API quota.
 It verifies independent drafts, languages, tones, results, files, assistant/reply state,
@@ -34,3 +44,26 @@ from other features. All checks default to port 5000; set TRANSLATOR_TEST_URL as
 The cleanup regression check verifies auto-detected language swapping, refreshed audits
 when applying suggested revisions, ownership of delayed clipboard feedback and canceled
 photo exports after switching features.
+
+The Thai interpretation check covers ambiguity blocking, explicit clarification, the real
+local dictionary validator, persistence, independent Text/Live Chat settings, unsent
+uncertain messages, late results, microphone transcript review and responsive Thai labels.
+Translation/transcription are mocked and no AI quota is consumed.
+
+The performance check verifies primary text/chat/photo output before slow additional
+languages, canceled background pronunciation, typing debounce, explicit cache bypass,
+pause/retry behavior and late-result ownership. All model calls are mocked.
+
+The image formats check verifies HEIC server-preview use, successful image rendering,
+and canceled conversion after a feature switch. Preview and translation responses are
+mocked here; Python codec tests encode and decode real HEIF bytes without AI calls.
+
+The image formats suite also checks unchanged-result feedback and mixed Thai/English
+menus: translated Thai labels appear while existing English labels remain untouched.
+
+Image quality checks also cover the visible target-language picker, readable translation
+list, per-label dialog, partial-result warning, and disabled actions for unclear labels.
+
+The numeric preservation suite supplies original pixels spelling 50 with a deliberately
+wrong OCR value of 5. It compares every protected pixel on screen and in the downloaded
+PNG, while also verifying that translations outside those areas are still rendered.

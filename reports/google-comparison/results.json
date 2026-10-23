@@ -1,0 +1,616 @@
+{
+  "started_at": "2026-10-23T17:44:21.151Z",
+  "methodology": "12 hand-selected Thai-English/English-Thai text cases. Same raw text and explicit language pair; no glossary, dialect hints or conversation. Google public signed-out desktop website, displayed mode recorded, versus app /api/translate with natural tone/general context and cache bypass. One run; model-assisted qualitative inspection is not a human blind benchmark or a population accuracy score. No images/audio comparison. UI time and API time are different channels, not a fair speed ranking.",
+  "code_sha256": {
+    "app.py": "2f2c0140a920599e8134c47b318102ec528e53c78115ef25fa940edad66d6142",
+    "semantic_review.py": "18f4a38edf74542dd06dfdbbd39a9ef9de98b7bce0497a5a337c55f5fe2c4524",
+    "project_config.py": "e1fbe83bccf95aec31b8fdf5c4e222caeb4401118ad417b9bd648dbfefa21c06",
+    "practical_translation.py": "ecf74c7674910e17008857e3639fe0c62d5c686130b510f767c9dcd3a988df61"
+  },
+  "results": [
+    {
+      "id": "01-routine",
+      "source": "th",
+      "target": "en",
+      "text": "พรุ่งนี้ร้านเปิดกี่โมงครับ",
+      "check": "Ask tomorrow's opening time; preserve question and politeness.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "What time does the restaurant open tomorrow?",
+        "http_status": 200,
+        "seconds": 0.488,
+        "captured_at": "2026-10-23T17:44:21.954Z"
+      },
+      "google": {
+        "translation": "What time does the shop open tomorrow?",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n26\nAdvanced\nTranslation results\nWhat time does the shop open tomorrow?\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "พรุ่งนี้ร้านเปิดกี่โมงครับ",
+          "What time does the shop open tomorrow?"
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%9E%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%87%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%81%E0%B8%B5%E0%B9%88%E0%B9%82%E0%B8%A1%E0%B8%87%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A&op=translate",
+        "seconds": 1.98,
+        "captured_at": "2026-10-23T17:44:23.935Z",
+        "screenshot": "01-routine.png"
+      }
+    },
+    {
+      "id": "02-indirect-request",
+      "source": "th",
+      "target": "en",
+      "text": "ถ้าสะดวก รบกวนส่งใบเสร็จให้หน่อยนะครับ",
+      "check": "Polite request to send a receipt when convenient; no new deadline or promise.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "condition_or_health"
+          ]
+        },
+        "source_language": "th",
+        "translation": "If it's convenient, could you please send the receipt?",
+        "http_status": 200,
+        "seconds": 1.362,
+        "captured_at": "2026-10-23T17:44:25.369Z"
+      },
+      "google": {
+        "translation": "If convenient, please send me the receipt.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n38\nAdvanced\nTranslation results\nIf convenient, please send me the receipt.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "ถ้าสะดวก รบกวนส่งใบเสร็จให้หน่อยนะครับ",
+          "If convenient, please send me the receipt."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%AA%E0%B8%B0%E0%B8%94%E0%B8%A7%E0%B8%81+%E0%B8%A3%E0%B8%9A%E0%B8%81%E0%B8%A7%E0%B8%99%E0%B8%AA%E0%B9%88%E0%B8%87%E0%B9%83%E0%B8%9A%E0%B9%80%E0%B8%AA%E0%B8%A3%E0%B9%87%E0%B8%88%E0%B9%83%E0%B8%AB%E0%B9%89%E0%B8%AB%E0%B8%99%E0%B9%88%E0%B8%AD%E0%B8%A2%E0%B8%99%E0%B8%B0%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A&op=translate",
+        "seconds": 3.018,
+        "captured_at": "2026-10-23T17:44:28.387Z",
+        "screenshot": "02-indirect-request.png"
+      }
+    },
+    {
+      "id": "03-idiom",
+      "source": "th",
+      "target": "en",
+      "text": "งานนี้เขาทำแบบผักชีโรยหน้า",
+      "check": "Figurative criticism of cosmetic/superficial work; not cooking or literal coriander.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "They made it with cilantro sprinkled on top.",
+        "http_status": 200,
+        "seconds": 0.768,
+        "captured_at": "2026-10-23T17:44:29.221Z"
+      },
+      "google": {
+        "translation": "This time, he made it with coriander sprinkled on top.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n26\nAdvanced\nTranslation results\nThis time, he made it with coriander sprinkled on top.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "งานนี้เขาทำแบบผักชีโรยหน้า",
+          "This time, he made it with coriander sprinkled on top."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B9%80%E0%B8%82%E0%B8%B2%E0%B8%97%E0%B8%B3%E0%B9%81%E0%B8%9A%E0%B8%9A%E0%B8%9C%E0%B8%B1%E0%B8%81%E0%B8%8A%E0%B8%B5%E0%B9%82%E0%B8%A3%E0%B8%A2%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2&op=translate",
+        "seconds": 3.189,
+        "captured_at": "2026-10-23T17:44:32.410Z",
+        "screenshot": "03-idiom.png"
+      },
+      "app_live_diagnostic": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "He/she made it with cilantro sprinkled on top.",
+        "http_status": 200,
+        "seconds": 2.178
+      }
+    },
+    {
+      "id": "04-negation",
+      "source": "th",
+      "target": "en",
+      "text": "อย่าโอนเงินจนกว่าจะได้รับใบแจ้งหนี้",
+      "check": "Do not transfer money before receiving the invoice; do not reverse the condition.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Don't transfer the money until you receive the invoice.",
+        "http_status": 200,
+        "seconds": 0.86,
+        "captured_at": "2026-10-23T17:44:33.327Z"
+      },
+      "google": {
+        "translation": "Do not transfer money until you receive the invoice.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n35\nAdvanced\nTranslation results\nDo not transfer money until you receive the invoice.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "อย่าโอนเงินจนกว่าจะได้รับใบแจ้งหนี้",
+          "Do not transfer money until you receive the invoice."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B9%82%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B8%88%E0%B8%99%E0%B8%81%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%88%E0%B8%B0%E0%B9%84%E0%B8%94%E0%B9%89%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B9%83%E0%B8%9A%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B8%AB%E0%B8%99%E0%B8%B5%E0%B9%89&op=translate",
+        "seconds": 1.815,
+        "captured_at": "2026-10-23T17:44:35.142Z",
+        "screenshot": "04-negation.png"
+      }
+    },
+    {
+      "id": "05-numbers-time",
+      "source": "th",
+      "target": "en",
+      "text": "นัดวันที่ 24 ตุลาคม เวลา 18:45 น. ค่ามัดจำ 1,500 บาท เหลือจ่าย 750 บาท",
+      "check": "October 24, 18:45/6:45pm, deposit 1500 baht, remaining payment 750 baht; preserve roles.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "Appointment on October 24 at 18:45. Deposit: 1,500 baht. Remaining balance: 750 baht.",
+        "http_status": 200,
+        "seconds": 0.381,
+        "captured_at": "2026-10-23T17:44:35.583Z"
+      },
+      "google": {
+        "translation": "Appointment on October 24 at 6:45 p.m. Deposit 1,500 baht, remaining payment 750 baht.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n70\nAdvanced\nTranslation results\nAppointment on October 24 at 6:45 p.m. Deposit 1,500 baht, remaining payment 750 baht.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "นัดวันที่ 24 ตุลาคม เวลา 18:45 น. ค่ามัดจำ 1,500 บาท เหลือจ่าย 750 บาท",
+          "Appointment on October 24 at 6:45 p.m. Deposit 1,500 baht, remaining payment 750 baht."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%99%E0%B8%B1%E0%B8%94%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88+24+%E0%B8%95%E0%B8%B8%E0%B8%A5%E0%B8%B2%E0%B8%84%E0%B8%A1+%E0%B9%80%E0%B8%A7%E0%B8%A5%E0%B8%B2+18%3A45+%E0%B8%99.+%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%A1%E0%B8%B1%E0%B8%94%E0%B8%88%E0%B8%B3+1%2C500+%E0%B8%9A%E0%B8%B2%E0%B8%97+%E0%B9%80%E0%B8%AB%E0%B8%A5%E0%B8%B7%E0%B8%AD%E0%B8%88%E0%B9%88%E0%B8%B2%E0%B8%A2+750+%E0%B8%9A%E0%B8%B2%E0%B8%97&op=translate",
+        "seconds": 2.994,
+        "captured_at": "2026-10-23T17:44:38.578Z",
+        "screenshot": "05-numbers-time.png"
+      }
+    },
+    {
+      "id": "06-ambiguous-pronouns",
+      "source": "th",
+      "target": "en",
+      "text": "เขาบอกว่าเขาจะจัดการให้",
+      "check": "Someone said they would handle it; do not invent what 'it' is. Pronoun identity is underdetermined; conventional he/she/they wording alone is not scored as an error.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "He said he would take care of it.",
+        "http_status": 200,
+        "seconds": 0.424,
+        "captured_at": "2026-10-23T17:44:39.061Z"
+      },
+      "google": {
+        "translation": "He said he would take care of it.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n23\nAdvanced\nTranslation results\nHe said he would take care of it.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "เขาบอกว่าเขาจะจัดการให้",
+          "He said he would take care of it."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B9%80%E0%B8%82%E0%B8%B2%E0%B8%9A%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%82%E0%B8%B2%E0%B8%88%E0%B8%B0%E0%B8%88%E0%B8%B1%E0%B8%94%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%83%E0%B8%AB%E0%B9%89&op=translate",
+        "seconds": 2.719,
+        "captured_at": "2026-10-23T17:44:41.780Z",
+        "screenshot": "06-ambiguous-pronouns.png"
+      }
+    },
+    {
+      "id": "07-informal-metaphor",
+      "source": "th",
+      "target": "en",
+      "text": "วันนี้โดนหัวหน้าสาดงานจนหัวหมุน",
+      "check": "Boss overwhelmed speaker with work today; retain informal metaphor without inventing literal physical injury.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "My boss piled work on me today and I feel dizzy.",
+        "http_status": 200,
+        "seconds": 0.433,
+        "captured_at": "2026-10-23T17:44:42.268Z"
+      },
+      "google": {
+        "translation": "Today, my boss threw me at work until my head was spinning.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n31\nAdvanced\nTranslation results\nToday, my boss threw me at work until my head was spinning.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "วันนี้โดนหัวหน้าสาดงานจนหัวหมุน",
+          "Today, my boss threw me at work until my head was spinning."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B9%82%E0%B8%94%E0%B8%99%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B8%AA%E0%B8%B2%E0%B8%94%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%88%E0%B8%99%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A1%E0%B8%B8%E0%B8%99&op=translate",
+        "seconds": 3.299,
+        "captured_at": "2026-10-23T17:44:45.567Z",
+        "screenshot": "07-informal-metaphor.png"
+      },
+      "app_live_diagnostic": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Today my boss dumped so much work on me that I feel dizzy.",
+        "http_status": 200,
+        "seconds": 1.268
+      }
+    },
+    {
+      "id": "08-northern-thai",
+      "source": "th",
+      "target": "en",
+      "text": "กิ๋นข้าวแล้วกา",
+      "check": "Northern Thai asking whether someone has eaten yet. Both products receive only the raw text, without a dialect hint.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "I've already eaten.",
+        "http_status": 200,
+        "seconds": 0.459,
+        "captured_at": "2026-10-23T17:44:46.091Z"
+      },
+      "google": {
+        "translation": "Eat rice and check.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n14\nAdvanced\nTranslation results\nEat rice and check.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "กิ๋นข้าวแล้วกา",
+          "Eat rice and check."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%81%E0%B8%B4%E0%B9%8B%E0%B8%99%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B9%81%E0%B8%A5%E0%B9%89%E0%B8%A7%E0%B8%81%E0%B8%B2&op=translate",
+        "seconds": 2.948,
+        "captured_at": "2026-10-23T17:44:49.039Z",
+        "screenshot": "08-northern-thai.png"
+      },
+      "app_live_diagnostic": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": true,
+          "issues": [
+            {
+              "draft_quote": "",
+              "explanation": "The source ends with the particle \"กา\", which adds a softening/confirming nuance. The draft omits this particle, losing the speaker's polite emphasis.",
+              "kind": "omission",
+              "source_quote": "กา"
+            }
+          ],
+          "status": "revised",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "I've already eaten, okay?",
+        "http_status": 200,
+        "seconds": 2.634
+      }
+    },
+    {
+      "id": "09-english-idiom",
+      "source": "en",
+      "target": "th",
+      "text": "Could you give me a hand with these boxes?",
+      "check": "Polite request for help with these boxes; not literal body parts.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "en",
+        "translation": "ช่วยยกกล่องเหล่านี้ให้หน่อยได้ไหม?",
+        "http_status": 200,
+        "seconds": 0.603,
+        "captured_at": "2026-10-23T17:44:49.705Z"
+      },
+      "google": {
+        "translation": "คุณช่วยฉันด้วยกล่องพวกนี้หน่อยได้ไหม?",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n42\nAdvanced\nTranslation results\nคุณช่วยฉันด้วยกล่องพวกนี้หน่อยได้ไหม?\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "Could you give me a hand with these boxes?",
+          "คุณช่วยฉันด้วยกล่องพวกนี้หน่อยได้ไหม?"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=Could+you+give+me+a+hand+with+these+boxes%3F&op=translate",
+        "seconds": 2.683,
+        "captured_at": "2026-10-23T17:44:52.388Z",
+        "screenshot": "09-english-idiom.png"
+      }
+    },
+    {
+      "id": "10-polite-refusal",
+      "source": "en",
+      "target": "th",
+      "text": "I'm afraid we won't be able to make it tonight.",
+      "check": "Polite regret about not being able to attend/come tonight; 'afraid' is not literal fear here.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "en",
+        "translation": "ผม/ดิฉันกลัวว่าเราจะไม่สามารถมาคืนนี้ได้.",
+        "http_status": 200,
+        "seconds": 0.79,
+        "captured_at": "2026-10-23T17:44:53.275Z"
+      },
+      "google": {
+        "translation": "ฉันกลัวว่าคืนนี้เราจะไปไม่ได้",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n47\nAdvanced\nTranslation results\nฉันกลัวว่าคืนนี้เราจะไปไม่ได้\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "I'm afraid we won't be able to make it tonight.",
+          "ฉันกลัวว่าคืนนี้เราจะไปไม่ได้"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=I%27m+afraid+we+won%27t+be+able+to+make+it+tonight.&op=translate",
+        "seconds": 3.049,
+        "captured_at": "2026-10-23T17:44:56.324Z",
+        "screenshot": "10-polite-refusal.png"
+      },
+      "app_live_diagnostic": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": true,
+          "issues": [
+            {
+              "draft_quote": "อาจจะไปไม่ได้",
+              "explanation": "Source states definite inability, draft adds uncertainty with \"อาจจะ\".",
+              "kind": "addition",
+              "source_quote": "won't be able to"
+            },
+            {
+              "draft_quote": "ต้องขอโทษ",
+              "explanation": "\"I'm afraid\" expresses regret, not an apology; appropriate Thai phrasing is \"ขออภัย\" or \"เสียใจที่\".",
+              "kind": "terminology",
+              "source_quote": "I'm afraid"
+            }
+          ],
+          "status": "revised",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "en",
+        "translation": "ขออภัย เราไม่สามารถมาคืนนี้ได้",
+        "http_status": 200,
+        "seconds": 2.239
+      }
+    },
+    {
+      "id": "11-frequency",
+      "source": "en",
+      "target": "th",
+      "text": "Water the plants every other day, not twice a day.",
+      "check": "Water plants on alternate days, explicitly not twice daily.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "en",
+        "translation": "รดน้ำต้นไม้ทุกวันสลับวัน ไม่ใช่วันละสองครั้ง.",
+        "http_status": 200,
+        "seconds": 1.488,
+        "captured_at": "2026-10-23T17:44:57.875Z"
+      },
+      "google": {
+        "translation": "รดน้ำต้นไม้วันเว้นวัน ไม่ใช่วันละสองครั้ง",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n50\nAdvanced\nTranslation results\nรดน้ำต้นไม้วันเว้นวัน ไม่ใช่วันละสองครั้ง\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "Water the plants every other day, not twice a day.",
+          "รดน้ำต้นไม้วันเว้นวัน ไม่ใช่วันละสองครั้ง"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=Water+the+plants+every+other+day%2C+not+twice+a+day.&op=translate",
+        "seconds": 3.187,
+        "captured_at": "2026-10-23T17:45:01.063Z",
+        "screenshot": "11-frequency.png"
+      },
+      "app_live_diagnostic": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception",
+            "conversation"
+          ]
+        },
+        "source_language": "en",
+        "translation": "รดน้ำต้นไม้ทุกวันสลับวัน อย่าให้วันละสองครั้ง.",
+        "http_status": 200,
+        "seconds": 2.594
+      }
+    },
+    {
+      "id": "12-deadline",
+      "source": "en",
+      "target": "th",
+      "text": "The deadline has been moved up from Friday to Wednesday.",
+      "check": "Deadline advanced from Friday to Wednesday; preserve direction and do not turn it into a postponement.",
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "en",
+        "translation": "กำหนดส่งได้เลื่อนจากวันศุกร์เป็นวันพุธแล้ว.",
+        "http_status": 200,
+        "seconds": 0.595,
+        "captured_at": "2026-10-23T17:45:01.714Z"
+      },
+      "google": {
+        "translation": "กำหนดเวลาถูกเลื่อนจากวันศุกร์เป็นวันพุธ",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n56\nAdvanced\nTranslation results\nกำหนดเวลาถูกเลื่อนจากวันศุกร์เป็นวันพุธ\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "The deadline has been moved up from Friday to Wednesday.",
+          "กำหนดเวลาถูกเลื่อนจากวันศุกร์เป็นวันพุธ"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=The+deadline+has+been+moved+up+from+Friday+to+Wednesday.&op=translate",
+        "seconds": 3.014,
+        "captured_at": "2026-10-23T17:45:04.730Z",
+        "screenshot": "12-deadline.png"
+      }
+    }
+  ],
+  "finished_at": "2026-10-23T17:45:04.786Z",
+  "app_configuration": {
+    "model": "openai/gpt-oss-120b",
+    "text_reasoning": "low",
+    "chat_reasoning": "medium"
+  },
+  "live_diagnostic_scope": "Five selected difficult cases were checked again in app Live mode with no conversation, glossary or dialect hint, after viewing text results. Diagnostic only; not pooled into the 12-case counts."
+}

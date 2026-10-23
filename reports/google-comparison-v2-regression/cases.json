@@ -1,0 +1,14 @@
+[
+  {"id":"01-routine","source":"th","target":"en","text":"พรุ่งนี้ร้านเปิดกี่โมงครับ","check":"Ask tomorrow's opening time; preserve question and politeness."},
+  {"id":"02-indirect-request","source":"th","target":"en","text":"ถ้าสะดวก รบกวนส่งใบเสร็จให้หน่อยนะครับ","check":"Polite request to send a receipt when convenient; no new deadline or promise."},
+  {"id":"03-idiom","source":"th","target":"en","text":"งานนี้เขาทำแบบผักชีโรยหน้า","check":"Figurative criticism of cosmetic/superficial work; not cooking or literal coriander."},
+  {"id":"04-negation","source":"th","target":"en","text":"อย่าโอนเงินจนกว่าจะได้รับใบแจ้งหนี้","check":"Do not transfer money before receiving the invoice; do not reverse the condition."},
+  {"id":"05-numbers-time","source":"th","target":"en","text":"นัดวันที่ 24 ตุลาคม เวลา 18:45 น. ค่ามัดจำ 1,500 บาท เหลือจ่าย 750 บาท","check":"October 24, 18:45/6:45pm, deposit 1500 baht, remaining payment 750 baht; preserve roles."},
+  {"id":"06-ambiguous-pronouns","source":"th","target":"en","text":"เขาบอกว่าเขาจะจัดการให้","check":"Someone said they would handle it; do not invent what 'it' is. Pronoun identity is underdetermined; conventional he/she/they wording alone is not scored as an error."},
+  {"id":"07-informal-metaphor","source":"th","target":"en","text":"วันนี้โดนหัวหน้าสาดงานจนหัวหมุน","check":"Boss overwhelmed speaker with work today; retain informal metaphor without inventing literal physical injury."},
+  {"id":"08-northern-thai","source":"th","target":"en","text":"กิ๋นข้าวแล้วกา","check":"Northern Thai asking whether someone has eaten yet. Both products receive only the raw text, without a dialect hint."},
+  {"id":"09-english-idiom","source":"en","target":"th","text":"Could you give me a hand with these boxes?","check":"Polite request for help with these boxes; not literal body parts."},
+  {"id":"10-polite-refusal","source":"en","target":"th","text":"I'm afraid we won't be able to make it tonight.","check":"Polite regret about not being able to attend/come tonight; 'afraid' is not literal fear here."},
+  {"id":"11-frequency","source":"en","target":"th","text":"Water the plants every other day, not twice a day.","check":"Water plants on alternate days, explicitly not twice daily."},
+  {"id":"12-deadline","source":"en","target":"th","text":"The deadline has been moved up from Friday to Wednesday.","check":"Deadline advanced from Friday to Wednesday; preserve direction and do not turn it into a postponement."}
+]

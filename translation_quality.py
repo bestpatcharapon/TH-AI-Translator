@@ -70,7 +70,14 @@ def _numbers(text):
     normalized = "".join(
         str(unicodedata.digit(char)) if char.isdecimal() else char for char in text
     )
-    return re.findall(r"(?<!\d)[-+]?\d+(?:[.,:/-]\d+)*(?:\s?%)?", normalized)
+    # Thousands separators are formatting, not content: 1500 and 1,500 are the same amount.
+    # Without this, routine price text triggers a needless (slow) repair request.
+    return [
+        number.replace(",", "")
+        if re.fullmatch(r"[-+]?\d{1,3}(?:,\d{3})+(?:\.\d+)?(?:\s?%)?", number)
+        else number
+        for number in re.findall(r"(?<!\d)[-+]?\d+(?:[.,:/-]\d+)*(?:\s?%)?", normalized)
+    ]
 
 
 def audit_translation(text, translation, target, glossary):

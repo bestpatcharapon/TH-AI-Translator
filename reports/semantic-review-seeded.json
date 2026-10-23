@@ -1,0 +1,117 @@
+{
+  "scope": "Small Thai-English challenge with deliberately wrong drafts and one adequate draft. Review judgments require human inspection; this is not an overall accuracy score or Google comparison.",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "purpose": "seeded negation and allergy error",
+      "source": "ไม่ใส่ถั่ว ผมแพ้ถั่วลิสง",
+      "draft": "Add peanuts; I like peanuts.",
+      "translation": "No peanuts; I'm allergic to peanuts.",
+      "review": {
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ],
+        "applied": true,
+        "issues": [
+          {
+            "kind": "negation",
+            "source_quote": "ไม่ใส่ถั่ว",
+            "draft_quote": "Add peanuts",
+            "explanation": "The source explicitly says not to include peanuts, while the draft says to add them."
+          },
+          {
+            "kind": "addition",
+            "source_quote": "ผมแพ้ถั่วลิสง",
+            "draft_quote": "I like peanuts",
+            "explanation": "The draft adds a statement about liking peanuts, which is not present in the source and contradicts the source's allergy claim."
+          }
+        ]
+      },
+      "seconds": 1.835
+    },
+    {
+      "purpose": "seeded reversed condition",
+      "source": "ถ้าฝนไม่ตกค่อยไป",
+      "draft": "Let's go even if it rains.",
+      "translation": "If it doesn't rain, let's go.",
+      "review": {
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ],
+        "applied": true,
+        "issues": [
+          {
+            "kind": "negation",
+            "source_quote": "ถ้าฝนไม่ตก",
+            "draft_quote": "even if it rains",
+            "explanation": "The source states a condition of no rain, but the draft reverses it to a condition of rain, changing the meaning."
+          }
+        ]
+      },
+      "seconds": 1.514
+    },
+    {
+      "purpose": "seeded reversed payment state",
+      "source": "เขายังไม่ได้จ่ายเงิน",
+      "draft": "He has already paid.",
+      "translation": "He hasn't paid yet.",
+      "review": {
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ],
+        "applied": true,
+        "issues": [
+          {
+            "kind": "negation",
+            "source_quote": "ยังไม่ได้",
+            "draft_quote": "already",
+            "explanation": "The source says he has not yet paid, but the draft says he has already paid, reversing the negation."
+          }
+        ]
+      },
+      "seconds": 1.204
+    },
+    {
+      "purpose": "seeded swapped times; digit counters alone cannot detect this",
+      "source": "ประชุมวันที่ 15 เวลา 14:30 ไม่ใช่ 13:30",
+      "draft": "The meeting is on the 15th at 13:30, not 14:30.",
+      "translation": "The meeting is on the 15th at 14:30, not 13:30.",
+      "review": {
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ],
+        "applied": true,
+        "issues": [
+          {
+            "kind": "negation",
+            "source_quote": "เวลา 14:30 ไม่ใช่ 13:30",
+            "draft_quote": "at 13:30, not 14:30",
+            "explanation": "The draft reverses the times, stating the meeting is at 13:30 and not 14:30, whereas the source says it is at 14:30 and not 13:30."
+          }
+        ]
+      },
+      "seconds": 1.34
+    },
+    {
+      "purpose": "adequate draft should remain unchanged",
+      "source": "ไม่ใส่ถั่วลิสง ผมแพ้ถั่วลิสง",
+      "draft": "Please don't add peanuts; I'm allergic to peanuts.",
+      "translation": "Please don't add peanuts; I'm allergic to peanuts.",
+      "review": {
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ],
+        "applied": false
+      },
+      "seconds": 1.372
+    }
+  ]
+}

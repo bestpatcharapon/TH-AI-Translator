@@ -310,6 +310,8 @@ function renderAudit(container, audit) {
 }
 function studioPayload(snapshot) {
   return {
+    ...thaiSnapshotOptions(snapshot),
+    interpretation: snapshot.interpretation || null,
     text: snapshot.text,
     translation: snapshot.translation,
     source: snapshot.sourceLanguage || snapshot.source,

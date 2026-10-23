@@ -157,7 +157,9 @@ class AppTests(unittest.TestCase):
                 "/api/transcribe",
                 data={"language": "th", "file": (io.BytesIO(b"audio"), "recording.webm")},
             )
-            self.assertEqual(result.json, {"text": "สวัสดี"})
+            self.assertEqual(result.json["text"], "สวัสดี")
+            self.assertTrue(result.json["review_required"])
+            self.assertEqual(result.json["review_reasons"], ["no_metadata"])
             self.assertEqual(
                 client.return_value.audio.transcriptions.create.call_args.kwargs["language"], "th"
             )

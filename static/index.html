@@ -8,20 +8,17 @@
     />
     <meta name="theme-color" content="#211f1b" />
     <title>TH AI Translator</title>
+    <link rel="icon" type="image/png" href="/static/brand/logo-v1.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&family=Noto+Sans+SC:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/style.css?v=appearance-restored-v9" />
   </head>
   <body>
     <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <symbol id="icon-logo" viewBox="0 0 24 24">
-        <path d="M9 16 5 20v-5a7 7 0 1 1 12-5" />
-        <path d="M12 7a6 6 0 0 1 7 9v4l-4-3h-3a5 5 0 0 1-3-9" />
-      </symbol>
       <symbol id="icon-moon" viewBox="0 0 24 24">
         <path d="M20.8 13a9 9 0 0 1-9.8-9.8A9 9 0 1 0 20.8 13Z" />
       </symbol>
@@ -107,8 +104,8 @@
       <header class="app-header">
         <a class="brand" href="/" aria-label="TH AI Translator home"
           ><span class="brand-icon"
-            ><svg><use href="#icon-logo" /></svg
-          ></span>
+            ><img src="/static/brand/logo-v1.png" alt="" width="44" height="44" />
+          </span>
           <h1>TH AI Translator</h1></a
         >
         <div class="header-actions">
@@ -147,12 +144,43 @@
         </div>
       </header>
 
+      <div class="bottom-bar">
+        <nav class="mode-nav" aria-label="Translation modes">
+          <button class="mode active" data-mode="text" type="button" aria-current="page">
+            <svg><use href="#icon-text" /></svg><span data-i18n="text">Text</span>
+          </button>
+          <button class="mode" data-mode="image" type="button">
+            <svg><use href="#icon-image" /></svg><span data-i18n="image">Image</span>
+          </button>
+          <span class="mic-space" aria-hidden="true"></span>
+          <button class="mode" data-mode="document" type="button">
+            <svg><use href="#icon-document" /></svg><span data-i18n="document">Document</span>
+          </button>
+          <button class="mode" data-mode="live" type="button">
+            <svg><use href="#icon-live" /></svg><span data-i18n="live">Live Chat</span>
+          </button>
+        </nav>
+        <button
+          id="microphone"
+          class="microphone"
+          type="button"
+          aria-label="Dictate source text"
+          aria-pressed="false"
+          title="Dictate source text"
+        >
+          <svg><use href="#icon-mic" /></svg>
+        </button>
+      </div>
+
       <header id="live-header" class="live-header" hidden>
         <button id="live-back" class="icon-button" type="button" aria-label="Back to translator">
           <svg><use href="#icon-arrow" /></svg>
         </button>
         <div class="live-heading">
-          <h1 data-i18n="live">Live Chat</h1>
+          <div class="live-title">
+            <img src="/static/brand/logo-v1.png" alt="" width="32" height="32" />
+            <h1 data-i18n="live">Live Chat</h1>
+          </div>
           <p data-i18n="twoLanguage">Two-language conversation</p>
         </div>
         <button
@@ -207,9 +235,46 @@
         </div>
       </div>
 
+      <section id="thai-tools" class="thai-tools" hidden aria-label="Thai slang and dialects">
+        <label class="thai-mode-label" for="thai-mode"
+          ><span data-i18n="thaiMode">Thai interpretation</span>
+          <select id="thai-mode">
+            <option value="standard" data-i18n="thaiStandard">Standard translation</option>
+            <option value="auto" data-i18n="thaiAuto">Slang / dialect · unsure which</option>
+            <option value="slang" data-i18n="thaiSlang">Slang &amp; coined phrases</option>
+            <option value="northern" data-i18n="thaiNorthern">Northern Thai</option>
+            <option value="isan" data-i18n="thaiIsan">Isan</option>
+            <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
+          </select>
+        </label>
+        <p id="thai-mode-note" class="menu-help" data-i18n="thaiModeNote" hidden>
+          Interpretation can be wrong. Check microphone transcripts before relying on the meaning.
+        </p>
+        <section id="thai-result" class="thai-result" aria-live="polite" hidden>
+          <div id="thai-result-content"></div>
+          <form id="thai-clarification-form" hidden>
+            <label for="thai-clarification" data-i18n="thaiClarification"
+              >What does the speaker mean here?</label
+            >
+            <textarea id="thai-clarification" maxlength="1000" rows="2"></textarea>
+            <button id="thai-clarify" class="outline-button" type="submit" data-i18n="thaiClarify">
+              Explain and translate again
+            </button>
+          </form>
+        </section>
+      </section>
+
       <section id="photo-mode" class="photo-mode" hidden aria-labelledby="photo-heading">
         <h2 id="photo-heading" data-i18n="translation">Translation</h2>
-        <input id="photo-file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+        <button id="photo-target-language" class="outline-button" type="button"></button>
+        <p id="photo-status" class="feature-status" role="status" aria-live="polite"></p>
+        <p id="photo-number-note" class="feature-status" hidden></p>
+        <input
+          id="photo-file-input"
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/heic,image/heif,.heic,.heif"
+          hidden
+        />
         <div id="photo-empty" class="photo-empty">
           <p class="photo-eyebrow" data-i18n="photoEyebrow">AI PHOTO TRANSLATION</p>
           <span class="photo-hero-icon"
@@ -230,7 +295,9 @@
           <p class="photo-help" data-i18n="photoHelp">
             Choose a photo and see its translation on the image.
           </p>
-          <p class="photo-formats" data-i18n="photoFormats">PNG, JPEG, WebP · up to 10 MB</p>
+          <p class="photo-formats" data-i18n="photoFormats">
+            PNG, JPEG, WebP, HEIC/HEIF · up to 10 MB
+          </p>
         </div>
         <div id="photo-result" class="photo-result" hidden>
           <div id="photo-preview" class="photo-preview">
@@ -263,6 +330,10 @@
               </button>
             </div>
           </div>
+          <details id="photo-readings" class="photo-readings" hidden>
+            <summary id="photo-readings-title"></summary>
+            <div id="photo-readings-list"></div>
+          </details>
           <div class="photo-actions">
             <button id="photo-original" type="button" aria-pressed="false">
               <svg><use href="#icon-image" /></svg
@@ -289,18 +360,17 @@
             </button>
           </div>
         </div>
-        <p id="photo-status" class="feature-status" role="status" aria-live="polite"></p>
       </section>
 
       <section id="file-tools" class="file-tools" hidden aria-label="Upload a file">
-        <input id="file-input" type="file" hidden />
+        <input id="file-input" type="file" accept=".txt,.md,.csv,.pdf,.docx" hidden />
         <button id="choose-file" class="upload-zone" type="button">
-          <svg id="upload-icon"><use href="#icon-image" /></svg>
-          <strong id="upload-title">Choose an image</strong>
-          <span id="upload-hint">PNG, JPEG or WebP · up to 10 MB</span>
+          <svg><use href="#icon-document" /></svg>
+          <strong id="upload-title">Choose or drop a document</strong>
+          <span id="upload-hint">TXT, MD, CSV, PDF, DOCX · 10 MB · PDF up to 20 pages</span>
         </button>
         <div id="file-preview" class="file-preview" hidden>
-          <img id="image-preview" alt="Selected image" hidden /><span id="file-name"></span
+          <span id="file-name"></span
           ><button id="retry-file" type="button" class="text-button" data-i18n="retry" hidden>
             Retry</button
           ><button id="remove-file" type="button" class="text-button" data-i18n="remove">
@@ -344,6 +414,10 @@
               <svg><use href="#icon-mic" /></svg><span>English</span>
             </button>
           </div>
+          <label class="live-review-voice">
+            <input id="live-review-voice" type="checkbox" />
+            <span data-i18n="reviewVoice">Check microphone text before sending</span>
+          </label>
           <p id="live-status" class="feature-status" role="status" aria-live="polite"></p>
         </div>
         <input id="auto-speak" type="checkbox" checked hidden />
@@ -353,7 +427,9 @@
         <section class="panel source-panel" aria-labelledby="source-heading">
           <div class="panel-heading">
             <h2 id="source-heading" data-i18n="source">Source</h2>
-            <button id="clear" class="text-button" type="button" data-i18n="clear">Clear</button>
+            <button id="clear" class="text-button" type="button" data-i18n="clear" hidden>
+              Clear
+            </button>
           </div>
           <textarea
             dir="auto"
@@ -390,9 +466,6 @@
         <section class="panel output-panel" aria-labelledby="translation-heading" aria-busy="false">
           <div class="panel-heading">
             <h2 id="translation-heading" data-i18n="translation">Translation</h2>
-            <button id="download" class="text-button" type="button" data-i18n="download" hidden>
-              Download
-            </button>
           </div>
           <strong id="output-language" class="output-language" hidden></strong>
           <textarea
@@ -637,33 +710,6 @@
         hidden
       ></section>
       <p id="voice-status" class="voice-status" role="status" aria-live="polite"></p>
-      <footer class="bottom-bar">
-        <nav class="mode-nav" aria-label="Translation modes">
-          <button class="mode active" data-mode="text" type="button" aria-current="page">
-            <svg><use href="#icon-text" /></svg><span data-i18n="text">Text</span>
-          </button>
-          <button class="mode" data-mode="image" type="button">
-            <svg><use href="#icon-image" /></svg><span data-i18n="image">Image</span>
-          </button>
-          <span class="mic-space" aria-hidden="true"></span>
-          <button class="mode" data-mode="document" type="button">
-            <svg><use href="#icon-document" /></svg><span data-i18n="document">Document</span>
-          </button>
-          <button class="mode" data-mode="live" type="button">
-            <svg><use href="#icon-live" /></svg><span data-i18n="live">Live Chat</span>
-          </button>
-        </nav>
-        <button
-          id="microphone"
-          class="microphone"
-          type="button"
-          aria-label="Dictate source text"
-          aria-pressed="false"
-          title="Dictate source text"
-        >
-          <svg><use href="#icon-mic" /></svg>
-        </button>
-      </footer>
     </main>
     <dialog id="settings" class="menu-dialog" aria-labelledby="menu-heading">
       <div class="menu-header">
@@ -729,6 +775,40 @@
             <p id="additional-count" class="menu-help" role="status"></p>
           </div>
         </section>
+        <details id="thai-lexicon-editor" class="glossary-editor">
+          <summary data-i18n="thaiLexicon">My slang &amp; dialect meanings</summary>
+          <p class="menu-help" data-i18n="thaiLexiconHelp">
+            Personal definitions for Text or Live Chat, saved on this browser. Not shared or
+            community-verified. Up to 30 per feature.
+          </p>
+          <form id="thai-lexicon-form" class="glossary-form">
+            <label for="thai-term" data-i18n="thaiTerm">Word or phrase</label
+            ><input id="thai-term" class="menu-input" maxlength="120" required />
+            <label for="thai-meaning" data-i18n="thaiMeaning">Meaning in Central Thai</label
+            ><textarea
+              id="thai-meaning"
+              class="menu-input"
+              maxlength="500"
+              rows="2"
+              required
+            ></textarea>
+            <label for="thai-term-dialect" data-i18n="thaiDialect">Usage / dialect</label>
+            <select id="thai-term-dialect" class="menu-input">
+              <option value="slang" data-i18n="thaiSlang">Slang &amp; coined phrases</option>
+              <option value="northern" data-i18n="thaiNorthern">Northern Thai</option>
+              <option value="isan" data-i18n="thaiIsan">Isan</option>
+              <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
+              <option value="auto" data-i18n="thaiAny">Any Thai usage</option>
+            </select>
+            <label for="thai-example" data-i18n="thaiExample">When is it used? (optional)</label
+            ><input id="thai-example" class="menu-input" maxlength="300" />
+            <button id="thai-save" class="outline-button" type="submit" data-i18n="thaiSave">
+              Save meaning
+            </button>
+          </form>
+          <p id="thai-lexicon-status" class="feature-status" role="status"></p>
+          <div id="thai-lexicon-list"></div>
+        </details>
         <details id="glossary-editor" class="glossary-editor">
           <summary>
             <span data-i18n="myTerminology">My terminology</span
@@ -945,5 +1025,6 @@
     <script src="/static/voice.js"></script>
     <script src="/static/menu.js"></script>
     <script src="/static/studio.js"></script>
+    <script src="/static/thai.js"></script>
   </body>
 </html>

@@ -1,4 +1,6 @@
 /* Translation preferences, additional languages and feature-scoped local history. */
+Object.assign(COPY.en, { additionalPaused: "Translation paused. Retry this language." });
+Object.assign(COPY.th, { additionalPaused: "หยุดแปลภาษานี้แล้ว กดลองใหม่เมื่อต้องการ" });
 Object.assign(COPY.en, {
   menu: "Menu",
   style: "Style",
@@ -282,6 +284,36 @@ function clearAdditionalResults() {
   $("additional-results").replaceChildren();
   $("additional-results").hidden = true;
 }
+function additionalRequestBody(detail, target) {
+  return {
+    ...thaiSnapshotOptions(detail),
+    cache_scope: mode,
+    text: detail.text,
+    source: detail.source,
+    target,
+    tone: detail.tone,
+    context: detail.context || "general",
+    extra_context: detail.extra_context || "",
+    glossary: detail.glossary || [],
+    conversation: detail.conversation || [],
+  };
+}
+function applyAdditionalTranslation(result, data, detail) {
+  if (data.interpretation?.status === "needs_context") throw new Error(t("thaiNeedContext"));
+  if (data.quality_review?.status === "needs_context")
+    throw new Error(`${t("meaningNeedsContext")} ${data.quality_review.question || ""}`);
+  result.quality_review = data.quality_review || null;
+  result.translation = data.translation;
+  result.audit = data.audit || null;
+  delete result.error;
+  delete result.pending;
+  rememberTranslation({
+    ...detail,
+    target: result.target,
+    translation: data.translation,
+    audit: data.audit || null,
+  });
+}
 function renderAdditionalResults() {
   const results = activeFeature().additional,
     detail = activeFeature().additionalContext;
@@ -299,18 +331,24 @@ function renderAdditionalResults() {
     const text = document.createElement("p");
     text.dir = "auto";
     text.lang = result.target;
-    text.textContent = result.translation || result.error;
-    if (result.error) {
-      text.className = "error";
+    text.textContent = result.pending ? t("loading") : result.translation || result.error;
+    if (result.error || result.pending) {
+      text.className = result.error ? "error" : "";
       const retry = document.createElement("button");
       retry.className = "outline-button";
       retry.type = "button";
-      retry.textContent = t("retry");
-      retry.addEventListener("click", async () => {
-        const workspace = activeFeature(),
-          epoch = modeEpoch,
-          controller = new AbortController();
-        workspace.additionalRequests.get(result.target)?.abort();
+      retry.textContent = t(result.pending ? "loading" : "retry");
+      retry.disabled = !!result.pending;
+      const workspace = activeFeature(),
+        epoch = modeEpoch;
+      const load = async () => {
+        if (
+          workspace !== activeFeature() ||
+          modeEpoch !== epoch ||
+          workspace.additionalRequests.has(result.target)
+        )
+          return;
+        const controller = new AbortController();
         workspace.additionalRequests.set(result.target, controller);
         retry.disabled = true;
         try {
@@ -319,16 +357,7 @@ function renderAdditionalResults() {
               method: "POST",
               signal: controller.signal,
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                text: detail.text,
-                source: detail.source,
-                target: result.target,
-                tone: detail.tone,
-                context: detail.context || "general",
-                extra_context: detail.extra_context || "",
-                glossary: detail.glossary || [],
-                conversation: detail.conversation || [],
-              }),
+              body: JSON.stringify(additionalRequestBody(detail, result.target)),
             })
           );
           if (
@@ -337,26 +366,26 @@ function renderAdditionalResults() {
             workspace.additionalRequests.get(result.target) !== controller
           )
             return;
-          result.translation = data.translation;
-          result.audit = data.audit || null;
-          delete result.error;
-          rememberTranslation({
-            ...detail,
-            target: result.target,
-            translation: data.translation,
-            audit: data.audit || null,
-          });
+          applyAdditionalTranslation(result, data, detail);
           renderAdditionalResults();
         } catch (error) {
-          if (error.name !== "AbortError" && workspace === activeFeature() && modeEpoch === epoch) {
-            text.textContent = error.message;
-            retry.disabled = false;
+          if (
+            error.name !== "AbortError" &&
+            workspace === activeFeature() &&
+            modeEpoch === epoch &&
+            workspace.additionalRequests.get(result.target) === controller
+          ) {
+            result.error = error.message;
+            result.pending = false;
+            renderAdditionalResults();
           }
         } finally {
           if (workspace.additionalRequests.get(result.target) === controller)
             workspace.additionalRequests.delete(result.target);
         }
-      });
+      };
+      retry.addEventListener("click", load);
+      if (result.pending && !workspace.additionalRequests.has(result.target)) queueMicrotask(load);
       card.append(header, text, retry);
     } else {
       actions.append(
@@ -364,6 +393,12 @@ function renderAdditionalResults() {
         menuIconButton("volume", t("listen"), () => speak(result.translation, result.target))
       );
       card.append(header, text);
+      if (["unavailable", "rejected", "length_limit"].includes(result.quality_review?.status)) {
+        const warning = document.createElement("p");
+        warning.className = "feature-status";
+        warning.textContent = t("meaningReviewUnavailable");
+        card.append(warning);
+      }
       if (result.audit?.status === "review") {
         const check = document.createElement("details");
         check.className = "studio-back";
@@ -399,6 +434,11 @@ document.addEventListener("history:record", ({ detail }) => {
 document.addEventListener("translation:invalidated", clearAdditionalResults);
 document.addEventListener("additional:clear", clearAdditionalResults);
 document.addEventListener("mode:leaving", () => {
+  for (const result of activeFeature().additional)
+    if (result.pending) {
+      result.pending = false;
+      result.error = t("additionalPaused");
+    }
   activeFeature().additionalRequests.forEach((controller) => controller.abort());
   activeFeature().additionalRequests.clear();
 });
@@ -424,22 +464,20 @@ document.addEventListener(
     workspace.chatRequests.get(key)?.abort();
     workspace.chatRequests.set(key, controller);
     button.disabled = true;
+    controller.pause = () => {
+      result.pending = false;
+      result.error = t("additionalPaused");
+      text.textContent = `${LANGUAGES[result.target][0]} · ${result.error}`;
+      button.disabled = false;
+      button.textContent = t("retry");
+    };
     try {
       const data = await responseJson(
         await fetch("/api/translate", {
           method: "POST",
           signal: controller.signal,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text: turn.text,
-            source: turn.source,
-            target: result.target,
-            tone: turn.tone,
-            context: turn.context || "general",
-            extra_context: turn.extra_context || "",
-            glossary: turn.glossary || [],
-            conversation: turn.conversation || [],
-          }),
+          body: JSON.stringify(additionalRequestBody(turn, result.target)),
         })
       );
       if (
@@ -448,17 +486,9 @@ document.addEventListener(
         workspace.chatRequests.get(key) !== controller
       )
         return;
-      result.translation = data.translation;
-      result.audit = data.audit || null;
-      delete result.error;
+      applyAdditionalTranslation(result, data, turn);
       text.textContent = `${LANGUAGES[result.target][0]} · ${data.translation}`;
       button.remove();
-      rememberTranslation({
-        ...turn,
-        target: result.target,
-        translation: data.translation,
-        audit: data.audit || null,
-      });
     } catch (error) {
       if (
         error.name !== "AbortError" &&
@@ -466,8 +496,11 @@ document.addEventListener(
         modeEpoch === epoch &&
         workspace.chatRequests.get(key) === controller
       ) {
+        result.error = error.message;
+        result.pending = false;
         text.textContent = `${LANGUAGES[result.target][0]} · ${error.message}`;
         button.disabled = false;
+        button.textContent = t("retry");
       }
     } finally {
       if (workspace.chatRequests.get(key) === controller) workspace.chatRequests.delete(key);
@@ -475,7 +508,10 @@ document.addEventListener(
   }
 );
 function cancelChatRetries() {
-  activeFeature().chatRequests.forEach((controller) => controller.abort());
+  activeFeature().chatRequests.forEach((controller) => {
+    controller.pause?.();
+    controller.abort();
+  });
   activeFeature().chatRequests.clear();
 }
 document.addEventListener("mode:leaving", cancelChatRetries);

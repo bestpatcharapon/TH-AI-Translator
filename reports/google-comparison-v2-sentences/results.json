@@ -1,0 +1,947 @@
+{
+  "started_at": "2026-10-23T18:00:41.176Z",
+  "methodology": "14 hand-selected Thai-English/English-Thai cases. Same raw text and explicit language pair; no glossary, dialect hints or conversation. Google public signed-out desktop website, displayed mode recorded, versus app /api/translate scope=text with natural tone/general context and cache bypass. One run; qualitative inspection is not a human blind benchmark or a population accuracy score. No images/audio comparison. UI time and API time are different channels, not a fair speed ranking.",
+  "app_configuration": {
+    "model": "openai/gpt-oss-120b",
+    "text_reasoning": "medium",
+    "chat_reasoning": "medium"
+  },
+  "code_sha256": {
+    "app.py": "5dae67271a56d46c10b83be237ffadf9ab04d12b5cd282c0b3aa8e9fc1202e1d",
+    "semantic_review.py": "52e1e1071fbb5361dfc9c83526c5e115bf95d0a84a7a14783bd0ea90f9d582fe",
+    "project_config.py": "cb41402a6c83ff485f8cd8c7cda937ac01074715ca79dab85185b448f0ac4c1d",
+    "practical_translation.py": "b6fb9f7b3f56522a7de4931e21e52145e620321f9db988efe7ef1bf221d48e57",
+    "linguistic_guidance.py": "d62f1362946c9ae9177757f6ab5c4c96557d4d170b8b93ee6a7b6d0c74711d56"
+  },
+  "results": [
+    {
+      "id": "01-travel-condition",
+      "source": "th",
+      "target": "en",
+      "text": "พรุ่งนี้ถ้ารถไฟเที่ยวแรกยกเลิก ช่วยจองรถบัสให้สองที่ แต่ยังไม่ต้องชำระเงินนะครับ",
+      "check": "Conditional cancellation; request two bus seats only if first train is canceled; no payment yet.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "condition_or_health"
+            ]
+          },
+          "source_language": "th",
+          "translation": "If the first train tomorrow gets cancelled, please reserve two seats on a bus, but you don’t need to pay yet.",
+          "http_status": 200,
+          "seconds": 3.568,
+          "captured_at": "2026-10-23T18:00:44.955Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception",
+            "condition_or_health"
+          ]
+        },
+        "source_language": "th",
+        "translation": "If the first train tomorrow gets cancelled, please reserve two seats on a bus, but you don’t need to pay yet.",
+        "http_status": 200,
+        "seconds": 3.568,
+        "captured_at": "2026-10-23T18:00:44.955Z"
+      },
+      "google": {
+        "translation": "Tomorrow if the first train is cancelled. Please help reserve two buses. But you don't have to pay yet.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n80\nAdvanced\nTranslation results\nTomorrow if the first train is cancelled. Please help reserve two buses. But you don't have to pay yet.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "พรุ่งนี้ถ้ารถไฟเที่ยวแรกยกเลิก ช่วยจองรถบัสให้สองที่ แต่ยังไม่ต้องชำระเงินนะครับ",
+          "Tomorrow if the first train is cancelled. Please help reserve two buses. But you don't have to pay yet."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%9E%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%87%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%A3%E0%B8%96%E0%B9%84%E0%B8%9F%E0%B9%80%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%A2%E0%B8%A7%E0%B9%81%E0%B8%A3%E0%B8%81%E0%B8%A2%E0%B8%81%E0%B9%80%E0%B8%A5%E0%B8%B4%E0%B8%81+%E0%B8%8A%E0%B9%88%E0%B8%A7%E0%B8%A2%E0%B8%88%E0%B8%AD%E0%B8%87%E0%B8%A3%E0%B8%96%E0%B8%9A%E0%B8%B1%E0%B8%AA%E0%B9%83%E0%B8%AB%E0%B9%89%E0%B8%AA%E0%B8%AD%E0%B8%87%E0%B8%97%E0%B8%B5%E0%B9%88+%E0%B9%81%E0%B8%95%E0%B9%88%E0%B8%A2%E0%B8%B1%E0%B8%87%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%8A%E0%B8%B3%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B8%99%E0%B8%B0%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A&op=translate",
+        "seconds": 3.214,
+        "captured_at": "2026-10-23T18:00:48.170Z",
+        "screenshot": "01-travel-condition.png"
+      }
+    },
+    {
+      "id": "02-appointment-change",
+      "source": "th",
+      "target": "en",
+      "text": "ขอเลื่อนนัดจากบ่ายสามเป็นบ่ายสองครึ่งวันพฤหัสบดีหน้า ส่วนสถานที่ยังเหมือนเดิมครับ",
+      "check": "Move appointment from 3pm to 2:30pm next Thursday; unchanged location; preserve request.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [
+              {
+                "added": [
+                  "3",
+                  "2:30"
+                ],
+                "kind": "numbers",
+                "missing": []
+              }
+            ],
+            "status": "review",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "not_requested",
+            "triggers": []
+          },
+          "source_language": "th",
+          "translation": "I’d like to move the appointment from 3 p.m. to 2:30 p.m. next Thursday. The location stays the same.",
+          "http_status": 200,
+          "seconds": 0.079,
+          "captured_at": "2026-10-23T18:01:00.359Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [
+            {
+              "added": [
+                "3",
+                "2:30"
+              ],
+              "kind": "numbers",
+              "missing": []
+            }
+          ],
+          "status": "review",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "I’d like to move the appointment from 3 p.m. to 2:30 p.m. next Thursday. The location stays the same.",
+        "http_status": 200,
+        "seconds": 0.079,
+        "captured_at": "2026-10-23T18:01:00.359Z"
+      },
+      "google": {
+        "translation": "I would like to postpone the appointment from 3:00 p.m. to 2:30 p.m. next Thursday. The location is still the same.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n81\nAdvanced\nTranslation results\nI would like to postpone the appointment from 3:00 p.m. to 2:30 p.m. next Thursday. The location is still the same.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "ขอเลื่อนนัดจากบ่ายสามเป็นบ่ายสองครึ่งวันพฤหัสบดีหน้า ส่วนสถานที่ยังเหมือนเดิมครับ",
+          "I would like to postpone the appointment from 3:00 p.m. to 2:30 p.m. next Thursday. The location is still the same."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%82%E0%B8%AD%E0%B9%80%E0%B8%A5%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B8%99%E0%B8%B1%E0%B8%94%E0%B8%88%E0%B8%B2%E0%B8%81%E0%B8%9A%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%B2%E0%B8%A1%E0%B9%80%E0%B8%9B%E0%B9%87%E0%B8%99%E0%B8%9A%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%9E%E0%B8%A4%E0%B8%AB%E0%B8%B1%E0%B8%AA%E0%B8%9A%E0%B8%94%E0%B8%B5%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2+%E0%B8%AA%E0%B9%88%E0%B8%A7%E0%B8%99%E0%B8%AA%E0%B8%96%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%A2%E0%B8%B1%E0%B8%87%E0%B9%80%E0%B8%AB%E0%B8%A1%E0%B8%B7%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%B4%E0%B8%A1%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A&op=translate",
+        "seconds": 3.891,
+        "captured_at": "2026-10-23T18:01:04.250Z",
+        "screenshot": "02-appointment-change.png"
+      }
+    },
+    {
+      "id": "03-polite-pass",
+      "source": "th",
+      "target": "en",
+      "text": "ร้านนี้ไม่ได้แย่นะ แต่ถ้าต้องต่อคิวนานขนาดนั้น ผมคงขอผ่าน",
+      "check": "Place is not bad but speaker would pass if queue is that long; do not invent restaurant vs another store.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "condition_or_health"
+            ]
+          },
+          "source_language": "th",
+          "translation": "This place isn’t bad, but if I have to wait that long in line, I’d probably pass.",
+          "http_status": 200,
+          "seconds": 2.77,
+          "captured_at": "2026-10-23T18:01:19.100Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception",
+            "condition_or_health"
+          ]
+        },
+        "source_language": "th",
+        "translation": "This place isn’t bad, but if I have to wait that long in line, I’d probably pass.",
+        "http_status": 200,
+        "seconds": 2.77,
+        "captured_at": "2026-10-23T18:01:19.100Z"
+      },
+      "google": {
+        "translation": "This shop isn't bad. But if I had to queue for that long, I would probably pass.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n57\nAdvanced\nTranslation results\nThis shop isn't bad. But if I had to queue for that long, I would probably pass.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "ร้านนี้ไม่ได้แย่นะ แต่ถ้าต้องต่อคิวนานขนาดนั้น ผมคงขอผ่าน",
+          "This shop isn't bad. But if I had to queue for that long, I would probably pass."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B9%84%E0%B8%94%E0%B9%89%E0%B9%81%E0%B8%A2%E0%B9%88%E0%B8%99%E0%B8%B0+%E0%B9%81%E0%B8%95%E0%B9%88%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B9%88%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%A7%E0%B8%99%E0%B8%B2%E0%B8%99%E0%B8%82%E0%B8%99%E0%B8%B2%E0%B8%94%E0%B8%99%E0%B8%B1%E0%B9%89%E0%B8%99+%E0%B8%9C%E0%B8%A1%E0%B8%84%E0%B8%87%E0%B8%82%E0%B8%AD%E0%B8%9C%E0%B9%88%E0%B8%B2%E0%B8%99&op=translate",
+        "seconds": 2.801,
+        "captured_at": "2026-10-23T18:01:21.902Z",
+        "screenshot": "03-polite-pass.png"
+      }
+    },
+    {
+      "id": "04-unseen-thai-idiom",
+      "source": "th",
+      "target": "en",
+      "text": "เขาเป็นญาติของผู้จัดการ เรื่องนี้เลยลูบหน้าปะจมูก จะตรวจสอบตรง ๆ ก็ลำบาก",
+      "check": "Manager's relative makes impartial investigation awkward; idiom refers to personal ties obstructing frank action, not touching a face.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "not_requested",
+            "triggers": []
+          },
+          "source_language": "th",
+          "translation": "He's the manager's relative, so he's getting a free pass. Investigating it directly would be difficult.",
+          "http_status": 200,
+          "seconds": 1.195,
+          "captured_at": "2026-10-23T18:01:33.692Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "He's the manager's relative, so he's getting a free pass. Investigating it directly would be difficult.",
+        "http_status": 200,
+        "seconds": 1.195,
+        "captured_at": "2026-10-23T18:01:33.692Z"
+      },
+      "google": {
+        "translation": "He is the manager's relative. For this matter, I rubbed my face and nose, and it was difficult to directly examine it.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n72\nAdvanced\nTranslation results\nHe is the manager's relative. For this matter, I rubbed my face and nose, and it was difficult to directly examine it.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "เขาเป็นญาติของผู้จัดการ เรื่องนี้เลยลูบหน้าปะจมูก จะตรวจสอบตรง ๆ ก็ลำบาก",
+          "He is the manager's relative. For this matter, I rubbed my face and nose, and it was difficult to directly examine it."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B9%80%E0%B8%82%E0%B8%B2%E0%B9%80%E0%B8%9B%E0%B9%87%E0%B8%99%E0%B8%8D%E0%B8%B2%E0%B8%95%E0%B8%B4%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%88%E0%B8%B1%E0%B8%94%E0%B8%81%E0%B8%B2%E0%B8%A3+%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B9%80%E0%B8%A5%E0%B8%A2%E0%B8%A5%E0%B8%B9%E0%B8%9A%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B8%9B%E0%B8%B0%E0%B8%88%E0%B8%A1%E0%B8%B9%E0%B8%81+%E0%B8%88%E0%B8%B0%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%95%E0%B8%A3%E0%B8%87+%E0%B9%86+%E0%B8%81%E0%B9%87%E0%B8%A5%E0%B8%B3%E0%B8%9A%E0%B8%B2%E0%B8%81&op=translate",
+        "seconds": 3.248,
+        "captured_at": "2026-10-23T18:01:36.941Z",
+        "screenshot": "04-unseen-thai-idiom.png"
+      }
+    },
+    {
+      "id": "05-tentative-promise",
+      "source": "th",
+      "target": "en",
+      "text": "ผมไม่ได้รับปากว่าจะเสร็จวันนี้นะครับ แค่บอกว่าจะลองทำให้ทัน",
+      "check": "Speaker did not promise completion today; only offered to try; no firm commitment.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "source_language": "th",
+          "translation": "I didn't promise it would be finished today—just that I'd try to get it done on time.",
+          "http_status": 200,
+          "seconds": 2.469,
+          "captured_at": "2026-10-23T18:01:51.520Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "th",
+        "translation": "I didn't promise it would be finished today—just that I'd try to get it done on time.",
+        "http_status": 200,
+        "seconds": 2.469,
+        "captured_at": "2026-10-23T18:01:51.520Z"
+      },
+      "google": {
+        "translation": "I didn't promise to finish today. Just said I'll try to make it in time.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n59\nAdvanced\nTranslation results\nI didn't promise to finish today. Just said I'll try to make it in time.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "ผมไม่ได้รับปากว่าจะเสร็จวันนี้นะครับ แค่บอกว่าจะลองทำให้ทัน",
+          "I didn't promise to finish today. Just said I'll try to make it in time."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%9C%E0%B8%A1%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B9%84%E0%B8%94%E0%B9%89%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%88%E0%B8%B0%E0%B9%80%E0%B8%AA%E0%B8%A3%E0%B9%87%E0%B8%88%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%99%E0%B8%B0%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A+%E0%B9%81%E0%B8%84%E0%B9%88%E0%B8%9A%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%88%E0%B8%B0%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B8%97%E0%B8%B3%E0%B9%83%E0%B8%AB%E0%B9%89%E0%B8%97%E0%B8%B1%E0%B8%99&op=translate",
+        "seconds": 3.517,
+        "captured_at": "2026-10-23T18:01:55.038Z",
+        "screenshot": "05-tentative-promise.png"
+      }
+    },
+    {
+      "id": "06-no-pressure",
+      "source": "th",
+      "target": "en",
+      "text": "ถ้าคุณยังไม่สะดวกตอบตอนนี้ ไว้พรุ่งนี้ค่อยคุยกันก็ได้ ไม่ต้องเกรงใจ",
+      "check": "Can discuss tomorrow if replying now is inconvenient; gentle reassurance, no pressure or obligation.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "condition_or_health"
+            ]
+          },
+          "source_language": "th",
+          "translation": "If you can’t reply right now, we can talk tomorrow instead. No need to feel obliged.",
+          "http_status": 200,
+          "seconds": 1.849,
+          "captured_at": "2026-10-23T18:02:07.502Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception",
+            "condition_or_health"
+          ]
+        },
+        "source_language": "th",
+        "translation": "If you can’t reply right now, we can talk tomorrow instead. No need to feel obliged.",
+        "http_status": 200,
+        "seconds": 1.849,
+        "captured_at": "2026-10-23T18:02:07.502Z"
+      },
+      "google": {
+        "translation": "If you are not comfortable answering now. We can talk tomorrow. Don't be considerate.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nSpanish\nArabic\nSource text\nclear\n67\nAdvanced\nTranslation results\nIf you are not comfortable answering now. We can talk tomorrow. Don't be considerate.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "ถ้าคุณยังไม่สะดวกตอบตอนนี้ ไว้พรุ่งนี้ค่อยคุยกันก็ได้ ไม่ต้องเกรงใจ",
+          "If you are not comfortable answering now. We can talk tomorrow. Don't be considerate."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%A2%E0%B8%B1%E0%B8%87%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B8%AA%E0%B8%B0%E0%B8%94%E0%B8%A7%E0%B8%81%E0%B8%95%E0%B8%AD%E0%B8%9A%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89+%E0%B9%84%E0%B8%A7%E0%B9%89%E0%B8%9E%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%87%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%84%E0%B9%88%E0%B8%AD%E0%B8%A2%E0%B8%84%E0%B8%B8%E0%B8%A2%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%81%E0%B9%87%E0%B9%84%E0%B8%94%E0%B9%89+%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%81%E0%B8%A3%E0%B8%87%E0%B9%83%E0%B8%88&op=translate",
+        "seconds": 3.341,
+        "captured_at": "2026-10-23T18:02:10.844Z",
+        "screenshot": "06-no-pressure.png"
+      }
+    },
+    {
+      "id": "07-indirect-draft-request",
+      "source": "en",
+      "target": "th",
+      "text": "I was wondering if you could take a look at the draft before I send it to the client.",
+      "check": "Polite request to review a draft before client submission; no gender alternatives or literal wondering.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "condition_or_health"
+            ]
+          },
+          "source_language": "en",
+          "translation": "คุณช่วยดูร่างก่อนที่ฉันจะส่งให้ลูกค้าได้ไหม",
+          "http_status": 200,
+          "seconds": 2.709,
+          "captured_at": "2026-10-23T18:02:25.660Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "condition_or_health"
+          ]
+        },
+        "source_language": "en",
+        "translation": "คุณช่วยดูร่างก่อนที่ฉันจะส่งให้ลูกค้าได้ไหม",
+        "http_status": 200,
+        "seconds": 2.709,
+        "captured_at": "2026-10-23T18:02:25.660Z"
+      },
+      "google": {
+        "translation": "ฉันสงสัยว่าคุณช่วยดูแบบร่างก่อนที่จะส่งไปให้ลูกค้าได้ไหม",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n85\nAdvanced\nTranslation results\nฉันสงสัยว่าคุณช่วยดูแบบร่างก่อนที่จะส่งไปให้ลูกค้าได้ไหม\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "I was wondering if you could take a look at the draft before I send it to the client.",
+          "ฉันสงสัยว่าคุณช่วยดูแบบร่างก่อนที่จะส่งไปให้ลูกค้าได้ไหม"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=I+was+wondering+if+you+could+take+a+look+at+the+draft+before+I+send+it+to+the+client.&op=translate",
+        "seconds": 2.53,
+        "captured_at": "2026-10-23T18:02:28.190Z",
+        "screenshot": "07-indirect-draft-request.png"
+      }
+    },
+    {
+      "id": "08-refund-status",
+      "source": "en",
+      "target": "th",
+      "text": "Please bear with me while I check whether the refund has gone through.",
+      "check": "Ask for patience while checking refund completion; do not state refund is already completed.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "not_requested",
+            "triggers": []
+          },
+          "source_language": "en",
+          "translation": "กรุณารอสักครู่ขณะฉันตรวจสอบว่าเงินคืนได้ผ่านหรือยัง.",
+          "http_status": 200,
+          "seconds": 1.061,
+          "captured_at": "2026-10-23T18:02:39.479Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "en",
+        "translation": "กรุณารอสักครู่ขณะฉันตรวจสอบว่าเงินคืนได้ผ่านหรือยัง.",
+        "http_status": 200,
+        "seconds": 1.061,
+        "captured_at": "2026-10-23T18:02:39.479Z"
+      },
+      "google": {
+        "translation": "โปรดอดทนกับฉันในขณะที่ฉันตรวจสอบว่าการคืนเงินได้ผ่านไปแล้วหรือไม่",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n70\nAdvanced\nTranslation results\nโปรดอดทนกับฉันในขณะที่ฉันตรวจสอบว่าการคืนเงินได้ผ่านไปแล้วหรือไม่\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "Please bear with me while I check whether the refund has gone through.",
+          "โปรดอดทนกับฉันในขณะที่ฉันตรวจสอบว่าการคืนเงินได้ผ่านไปแล้วหรือไม่"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=Please+bear+with+me+while+I+check+whether+the+refund+has+gone+through.&op=translate",
+        "seconds": 2.795,
+        "captured_at": "2026-10-23T18:02:42.275Z",
+        "screenshot": "08-refund-status.png"
+      }
+    },
+    {
+      "id": "09-unless-cancel",
+      "source": "en",
+      "target": "th",
+      "text": "You don't have to cancel the order unless the supplier confirms that it won't arrive on time.",
+      "check": "No need to cancel except if supplier confirms late arrival; preserve both negation and exception.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "source_language": "en",
+          "translation": "คุณไม่จำเป็นต้องยกเลิกคำสั่งซื้อ เว้นแต่ผู้จัดจำหน่ายยืนยันว่าจะไม่มาถึงตรงเวลา.",
+          "http_status": 200,
+          "seconds": 2.536,
+          "captured_at": "2026-10-23T18:02:56.919Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "en",
+        "translation": "คุณไม่จำเป็นต้องยกเลิกคำสั่งซื้อ เว้นแต่ผู้จัดจำหน่ายยืนยันว่าจะไม่มาถึงตรงเวลา.",
+        "http_status": 200,
+        "seconds": 2.536,
+        "captured_at": "2026-10-23T18:02:56.919Z"
+      },
+      "google": {
+        "translation": "คุณไม่จำเป็นต้องยกเลิกคำสั่งซื้อ เว้นแต่ซัพพลายเออร์จะยืนยันว่าจะมาถึงไม่ตรงเวลา",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n93\nAdvanced\nTranslation results\nคุณไม่จำเป็นต้องยกเลิกคำสั่งซื้อ เว้นแต่ซัพพลายเออร์จะยืนยันว่าจะมาถึงไม่ตรงเวลา\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "You don't have to cancel the order unless the supplier confirms that it won't arrive on time.",
+          "คุณไม่จำเป็นต้องยกเลิกคำสั่งซื้อ เว้นแต่ซัพพลายเออร์จะยืนยันว่าจะมาถึงไม่ตรงเวลา"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=You+don%27t+have+to+cancel+the+order+unless+the+supplier+confirms+that+it+won%27t+arrive+on+time.&op=translate",
+        "seconds": 3.643,
+        "captured_at": "2026-10-23T18:03:00.562Z",
+        "screenshot": "09-unless-cancel.png"
+      }
+    },
+    {
+      "id": "10-cover-shift",
+      "source": "en",
+      "target": "th",
+      "text": "I can cover your shift this Friday, but I can't promise to do it every week.",
+      "check": "Can work someone's shift this Friday; no recurring weekly promise.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "source_language": "en",
+          "translation": "ช่วยทำกะของคุณในวันศุกร์นี้ได้ แต่ไม่สามารถสัญญาว่าจะทำทุกสัปดาห์ได้.",
+          "http_status": 200,
+          "seconds": 2.942,
+          "captured_at": "2026-10-23T18:03:13.982Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "en",
+        "translation": "ช่วยทำกะของคุณในวันศุกร์นี้ได้ แต่ไม่สามารถสัญญาว่าจะทำทุกสัปดาห์ได้.",
+        "http_status": 200,
+        "seconds": 2.942,
+        "captured_at": "2026-10-23T18:03:13.982Z"
+      },
+      "google": {
+        "translation": "ฉันสามารถครอบคลุมกะของคุณได้ในวันศุกร์นี้ แต่ฉันไม่สามารถสัญญาว่าจะทำทุกสัปดาห์ได้",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n76\nAdvanced\nTranslation results\nฉันสามารถครอบคลุมกะของคุณได้ในวันศุกร์นี้ แต่ฉันไม่สามารถสัญญาว่าจะทำทุกสัปดาห์ได้\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "I can cover your shift this Friday, but I can't promise to do it every week.",
+          "ฉันสามารถครอบคลุมกะของคุณได้ในวันศุกร์นี้ แต่ฉันไม่สามารถสัญญาว่าจะทำทุกสัปดาห์ได้"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=I+can+cover+your+shift+this+Friday%2C+but+I+can%27t+promise+to+do+it+every+week.&op=translate",
+        "seconds": 2.307,
+        "captured_at": "2026-10-23T18:03:16.290Z",
+        "screenshot": "10-cover-shift.png"
+      }
+    },
+    {
+      "id": "11-no-conclusion",
+      "source": "en",
+      "target": "th",
+      "text": "Let's not jump to conclusions; we haven't heard her side of the story yet.",
+      "check": "Avoid premature conclusions because her account has not been heard; retain negations.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "source_language": "en",
+          "translation": "อย่ารีบสรุปกันเลย; เรายังไม่ได้ฟังมุมมองของเธอเลย.",
+          "http_status": 200,
+          "seconds": 2.757,
+          "captured_at": "2026-10-23T18:03:31.142Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "en",
+        "translation": "อย่ารีบสรุปกันเลย; เรายังไม่ได้ฟังมุมมองของเธอเลย.",
+        "http_status": 200,
+        "seconds": 2.757,
+        "captured_at": "2026-10-23T18:03:31.142Z"
+      },
+      "google": {
+        "translation": "อย่าเพิ่งด่วนสรุป เรายังไม่เคยได้ยินเรื่องราวของเธอเลย",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n74\nAdvanced\nTranslation results\nอย่าเพิ่งด่วนสรุป เรายังไม่เคยได้ยินเรื่องราวของเธอเลย\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "Let's not jump to conclusions; we haven't heard her side of the story yet.",
+          "อย่าเพิ่งด่วนสรุป เรายังไม่เคยได้ยินเรื่องราวของเธอเลย"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=Let%27s+not+jump+to+conclusions%3B+we+haven%27t+heard+her+side+of+the+story+yet.&op=translate",
+        "seconds": 2.694,
+        "captured_at": "2026-10-23T18:03:33.836Z",
+        "screenshot": "11-no-conclusion.png"
+      }
+    },
+    {
+      "id": "12-fee-exception",
+      "source": "en",
+      "target": "th",
+      "text": "The new fee applies only to bookings made after June 1, not to existing reservations.",
+      "check": "Fee applies only to bookings made after June 1; existing reservations exempt; do not change after to inclusive starting on June 1.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "source_language": "en",
+          "translation": "ค่าธรรมเนียมใหม่จะใช้เฉพาะการจองที่ทำหลังวันที่ 1 มิถุนายนเท่านั้น ไม่รวมการจองที่มีอยู่เดิม.",
+          "http_status": 200,
+          "seconds": 3.012,
+          "captured_at": "2026-10-23T18:03:47.414Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "negation_or_exception"
+          ]
+        },
+        "source_language": "en",
+        "translation": "ค่าธรรมเนียมใหม่จะใช้เฉพาะการจองที่ทำหลังวันที่ 1 มิถุนายนเท่านั้น ไม่รวมการจองที่มีอยู่เดิม.",
+        "http_status": 200,
+        "seconds": 3.012,
+        "captured_at": "2026-10-23T18:03:47.414Z"
+      },
+      "google": {
+        "translation": "ค่าธรรมเนียมใหม่มีผลกับการจองที่ทำหลังวันที่ 1 มิถุนายนเท่านั้น ไม่รวมกับการจองที่มีอยู่",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nEnglish\nThai\nSpanish\nThai\nEnglish\nSpanish\nSource text\nclear\n85\nAdvanced\nTranslation results\nค่าธรรมเนียมใหม่มีผลกับการจองที่ทำหลังวันที่ 1 มิถุนายนเท่านั้น ไม่รวมกับการจองที่มีอยู่\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "The new fee applies only to bookings made after June 1, not to existing reservations.",
+          "ค่าธรรมเนียมใหม่มีผลกับการจองที่ทำหลังวันที่ 1 มิถุนายนเท่านั้น ไม่รวมกับการจองที่มีอยู่"
+        ],
+        "url": "https://translate.google.com/?sl=en&tl=th&text=The+new+fee+applies+only+to+bookings+made+after+June+1%2C+not+to+existing+reservations.&op=translate",
+        "seconds": 2.768,
+        "captured_at": "2026-10-23T18:03:50.182Z",
+        "screenshot": "12-fee-exception.png"
+      }
+    },
+    {
+      "id": "13-northern-sentence",
+      "source": "th",
+      "target": "en",
+      "text": "เปิ้นบอกว่าวันนี้ฝนจะตก ถ้าจะออกไปกาดก็เอาจ้องไปตวยเน้อ",
+      "check": "Northern Thai: someone says rain today; take an umbrella if going to market; no literal staring. No dialect hint supplied.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "status": "checked",
+            "triggers": [
+              "condition_or_health",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "source_language": "th",
+          "translation": "They said it’s going to rain today. If you’re heading to the market, bring an umbrella with you, okay.",
+          "http_status": 200,
+          "seconds": 1.896,
+          "captured_at": "2026-10-23T18:04:04.192Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "status": "checked",
+          "triggers": [
+            "condition_or_health",
+            "idiom_or_regional_usage"
+          ]
+        },
+        "source_language": "th",
+        "translation": "They said it’s going to rain today. If you’re heading to the market, bring an umbrella with you, okay.",
+        "http_status": 200,
+        "seconds": 1.896,
+        "captured_at": "2026-10-23T18:04:04.192Z"
+      },
+      "google": {
+        "translation": "Pen said it will rain today. If you want to go out, just take it and stare at it.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nThai\nSpanish\nSource text\nclear\n55\nAdvanced\nTranslation results\nPen said it will rain today. If you want to go out, just take it and stare at it.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "เปิ้นบอกว่าวันนี้ฝนจะตก ถ้าจะออกไปกาดก็เอาจ้องไปตวยเน้อ",
+          "Pen said it will rain today. If you want to go out, just take it and stare at it."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B9%89%E0%B8%99%E0%B8%9A%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%9D%E0%B8%99%E0%B8%88%E0%B8%B0%E0%B8%95%E0%B8%81+%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%88%E0%B8%B0%E0%B8%AD%E0%B8%AD%E0%B8%81%E0%B9%84%E0%B8%9B%E0%B8%81%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B9%87%E0%B9%80%E0%B8%AD%E0%B8%B2%E0%B8%88%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B9%84%E0%B8%9B%E0%B8%95%E0%B8%A7%E0%B8%A2%E0%B9%80%E0%B8%99%E0%B9%89%E0%B8%AD&op=translate",
+        "seconds": 2.875,
+        "captured_at": "2026-10-23T18:04:07.067Z",
+        "screenshot": "13-northern-sentence.png"
+      }
+    },
+    {
+      "id": "14-isan-question",
+      "source": "th",
+      "target": "en",
+      "text": "เจ้ากินข้าวแล้วบ่ ถ้ายังบ่กินก็มากินนำกันเด้อ",
+      "check": "Isan: ask if listener has eaten; invite them to eat together if not. Preserve question, condition and invitation.",
+      "app_attempts": [
+        {
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "",
+                "explanation": "The softening particle \"เด้อ\" adds a friendly, polite tone and is omitted in the draft.",
+                "kind": "omission",
+                "source_quote": "เด้อ"
+              }
+            ],
+            "status": "revised",
+            "triggers": [
+              "condition_or_health",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "source_language": "th",
+          "translation": "Have you eaten yet? If not, come and eat together, okay?",
+          "http_status": 200,
+          "seconds": 4.862,
+          "captured_at": "2026-10-23T18:04:24.015Z"
+        }
+      ],
+      "app": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": true,
+          "issues": [
+            {
+              "draft_quote": "",
+              "explanation": "The softening particle \"เด้อ\" adds a friendly, polite tone and is omitted in the draft.",
+              "kind": "omission",
+              "source_quote": "เด้อ"
+            }
+          ],
+          "status": "revised",
+          "triggers": [
+            "condition_or_health",
+            "idiom_or_regional_usage"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Have you eaten yet? If not, come and eat together, okay?",
+        "http_status": 200,
+        "seconds": 4.862,
+        "captured_at": "2026-10-23T18:04:24.015Z"
+      },
+      "google": {
+        "translation": "Have you eaten yet? If you haven't eaten yet, come and eat.",
+        "displayed_mode": "Advanced",
+        "body_text": "Translate\n\t\nSign in\nTranslation types\nText\nImages\nDocuments\nWebsites\nText translation\nDetect language\nThai\nEnglish\nSpanish\nEnglish\nThai\nSpanish\nSource text\nclear\n45\nAdvanced\nTranslation results\nHave you eaten yet? If you haven't eaten yet, come and eat.\nSend feedback\nSide panels\nHistory\nSaved\nTranslation results available",
+        "source_fields": [
+          "เจ้ากินข้าวแล้วบ่ ถ้ายังบ่กินก็มากินนำกันเด้อ",
+          "Have you eaten yet? If you haven't eaten yet, come and eat."
+        ],
+        "url": "https://translate.google.com/?sl=th&tl=en&text=%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%81%E0%B8%B4%E0%B8%99%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B9%81%E0%B8%A5%E0%B9%89%E0%B8%A7%E0%B8%9A%E0%B9%88+%E0%B8%96%E0%B9%89%E0%B8%B2%E0%B8%A2%E0%B8%B1%E0%B8%87%E0%B8%9A%E0%B9%88%E0%B8%81%E0%B8%B4%E0%B8%99%E0%B8%81%E0%B9%87%E0%B8%A1%E0%B8%B2%E0%B8%81%E0%B8%B4%E0%B8%99%E0%B8%99%E0%B8%B3%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B9%80%E0%B8%94%E0%B9%89%E0%B8%AD&op=translate",
+        "seconds": 3.512,
+        "captured_at": "2026-10-23T18:04:27.528Z",
+        "screenshot": "14-isan-question.png"
+      }
+    }
+  ],
+  "finished_at": "2026-10-23T18:04:37.853Z"
+}

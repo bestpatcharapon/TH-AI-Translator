@@ -1,0 +1,26 @@
+{
+  "scope": "Additional app-only literal reading checks, not included in the Google comparison totals.",
+  "results": [
+    {
+      "source": "ช่วยใส่ผักชีโรยหน้าข้าวต้มให้หน่อย แต่ไม่ต้องใส่พริกนะครับ",
+      "translation": "Could you sprinkle some cilantro on the rice porridge, but leave out the chili?",
+      "quality_review": {
+        "applied": false,
+        "status": "unavailable",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      }
+    },
+    {
+      "source": "ฉันเห็นกาตัวหนึ่งเกาะอยู่บนรั้วและจ้องมาที่ฉัน",
+      "translation": "I saw a crow perched on the fence, staring at me.",
+      "quality_review": {
+        "applied": false,
+        "status": "not_requested",
+        "triggers": []
+      }
+    }
+  ]
+}

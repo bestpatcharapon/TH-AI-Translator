@@ -1,0 +1,102 @@
+{
+  "created": "2026-10-23T20:22:09.183782+00:00",
+  "scope": "8 Thai-English sentences; raw single-pass translations, not the whole app pipeline. Not a blind accuracy benchmark. Thinking tokens are included in reported output usage when supplied by provider.",
+  "pricing_checked": "2026-10-24",
+  "summary": {
+    "groq": {
+      "completed": 8,
+      "median_seconds": 0.6895,
+      "estimated_usd": 0.00137535
+    }
+  },
+  "results": [
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "ช่วยจองโต๊ะสำหรับสองคนเย็นพรุ่งนี้ให้หน่อยได้ไหมครับ",
+      "translation": "Could you help book a table for two for tomorrow evening?",
+      "finish_reason": "stop",
+      "input_tokens": 609,
+      "output_tokens": 114,
+      "estimated_usd": 0.00015975,
+      "seconds": 0.967
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "ไม่ใส่ถั่วลิสงนะครับ ผมแพ้ถั่วลิสงอย่างรุนแรง",
+      "translation": "Please don't add peanuts—I’m severely allergic to them.",
+      "finish_reason": "stop",
+      "input_tokens": 615,
+      "output_tokens": 120,
+      "estimated_usd": 0.00016425,
+      "seconds": 0.905
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "ถ้าฝนไม่ตก เราค่อยออกเดินทางตอนห้าโมงเย็น",
+      "translation": "If it doesn't rain, we'll leave at five p.m.",
+      "finish_reason": "stop",
+      "input_tokens": 610,
+      "output_tokens": 131,
+      "estimated_usd": 0.0001701,
+      "seconds": 0.682
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "ราคาเดิม 150 บาท ลดเหลือ 50 บาท ไม่ใช่ 5 บาท",
+      "translation": "The original price was 150 baht, now it's reduced to 50 baht—not 5 baht.",
+      "finish_reason": "stop",
+      "input_tokens": 609,
+      "output_tokens": 94,
+      "estimated_usd": 0.00014775,
+      "seconds": 0.561
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "เขายังไม่ได้จ่ายเงิน แต่บอกว่าจะโอนให้พรุ่งนี้",
+      "translation": "He hasn't paid yet, but said he'll transfer the money tomorrow.",
+      "finish_reason": "stop",
+      "input_tokens": 607,
+      "output_tokens": 73,
+      "estimated_usd": 0.00013485,
+      "seconds": 0.697
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "เรื่องนี้มันลูบหน้าปะจมูก ผมเลยไม่อยากเข้าไปยุ่ง",
+      "translation": "This whole thing is just brown‑nosing, so I don’t want to get involved.",
+      "finish_reason": "stop",
+      "input_tokens": 613,
+      "output_tokens": 293,
+      "estimated_usd": 0.00026775,
+      "seconds": 0.839
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "ขอเลื่อนนัดจากวันจันทร์เป็นวันอังคาร เวลาเดิมนะครับ",
+      "translation": "I'd like to move the appointment from Monday to Tuesday at the same time.",
+      "finish_reason": "stop",
+      "input_tokens": 612,
+      "output_tokens": 141,
+      "estimated_usd": 0.00017639999999999998,
+      "seconds": 0.507
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "source": "บ่เป็นหยัง เดี๋ยวมื้ออื่นค่อยเว้ากันใหม่",
+      "translation": "No worries, we'll talk again another day.",
+      "finish_reason": "stop",
+      "input_tokens": 610,
+      "output_tokens": 105,
+      "estimated_usd": 0.0001545,
+      "seconds": 0.437
+    }
+  ]
+}

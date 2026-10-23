@@ -1,0 +1,59 @@
+{
+  "scope": "Generated 640x1000 menu with 15px Thai; raw exact matches, no corrections. Not a Google comparison or a test on the user's original photo.",
+  "models": {
+    "enabled": true,
+    "ready": true,
+    "detector": "PP-OCRv6_medium_det",
+    "thai_recognizer": "th_PP-OCRv5_mobile_rec",
+    "general_recognizer": "PP-OCRv6_medium_rec",
+    "general_ready": true,
+    "local_inference": true
+  },
+  "seconds_first_and_warm": [
+    9.915,
+    6.451
+  ],
+  "thai_expected": 17,
+  "thai_exact": 16,
+  "thai_missing_or_different": [
+    "ต้มยำปลาหมึก"
+  ],
+  "prices_expected": 14,
+  "prices_exact": 14,
+  "readings": [
+    "Menu.",
+    "อาหารตามสั่ง",
+    "อาหารจานเดียว",
+    "ข้าวผัด",
+    "50 Baht",
+    "ข้าวผัดทะเล",
+    "50 Baht",
+    "ข้าวกะเพราไก่",
+    "50 Baht",
+    "ข้าวกะเพราหมู",
+    "50 Baht",
+    "ข้าวกะเพราทะเล",
+    "50 Baht",
+    "ข้าวกะเพราเนื้อ",
+    "50 Baht",
+    "ข้าวกะเพราปลา",
+    "50 Baht",
+    "ข้าวไข่ทอด",
+    "50 Baht",
+    "เมนูต้ม",
+    "ต้มยำไก่",
+    "50 Baht",
+    "ต้มยำหมู",
+    "50 Baht",
+    "ต้มยำทะเล",
+    "50 Baht",
+    "ต้มยาปลาหมีก",
+    "50 Baht",
+    "ต้มยำเนื้อ",
+    "50 Baht",
+    "ต้มยำปลา",
+    "50 Baht",
+    "Open daily 10:00-20:00",
+    "Call 091-234-5678"
+  ]
+}

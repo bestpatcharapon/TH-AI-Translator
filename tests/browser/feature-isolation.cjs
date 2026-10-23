@@ -1,11 +1,12 @@
 /* Requires Playwright and the running Flask app. All AI requests are mocked. */
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const audioFixture = require("./audio-fixture.cjs");
 const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
 (async () => {
   const browser = await chromium.launch({
     headless: true,
-    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"],
+    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", audioFixture()],
   });
   try {
     const page = await browser.newPage({

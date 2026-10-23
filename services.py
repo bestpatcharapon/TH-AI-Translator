@@ -4,7 +4,10 @@ import asyncio
 import base64
 import io
 import os
+import threading
 import zipfile
+from collections import deque
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import edge_tts
@@ -13,12 +16,15 @@ from docx import Document
 from docx.table import Table
 from langdetect import DetectorFactory, LangDetectException, detect
 from PIL import Image, ImageOps, UnidentifiedImageError
+from pillow_heif import register_heif_opener
 
 from language_catalog import LANGUAGES, VOICES
 from project_config import MAX_PAGES, MAX_TEXT, VISION_MODEL
 from project_config import MAX_UPLOAD as MAX_UPLOAD  # Public compatibility export.
 
 DetectorFactory.seed = 0
+register_heif_opener(thumbnails=False)
+_pdf_ocr_pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix="pdf-ocr")
 
 
 def check_text(text):
@@ -34,8 +40,8 @@ def image_bytes(data, lossless=False):
     """Validate actual image data and normalize orientation/size before sending it."""
     try:
         with Image.open(io.BytesIO(data)) as image:
-            if image.format not in {"PNG", "JPEG", "WEBP"}:
-                raise ValueError("รองรับรูป PNG, JPEG และ WebP เท่านั้น")
+            if image.format not in {"PNG", "JPEG", "WEBP", "HEIF"}:
+                raise ValueError("รองรับรูป PNG, JPEG, WebP และ HEIC/HEIF เท่านั้น")
             if image.width * image.height > 25_000_000:
                 raise ValueError("รูปมีขนาดเกิน 25 ล้านพิกเซล กรุณาลดขนาดก่อน")
             image = ImageOps.exif_transpose(image).convert("RGB")
@@ -44,7 +50,8 @@ def image_bytes(data, lossless=False):
             image.save(
                 output,
                 format="PNG" if lossless else "JPEG",
-                **({} if lossless else {"quality": 90}),
+                # PNG level 3 encodes ~3x faster than the default 6 for a few % more bytes.
+                **({"compress_level": 3} if lossless else {"quality": 90}),
             )
             return output.getvalue()
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as error:
@@ -87,10 +94,14 @@ def read_image(data, client):
 def extract_file(data, filename, kind, client=None, *, client_factory=None):
     """Read local formats directly, resolving an AI client only if OCR is needed."""
 
+    client_lock = threading.Lock()
+
     def ocr(image):
         nonlocal client
         if client is None and client_factory is not None:
-            client = client_factory()
+            with client_lock:
+                if client is None:
+                    client = client_factory()
         return read_image(image, client)
 
     suffix = Path(filename).suffix.lower()
@@ -129,19 +140,38 @@ def extract_file(data, filename, kind, client=None, *, client_factory=None):
                     raise ValueError("กรุณาปลดรหัสผ่าน PDF ก่อนอัปโหลด")
                 if len(document) > MAX_PAGES:
                     raise ValueError(f"รองรับ PDF ไม่เกิน {MAX_PAGES} หน้า กรุณาแบ่งไฟล์ก่อน")
-                parts = []
-                for page in document:
-                    page_text = page.get_text("text", sort=True)
-                    if not isinstance(page_text, str):
-                        raise ValueError("ไม่สามารถอ่านข้อความจาก PDF ได้")
-                    text = page_text.strip()
-                    if not text:
-                        scale = min(2, 2200 / max(page.rect.width, page.rect.height))
-                        pixmap = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), alpha=False)
-                        text = ocr(pixmap.tobytes("png"))
-                    parts.append(text)
+                parts, pending = [], deque()
+
+                def finish_page():
+                    item = pending.popleft()
+                    parts.append(item if isinstance(item, str) else item.result())
                     if sum(map(len, parts)) > MAX_TEXT:
                         raise ValueError(f"เอกสารยาวเกิน {MAX_TEXT:,} ตัวอักษร กรุณาแบ่งไฟล์ก่อน")
+
+                try:
+                    for page in document:
+                        # PyMuPDF stays on this thread; workers receive only encoded image bytes.
+                        page_text = page.get_text("text", sort=True)
+                        if not isinstance(page_text, str):
+                            raise ValueError("ไม่สามารถอ่านข้อความจาก PDF ได้")
+                        text = page_text.strip()
+                        if text:
+                            pending.append(text)
+                        else:
+                            scale = min(2, 2200 / max(page.rect.width, page.rect.height))
+                            pixmap = page.get_pixmap(
+                                matrix=pymupdf.Matrix(scale, scale), alpha=False
+                            )
+                            pending.append(_pdf_ocr_pool.submit(ocr, pixmap.tobytes("png")))
+                        # At most two pages are pending, so size/error checks stop further work early.
+                        if len(pending) >= 2:
+                            finish_page()
+                    while pending:
+                        finish_page()
+                finally:
+                    for item in pending:
+                        if not isinstance(item, str):
+                            item.cancel()
                 return check_text("\n\n".join(parts))
         except (pymupdf.FileDataError, pymupdf.EmptyFileError) as error:
             raise ValueError("ไม่สามารถอ่าน PDF ได้ ไฟล์อาจเสียหาย") from error

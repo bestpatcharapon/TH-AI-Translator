@@ -23,6 +23,9 @@
   --accent: #c6b092;
   --on-accent: #28231c;
   --error: #ffa69c;
+  --header-bg: #38352f;
+  --header-border: #494338;
+  --header-control: #ffffff05;
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -35,6 +38,9 @@
   --accent: #c6b092;
   --on-accent: #28231c;
   --error: #b3342a;
+  --header-bg: #eee8de;
+  --header-border: #d9cebe;
+  --header-control: #ffffff55;
 }
 * {
   box-sizing: border-box;
@@ -95,6 +101,8 @@ select:focus-visible {
   outline-offset: 4px;
 }
 .translator {
+  --page-inset: 24px;
+  --page-top: 24px;
   width: 100%;
   max-width: 960px;
   min-height: 100svh;
@@ -107,14 +115,139 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 22px;
+}
+.app-header,
+.live-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-top: calc(-1 * var(--page-top));
+  margin-right: calc(-1 * var(--page-inset));
+  margin-left: calc(-1 * var(--page-inset));
+  padding: 16px var(--page-inset);
+  min-height: 80px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+}
+.app-header .icon-button,
+.app-header .locale-button,
+.live-header .icon-button {
+  background: var(--header-control);
+  border-color: var(--header-border);
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
+}
+
+/* Thai meaning tools retain the feature's own state and never cover the composer. */
+.thai-tools {
+  margin: 0 0 18px;
+  flex-shrink: 0;
+}
+.translator.thai-interpreting .source-panel .translate-button {
+  display: flex;
+}
+.thai-mode-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.thai-mode-label select {
+  min-width: 0;
+  max-width: 68%;
+  padding: 9px 10px;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font: inherit;
+}
+.thai-result {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 20px;
+  padding: 16px;
+  max-height: 360px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+.thai-result h3,
+.thai-result h4 {
+  font-size: 13px;
+  margin: 0 0 10px;
+  color: var(--accent);
+}
+.thai-central {
+  font-size: 17px;
+  line-height: 1.8;
+  margin: 0 0 10px;
+}
+.thai-result details {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.thai-question {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.thai-possibility,
+.thai-lexicon-entry {
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+  font-size: 13px;
+}
+.thai-possibility small,
+.thai-lexicon-entry small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.thai-possibility button {
+  margin-top: 10px;
+}
+#thai-clarification-form {
+  margin-top: 14px;
+}
+#thai-clarification-form label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+#thai-clarification,
+#thai-meaning {
+  min-height: 70px;
+  height: auto;
+  font-size: 14px;
+  resize: vertical;
+}
+#thai-clarification {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.live-mode .thai-tools {
+  margin-bottom: 8px;
+}
+.live-mode .thai-result {
+  max-height: min(220px, 28dvh);
+  padding: 12px;
+}
+.live-mode #thai-mode-note {
+  font-size: 10px;
+  margin: 6px 0;
 }
 h1 {
   font-size: 15px;
@@ -123,18 +256,29 @@ h1 {
   margin: 0;
 }
 .brand-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 9px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
-  color: var(--bg);
-  background: #94928b;
 }
-.brand-icon svg {
-  width: 25px;
-  height: 25px;
-  stroke-width: 2;
+.brand-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.live-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.live-title img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 .header-actions {
   display: flex;
@@ -272,7 +416,6 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  flex: 1;
 }
 .panel {
   min-width: 0;
@@ -462,6 +605,7 @@ textarea::placeholder {
 }
 @media (min-width: 701px) {
   .translator {
+    --page-top: 36px;
     padding-top: 36px;
     padding-bottom: 28px;
   }
@@ -483,6 +627,8 @@ textarea::placeholder {
 }
 @media (max-width: 700px) {
   .translator {
+    --page-inset: 14px;
+    --page-top: 16px;
     max-width: 440px;
     padding: 16px 14px 12px;
   }
@@ -498,16 +644,21 @@ textarea::placeholder {
     min-height: 120px;
   }
 }
+@media (min-width: 371px) and (max-width: 440px) {
+  .brand h1 {
+    font-size: 14px;
+  }
+  .header-actions .locale-button {
+    padding: 0 8px;
+    gap: 5px;
+  }
+}
 @media (max-width: 370px) {
   h1 {
     font-size: 13px;
   }
   .brand {
     gap: 5px;
-  }
-  .brand-icon {
-    width: 24px;
-    height: 24px;
   }
   .header-actions {
     gap: 4px;
@@ -546,8 +697,8 @@ textarea::placeholder {
     font-size: 12px;
   }
   .brand-icon {
-    width: 22px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
   }
   .header-actions .icon-button {
     width: 34px;
@@ -601,12 +752,6 @@ textarea::placeholder {
   align-items: center;
   gap: 12px;
   padding: 12px 0 0;
-}
-.file-preview img {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  object-fit: cover;
 }
 #file-name {
   flex: 1;
@@ -730,21 +875,6 @@ textarea::placeholder {
 .auto-speak input {
   accent-color: var(--accent);
 }
-.live-mode .output-panel {
-  display: none;
-}
-.live-mode .panels {
-  display: block;
-  flex: initial;
-}
-.live-mode .source-panel textarea {
-  min-height: 90px;
-  height: 105px;
-  flex: initial;
-}
-.live-mode .bottom-bar {
-  margin-top: 42px;
-}
 .translator:has(.file-tools:not([hidden])) .panels {
   min-height: 360px;
 }
@@ -851,9 +981,6 @@ p:lang(zh) {
 }
 .source-panel .translate-button {
   display: none;
-}
-.live-mode .source-panel .translate-button {
-  display: flex;
 }
 .output-panel {
   min-height: 260px;
@@ -1025,8 +1152,7 @@ p:lang(zh) {
   display: flex;
   gap: 8px;
 }
-.bottom-bar,
-.live-mode .bottom-bar {
+.bottom-bar {
   position: fixed;
   z-index: 20;
   bottom: max(12px, env(safe-area-inset-bottom));
@@ -1035,13 +1161,6 @@ p:lang(zh) {
   width: calc(100% - 28px);
   max-width: 412px;
   margin: 0;
-}
-.live-mode .source-panel {
-  min-height: initial;
-}
-.live-mode #source-insights,
-.live-mode #source-info-status {
-  display: none;
 }
 .count {
   white-space: normal;
@@ -1500,6 +1619,8 @@ p:lang(zh) {
 
 /* A focused, two-language conversation screen. */
 .translator.live-mode {
+  --page-inset: 18px;
+  --page-top: 22px;
   max-width: 440px;
   height: var(--live-height, 100dvh);
   min-height: 0;
@@ -1515,7 +1636,7 @@ p:lang(zh) {
 .live-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   margin-bottom: 22px;
   flex-shrink: 0;
 }
@@ -1757,6 +1878,19 @@ p:lang(zh) {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+.live-review-voice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.live-review-voice input {
+  accent-color: var(--accent);
+  margin: 0;
+}
 .live-composer .voice-status,
 .live-composer .feature-status {
   text-align: left;
@@ -1795,6 +1929,8 @@ p:lang(zh) {
 }
 @media (max-width: 370px) {
   .translator.live-mode {
+    --page-inset: 12px;
+    --page-top: 14px;
     padding: 14px 12px max(12px, env(safe-area-inset-bottom));
   }
   .live-header {
@@ -2392,9 +2528,6 @@ textarea[dir="auto"],
   font-size: 13px;
   color: var(--muted);
 }
-.live-header {
-  gap: 7px;
-}
 @media (max-width: 370px) {
   .menu-dialog {
     width: calc(100% - 18px);
@@ -2731,4 +2864,275 @@ textarea[dir="auto"],
 }
 #studio-export {
   margin-top: 18px;
+}
+
+#photo-target-language {
+  margin-bottom: 8px;
+  max-width: 100%;
+  white-space: normal;
+}
+.photo-readings {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin: 14px 0;
+}
+.photo-readings summary {
+  cursor: pointer;
+  color: var(--text);
+  font-size: 14px;
+}
+#photo-readings-list {
+  max-height: 380px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+.photo-reading {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  text-align: start;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  padding: 12px 4px;
+  overflow-wrap: anywhere;
+}
+.photo-reading small {
+  color: var(--muted);
+}
+.photo-reading strong {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.photo-reading.needs-review strong {
+  color: var(--error);
+}
+
+.photo-protected {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* A desktop workspace with navigation near the language and translation tools. */
+@media (min-width: 1024px) {
+  .translator:not(.live-mode) {
+    --page-inset: 32px;
+    --page-top: 0px;
+    max-width: 1280px;
+    padding: 0 var(--page-inset) 48px;
+  }
+  .translator:not(.live-mode) .app-header {
+    min-height: 88px;
+    margin-bottom: 24px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+  .app-header .brand {
+    gap: 10px;
+  }
+  .app-header h1 {
+    font-size: 17px;
+    letter-spacing: -0.3px;
+  }
+  .header-actions {
+    gap: 8px;
+  }
+  .translator:not(.live-mode) .bottom-bar {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: none;
+    width: auto;
+    max-width: 100%;
+    align-self: flex-start;
+    margin: 0 0 28px;
+  }
+  .bottom-bar .mode-nav {
+    grid-template-columns: repeat(4, minmax(110px, auto));
+    gap: 4px;
+    padding: 5px;
+    border-radius: 18px;
+  }
+  .bottom-bar .mode {
+    flex-direction: row;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .bottom-bar .mic-space {
+    display: none;
+  }
+  .bottom-bar .microphone {
+    position: static;
+    transform: none;
+    width: 54px;
+    height: 54px;
+    box-shadow: none;
+    background: var(--card);
+  }
+  .bottom-bar .microphone[aria-pressed="true"] {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--border);
+  }
+  .translator:not(.live-mode) .language-controls {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .translator:not(.live-mode) .language-picker {
+    height: 64px;
+    padding: 12px 20px;
+    border-radius: 18px;
+  }
+  .translator:not(.live-mode) .thai-mode-label {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+  .translator:not(.live-mode) .thai-mode-label select {
+    min-width: 240px;
+  }
+  .translator:not(.live-mode) .panels {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 24px;
+  }
+  .translator:not(.live-mode) .panel {
+    min-height: clamp(380px, 48vh, 560px);
+    padding: 26px;
+    border-radius: 24px;
+  }
+  .translator:not(.live-mode) .source-panel #input,
+  .translator:not(.live-mode) #output {
+    flex: 1;
+    min-height: 200px;
+    max-height: none;
+    font-size: 18px;
+    line-height: 1.85;
+  }
+  .translator:not(.live-mode) .output-footer {
+    margin-top: auto;
+  }
+  .translator:not(.live-mode) .photo-mode {
+    max-width: 960px;
+  }
+  .translator.live-mode {
+    --page-inset: 32px;
+    --page-top: 0px;
+    max-width: 1120px;
+    padding: 0 var(--page-inset) 20px;
+  }
+  .live-mode .live-header {
+    min-height: 88px;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+  .live-mode .live-heading h1 {
+    font-size: 20px;
+  }
+  .live-mode .live-heading p {
+    font-size: 12px;
+    margin-top: 3px;
+  }
+  .live-mode .language-controls {
+    gap: 20px;
+    margin-bottom: 16px;
+  }
+  .live-mode .language-picker {
+    height: 56px;
+    padding: 10px 18px;
+  }
+  .live-mode .language-label strong {
+    font-size: 15px;
+  }
+  .live-mode .thai-tools {
+    margin-bottom: 16px;
+  }
+  .live-mode .thai-mode-label {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+  .live-mode .thai-mode-label select {
+    min-width: 240px;
+  }
+  .live-mode .chat-messages {
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    scrollbar-gutter: stable;
+  }
+  .live-mode #chat-empty {
+    font-size: 15px;
+  }
+  .live-mode .chat-turn {
+    max-width: 72%;
+    min-width: 280px;
+    padding: 20px 22px 14px;
+    margin-bottom: 20px;
+  }
+  .live-mode .chat-turn .translated-message {
+    font-size: 19px;
+  }
+  .live-mode .chat-turn .original-message {
+    font-size: 14px;
+  }
+  .live-mode .chat-direction {
+    font-size: 12px;
+  }
+  .live-mode .live-composer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 12px 20px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    border-radius: 24px;
+  }
+  .live-mode .live-typing {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .live-mode .live-typing > span {
+    font-size: 12px;
+  }
+  .live-mode .live-typing .speaker-choice {
+    padding: 8px 14px;
+  }
+  .live-mode .live-input-row {
+    gap: 12px;
+    align-items: center;
+  }
+  .live-mode .live-input-row #input {
+    min-height: 60px;
+    height: 60px;
+    font-size: 16px;
+  }
+  .live-mode .live-send {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0;
+  }
+  .live-mode .live-microphones {
+    margin-top: 0;
+    align-self: stretch;
+  }
+  .live-mode .live-composer .voice-status,
+  .live-mode .live-composer .feature-status {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .live-mode .live-review-voice {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
 }

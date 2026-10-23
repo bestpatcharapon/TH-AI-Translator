@@ -1,0 +1,192 @@
+{
+  "measured_at": "2026-10-22T17:02:41.430775+00:00",
+  "controlled": {
+    "kind": "controlled synthetic provider, fixed 50ms per chunk; not an AI accuracy benchmark",
+    "chunks": 3,
+    "serial_seconds": 0.1508,
+    "parallel_seconds": 0.0518,
+    "same_complete_ordered_content": true
+  },
+  "live_note": "Single sample per path, same model and translation policy; provider/network variation is not controlled. Inspect translations and OCR for quality. Cache-hit speed is not uncached generation speed.",
+  "live": {
+    "baseline": {
+      "url": "http://127.0.0.1:5000",
+      "text": [
+        {
+          "seconds": 1.995,
+          "http_status": 200,
+          "cache": null,
+          "server_timing": null,
+          "translation": "Please reschedule the appointment to the 28th at 10:30 AM. The price is 1500 baht, not 150 baht.",
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          }
+        }
+      ],
+      "photo": [
+        {
+          "seconds": 2.4238,
+          "http_status": 200,
+          "cache": null,
+          "server_timing": null,
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "regions": [
+            {
+              "text": "MENU",
+              "translation": "เมนู"
+            },
+            {
+              "text": "Fried rice 50 baht",
+              "translation": "ข้าวผัด 50 บาท"
+            },
+            {
+              "text": "Chicken soup 80 baht",
+              "translation": "ซุปไก่ 80 บาท"
+            },
+            {
+              "text": "No peanuts please",
+              "translation": "ขอไม่ใส่ถั่วลิสง"
+            }
+          ]
+        }
+      ]
+    },
+    "optimized": {
+      "url": "http://127.0.0.1:5051",
+      "text": [
+        {
+          "seconds": 2.3297,
+          "http_status": 200,
+          "cache": "miss",
+          "server_timing": "app;dur=2328.3",
+          "translation": "I'd like to move the appointment to the 28th at 10:30 am. The price is 1500 baht, not 150 baht.",
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          }
+        },
+        {
+          "seconds": 0.0017,
+          "http_status": 200,
+          "cache": "hit",
+          "server_timing": "app;dur=0.2",
+          "translation": "I'd like to move the appointment to the 28th at 10:30 am. The price is 1500 baht, not 150 baht.",
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          }
+        }
+      ],
+      "photo": [
+        {
+          "seconds": 1.5909,
+          "http_status": 200,
+          "cache": null,
+          "server_timing": "app;dur=1589.2",
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "regions": [
+            {
+              "text": "MENU",
+              "translation": "เมนู"
+            },
+            {
+              "text": "Fried rice 50 baht",
+              "translation": "ข้าวผัด 50 บาท"
+            },
+            {
+              "text": "Chicken soup 80 baht",
+              "translation": "ซุปไก่ 80 บาท"
+            },
+            {
+              "text": "No peanuts please",
+              "translation": "กรุณาไม่ใส่ถั่วลิสง"
+            }
+          ]
+        },
+        {
+          "seconds": 0.0022,
+          "http_status": 200,
+          "cache": null,
+          "server_timing": "app;dur=0.8",
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "regions": [
+            {
+              "text": "MENU",
+              "translation": "เมนู"
+            },
+            {
+              "text": "Fried rice 50 baht",
+              "translation": "ข้าวผัด 50 บาท"
+            },
+            {
+              "text": "Chicken soup 80 baht",
+              "translation": "ซุปไก่ 80 บาท"
+            },
+            {
+              "text": "No peanuts please",
+              "translation": "กรุณาไม่ใส่ถั่วลิสง"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "speech": [
+    {
+      "seconds": 0.9281,
+      "http_status": 200,
+      "cache": "miss",
+      "server_timing": "app;dur=926.8"
+    },
+    {
+      "seconds": 0.0023,
+      "http_status": 200,
+      "cache": "hit",
+      "server_timing": "app;dur=0.3"
+    }
+  ],
+  "transcription": [
+    {
+      "seconds": 0.6542,
+      "http_status": 200,
+      "cache": "miss",
+      "server_timing": "app;dur=652.5",
+      "text": "Hello, welcome."
+    },
+    {
+      "seconds": 0.0017,
+      "http_status": 200,
+      "cache": "hit",
+      "server_timing": "app;dur=0.5",
+      "text": "Hello, welcome."
+    }
+  ],
+  "model": "openai/gpt-oss-120b",
+  "catalog_payload": {
+    "utf8_bytes": 26122,
+    "gzip_bytes": 6350
+  },
+  "same_ocr_labels_in_photo_sample": true
+}
