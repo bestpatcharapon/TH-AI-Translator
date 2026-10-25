@@ -8,6 +8,8 @@ node_modules/
 .ruff_cache/
 playwright-report/
 test-results/
+.vercel/
+public/static/
 
 # Downloaded dialect datasets and generated search indexes
 .data/

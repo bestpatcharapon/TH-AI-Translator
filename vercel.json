@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "flask",
+  "buildCommand": "python scripts/build_vercel.py",
+  "functions": {
+    "app.py": {
+      "excludeFiles": "{tests/**,reports/**,node_modules/**,.ocr/**,.data/**,.ruff_cache/**,public/**}"
+    }
+  }
+}

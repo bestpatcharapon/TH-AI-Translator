@@ -1,3 +1,47 @@
+[project]
+name = "th-ai-translator"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "flask>=3.0",
+    "openai>=1.40,<3",
+    "python-dotenv>=1.0",
+    "Pillow>=11.0,<13",
+    "pillow-heif>=1.8.1,<2",
+    "rapidocr-onnxruntime==1.4.4",
+    "pymupdf>=1.26,<2",
+    "python-docx>=1.2",
+    "edge-tts>=7.2",
+    "aiohttp>=3.10",
+    "langdetect>=1.0.9",
+]
+
+[project.optional-dependencies]
+# Install locally with the pre-downloaded models; not needed to start the web app.
+paddle = ["paddleocr==3.7.0", "paddlex[ocr-core]==3.7.2", "paddlepaddle==3.3.0"]
+
+[tool.uv]
+package = false
+
+[[tool.uv.dependency-metadata]]
+# RapidOCR only uses cv2 image operations. Avoid Qt/X11 and GUI libraries on the server.
+name = "rapidocr-onnxruntime"
+version = "1.4.4"
+requires-dist = [
+    "pyclipper>=1.2.0",
+    "opencv-python-headless>=4.5.1.48,<5",
+    "numpy>=1.19.5,<3.0.0",
+    "six>=1.15.0",
+    "Shapely>=1.7.1,!=2.0.4",
+    "PyYAML",
+    "Pillow",
+    "onnxruntime>=1.7.0",
+    "tqdm",
+]
+
+[tool.vercel]
+entrypoint = "app:app"
+
 [tool.ruff]
 target-version = "py311"
 line-length = 100

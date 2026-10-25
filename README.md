@@ -16,6 +16,14 @@ python app.py
 
 เปิด http://127.0.0.1:5000 หากมี `.env` อยู่แล้ว ให้เก็บค่าของคุณไว้และเพิ่มเฉพาะตัวแปรที่ต้องการเปลี่ยน ค่าโมเดลภาพและเสียงมีค่าเริ่มต้นให้แล้ว
 
+## Deploy บน Vercel
+
+ใช้ Root Directory เป็นรากโปรเจกต์ที่มี `app.py` และตั้ง Install Command / Output Directory เป็นค่าเริ่มต้น ไฟล์ `vercel.json` เลือก Flask และเรียก `scripts/build_vercel.py` เพื่อคัดลอก UI ไป `public/static` ให้ CDN เสิร์ฟที่ URL เดิม รายการแพ็กเกจสำหรับเริ่มเว็บอยู่ใน `[project].dependencies` ของ `pyproject.toml` และระบุ Python 3.12 ไว้แล้ว เพิ่ม `GROQ_API_KEY` และค่าที่ต้องการใน Environment Variables ของ Vercel แล้ว deploy จาก commit ใหม่
+
+ถ้าพบ `ModuleNotFoundError: No module named 'flask'` ให้ตรวจ Build Logs ว่าอ่าน `pyproject.toml` ฉบับที่มี dependencies แล้ว และ Redeploy โดยไม่ใช้ build cache เดิม การมีแค่ `[tool.ruff]` ในไฟล์นี้อาจทำให้ตัวติดตั้งเลือก manifest ที่ไม่มีแพ็กเกจ แม้ `requirements.txt` จะมี Flask อยู่
+
+ชุด deploy ปกติใช้ dependency metadata ของ uv ให้ RapidOCR ใช้ `opencv-python-headless` แทน OpenCV รุ่น GUI เพื่อลดขนาดและไม่พึ่ง Qt/X11 พร้อม lock dependencies ด้วย `uv.lock` ชุดนี้ไม่ติดตั้ง PaddleOCR/PaddlePaddle ที่ต้องมีโมเดลในเครื่อง การติดตั้ง local ด้วย `pip install -r requirements.txt` ยังรวมชุดนี้เหมือนเดิม หรือใช้ `uv sync --extra paddle` แล้วติดตั้งโมเดลตามหัวข้อ OCR ด้านล่าง เมื่อไม่มีโมเดล local ระบบจะใช้เส้นทาง OCR สำรองเดิม; ความสามารถที่ต้องพึ่ง Tesseract/โมเดลใน `.ocr` ยังต้องทดสอบแยกบนโฮสต์นั้น
+
 ## การใช้งาน
 
 - **ประสิทธิภาพและการใช้ผลเดิม**: คำขอข้อความเดียวกันที่มีภาษา โทน บริบท คลังคำ และฟีเจอร์ตรงกัน ใช้ผลสำเร็จที่ยังไม่หมดอายุได้ รวมคำขอเหมือนกันที่กำลังทำงานเป็นงานเดียว แปลเอกสารพร้อมกันสูงสุด 3 ส่วนโดยรักษาลำดับและบริบทข้างเคียง OCR ภาพยังใช้ภาพอ่าน 3 แบบเดิมแต่ทำพร้อมกันได้ 2 งาน และแปลชุดป้ายบนภาพได้ 2 ชุดพร้อมกัน PDF สแกนอ่านภาพได้ 2 หน้าพร้อมกันโดยเรนเดอร์ PDF บนเธรดเดิมและเก็บลำดับหน้า ไม่เปลี่ยนโมเดลหรือเอากฎตรวจคำแปลออก
