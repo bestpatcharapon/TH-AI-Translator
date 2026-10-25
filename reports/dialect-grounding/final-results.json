@@ -1,0 +1,384 @@
+{
+  "created": "2026-10-24T09:39:14.112179+00:00",
+  "scope": "Six development regressions; reported cases and corpus-adjacent examples are NOT held-out evaluation. No blind human ratings or accuracy percentage. Baseline is the last committed generator, not the temporary quarantine behavior. Independent model checks do not prove correctness.",
+  "baseline_commit": null,
+  "results": [
+    {
+      "id": "reported-retort-central",
+      "text": "ป่อคิงหยัง",
+      "target": "th",
+      "mode": "northern",
+      "criteria": "Rude rhetorical retort involving the listener's father, as documented by cited sources. Not 'What are you doing?' or a greeting. This is the user-reported development regression, not held-out.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "พ่อมึงเหรอ",
+        "translation": "พ่อมึงเหรอ",
+        "note": "แปลความหมายตามคำด่าโต้ตอบในภาษาถิ่นเหนือ โดยรักษาโทนความหยาบและเจตนาการโต้ตอบเชิงลบตามแหล่งอ้างอิง",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "ป่อคิงหยัง",
+            "meaning": "พ่อมึงเหรอ"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [
+          {
+            "id": "northern-retort-parent",
+            "dialect": "northern",
+            "term": "ป้อคิงหยัง",
+            "aliases": [
+              "ป่อคิงหยัง"
+            ],
+            "alias_note": "Application spelling alias for the user-reported variant; not a separate dictionary attestation.",
+            "central_thai": "พ่อมึงเหรอ",
+            "register": "insult / rude rhetorical retort; context may also be teasing",
+            "usage": "A rude rhetorical retort invoking the listener's father; do not turn it into a greeting or a question about what someone is doing. Preserve its confrontational function without inventing a threat or adding stronger abuse. Literal kinship questions and quoted discussion must still be distinguished by the surrounding sentence.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              },
+              {
+                "title": "ป้อคิงหยัง — พจนานุกรมภาษาเหนือ",
+                "url": "https://xn--q3cn1ail0ab6b0e.com/dict/%E0%B8%9B%E0%B9%89%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%87%E0%B8%AB%E0%B8%A2%E0%B8%B1%E0%B8%87/",
+                "supports": "Central Thai gloss; author-maintained dictionary entry, not a universal contextual translation."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ",
+              "มึง"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          }
+        ],
+        "quality_review": {
+          "status": "checked",
+          "applied": false,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "seconds": 4.061
+    },
+    {
+      "id": "reported-retort-english",
+      "text": "ป้อคิงหยัง",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "Preserve the rude rhetorical retort and kinship reference without invented threats or turning it into an ordinary activity question.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "พ่อมึงเหรอ",
+        "translation": "Your dad?",
+        "note": "เป็นการสบถหรือโต้เถียงด้วยคำหยาบในภาษาถิ่นเหนือ มีความหมายเชิงเผชิญหน้าหรือเยาะเย้ย",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "ป้อคิงหยัง",
+            "meaning": "พ่อมึงเหรอ"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [
+          {
+            "id": "northern-retort-parent",
+            "dialect": "northern",
+            "term": "ป้อคิงหยัง",
+            "aliases": [
+              "ป่อคิงหยัง"
+            ],
+            "alias_note": "Application spelling alias for the user-reported variant; not a separate dictionary attestation.",
+            "central_thai": "พ่อมึงเหรอ",
+            "register": "insult / rude rhetorical retort; context may also be teasing",
+            "usage": "A rude rhetorical retort invoking the listener's father; do not turn it into a greeting or a question about what someone is doing. Preserve its confrontational function without inventing a threat or adding stronger abuse. Literal kinship questions and quoted discussion must still be distinguished by the surrounding sentence.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              },
+              {
+                "title": "ป้อคิงหยัง — พจนานุกรมภาษาเหนือ",
+                "url": "https://xn--q3cn1ail0ab6b0e.com/dict/%E0%B8%9B%E0%B9%89%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%87%E0%B8%AB%E0%B8%A2%E0%B8%B1%E0%B8%87/",
+                "supports": "Central Thai gloss; author-maintained dictionary entry, not a universal contextual translation."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ",
+              "มึง"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          },
+          {
+            "id": "northern-father-noun",
+            "dialect": "northern",
+            "term": "ป้อ",
+            "aliases": [],
+            "central_thai": "พ่อ",
+            "register": "neutral kinship noun; surrounding words may change the speech act",
+            "usage": "Literal kinship noun meaning father. Do not drop the father or turn the sentence into the speaker going somewhere. The compound retort ป้อคิงหยัง has a separate rude rhetorical use. Resolve possessive pronouns from context; do not invent a trip back.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          }
+        ],
+        "quality_review": {
+          "status": "checked",
+          "applied": false,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "seconds": 3.243
+    },
+    {
+      "id": "slow-speech-request",
+      "text": "จ้วยอู้จ้าๆหน่อยได้ก่อ",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "A polite request to speak more slowly, still a question. Related corpus example exists; this is not held-out evidence of model generalization.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "กรุณาพูดช้า ๆ หน่อยได้ไหม",
+        "translation": "Could you please speak a little slower?",
+        "note": "ประโยคนี้เป็นภาษาเหนือ หมายถึงการขอร้องให้พูดช้าลงหน่อยอย่างสุภาพ",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "จ้วยอู้จ้าๆหน่อยได้ก่อ",
+            "meaning": "กรุณาพูดช้า ๆ หน่อยได้ไหม"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [
+          {
+            "id": "tdc-khummuang-7220",
+            "kind": "corpus_example",
+            "variety": "khummuang",
+            "text": "จ้วย อู้ จ้า จ้า หน่อย ได้ก่อ",
+            "central_thai": "กรุณา พูด ช้า ช้า หน่อย ได้ ไหม",
+            "match": "related_example",
+            "sources": [
+              {
+                "title": "Thai Local Language Translation Dataset — khummuang",
+                "url": "https://zenodo.org/records/13283454",
+                "license": "CC-BY-SA-4.0"
+              }
+            ],
+            "usage": "Published parallel example; may contain noise. Related examples do not establish the meaning of different words or negation in the current input."
+          }
+        ],
+        "quality_review": {
+          "status": "revised",
+          "applied": true,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite",
+          "reason": "invalid_primary_repaired"
+        }
+      },
+      "seconds": 3.109
+    },
+    {
+      "id": "father-literal-control",
+      "text": "ป้อเปิ้นไปกาดแล้ว",
+      "target": "th",
+      "mode": "northern",
+      "criteria": "Literal father has gone to the market. Do not introduce insults merely because the word father appears.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "พ่อไปตลาดแล้ว",
+        "translation": "พ่อไปตลาดแล้ว",
+        "note": "แปลข้อความภาษาถิ่นเหนือ 'ป้อเปิ้นไปกาดแล้ว' เป็นภาษากลางว่า 'พ่อไปตลาดแล้ว' โดย 'ป้อ' หมายถึง พ่อ, 'เปิ้น' เป็นสรรพนาม (ในที่นี้แสดงความเป็นเจ้าของหรือเจาะจงว่าพ่อของเขา/ท่าน) และ 'กาด' หมายถึงตลาด",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "ป้อ",
+            "meaning": "พ่อ"
+          },
+          {
+            "quote": "เปิ้น",
+            "meaning": "เขา หรือ ท่าน (สรรพนาม)"
+          },
+          {
+            "quote": "ไปกาดแล้ว",
+            "meaning": "ไปตลาดแล้ว"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [
+          {
+            "id": "northern-father-noun",
+            "dialect": "northern",
+            "term": "ป้อ",
+            "aliases": [],
+            "central_thai": "พ่อ",
+            "register": "neutral kinship noun; surrounding words may change the speech act",
+            "usage": "Literal kinship noun meaning father. Do not drop the father or turn the sentence into the speaker going somewhere. The compound retort ป้อคิงหยัง has a separate rude rhetorical use. Resolve possessive pronouns from context; do not invent a trip back.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          }
+        ],
+        "quality_review": {
+          "status": "checked",
+          "applied": false,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "seconds": 3.421
+    },
+    {
+      "id": "quoted-insult-discussion",
+      "text": "เพื่อนบอกว่า ‘ป้อคิงหยัง’ เป็นคำด่า",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "Translate a statement ABOUT a quoted insult; do not directly insult the reader.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "เพื่อนบอกว่า ‘ป้อคิงหยัง’ เป็นคำด่า",
+        "translation": "My friend said that ‘ป้อคิงหยัง’ is an insult.",
+        "note": "ประโยคนี้กล่าวถึงคำว่า ป้อคิงหยัง ซึ่งเป็นคำด่าในภาษาเหนือ โดยมีความหมายในภาษากลางว่า พ่อมึงเหรอ",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "เพื่อนบอกว่า",
+            "meaning": "เพื่อนบอกว่า"
+          },
+          {
+            "quote": "‘ป้อคิงหยัง’ เป็นคำด่า",
+            "meaning": "‘ป้อคิงหยัง’ เป็นคำด่า"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [
+          {
+            "id": "northern-retort-parent",
+            "dialect": "northern",
+            "term": "ป้อคิงหยัง",
+            "aliases": [
+              "ป่อคิงหยัง"
+            ],
+            "alias_note": "Application spelling alias for the user-reported variant; not a separate dictionary attestation.",
+            "central_thai": "พ่อมึงเหรอ",
+            "register": "insult / rude rhetorical retort; context may also be teasing",
+            "usage": "A rude rhetorical retort invoking the listener's father; do not turn it into a greeting or a question about what someone is doing. Preserve its confrontational function without inventing a threat or adding stronger abuse. Literal kinship questions and quoted discussion must still be distinguished by the surrounding sentence.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              },
+              {
+                "title": "ป้อคิงหยัง — พจนานุกรมภาษาเหนือ",
+                "url": "https://xn--q3cn1ail0ab6b0e.com/dict/%E0%B8%9B%E0%B9%89%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%87%E0%B8%AB%E0%B8%A2%E0%B8%B1%E0%B8%87/",
+                "supports": "Central Thai gloss; author-maintained dictionary entry, not a universal contextual translation."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ",
+              "มึง"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          },
+          {
+            "id": "northern-father-noun",
+            "dialect": "northern",
+            "term": "ป้อ",
+            "aliases": [],
+            "central_thai": "พ่อ",
+            "register": "neutral kinship noun; surrounding words may change the speech act",
+            "usage": "Literal kinship noun meaning father. Do not drop the father or turn the sentence into the speaker going somewhere. The compound retort ป้อคิงหยัง has a separate rude rhetorical use. Resolve possessive pronouns from context; do not invent a trip back.",
+            "sources": [
+              {
+                "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+                "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+                "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+              }
+            ],
+            "required_central_fragments": [
+              "พ่อ"
+            ],
+            "kind": "lexical",
+            "match": "exact_term"
+          }
+        ],
+        "quality_review": {
+          "status": "checked",
+          "applied": false,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "seconds": 3.8
+    },
+    {
+      "id": "unknown-private-phrase",
+      "text": "จ๊องกิ๊งแฟลชป๋อง",
+      "target": "en",
+      "mode": "slang",
+      "criteria": "Unfamiliar invented phrase: ask for meaning without fabricated etymology or definitive possibilities.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "needs_context",
+        "standard_thai": "",
+        "translation": "",
+        "note": "วลีนี้ไม่มีความหมายที่เป็นที่ยอมรับทั่วไปและไม่มีคำจำกัดความเฉพาะเจาะจงในบริบทนี้ จึงไม่สามารถแปลความหมายได้อย่างแน่ชัด",
+        "questions": [
+          "วลี \"จ๊องกิ๊งแฟลชป๋อง\" หมายถึงอะไรหรือต้องการสื่อถึงสิ่งใดในบริบทนี้"
+        ],
+        "possibilities": [],
+        "evidence": [],
+        "matched_entries": [],
+        "mode": "slang",
+        "references": [],
+        "quality_review": {
+          "status": "needs_context",
+          "applied": false,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite",
+          "reason": "primary_provider_unavailable"
+        }
+      },
+      "seconds": 4.002
+    }
+  ]
+}

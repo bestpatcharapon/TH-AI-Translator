@@ -1,0 +1,5227 @@
+{
+  "created": "2026-10-24T10:43:22.926717+00:00",
+  "endpoint": "/api/translate",
+  "settings": {
+    "source": "th",
+    "target": "en",
+    "tone": "natural",
+    "thai_mode": "standard",
+    "cache_bypass": true
+  },
+  "scope": "100 development expressions in sentences plus 12 literal contrasts; one supplied lexical entry is already grounded. Not held-out, blind human evaluation, a Google comparison, OCR or ASR testing. Model self-review is not a correctness score.",
+  "interval_seconds": 2.5,
+  "results": [
+    {
+      "id": 1,
+      "term": "จึ้ง",
+      "text": "ชุดที่เธอใส่วันนี้จึ้งมาก",
+      "meaning_checklist": "Praise the impressive outfit, not physical shock.",
+      "http": 200,
+      "seconds": 0.99,
+      "translation": "Your outfit today looks amazing.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.99,
+          "translation": "Your outfit today looks amazing.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "term": "ปัง",
+      "text": "ร้านใหม่ของเขาปังตั้งแต่วันแรก",
+      "meaning_checklist": "The new shop was successful from day one; no explosion.",
+      "http": 200,
+      "seconds": 0.806,
+      "translation": "His new place has been a hit from day one.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.806,
+          "translation": "His new place has been a hit from day one.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "term": "เริ่ด",
+      "text": "ไอเดียนี้เริ่ด ลองทำกันเลย",
+      "meaning_checklist": "Praise the idea and suggest trying it.",
+      "http": 200,
+      "seconds": 0.826,
+      "translation": "This idea is awesome. Let's try it.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.826,
+          "translation": "This idea is awesome. Let's try it.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "term": "ทำถึง",
+      "text": "คอนเสิร์ตเมื่อคืนทีมงานทำถึงจริง ๆ",
+      "meaning_checklist": "The concert production delivered impressively.",
+      "http": 200,
+      "seconds": 0.923,
+      "translation": "The concert last night really came together thanks to the crew.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.923,
+          "translation": "The concert last night really came together thanks to the crew.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "term": "เอาอยู่",
+      "text": "งานยากขนาดนี้แต่เธอเอาอยู่",
+      "meaning_checklist": "She can handle this difficult task.",
+      "http": 200,
+      "seconds": 0.849,
+      "translation": "The job’s this hard, yet you’re still taking it on.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.849,
+          "translation": "The job’s this hard, yet you’re still taking it on.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "term": "เอาเรื่อง",
+      "text": "ร้านเล็ก ๆ แต่ฝีมือเชฟเอาเรื่องนะ",
+      "meaning_checklist": "The chef is surprisingly skilled despite the small restaurant.",
+      "http": 200,
+      "seconds": 0.766,
+      "translation": "It's a small place, but the chef's skill is impressive.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.766,
+          "translation": "It's a small place, but the chef's skill is impressive.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "term": "ตัวตึง",
+      "text": "พี่เขาเป็นตัวตึงเรื่องแก้บั๊กของทีม",
+      "meaning_checklist": "A standout expert at fixing the team's bugs, not a stiff body.",
+      "http": 200,
+      "seconds": 1.006,
+      "translation": "He's the go‑to person for fixing bugs on the team.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.006,
+          "translation": "He's the go‑to person for fixing bugs on the team.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "term": "ตัวแม่",
+      "text": "เรื่องแต่งหน้าเธอคือตัวแม่ของกลุ่ม",
+      "meaning_checklist": "The group's makeup expert, not their biological mother.",
+      "http": 200,
+      "seconds": 1.095,
+      "translation": "Her makeup is the best in the group.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.095,
+          "translation": "Her makeup is the best in the group.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "term": "ตัวพ่อ",
+      "text": "เขาเป็นตัวพ่อเรื่องต่อรองราคา",
+      "meaning_checklist": "An expert at bargaining, not a biological father.",
+      "http": 200,
+      "seconds": 0.636,
+      "translation": "He's the one who handles price negotiations.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.636,
+          "translation": "He's the one who handles price negotiations.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "term": "ตัวท็อป",
+      "text": "บริษัทนี้รับแต่ตัวท็อปเข้าทีม",
+      "meaning_checklist": "The company hires top performers.",
+      "http": 200,
+      "seconds": 0.802,
+      "translation": "This company only brings in top talent to the team.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.802,
+          "translation": "This company only brings in top talent to the team.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "term": "ของจริง",
+      "text": "ตอนแรกนึกว่าคุยโว พอเห็นฝีมือถึงรู้ว่าของจริง",
+      "meaning_checklist": "Initially thought it was boasting, then recognized real skill.",
+      "http": 200,
+      "seconds": 0.845,
+      "translation": "At first I thought it was just bragging, but after seeing the skill I realized it was the real deal.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.845,
+          "translation": "At first I thought it was just bragging, but after seeing the skill I realized it was the real deal.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "term": "ของแทร่",
+      "text": "ช่วยแก้ปัญหาได้ทุกครั้ง คนนี้ของแทร่",
+      "meaning_checklist": "Praise demonstrated reliable ability; recognize playful spelling of ของแท้.",
+      "http": 200,
+      "seconds": 1.156,
+      "translation": "Can solve problems every time. This one belongs to Trae.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.156,
+          "translation": "Can solve problems every time. This one belongs to Trae.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "term": "อย่างเอา",
+      "text": "โซโล่กีตาร์เมื่อกี้อย่างเอา",
+      "meaning_checklist": "The guitar solo was impressive; not a command to take it.",
+      "http": 200,
+      "seconds": 2.627,
+      "translation": "That guitar solo just now was fire.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "just like that.",
+            "explanation": "The slang expression 'อย่างเอา' means awesome, incredible, or 'fire', not 'just like that'.",
+            "kind": "meaning",
+            "source_quote": "อย่างเอา"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.627,
+          "translation": "That guitar solo just now was fire.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "just like that.",
+                "explanation": "The slang expression 'อย่างเอา' means awesome, incredible, or 'fire', not 'just like that'.",
+                "kind": "meaning",
+                "source_quote": "อย่างเอา"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "term": "อย่างเทพ",
+      "text": "เขาเล่นเกมนี้เก่งอย่างเทพ",
+      "meaning_checklist": "Very skilled at the game; no assertion of literal divinity.",
+      "http": 200,
+      "seconds": 1.572,
+      "translation": "He's godlike at this game.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.572,
+          "translation": "He's godlike at this game.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "term": "เมพ",
+      "text": "ด่านยากขนาดนี้ยังผ่านได้ เมพจริง",
+      "meaning_checklist": "Praise skill at completing the hard level.",
+      "http": 200,
+      "seconds": 1.205,
+      "translation": "A level this tough can still be beaten—seriously, that's a real map.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.205,
+          "translation": "A level this tough can still be beaten—seriously, that's a real map.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "term": "สับ",
+      "text": "วันนี้เธอเดินขึ้นเวทีแบบสับมาก",
+      "meaning_checklist": "A confident striking stage walk, not chopping.",
+      "http": 200,
+      "seconds": 0.874,
+      "translation": "You walked onto the stage so awkwardly today.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.874,
+          "translation": "You walked onto the stage so awkwardly today.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "term": "กินขาด",
+      "text": "เรื่องแบตเตอรี่มือถือรุ่นนี้กินขาด",
+      "meaning_checklist": "This phone is clearly superior in battery life, not eating or a broken battery.",
+      "http": 200,
+      "seconds": 0.805,
+      "translation": "The battery on this phone model drains completely.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.805,
+          "translation": "The battery on this phone model drains completely.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "term": "ยืนหนึ่ง",
+      "text": "ร้านนี้ยืนหนึ่งเรื่องขนมในใจฉัน",
+      "meaning_checklist": "The speaker's favorite/best dessert shop, subjective not proven market ranking.",
+      "http": 200,
+      "seconds": 0.81,
+      "translation": "This place is my top choice for desserts.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.81,
+          "translation": "This place is my top choice for desserts.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "term": "มงลง",
+      "text": "ตอบคำถามดีขนาดนี้ มงลงแน่นอน",
+      "meaning_checklist": "Pageant-style praise that the contestant deserves or will win the crown.",
+      "http": 200,
+      "seconds": 2.061,
+      "translation": "Answering the question that well, you’re definitely going to get a crown.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.061,
+          "translation": "Answering the question that well, you’re definitely going to get a crown.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "term": "ออร่าจับ",
+      "text": "วันนี้แต่งตัวแล้วออร่าจับมาก",
+      "meaning_checklist": "The outfit makes the person look radiant or striking.",
+      "http": 200,
+      "seconds": 1.071,
+      "translation": "I got dressed today and my aura is really strong.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.071,
+          "translation": "I got dressed today and my aura is really strong.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "term": "สาดไปสมาชิก",
+      "text": "สาดไปสมาชิก",
+      "meaning_checklist": "User-defined enthusiastic encouragement: go for it, buddy; not send to members.",
+      "http": 200,
+      "seconds": 1.481,
+      "translation": "Go for it, buddy!",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.481,
+          "translation": "Go for it, buddy!",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "term": "จัดไป",
+      "text": "อยากกินพิซซ่าใช่ไหม จัดไป เดี๋ยวสั่งให้",
+      "meaning_checklist": "Agree to order pizza for the listener.",
+      "http": 200,
+      "seconds": 0.671,
+      "translation": "You want pizza, right? Go ahead—I’ll order it.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.671,
+          "translation": "You want pizza, right? Go ahead—I’ll order it.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "term": "จัดมา",
+      "text": "มีข้อเสนออะไรจัดมาได้เลย เดี๋ยวช่วยดู",
+      "meaning_checklist": "Invite proposals and offer to look them over.",
+      "http": 200,
+      "seconds": 0.742,
+      "translation": "Just send any proposals you have, and I’ll take a look.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.742,
+          "translation": "Just send any proposals you have, and I’ll take a look.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "term": "ลุยเลย",
+      "text": "เตรียมทุกอย่างพร้อมแล้ว ลุยเลย",
+      "meaning_checklist": "Everything is ready; start or go ahead.",
+      "http": 200,
+      "seconds": 2.022,
+      "translation": "Everything's ready—let's go.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.022,
+          "translation": "Everything's ready—let's go.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "term": "เอาเลย",
+      "text": "ถ้าชอบแบบนี้ก็เอาเลย ฉันไม่ติด",
+      "meaning_checklist": "Permission/agreement, with no objection.",
+      "http": 200,
+      "seconds": 2.019,
+      "translation": "If you like it like that, go for it. I don't mind.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "just take it",
+            "explanation": "In this context, 'เอาเลย' functions as 'go for it' or 'do it', rather than physically 'take it'.",
+            "kind": "meaning",
+            "source_quote": "เอาเลย"
+          },
+          {
+            "draft_quote": "I'm not attached.",
+            "explanation": "'ไม่ติด' here is an idiom meaning 'I don't mind' or 'I have no problem with it', not 'I'm not attached'.",
+            "kind": "meaning",
+            "source_quote": "ฉันไม่ติด"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "condition_or_health"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.019,
+          "translation": "If you like it like that, go for it. I don't mind.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "just take it",
+                "explanation": "In this context, 'เอาเลย' functions as 'go for it' or 'do it', rather than physically 'take it'.",
+                "kind": "meaning",
+                "source_quote": "เอาเลย"
+              },
+              {
+                "draft_quote": "I'm not attached.",
+                "explanation": "'ไม่ติด' here is an idiom meaning 'I don't mind' or 'I have no problem with it', not 'I'm not attached'.",
+                "kind": "meaning",
+                "source_quote": "ฉันไม่ติด"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "condition_or_health"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "term": "เต็มที่เลย",
+      "text": "พรุ่งนี้แข่งแล้ว เล่นให้เต็มที่เลยนะ",
+      "meaning_checklist": "Encourage full effort at tomorrow's competition.",
+      "http": 200,
+      "seconds": 0.604,
+      "translation": "The match is tomorrow—give it your all.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.604,
+          "translation": "The match is tomorrow—give it your all.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "term": "ใส่ให้สุด",
+      "text": "รอบสุดท้ายแล้ว ใส่ให้สุด",
+      "meaning_checklist": "Give the final round everything; not insert an object.",
+      "http": 200,
+      "seconds": 0.67,
+      "translation": "It's the final round—give it everything you've got.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.67,
+          "translation": "It's the final round—give it everything you've got.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "term": "ไปให้สุด",
+      "text": "เลือกทางนี้แล้วก็ไปให้สุด",
+      "meaning_checklist": "Having chosen this path, commit fully.",
+      "http": 200,
+      "seconds": 0.946,
+      "translation": "Take this route and go all the way.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.946,
+          "translation": "Take this route and go all the way.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "term": "ลุยให้ยับ",
+      "text": "งานนี้เตรียมตัวมาดีแล้ว ลุยให้ยับ",
+      "meaning_checklist": "Enthusiastic encouragement to give full effort, no invented violence.",
+      "http": 200,
+      "seconds": 0.79,
+      "translation": "I'm well prepared for this job—let's crush it.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.79,
+          "translation": "I'm well prepared for this job—let's crush it.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "term": "เดี๋ยวจัดให้",
+      "text": "อยากได้ไฟล์ต้นฉบับใช่ไหม เดี๋ยวจัดให้",
+      "meaning_checklist": "Offer to provide the original file.",
+      "http": 200,
+      "seconds": 0.902,
+      "translation": "You want the original file, right? I’ll get it for you.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.902,
+          "translation": "You want the original file, right? I’ll get it for you.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "term": "ได้อยู่",
+      "text": "รูปนี้ได้อยู่ แต่เพิ่มแสงอีกหน่อยจะดี",
+      "meaning_checklist": "The photo is acceptable, with a suggestion to brighten it.",
+      "http": 200,
+      "seconds": 0.845,
+      "translation": "The picture is fine, but a bit more light would improve it.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.845,
+          "translation": "The picture is fine, but a bit more light would improve it.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "term": "ได้หมด",
+      "text": "จะกินร้านไหนก็ได้ ฉันได้หมด",
+      "meaning_checklist": "No preference about where to eat.",
+      "http": 200,
+      "seconds": 0.943,
+      "translation": "I’ll eat anywhere; I’m full.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.943,
+          "translation": "I’ll eat anywhere; I’m full.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "term": "ตามนั้น",
+      "text": "ถ้าทุกคนสะดวกวันศุกร์ก็ตามนั้น",
+      "meaning_checklist": "Agree on Friday conditionally on everyone being available.",
+      "http": 200,
+      "seconds": 1.711,
+      "translation": "If everyone’s free on Friday, then let’s go ahead.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "condition_or_health"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.711,
+          "translation": "If everyone’s free on Friday, then let’s go ahead.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "condition_or_health"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "term": "ตามสะดวก",
+      "text": "ไม่ต้องรีบตอบนะ ตอบตามสะดวกได้เลย",
+      "meaning_checklist": "No rush; reply when convenient.",
+      "http": 200,
+      "seconds": 1.366,
+      "translation": "No need to rush—just reply whenever it's convenient.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.366,
+          "translation": "No need to rush—just reply whenever it's convenient.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "term": "แล้วแต่เลย",
+      "text": "เรื่องสีเสื้อแล้วแต่เธอเลย ฉันชอบทั้งสองสี",
+      "meaning_checklist": "Delegate the shirt-color choice because both are liked; no invented resentment.",
+      "http": 200,
+      "seconds": 0.749,
+      "translation": "The shirt color is up to you—I like both colors.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.749,
+          "translation": "The shirt color is up to you—I like both colors.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "term": "ว่ามา",
+      "text": "มีอะไรอยากปรึกษาก็ว่ามา ฉันฟังอยู่",
+      "meaning_checklist": "Invite the other person to share what they need advice about.",
+      "http": 200,
+      "seconds": 0.887,
+      "translation": "If there's anything you want to discuss, just tell me—I'm listening.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.887,
+          "translation": "If there's anything you want to discuss, just tell me—I'm listening.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "term": "มาเลย",
+      "text": "ถ้าพร้อมแข่งแล้วก็มาเลย",
+      "meaning_checklist": "Accept/invite the challenge if ready.",
+      "http": 200,
+      "seconds": 2.221,
+      "translation": "If you're ready to race, just come.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "condition_or_health"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.221,
+          "translation": "If you're ready to race, just come.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "condition_or_health"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "term": "ไม่ติด",
+      "text": "เลื่อนนัดเป็นบ่ายสองได้ ฉันไม่ติด",
+      "meaning_checklist": "No objection to moving the appointment to 2 pm.",
+      "http": 200,
+      "seconds": 2.433,
+      "translation": "I can move the appointment to 2 p.m.; I'm not busy.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [
+          {
+            "added": [
+              "2"
+            ],
+            "kind": "numbers",
+            "missing": []
+          }
+        ],
+        "status": "review",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.433,
+          "translation": "I can move the appointment to 2 p.m.; I'm not busy.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [
+              {
+                "added": [
+                  "2"
+                ],
+                "kind": "numbers",
+                "missing": []
+              }
+            ],
+            "status": "review",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "term": "ดีล",
+      "text": "เธอทำสไลด์ ฉันนำเสนอ ตกลงไหม ดีล",
+      "meaning_checklist": "Agree to divide slide preparation and presenting.",
+      "http": 200,
+      "seconds": 0.837,
+      "translation": "You make the slides, I’ll present. Is that okay? Deal.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.837,
+          "translation": "You make the slides, I’ll present. Is that okay? Deal.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "term": "จบที่นี่",
+      "text": "เรื่องที่ทะเลาะกันขอให้จบที่นี่ ไม่ต้องเอาไปพูดต่อ",
+      "meaning_checklist": "End the dispute and do not spread it further.",
+      "http": 200,
+      "seconds": 4.134,
+      "translation": "Let this argument end here—don't bring it up again.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 4.134,
+          "translation": "Let this argument end here—don't bring it up again.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "term": "นอย",
+      "text": "เขาอ่านแชตแล้วไม่ตอบ ฉันนอยเลย",
+      "meaning_checklist": "Feeling upset/anxious after being left on read.",
+      "http": 200,
+      "seconds": 1.735,
+      "translation": "He read the chat and didn't reply, so I'm annoyed.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.735,
+          "translation": "He read the chat and didn't reply, so I'm annoyed.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "term": "เฟล",
+      "text": "เตรียมงานมาตั้งนานแต่โดนยกเลิก รู้สึกเฟลมาก",
+      "meaning_checklist": "Disappointment after long preparation and cancellation.",
+      "http": 200,
+      "seconds": 1.078,
+      "translation": "I’d been preparing for the event for a long time, but it got cancelled. I feel really messed up.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.078,
+          "translation": "I’d been preparing for the event for a long time, but it got cancelled. I feel really messed up.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "term": "จอย",
+      "text": "เมื่อคืนไปดูคอนเสิร์ตแล้วจอยมาก",
+      "meaning_checklist": "Enjoyed the concert last night.",
+      "http": 200,
+      "seconds": 0.579,
+      "translation": "I went to a concert last night and had a great time.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.579,
+          "translation": "I went to a concert last night and had a great time.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "term": "ตุย",
+      "text": "เดินขึ้นบันไดสิบชั้น เหนื่อยจะตุย",
+      "meaning_checklist": "Exaggerated exhaustion, not a claim of actual death.",
+      "http": 200,
+      "seconds": 0.637,
+      "translation": "I walked up ten flights of stairs and I'm exhausted.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.637,
+          "translation": "I walked up ten flights of stairs and I'm exhausted.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "term": "ขิต",
+      "text": "เห็นบิลค่าไฟแล้วแทบขิต",
+      "meaning_checklist": "Figurative shock at the electricity bill, not literal death.",
+      "http": 200,
+      "seconds": 1.171,
+      "translation": "Seeing the electricity bill, I almost threw up.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.171,
+          "translation": "Seeing the electricity bill, I almost threw up.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "term": "ขำจะขิต",
+      "text": "คลิปนี้ขำจะขิต ดูวนไปสามรอบแล้ว",
+      "meaning_checklist": "Very funny, watched three times, no actual death.",
+      "http": 200,
+      "seconds": 0.834,
+      "translation": "This video is so funny—I’ve already watched it three times.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.834,
+          "translation": "This video is so funny—I’ve already watched it three times.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "term": "หัวร้อน",
+      "text": "แพ้เกมติดกันสามตาแล้วเริ่มหัวร้อน",
+      "meaning_checklist": "Anger/frustration after three consecutive game losses, not fever.",
+      "http": 200,
+      "seconds": 2.038,
+      "translation": "I've lost three games in a row and I'm starting to get angry.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "condition_or_health"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.038,
+          "translation": "I've lost three games in a row and I'm starting to get angry.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "condition_or_health"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "term": "หัวจะปวด",
+      "text": "ไฟล์หายก่อนส่งงานสิบนาที หัวจะปวด",
+      "meaning_checklist": "Frustration at a file disappearing ten minutes before the deadline; do not invent illness.",
+      "http": 200,
+      "seconds": 0.794,
+      "translation": "The file disappeared ten minutes before I was supposed to submit it—my head is pounding.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.794,
+          "translation": "The file disappeared ten minutes before I was supposed to submit it—my head is pounding.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "term": "ใจฟู",
+      "text": "เพื่อนจำวันเกิดได้ แค่นี้ก็ใจฟูแล้ว",
+      "meaning_checklist": "Warm happiness because a friend remembered the birthday.",
+      "http": 200,
+      "seconds": 1.25,
+      "translation": "A friend remembered my birthday—just that makes me feel so happy.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.25,
+          "translation": "A friend remembered my birthday—just that makes me feel so happy.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "term": "ใจบาง",
+      "text": "เห็นแมวตัวเล็ก ๆ แล้วใจบางทุกที",
+      "meaning_checklist": "Soft spot for tiny cats, not heart disease.",
+      "http": 200,
+      "seconds": 0.731,
+      "translation": "Every time I see a tiny cat, my heart aches.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.731,
+          "translation": "Every time I see a tiny cat, my heart aches.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "term": "ใจเหลว",
+      "text": "เขายิ้มให้ทีเดียวฉันก็ใจเหลวแล้ว",
+      "meaning_checklist": "Smitten by someone's smile, not physical liquefaction.",
+      "http": 200,
+      "seconds": 1.034,
+      "translation": "He smiled just once, and I was already won over.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.034,
+          "translation": "He smiled just once, and I was already won over.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "term": "ช็อตฟีล",
+      "text": "กำลังเล่าเรื่องสนุกอยู่แต่เขาพูดช็อตฟีลเลย",
+      "meaning_checklist": "His comment abruptly spoiled the fun mood.",
+      "http": 200,
+      "seconds": 1.36,
+      "translation": "I was telling a funny story, but he started talking about a short film.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.36,
+          "translation": "I was telling a funny story, but he started talking about a short film.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "term": "อ่อม",
+      "text": "โปรโมตว่าปังมาก แต่ดูของจริงแล้วอ่อม",
+      "meaning_checklist": "Underwhelming compared with promotion; not a stew.",
+      "http": 200,
+      "seconds": 0.788,
+      "translation": "They hype it up as amazing, but the real thing falls flat.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.788,
+          "translation": "They hype it up as amazing, but the real thing falls flat.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "term": "บ้ง",
+      "text": "โฆษณานี้บ้งตรงที่เอาความพิการมาล้อ",
+      "meaning_checklist": "Criticize the ad for mocking disability; preserve the reason.",
+      "http": 200,
+      "seconds": 0.739,
+      "translation": "This ad is flawed because it makes fun of disability.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.739,
+          "translation": "This ad is flawed because it makes fun of disability.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "term": "บูด",
+      "text": "หวังว่าจะสนุก แต่บทหนังบูดมาก",
+      "meaning_checklist": "The movie's writing was disappointing, not spoiled food.",
+      "http": 200,
+      "seconds": 0.584,
+      "translation": "I was hoping it would be fun, but the script is really terrible.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.584,
+          "translation": "I was hoping it would be fun, but the script is really terrible.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "term": "อิหยังวะ",
+      "text": "จ่ายเงินแล้วแต่ระบบบอกยังไม่จ่าย อิหยังวะ",
+      "meaning_checklist": "Confusion/frustration at paid status being falsely shown as unpaid; keep already-paid meaning.",
+      "http": 200,
+      "seconds": 2.224,
+      "translation": "I already paid, but the system says it hasn't gone through. What the heck?",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.224,
+          "translation": "I already paid, but the system says it hasn't gone through. What the heck?",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "term": "ไปพักก่อน",
+      "text": "บอกว่าฉันผิดทั้งที่ยังไม่อ่าน ไปพักก่อน",
+      "meaning_checklist": "Sarcastically tell the accuser to stop, not earnest medical rest advice.",
+      "http": 200,
+      "seconds": 2.479,
+      "translation": "You said I was wrong even without reading it yet. Take a break.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "They say",
+            "explanation": "The source phrase 'บอกว่า' lacks an explicit subject, but in internet slang/casual context addressing someone who jumped to conclusions, it refers to the interlocutor ('You said') rather than a third-party 'They'.",
+            "kind": "participants",
+            "source_quote": "บอกว่า"
+          },
+          {
+            "draft_quote": "I haven't read it yet",
+            "explanation": "The subject who hasn't read yet is the person being addressed (who judged prematurely), not the speaker ('I').",
+            "kind": "participants",
+            "source_quote": "ยังไม่อ่าน"
+          },
+          {
+            "draft_quote": "I'm going to take a break first.",
+            "explanation": "'ไปพักก่อน' here is a slang expression telling the other person to calm down or take a break (similar to 'go sit down' or 'take a breather'), rather than the speaker stating they are taking a break.",
+            "kind": "meaning",
+            "source_quote": "ไปพักก่อน"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.479,
+          "translation": "You said I was wrong even without reading it yet. Take a break.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "They say",
+                "explanation": "The source phrase 'บอกว่า' lacks an explicit subject, but in internet slang/casual context addressing someone who jumped to conclusions, it refers to the interlocutor ('You said') rather than a third-party 'They'.",
+                "kind": "participants",
+                "source_quote": "บอกว่า"
+              },
+              {
+                "draft_quote": "I haven't read it yet",
+                "explanation": "The subject who hasn't read yet is the person being addressed (who judged prematurely), not the speaker ('I').",
+                "kind": "participants",
+                "source_quote": "ยังไม่อ่าน"
+              },
+              {
+                "draft_quote": "I'm going to take a break first.",
+                "explanation": "'ไปพักก่อน' here is a slang expression telling the other person to calm down or take a break (similar to 'go sit down' or 'take a breather'), rather than the speaker stating they are taking a break.",
+                "kind": "meaning",
+                "source_quote": "ไปพักก่อน"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "term": "ไหวไหม",
+      "text": "ทำงานมาสิบชั่วโมงแล้ว ไหวไหม พักก่อนได้นะ",
+      "meaning_checklist": "Genuine concern after ten hours of work, not sarcastic criticism.",
+      "http": 200,
+      "seconds": 0.795,
+      "translation": "I've been working for ten hours now. Can you manage? You can take a break first.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.795,
+          "translation": "I've been working for ten hours now. Can you manage? You can take a break first.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "term": "เอาดี ๆ",
+      "text": "เอาดี ๆ นะ นัดพรุ่งนี้หรือมะรืนกันแน่",
+      "meaning_checklist": "Ask seriously whether the appointment is tomorrow or the day after; do not choose a date.",
+      "http": 200,
+      "seconds": 2.728,
+      "translation": "Seriously, are we meeting tomorrow or the day after?",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "Make it good, okay?",
+            "explanation": "The phrase 'เอาดี ๆ นะ' in this context means 'Seriously' or 'Be serious', not 'Make it good'.",
+            "kind": "meaning",
+            "source_quote": "เอาดี ๆ นะ"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "time_or_quantity_relationship"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.728,
+          "translation": "Seriously, are we meeting tomorrow or the day after?",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "Make it good, okay?",
+                "explanation": "The phrase 'เอาดี ๆ นะ' in this context means 'Seriously' or 'Be serious', not 'Make it good'.",
+                "kind": "meaning",
+                "source_quote": "เอาดี ๆ นะ"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "time_or_quantity_relationship"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "term": "จะเครซี่",
+      "text": "ประชุมพร้อมกันสามงาน ฉันจะเครซี่",
+      "meaning_checklist": "Overwhelmed by three simultaneous meetings, no diagnosis.",
+      "http": 200,
+      "seconds": 1.062,
+      "translation": "Three meetings at once—I'm going crazy.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.062,
+          "translation": "Three meetings at once—I'm going crazy.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "term": "โดนเท",
+      "text": "นัดกันไว้แล้วแต่เขายกเลิกก่อนเจอสิบนาที ฉันโดนเทอีกแล้ว",
+      "meaning_checklist": "Last-minute canceled meeting, not an established romantic breakup.",
+      "http": 200,
+      "seconds": 0.904,
+      "translation": "We had a plan, but they canceled ten minutes before we were supposed to meet. I got stood up again.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.904,
+          "translation": "We had a plan, but they canceled ten minutes before we were supposed to meet. I got stood up again.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "term": "นก",
+      "text": "ชอบเขามานานแต่เขามีแฟนแล้ว นกอีกแล้วเรา",
+      "meaning_checklist": "Romantic disappointment because the crush is already in a relationship.",
+      "http": 200,
+      "seconds": 0.978,
+      "translation": "I've liked him for a while, but he's already taken. Guess I'm single again.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.978,
+          "translation": "I've liked him for a while, but he's already taken. Guess I'm single again.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "term": "แห้ว",
+      "text": "กดซื้อบัตรไม่ทัน แห้วเลย",
+      "meaning_checklist": "Missed getting tickets, not a water chestnut.",
+      "http": 200,
+      "seconds": 1.725,
+      "translation": "I couldn't buy the ticket in time, so I missed out.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.725,
+          "translation": "I couldn't buy the ticket in time, so I missed out.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "term": "มูฟออน",
+      "text": "เลิกกันแล้วแต่ฉันยังมูฟออนไม่ได้",
+      "meaning_checklist": "Cannot move on after the breakup; retain negation.",
+      "http": 200,
+      "seconds": 1.403,
+      "translation": "We broke up, but I still can't move on.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.403,
+          "translation": "We broke up, but I still can't move on.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "term": "คลั่งรัก",
+      "text": "เพื่อนคลั่งรักมาก พูดถึงแฟนทั้งวัน",
+      "meaning_checklist": "Friend is infatuated and talks about their partner all day.",
+      "http": 200,
+      "seconds": 0.525,
+      "translation": "My friend is totally smitten and talks about their partner all day.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.525,
+          "translation": "My friend is totally smitten and talks about their partner all day.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "term": "แอบแซ่บ",
+      "text": "เขาสองคนแอบแซ่บกันแต่ไม่ยอมบอกใคร",
+      "meaning_checklist": "Secret romantic/sexual involvement; do not invent adultery or a specific sexual act.",
+      "http": 200,
+      "seconds": 2.013,
+      "translation": "The two of them are secretly seeing each other, but they won’t tell anyone.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.013,
+          "translation": "The two of them are secretly seeing each other, but they won’t tell anyone.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "term": "คนคุย",
+      "text": "เขายังไม่ใช่แฟน เป็นแค่คนคุย",
+      "meaning_checklist": "Not yet a partner, a possible romantic interest in the talking stage.",
+      "http": 200,
+      "seconds": 2.495,
+      "translation": "He's not my boyfriend—just someone I talk to.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.495,
+          "translation": "He's not my boyfriend—just someone I talk to.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "term": "คุยเผื่อเลือก",
+      "text": "ฉันอยากคุยจริงจัง ไม่อยากเป็นคนที่เธอคุยเผื่อเลือก",
+      "meaning_checklist": "Wants seriousness, not to be one of several options; no claim of official exclusivity.",
+      "http": 200,
+      "seconds": 1.985,
+      "translation": "I want to have a serious talk; I don’t want to be someone you keep as a backup.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.985,
+          "translation": "I want to have a serious talk; I don’t want to be someone you keep as a backup.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "term": "หยอด",
+      "text": "เขาชอบหยอดว่าฉันน่ารักทุกครั้งที่เจอ",
+      "meaning_checklist": "Flirtatious compliments on meeting, not dropping objects.",
+      "http": 200,
+      "seconds": 0.748,
+      "translation": "He always says I'm cute whenever he sees me.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.748,
+          "translation": "He always says I'm cute whenever he sees me.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "term": "อ่อย",
+      "text": "ฉันแค่ยิ้มตามมารยาท ไม่ได้อ่อย",
+      "meaning_checklist": "Polite smile, explicitly deny flirting.",
+      "http": 200,
+      "seconds": 3.392,
+      "translation": "I was just smiling out of courtesy, not trying to flirt.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 3.392,
+          "translation": "I was just smiling out of courtesy, not trying to flirt.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "term": "เต๊าะ",
+      "text": "เพื่อนชอบเต๊าะพนักงานร้านกาแฟ",
+      "meaning_checklist": "Friend flirts with the cafe staff; do not invent reciprocal interest.",
+      "http": 200,
+      "seconds": 0.988,
+      "translation": "My friend likes to tease the coffee shop staff.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.988,
+          "translation": "My friend likes to tease the coffee shop staff.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "term": "จีบติด",
+      "text": "จีบมาตั้งนาน ในที่สุดก็จีบติดแล้ว",
+      "meaning_checklist": "Romantic pursuit finally succeeded.",
+      "http": 200,
+      "seconds": 1.325,
+      "translation": "I've been flirting for a long time, and finally I succeeded.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.325,
+          "translation": "I've been flirting for a long time, and finally I succeeded.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "term": "ติดเฟรนด์โซน",
+      "text": "เขาบอกว่าเห็นฉันเป็นเพื่อน ฉันติดเฟรนด์โซนแล้ว",
+      "meaning_checklist": "Unreciprocated romantic interest, regarded as a friend.",
+      "http": 200,
+      "seconds": 0.761,
+      "translation": "He said he sees me as just a friend. I'm stuck in the friend zone.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.761,
+          "translation": "He said he sees me as just a friend. I'm stuck in the friend zone.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "term": "แพ้ทาง",
+      "text": "ฉันแพ้ทางคนพูดเพราะและใจดีกับสัตว์",
+      "meaning_checklist": "Soft spot for people who speak kindly and are kind to animals.",
+      "http": 200,
+      "seconds": 4.216,
+      "translation": "I'm a sucker for people who speak sweetly and are kind to animals.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "drawn to",
+            "explanation": "The idiom 'แพ้ทาง' means having a weakness for someone or being a sucker for a certain type of person/trait, which is stronger and more specific than simply being 'drawn to'.",
+            "kind": "meaning",
+            "source_quote": "แพ้ทาง"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "condition_or_health"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 4.216,
+          "translation": "I'm a sucker for people who speak sweetly and are kind to animals.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "drawn to",
+                "explanation": "The idiom 'แพ้ทาง' means having a weakness for someone or being a sucker for a certain type of person/trait, which is stronger and more specific than simply being 'drawn to'.",
+                "kind": "meaning",
+                "source_quote": "แพ้ทาง"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "condition_or_health"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "term": "ธงแดง",
+      "text": "เขาขอดูมือถือและห้ามคุยกับเพื่อน แบบนี้ธงแดงนะ",
+      "meaning_checklist": "Controlling behaviors are a warning sign, not a literal flag.",
+      "http": 200,
+      "seconds": 4.13,
+      "translation": "He wants to see my phone and says I can’t talk to my friends—that’s a red flag.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 4.13,
+          "translation": "He wants to see my phone and says I can’t talk to my friends—that’s a red flag.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "term": "ธงเขียว",
+      "text": "เขารับฟังและเคารพเวลาส่วนตัวของฉัน ธงเขียวเลย",
+      "meaning_checklist": "Listening and respecting personal time are positive relationship signs.",
+      "http": 200,
+      "seconds": 1.057,
+      "translation": "He listens to and respects my personal time. That's a green flag.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.057,
+          "translation": "He listens to and respects my personal time. That's a green flag.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "term": "แกงเพื่อน",
+      "text": "เพื่อนบอกว่าแต่งชุดแฟนซีมา สรุปมีฉันแต่งคนเดียว โดนแกงแล้ว",
+      "meaning_checklist": "Pranked into being the only person in fancy dress, no food/curry.",
+      "http": 200,
+      "seconds": 1.0,
+      "translation": "My friend said to wear a fancy costume, and it turned out I was the only one who did, so I got scolded.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.0,
+          "translation": "My friend said to wear a fancy costume, and it turned out I was the only one who did, so I got scolded.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "term": "ปั่น",
+      "text": "เขารู้อยู่แล้วแต่แกล้งถามเพื่อปั่นคนในกลุ่ม",
+      "meaning_checklist": "Deliberately trolling/provoking the group despite already knowing.",
+      "http": 200,
+      "seconds": 1.209,
+      "translation": "They already know but pretend to ask just to stir up the group.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.209,
+          "translation": "They already know but pretend to ask just to stir up the group.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "term": "ปั่นหัว",
+      "text": "เขาบอกว่ารักแล้วก็หายไป อย่ามาปั่นหัวฉัน",
+      "meaning_checklist": "Emotional manipulation or messing with someone's head, not physical spinning.",
+      "http": 200,
+      "seconds": 5.076,
+      "translation": "He said he loved me and then vanished. Don't try to mess with my head.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 5.076,
+          "translation": "He said he loved me and then vanished. Don't try to mess with my head.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "term": "ทัวร์ลง",
+      "text": "แบรนด์โพสต์ล้อเลียนลูกค้าจนทัวร์ลง",
+      "meaning_checklist": "Online backlash after mocking customers, not a tour group visiting.",
+      "http": 200,
+      "seconds": 1.376,
+      "translation": "The brand posted a mocking take on its customers, and the tour was called off.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.376,
+          "translation": "The brand posted a mocking take on its customers, and the tour was called off.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "term": "ป้ายยา",
+      "text": "เพื่อนป้ายยาหูฟังจนฉันกดซื้อเลย",
+      "meaning_checklist": "Friend's recommendation persuaded the speaker to buy headphones, not drugging.",
+      "http": 200,
+      "seconds": 0.825,
+      "translation": "My friend kept hyping the headphones, so I bought them right away.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.825,
+          "translation": "My friend kept hyping the headphones, so I bought them right away.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "term": "โดนตก",
+      "text": "ดูซีรีส์เรื่องเดียวก็โดนนักแสดงคนนี้ตกแล้ว",
+      "meaning_checklist": "Became a fan/charmed by the actor, no physical fall.",
+      "http": 200,
+      "seconds": 1.014,
+      "translation": "I only watched one series and already fell for this actor.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.014,
+          "translation": "I only watched one series and already fell for this actor.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "term": "ด้อม",
+      "text": "คนในด้อมช่วยกันจัดงานวันเกิดให้นักร้อง",
+      "meaning_checklist": "Fans/fandom organize the singer's birthday event.",
+      "http": 200,
+      "seconds": 0.633,
+      "translation": "The people in the dorm helped organize a birthday party for the singer.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.633,
+          "translation": "The people in the dorm helped organize a birthday party for the singer.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "term": "เมน",
+      "text": "วงนี้ฉันชอบทุกคน แต่เมนคือมือกลอง",
+      "meaning_checklist": "Likes everyone in the band, drummer is the favorite, not main dish.",
+      "http": 200,
+      "seconds": 0.781,
+      "translation": "I like everyone in this band, but Men is the drummer.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.781,
+          "translation": "I like everyone in this band, but Men is the drummer.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "term": "ชิป",
+      "text": "ฉันชิปตัวละครคู่นี้ แต่ไม่ได้บอกว่านักแสดงคบกันจริง",
+      "meaning_checklist": "Ships fictional characters, explicitly not claiming the actors date.",
+      "http": 200,
+      "seconds": 2.959,
+      "translation": "I ship this couple, but I didn't say the actors are actually dating.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.959,
+          "translation": "I ship this couple, but I didn't say the actors are actually dating.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "term": "เรือแล่น",
+      "text": "ตอนล่าสุดตัวละครคู่นี้จับมือกัน เรือแล่นแล้ว",
+      "meaning_checklist": "Shipping excitement over characters holding hands, not a real boat.",
+      "http": 200,
+      "seconds": 0.646,
+      "translation": "In the latest episode, the two characters held hands, and the ship set sail.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.646,
+          "translation": "In the latest episode, the two characters held hands, and the ship set sail.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "term": "เรือแตก",
+      "text": "บทเฉลยว่าตัวละครที่ฉันชิปเป็นพี่น้องกัน เรือแตกเลย",
+      "meaning_checklist": "A reveal that shipped characters are siblings ruins the ship; no actual shipwreck.",
+      "http": 200,
+      "seconds": 1.212,
+      "translation": "The answer reveals that the characters I was shipping are siblings, so the ship is dead.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.212,
+          "translation": "The answer reveals that the characters I was shipping are siblings, so the ship is dead.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "term": "ขิง",
+      "text": "ซื้อคอมใหม่แล้วขิงเพื่อนใหญ่เลย",
+      "meaning_checklist": "Boasting to friends about a new computer, not ginger.",
+      "http": 200,
+      "seconds": 1.153,
+      "translation": "I got a new computer and teased my big buddy.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.153,
+          "translation": "I got a new computer and teased my big buddy.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "term": "เกลือ",
+      "text": "สุ่มตัวละครไปสิบครั้ง ได้แต่ตัวซ้ำ เกลือมาก",
+      "meaning_checklist": "Bad gacha luck, ten draws all duplicates; no table salt.",
+      "http": 200,
+      "seconds": 1.03,
+      "translation": "I tried randomizing characters ten times and only got repeats. So salty.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.03,
+          "translation": "I tried randomizing characters ten times and only got repeats. So salty.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "term": "แบก",
+      "text": "โปรเจกต์นี้เขาแบกคนเดียว ทั้งเขียนโค้ดทั้งนำเสนอ",
+      "meaning_checklist": "One person carried the project, both coding and presenting.",
+      "http": 200,
+      "seconds": 0.653,
+      "translation": "He/she handled the entire project alone, doing both the coding and the presentation.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.653,
+          "translation": "He/she handled the entire project alone, doing both the coding and the presentation.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "term": "หิวแสง",
+      "text": "อย่าเอาเรื่องคนอื่นมาโพสต์หิวแสงเลย",
+      "meaning_checklist": "Criticize exploiting someone else's story for attention, no hunger/light literalism.",
+      "http": 200,
+      "seconds": 3.338,
+      "translation": "Don't use other people's issues just to get attention in your posts.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "reason": "invalid_review",
+        "status": "unavailable",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 3.338,
+          "translation": "Don't use other people's issues just to get attention in your posts.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "reason": "invalid_review",
+            "status": "unavailable",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "term": "แสงออกเท้า",
+      "text": "ถ่ายรูปข้างเพื่อนที่แต่งเต็มแล้วฉันแสงออกเท้าเลย",
+      "meaning_checklist": "Joke about being overshadowed by the dressed-up friend.",
+      "http": 200,
+      "seconds": 1.735,
+      "translation": "I took a picture next to a friend who was all dressed up, and I ended up showing my foot.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.735,
+          "translation": "I took a picture next to a friend who was all dressed up, and I ended up showing my foot.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "term": "งานเข้า",
+      "text": "เผลอลบฐานข้อมูลจริง งานเข้าแล้ว",
+      "meaning_checklist": "Accidentally deleted the production database, now in trouble.",
+      "http": 200,
+      "seconds": 0.895,
+      "translation": "I accidentally deleted the real database. The job’s already in.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.895,
+          "translation": "I accidentally deleted the real database. The job’s already in.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "term": "งานงอก",
+      "text": "แก้บั๊กหนึ่งจุดแล้วเจออีกสามจุด งานงอกเลย",
+      "meaning_checklist": "Fixing one bug reveals three more; additional work, not plant growth.",
+      "http": 200,
+      "seconds": 0.844,
+      "translation": "I fixed one bug and then ran into three more—now the work is just piling up.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.844,
+          "translation": "I fixed one bug and then ran into three more—now the work is just piling up.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "term": "ไฟลนก้น",
+      "text": "พรุ่งนี้ต้องส่งแต่ยังไม่เริ่ม ตอนนี้ไฟลนก้นแล้ว",
+      "meaning_checklist": "Deadline panic with submission tomorrow and nothing started; no literal fire.",
+      "http": 200,
+      "seconds": 2.247,
+      "translation": "I have to submit it tomorrow, but I haven't started yet. My pants are on fire now.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "The file’s already messed up.",
+            "explanation": "The Thai idiom ไฟลนก้น (literally 'fire scorching the bottom') means to be in a frantic rush because a deadline is looming, not that a file is messed up.",
+            "kind": "meaning",
+            "source_quote": "ไฟลนก้น"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.247,
+          "translation": "I have to submit it tomorrow, but I haven't started yet. My pants are on fire now.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "The file’s already messed up.",
+                "explanation": "The Thai idiom ไฟลนก้น (literally 'fire scorching the bottom') means to be in a frantic rush because a deadline is looming, not that a file is messed up.",
+                "kind": "meaning",
+                "source_quote": "ไฟลนก้น"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "term": "สมองไหล",
+      "text": "อ่านโค้ดมาทั้งวันจนสมองไหลแล้ว ขอพักก่อน",
+      "meaning_checklist": "Colloquial mental exhaustion after coding, not skilled-worker emigration.",
+      "http": 200,
+      "seconds": 0.679,
+      "translation": "I've been reading code all day and my brain's fried. I need a break.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.679,
+          "translation": "I've been reading code all day and my brain's fried. I need a break.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "term": "สมองตัน",
+      "text": "คิดชื่อแอปมาสองชั่วโมงแล้วสมองตัน",
+      "meaning_checklist": "Cannot think of an app name after two hours.",
+      "http": 200,
+      "seconds": 0.607,
+      "translation": "I've been trying to come up with an app name for two hours, and I'm completely stuck.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.607,
+          "translation": "I've been trying to come up with an app name for two hours, and I'm completely stuck.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "term": "หมดแพสชัน",
+      "text": "ยังชอบงานนี้อยู่ แค่เหนื่อย ไม่ได้หมดแพสชัน",
+      "meaning_checklist": "Still likes the work; tired, explicitly not a loss of passion.",
+      "http": 200,
+      "seconds": 1.658,
+      "translation": "I still like this job—I'm just tired, but I haven't lost my passion.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.658,
+          "translation": "I still like this job—I'm just tired, but I haven't lost my passion.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "term": "แบตหมด",
+      "text": "วันนี้คุยกับคนเยอะจนแบตหมด ขออยู่เงียบ ๆ ก่อน",
+      "meaning_checklist": "Social energy depleted, asks for quiet time, not a device battery.",
+      "http": 200,
+      "seconds": 1.41,
+      "translation": "I’ve been talking to a lot of people today and my battery’s dead, so I need to stay quiet for a while.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.41,
+          "translation": "I’ve been talking to a lot of people today and my battery’s dead, so I need to stay quiet for a while.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "term": "หมดโควตาความอดทน",
+      "text": "เตือนมาสามครั้งแล้ว ตอนนี้หมดโควตาความอดทน",
+      "meaning_checklist": "Patience exhausted after three warnings.",
+      "http": 200,
+      "seconds": 0.777,
+      "translation": "I've warned you three times already. I'm out of patience now.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.777,
+          "translation": "I've warned you three times already. I'm out of patience now.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "term": "literal-สับ",
+      "text": "สับหมูให้ละเอียดก่อนใส่กระทะ",
+      "meaning_checklist": "Literally mince pork before putting it in the pan.",
+      "http": 200,
+      "seconds": 0.748,
+      "translation": "Finely mince the pork before adding it to the pan.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.748,
+          "translation": "Finely mince the pork before adding it to the pan.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "term": "literal-เกลือ",
+      "text": "ใส่เกลือ 10 กรัม อย่าใส่ 50 กรัม",
+      "meaning_checklist": "Add 10 grams of salt, explicitly not 50; keep units and negation.",
+      "http": 200,
+      "seconds": 1.787,
+      "translation": "Add 10 g of salt, not 50 g.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.787,
+          "translation": "Add 10 g of salt, not 50 g.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "term": "literal-แกง",
+      "text": "เพื่อนทำแกงให้ฉันกิน ไม่ได้แกล้งฉัน",
+      "meaning_checklist": "Friend cooked curry, explicitly did not prank the speaker.",
+      "http": 200,
+      "seconds": 1.955,
+      "translation": "My friend made curry for me to eat, not to tease me.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.955,
+          "translation": "My friend made curry for me to eat, not to tease me.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "term": "literal-ขิง",
+      "text": "ขอชาขิงหนึ่งแก้ว ไม่ใส่น้ำตาล",
+      "meaning_checklist": "One cup of ginger tea without sugar, not boasting.",
+      "http": 200,
+      "seconds": 2.868,
+      "translation": "One cup of ginger tea, no sugar, please.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.868,
+          "translation": "One cup of ginger tea, no sugar, please.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "term": "literal-อ่อม",
+      "text": "วันนี้แม่ทำแกงอ่อมไก่ให้กิน",
+      "meaning_checklist": "Mother cooked chicken om/stew; not underwhelming performance.",
+      "http": 200,
+      "seconds": 0.829,
+      "translation": "Mom made chicken gaeng om today.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.829,
+          "translation": "Mom made chicken gaeng om today.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "term": "literal-แบตหมด",
+      "text": "มือถือแบตหมด ช่วยเอาที่ชาร์จมาให้หน่อย",
+      "meaning_checklist": "Phone battery dead, asks for charger; not social exhaustion.",
+      "http": 200,
+      "seconds": 0.834,
+      "translation": "My phone's battery is dead—could you bring the charger, please?",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.834,
+          "translation": "My phone's battery is dead—could you bring the charger, please?",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "term": "literal-เรือแตก",
+      "text": "เรือแตกกลางทะเล ทุกคนใส่เสื้อชูชีพแล้ว",
+      "meaning_checklist": "Real maritime accident, everyone already wearing life jackets, not fandom disappointment.",
+      "http": 200,
+      "seconds": 0.729,
+      "translation": "The boat broke apart in the middle of the sea, and everyone is already wearing life jackets.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.729,
+          "translation": "The boat broke apart in the middle of the sea, and everyone is already wearing life jackets.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "term": "literal-ธงแดง",
+      "text": "ปักธงแดงไว้หน้าทางเข้าที่กำลังก่อสร้าง",
+      "meaning_checklist": "Place a real red flag at the entrance under construction.",
+      "http": 200,
+      "seconds": 0.837,
+      "translation": "Put a red flag in front of the entrance that's under construction.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.837,
+          "translation": "Put a red flag in front of the entrance that's under construction.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "term": "literal-สมองไหล",
+      "text": "รัฐบาลกังวลปัญหาสมองไหลจากการย้ายไปทำงานต่างประเทศ",
+      "meaning_checklist": "Government concern about skilled-worker emigration/brain drain.",
+      "http": 200,
+      "seconds": 0.797,
+      "translation": "The government is concerned about brain drain caused by people moving abroad for work.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.797,
+          "translation": "The government is concerned about brain drain caused by people moving abroad for work.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "term": "literal-สมาชิก",
+      "text": "ส่งเอกสารให้สมาชิก 50 คน ไม่ใช่ 5 คน",
+      "meaning_checklist": "Send documents to 50 members, not 5; not an encouraging address to friends.",
+      "http": 200,
+      "seconds": 1.832,
+      "translation": "Send the documents to 50 members, not 5.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.832,
+          "translation": "Send the documents to 50 members, not 5.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "term": "literal-สาด",
+      "text": "อย่าสาดน้ำใส่สมาชิกที่ถือกล้อง",
+      "meaning_checklist": "Do not splash water on members holding cameras; keep prohibition and no invented encouragement.",
+      "http": 200,
+      "seconds": 1.377,
+      "translation": "Don't splash water on members who are holding a camera.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.377,
+          "translation": "Don't splash water on members who are holding a camera.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "term": "literal-ป้ายยา",
+      "text": "พยาบาลป้ายยาบนแผลแล้วปิดผ้าก๊อซ",
+      "meaning_checklist": "Nurse applies medication to a wound and covers it with gauze, not product recommendation.",
+      "http": 200,
+      "seconds": 1.167,
+      "translation": "The nurse placed a medication label on the wound and then covered it with gauze.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.167,
+          "translation": "The nurse placed a medication label on the wound and then covered it with gauze.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

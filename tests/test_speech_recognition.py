@@ -19,6 +19,21 @@ def result(text="สวัสดีครับ", **values):
 
 
 class SpeechQualityTests(unittest.TestCase):
+    def test_observed_slang_confusions_require_review_even_with_clear_segment_scores(self):
+        text = "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+        reading = transcript_result(result(text=text), "model")
+        self.assertEqual(reading["text"], text)
+        self.assertTrue(reading["review_required"])
+        self.assertIn("possible_word_confusion", reading["review_reasons"])
+        for ordinary in (
+            "ฉันจดโดเมนใหม่",
+            "กล่องใบนี้หนัก",
+            "เมนของฉันคือมือกลอง",
+            "จดดอมเมนเนมสำหรับเซิร์ฟเวอร์",
+            "แกะมือกล่องกระดาษ",
+        ):
+            self.assertFalse(transcript_result(result(text=ordinary), "model")["review_required"])
+
     def test_pcm_silence_is_rejected_without_requesting_the_provider(self):
         audio = io.BytesIO()
         with wave.open(audio, "wb") as output:

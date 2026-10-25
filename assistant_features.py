@@ -2,8 +2,14 @@
 
 import json
 
+from linguistic_guidance import language_notes
+
 
 def assistant_result(client, model, action, context, language):
+    context = {
+        **context,
+        "linguistic_notes": language_notes(context.get("source_text", "")),
+    }
     instructions = {
         "source_info": (
             'Return {"pronunciation": string, "alternatives": [string, string]}. '

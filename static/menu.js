@@ -90,6 +90,213 @@ Object.assign(COPY.th, {
     "คุยกับเพื่อนร่วมงานหรือลูกค้า ระบุความสัมพันธ์และแผนที่ยืนยันแล้วเพื่อเลือกคำให้ตรง",
   scenarioStudy: "บทเรียนและเนื้อหาวิชาการ ระบุวิชาเพื่อช่วยเลือกศัพท์ให้ตรงความหมาย",
 });
+const preferenceDialog = $("preference-dialog"),
+  preferenceOptions = $("preference-options");
+const preferenceTriggers = new Map();
+let preferenceSource = null;
+const preferenceIcons = {
+  natural: "sparkles",
+  friendly: "star",
+  formal: "document",
+  casual: "reply",
+  general: "globe",
+  travel: "arrow",
+  work: "document",
+  study: "text",
+  conversation: "reply",
+  restaurant: "menu-food",
+  shopping: "menu-bag",
+  health: "menu-health",
+};
+function preferenceIcon(name, className = "") {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("aria-hidden", "true");
+  if (className) svg.setAttribute("class", className);
+  const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  use.setAttribute("href", `#icon-${name}`);
+  svg.append(use);
+  return svg;
+}
+function preferenceTitle(select) {
+  return t(select.id === "tone" ? "tone" : "context");
+}
+function refreshPreferenceTriggers() {
+  for (const [select, button] of preferenceTriggers) {
+    const title = preferenceTitle(select);
+    const selected = select.selectedOptions[0];
+    const text = document.createElement("span");
+    text.className = "preference-trigger-label";
+    text.textContent = t(selected.dataset.i18n);
+    const icon = document.createElement("span");
+    icon.className = "preference-trigger-icon";
+    icon.append(preferenceIcon(preferenceIcons[select.value]));
+    button.replaceChildren(icon, text, preferenceIcon("chevron", "preference-chevron"));
+    button.setAttribute("aria-label", `${title} · ${text.textContent}`);
+    button.title = text.textContent;
+  }
+}
+function renderPreferenceOptions() {
+  if (!preferenceSource) return;
+  const context = preferenceSource.id === "translation-context";
+  preferenceDialog.classList.toggle("tone-picker", !context);
+  $("preference-title").textContent = preferenceTitle(preferenceSource);
+  $("preference-close").setAttribute("aria-label", t("close"));
+  preferenceOptions.classList.toggle("context-options", context);
+  preferenceOptions.replaceChildren();
+  for (const option of preferenceSource.options) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "preference-option";
+    button.dataset.value = option.value;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(option.selected));
+    button.tabIndex = option.selected ? 0 : -1;
+    const icon = document.createElement("span");
+    icon.className = "preference-option-icon";
+    icon.append(preferenceIcon(preferenceIcons[option.value]));
+    const name = document.createElement("span");
+    name.className = "preference-option-name";
+    name.textContent = t(option.dataset.i18n);
+    button.append(icon, name);
+    if (context) {
+      const help = document.createElement("span");
+      help.className = "preference-option-help";
+      help.textContent = t("scenario" + option.value[0].toUpperCase() + option.value.slice(1));
+      button.append(help);
+      button.title = help.textContent;
+    }
+    button.append(preferenceIcon("check", "preference-option-check"));
+    button.addEventListener("click", () => {
+      const select = preferenceSource;
+      const changed = select.value !== option.value;
+      select.value = option.value;
+      if (changed) select.dispatchEvent(new Event("change", { bubbles: true }));
+      refreshPreferenceTriggers();
+      preferenceDialog.close();
+    });
+    button.addEventListener("keydown", (event) => {
+      const buttons = [...preferenceOptions.querySelectorAll('[role="option"]')];
+      const columns = getComputedStyle(preferenceOptions).gridTemplateColumns.split(" ").length;
+      const rtl = document.documentElement.dir === "rtl";
+      let step =
+        event.key === "ArrowDown"
+          ? columns
+          : event.key === "ArrowUp"
+            ? -columns
+            : event.key === "ArrowRight"
+              ? rtl
+                ? -1
+                : 1
+              : event.key === "ArrowLeft"
+                ? rtl
+                  ? 1
+                  : -1
+                : 0;
+      if (!step && !["Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const index =
+        event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? buttons.length - 1
+            : (buttons.indexOf(button) + step + buttons.length) % buttons.length;
+      for (const candidate of buttons) candidate.tabIndex = candidate === buttons[index] ? 0 : -1;
+      buttons[index].focus();
+    });
+    preferenceOptions.append(button);
+  }
+}
+for (const id of ["tone", "translation-context"]) {
+  const select = $(id),
+    button = document.createElement("button");
+  button.id = id + "-trigger";
+  button.type = "button";
+  button.className = "preference-trigger";
+  button.setAttribute("aria-haspopup", "listbox");
+  button.setAttribute("aria-controls", "preference-options");
+  button.setAttribute("aria-expanded", "false");
+  // Retain the native model and its change events for feature-owned settings.
+  select.hidden = true;
+  select.parentElement.append(button);
+  preferenceTriggers.set(select, button);
+  function open() {
+    preferenceSource = select;
+    renderPreferenceOptions();
+    for (const candidate of preferenceTriggers.values())
+      candidate.setAttribute("aria-expanded", String(candidate === button));
+    preferenceDialog.showModal();
+    preferenceOptions.querySelector('[aria-selected="true"]').focus();
+  }
+  button.addEventListener("click", open);
+  button.addEventListener("keydown", (event) => {
+    if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
+    event.preventDefault();
+    open();
+  });
+  select.addEventListener("change", refreshPreferenceTriggers);
+}
+$("preference-close").addEventListener("click", () => preferenceDialog.close());
+preferenceDialog.addEventListener("close", () => {
+  // A queued close event must not reset a picker that has already reopened.
+  if (preferenceDialog.open) return;
+  for (const trigger of preferenceTriggers.values()) trigger.setAttribute("aria-expanded", "false");
+  preferenceSource = null;
+  // The native dialog restores focus synchronously; do not steal a later focus.
+});
+preferenceDialog.addEventListener("click", (event) => {
+  if (event.target !== preferenceDialog) return;
+  const box = preferenceDialog.getBoundingClientRect();
+  if (
+    event.clientX < box.left ||
+    event.clientX > box.right ||
+    event.clientY < box.top ||
+    event.clientY > box.bottom
+  )
+    preferenceDialog.close();
+});
+refreshPreferenceTriggers();
+const menuTabs = [...document.querySelectorAll('.menu-tabs [role="tab"]')];
+function selectMenuTab(tab, focus = false) {
+  for (const item of menuTabs) {
+    const selected = item === tab;
+    item.setAttribute("aria-selected", String(selected));
+    item.tabIndex = selected ? 0 : -1;
+    $(item.getAttribute("aria-controls")).hidden = !selected;
+  }
+  document.querySelector(".menu-content").scrollTop = 0;
+  if (focus) tab.focus();
+}
+for (const tab of menuTabs) {
+  tab.addEventListener("click", () => selectMenuTab(tab));
+  tab.addEventListener("keydown", (event) => {
+    const rtl = document.documentElement.dir === "rtl";
+    let direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (rtl) direction *= -1;
+    if (!direction && !["Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const index =
+      event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? menuTabs.length - 1
+          : (menuTabs.indexOf(tab) + direction + menuTabs.length) % menuTabs.length;
+    selectMenuTab(menuTabs[index], true);
+  });
+}
+function syncMenuTheme() {
+  const light = document.documentElement.dataset.theme === "light";
+  $("menu-theme").querySelector(".menu-theme-label").textContent = t(
+    light ? "darkTheme" : "lightTheme"
+  );
+  $("menu-theme").setAttribute("aria-pressed", String(light));
+  $("menu-theme")
+    .querySelector("use")
+    .setAttribute("href", light ? "#icon-moon" : "#icon-sun");
+}
+$("menu-theme").addEventListener("click", () => $("theme").click());
+$("theme").addEventListener("click", syncMenuTheme);
+document.addEventListener("interface:change", syncMenuTheme);
+syncMenuTheme();
 function renderScenarioHelp() {
   const key = activeFeature().preferences.context;
   $("scenario-help").textContent = t("scenario" + key[0].toUpperCase() + key.slice(1));
@@ -134,7 +341,7 @@ function renderHistory() {
       info = document.createElement("span");
     const source = item.sourceLanguage || item.source;
     const date = Number.isFinite(item.savedAt)
-      ? new Date(item.savedAt).toLocaleDateString(locale === "th" ? "th-TH" : "en-GB")
+      ? new Date(item.savedAt).toLocaleDateString(locale)
       : "";
     info.textContent = `${LANGUAGES[source]?.[0] || source} → ${LANGUAGES[item.target][0]}${date ? " · " + date : ""}`;
     const favorite = menuIconButton("star", t("favoriteTranslation"), () => {
@@ -177,42 +384,94 @@ function renderHistory() {
     $("history-list").append(card);
   }
 }
+function additionalFlag(code) {
+  const flag = document.createElement("img");
+  flag.src = languageFlag(code);
+  flag.alt = "";
+  flag.width = 26;
+  flag.height = 20;
+  flag.loading = "lazy";
+  return flag;
+}
+function updateAdditionalSelection(code, selected) {
+  const preferences = activeFeature().preferences,
+    list = $("additional-targets"),
+    scroll = list.scrollTop;
+  if (selected && !preferences.targets.includes(code) && preferences.targets.length < 3)
+    preferences.targets.push(code);
+  else if (!selected) preferences.targets = preferences.targets.filter((target) => target !== code);
+  renderAdditionalChoices();
+  list.scrollTop = scroll;
+  document.dispatchEvent(new CustomEvent("translation:settings"));
+}
 function renderAdditionalChoices() {
   const preferences = activeFeature().preferences,
-    primary = activeLanguages()[1];
+    primary = activeLanguages()[1],
+    list = $("additional-targets"),
+    selected = $("additional-selected");
   preferences.targets = preferences.targets.filter((code) => code !== primary);
   $("additional-language-options").hidden = !preferences.multiple;
   $("additional-count").textContent = t("selectedLanguages").replace(
     "{count}",
     preferences.targets.length
   );
-  const query = $("additional-search").value.toLocaleLowerCase().trim();
-  $("additional-targets").replaceChildren();
+  $("additional-count").classList.toggle("is-full", preferences.targets.length >= 3);
+  selected.replaceChildren();
+  selected.hidden = !preferences.targets.length;
+  for (const code of preferences.targets) {
+    const chip = document.createElement("button"),
+      name = document.createElement("bdi");
+    chip.type = "button";
+    chip.className = "additional-chip";
+    chip.dataset.language = code;
+    chip.setAttribute("aria-label", `${t("remove")} · ${languageName(code)}`);
+    name.textContent = languageName(code);
+    chip.append(additionalFlag(code), name, preferenceIcon("close"));
+    chip.addEventListener("click", () => {
+      const index = preferences.targets.indexOf(code);
+      updateAdditionalSelection(code, false);
+      const chips = selected.querySelectorAll("button");
+      (chips[Math.min(index, chips.length - 1)] || $("additional-search")).focus({
+        preventScroll: true,
+      });
+    });
+    selected.append(chip);
+  }
+  const query = languageSearchText($("additional-search").value);
+  list.replaceChildren();
   for (const [code, entry] of Object.entries(LANGUAGE_CATALOG)) {
     if (
       code === primary ||
-      !`${entry.name} ${entry.native} ${entry.thai}`.toLocaleLowerCase().includes(query)
+      !languageSearchText(
+        `${languageName(code)} ${entry.name} ${entry.native} ${entry.thai} ${code}`
+      ).includes(query)
     )
       continue;
     const label = document.createElement("label"),
-      checkbox = document.createElement("input");
+      checkbox = document.createElement("input"),
+      names = document.createElement("span"),
+      name = document.createElement("bdi"),
+      native = document.createElement("bdi");
+    names.className = "additional-language-name";
+    name.textContent = languageName(code);
+    native.textContent = entry.native;
+    native.className = "additional-language-native";
+    native.hidden = entry.native === name.textContent;
+    names.append(name, native);
     checkbox.type = "checkbox";
     checkbox.value = code;
+    checkbox.setAttribute("aria-label", languageName(code));
     checkbox.checked = preferences.targets.includes(code);
     checkbox.disabled = !checkbox.checked && preferences.targets.length >= 3;
-    const name = document.createElement("span");
-    name.textContent = locale === "th" ? entry.thai : entry.name;
     checkbox.addEventListener("change", () => {
-      if (checkbox.checked && preferences.targets.length < 3) preferences.targets.push(code);
-      else preferences.targets = preferences.targets.filter((target) => target !== code);
-      const scroll = $("additional-targets").scrollTop;
-      renderAdditionalChoices();
-      $("additional-targets").scrollTop = scroll;
-      document.dispatchEvent(new CustomEvent("translation:settings"));
+      updateAdditionalSelection(code, checkbox.checked);
+      list.querySelector(`input[value="${code}"]`)?.focus({ preventScroll: true });
     });
-    label.append(checkbox, name);
-    $("additional-targets").append(label);
+    label.append(additionalFlag(code), names, checkbox);
+    list.append(label);
   }
+  $("additional-empty").textContent = t("languageNoResults");
+  $("additional-empty").hidden = list.childElementCount > 0;
 }
 function refreshMenu() {
   const preferences = activeFeature().preferences;
@@ -228,6 +487,7 @@ function refreshMenu() {
   $("additional-search").placeholder = t("additionalSearchHint");
   $("additional-search").setAttribute("aria-label", t("additionalSearchHint"));
   $("menu-close").setAttribute("aria-label", t("closeMenu"));
+  refreshPreferenceTriggers();
   renderScenarioHelp();
   renderAdditionalChoices();
   renderHistory();
@@ -266,6 +526,8 @@ $("settings").addEventListener("close", () =>
   $("live-settings-toggle").setAttribute("aria-expanded", "false")
 );
 document.addEventListener("menu:open", () => {
+  selectMenuTab(menuTabs[0]);
+  syncMenuTheme();
   $("additional-search").value = "";
   menuStatus();
   refreshMenu();

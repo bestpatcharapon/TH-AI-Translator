@@ -1,0 +1,8 @@
+[
+ {"id":"reported-retort-central","text":"ป่อคิงหยัง","target":"th","mode":"northern","criteria":"Rude rhetorical retort involving the listener's father, as documented by cited sources. Not 'What are you doing?' or a greeting. This is the user-reported development regression, not held-out."},
+ {"id":"reported-retort-english","text":"ป้อคิงหยัง","target":"en","mode":"northern","criteria":"Preserve the rude rhetorical retort and kinship reference without invented threats or turning it into an ordinary activity question."},
+ {"id":"slow-speech-request","text":"จ้วยอู้จ้าๆหน่อยได้ก่อ","target":"en","mode":"northern","criteria":"A polite request to speak more slowly, still a question. Related corpus example exists; this is not held-out evidence of model generalization."},
+ {"id":"father-literal-control","text":"ป้อเปิ้นไปกาดแล้ว","target":"th","mode":"northern","criteria":"Literal father has gone to the market. Do not introduce insults merely because the word father appears."},
+ {"id":"quoted-insult-discussion","text":"เพื่อนบอกว่า ‘ป้อคิงหยัง’ เป็นคำด่า","target":"en","mode":"northern","criteria":"Translate a statement ABOUT a quoted insult; do not directly insult the reader."},
+ {"id":"unknown-private-phrase","text":"จ๊องกิ๊งแฟลชป๋อง","target":"en","mode":"slang","criteria":"Unfamiliar invented phrase: ask for meaning without fabricated etymology or definitive possibilities."}
+]

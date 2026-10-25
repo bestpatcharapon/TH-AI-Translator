@@ -1,0 +1,62 @@
+[
+  {
+    "text": "สาดไปสมาชิก",
+    "status": 200,
+    "translation": "Go for it, buddy!",
+    "quality_review": {
+      "applied": false,
+      "model": "gemini-3.5-flash-lite",
+      "provider": "gemini",
+      "status": "checked",
+      "triggers": [
+        "idiom_or_regional_usage"
+      ]
+    },
+    "error": null,
+    "seconds": 2.03
+  },
+  {
+    "text": "ได้เลย สาดไปสมาชิก!",
+    "status": 200,
+    "translation": "Alright, go for it, buddy!",
+    "quality_review": {
+      "applied": false,
+      "model": "gemini-3.5-flash-lite",
+      "provider": "gemini",
+      "status": "checked",
+      "triggers": [
+        "idiom_or_regional_usage"
+      ]
+    },
+    "error": null,
+    "seconds": 1.88
+  },
+  {
+    "text": "ส่งเอกสารให้สมาชิก 50 คน",
+    "status": 200,
+    "translation": "Send the documents to 50 members.",
+    "quality_review": {
+      "applied": false,
+      "model": "openai/gpt-oss-120b",
+      "provider": "groq",
+      "status": "not_requested",
+      "triggers": []
+    },
+    "error": null,
+    "seconds": 0.54
+  },
+  {
+    "text": "สาดน้ำใส่สมาชิก",
+    "status": 200,
+    "translation": "Spray water on the members.",
+    "quality_review": {
+      "applied": false,
+      "model": "openai/gpt-oss-120b",
+      "provider": "groq",
+      "status": "not_requested",
+      "triggers": []
+    },
+    "error": null,
+    "seconds": 0.7
+  }
+]

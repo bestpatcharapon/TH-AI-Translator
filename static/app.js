@@ -137,7 +137,7 @@ let audioController = null,
   audioButton = null,
   audioEpoch = 0;
 const conversation = featureWorkspaces.get("live").conversation;
-const t = (key) => COPY[locale][key];
+const t = (key) => COPY[locale]?.[key] || COPY.en[key] || key;
 const maxInput = () => (["image", "document"].includes(mode) ? 30000 : 5000);
 function setStatus(message = "", error = false) {
   statusEl.textContent = message;
@@ -155,6 +155,16 @@ function fileStatus(message = "", error = false) {
   $("file-status").textContent = message;
   $("file-status").classList.toggle("error", error);
 }
+function resizeSourceInput() {
+  inputEl.style.height = "";
+  if (mode === "live" || mode === "image") return;
+  const styles = getComputedStyle(inputEl),
+    minimum = parseFloat(styles.minHeight) || 180,
+    maximum = parseFloat(styles.maxHeight) || 420;
+  inputEl.style.height = "auto";
+  inputEl.style.height = `${Math.min(maximum, Math.max(minimum, inputEl.scrollHeight))}px`;
+}
+window.addEventListener("resize", resizeSourceInput);
 function updateInput() {
   inputEl.maxLength = maxInput();
   const text = inputEl.value;
@@ -171,13 +181,13 @@ function updateInput() {
     /* Whitespace count remains available on older browsers. */
   }
   const characters = Array.from(text).length;
-  $("count").textContent =
-    locale === "th"
-      ? `${words} คำ · ${characters} ตัวอักษร`
-      : `${words} words · ${characters} characters`;
+  $("count").textContent = t("wordCharacterCount")
+    .replace("{words}", words)
+    .replace("{characters}", characters);
   $("count").title = `${text.length} / ${maxInput()}`;
   $("count").hidden = !inputEl.value.length;
   translateBtn.hidden = !inputEl.value.trim();
+  resizeSourceInput();
 }
 function updateOutput() {
   for (const id of ["copy", "speak-output"]) $(id).hidden = !outputEl.value;
@@ -289,7 +299,8 @@ function updateLanguages() {
     ["target", targetEl],
   ]) {
     const [name, nativeName] = LANGUAGES[select.value];
-    $(`${id}-name`).textContent = name;
+    $(`${id}-name`).textContent =
+      typeof languageName === "function" ? languageName(select.value) : name;
     $(`${id}-native`).textContent = nativeName;
     const flagImage = document.createElement("img");
     flagImage.src = languageFlag(select.value);
@@ -308,7 +319,7 @@ function updateLanguages() {
     flag.alt = "";
     flag.title = LANGUAGE_CATALOG[code]?.flagName || "";
     const name = document.createElement("span");
-    name.textContent = LANGUAGES[code][0];
+    name.textContent = typeof languageName === "function" ? languageName(code) : LANGUAGES[code][0];
     $(id).replaceChildren(flag, name);
   }
   for (const [id, selected] of [
@@ -551,12 +562,14 @@ function refreshMode() {
   if (mode === "image" && !LANGUAGE_CATALOG[sourceEl.value]?.ocr) sourceEl.value = "auto";
   document.querySelector(".translator").classList.toggle("live-mode", mode === "live");
   document.querySelector(".translator").classList.toggle("image-mode", mode === "image");
+  document.querySelector(".translator").classList.toggle("document-mode", mode === "document");
   $("photo-mode").hidden = mode !== "image";
   $("file-tools").hidden = mode !== "document";
   $("chat-area").hidden = mode !== "live";
   $("upload-title").textContent = t("chooseDocument");
   $("upload-hint").textContent = t("documentHint");
-  $("microphone").disabled = mode === "image";
+  $("microphone").disabled = mode === "image" || mode === "document";
+  $("microphone").hidden = mode === "image" || mode === "document";
   $("show-saved").hidden = true;
   $("source-heading").textContent = t(mode === "live" ? "message" : "source");
   inputEl.placeholder = t(mode === "live" ? "chatPlaceholder" : "placeholder");
@@ -817,44 +830,96 @@ function stopAudio() {
   audioButton = null;
   voiceStatus();
 }
+function installedSpeechVoice(language) {
+  if (language === "auto" || !window.speechSynthesis) return null;
+  const normalize = (value) => value.replaceAll("_", "-").toLowerCase(),
+    requested = normalize(language),
+    preferred = normalize(LANGUAGE_CATALOG[language]?.locale || language),
+    base = preferred.split("-")[0],
+    voices = window.speechSynthesis.getVoices();
+  return (
+    voices.find((voice) => normalize(voice.lang) === preferred) ||
+    voices.find((voice) => normalize(voice.lang) === requested) ||
+    voices.find((voice) => normalize(voice.lang).split("-")[0] === base) ||
+    null
+  );
+}
+async function waitForSpeechVoice(language, signal) {
+  const ready = installedSpeechVoice(language);
+  if (ready || language === "auto" || !window.speechSynthesis || signal.aborted) return ready;
+  await new Promise((resolve) => {
+    const finish = () => {
+      clearTimeout(timer);
+      window.speechSynthesis.removeEventListener("voiceschanged", changed);
+      signal.removeEventListener("abort", finish);
+      resolve();
+    };
+    const changed = () => {
+      if (installedSpeechVoice(language)) finish();
+    };
+    const timer = setTimeout(finish, 350);
+    window.speechSynthesis.addEventListener("voiceschanged", changed);
+    signal.addEventListener("abort", finish, { once: true });
+    changed();
+  });
+  return installedSpeechVoice(language);
+}
+function playInstalledSpeech(text, voice, signal) {
+  return new Promise((resolve) => {
+    if (signal.aborted) return resolve(false);
+    const utterance = new SpeechSynthesisUtterance(text);
+    const finish = (success = false) => {
+      signal.removeEventListener("abort", canceled);
+      utterance.onend = utterance.onerror = null;
+      resolve(success);
+    };
+    const canceled = () => finish(false);
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+    utterance.onend = () => finish(true);
+    utterance.onerror = () => finish(false);
+    signal.addEventListener("abort", canceled, { once: true });
+    voiceStatus(t("speechPlaying"));
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      finish(false);
+    }
+  });
+}
 async function speak(text, language, button = null) {
   if (!text.trim()) return;
   const wasPlaying = button && audioButton === button;
   stopAudio();
   if (wasPlaying) return;
   stopRecording(true);
-  const epoch = audioEpoch;
+  const epoch = audioEpoch,
+    controller = new AbortController();
+  audioController = controller;
   audioButton = button;
   button?.setAttribute("aria-pressed", "true");
   voiceStatus(t("speechLoading"));
-  // Use an installed voice when available; otherwise the server supplies audio.
-  const voice =
-    language !== "auto" &&
-    window.speechSynthesis?.getVoices().find((v) => v.lang.toLowerCase().startsWith(language));
+  const voice = await waitForSpeechVoice(language, controller.signal);
+  if (epoch !== audioEpoch) return;
   if (voice) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = voice;
-    utterance.lang = voice.lang;
-    utterance.onend = () => {
-      if (epoch === audioEpoch) stopAudio();
-    };
-    utterance.onerror = (event) => {
-      if (epoch === audioEpoch && !["canceled", "interrupted"].includes(event.error)) {
-        stopAudio();
-        voiceStatus(t("speechError"), true);
-      }
-    };
-    voiceStatus(t("speechPlaying"));
-    window.speechSynthesis.speak(utterance);
-    return;
+    const played = await playInstalledSpeech(text, voice, controller.signal);
+    if (epoch !== audioEpoch) return;
+    if (played) {
+      stopAudio();
+      return;
+    }
+    voiceStatus(t("speechLoading"));
   }
   if (!LANGUAGE_CATALOG[language]?.voice && language !== "auto") {
     stopAudio();
     voiceStatus(t("voiceUnavailable"), true);
     return;
   }
-  const controller = new AbortController();
-  audioController = controller;
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, 45000);
   try {
     const response = await fetch("/api/speech", {
       method: "POST",
@@ -865,6 +930,7 @@ async function speak(text, language, button = null) {
     if (!response.ok) await responseJson(response);
     const blob = await response.blob();
     if (epoch !== audioEpoch) return;
+    if (!blob.size) throw new Error(t("speechError"));
     audioUrl = URL.createObjectURL(blob);
     audioPlayer = new Audio(audioUrl);
     audioPlayer.onended = () => {
@@ -879,10 +945,21 @@ async function speak(text, language, button = null) {
     await audioPlayer.play();
     if (epoch === audioEpoch) voiceStatus(t("speechPlaying"));
   } catch (error) {
-    if (error.name !== "AbortError" && epoch === audioEpoch) {
-      stopAudio();
-      voiceStatus(error.message || t("speechError"), true);
+    if (epoch !== audioEpoch || (error.name === "AbortError" && !timedOut)) return;
+    // A device voice may have become available while the server request was in flight.
+    const fallback = installedSpeechVoice(language);
+    if (!timedOut && fallback && fallback !== voice) {
+      const played = await playInstalledSpeech(text, fallback, controller.signal);
+      if (epoch !== audioEpoch) return;
+      if (played) {
+        stopAudio();
+        return;
+      }
     }
+    stopAudio();
+    voiceStatus(error.message || t("speechError"), true);
+  } finally {
+    clearTimeout(timeout);
   }
 }
 $("speak-source").addEventListener("click", () =>
@@ -892,6 +969,21 @@ $("speak-output").addEventListener("click", () =>
   speak(outputEl.value, activeLanguages()[1], $("speak-output"))
 );
 
+function microphoneVocabulary(language) {
+  if (language === "auto") return [];
+  const workspace = activeFeature(),
+    forward = language === sourceEl.value,
+    terms = workspace.glossary
+      .filter((entry) => entry.language === (forward ? targetEl.value : language))
+      .map((entry) => (forward ? entry.source : entry.target));
+  if (language === "th") terms.push(...workspace.thai.lexicon.map((entry) => entry.term));
+  const selected = [];
+  for (const term of new Set(terms)) {
+    if (selected.length >= 16) break;
+    if (new TextEncoder().encode([...selected, term].join(", ")).length <= 200) selected.push(term);
+  }
+  return selected;
+}
 function setMicrophoneState(state, stream = null, onLevel = null) {
   $("microphone").dataset.voiceState = state;
   document.dispatchEvent(
@@ -917,7 +1009,7 @@ function stopRecording(discard = false) {
   if (discard) voiceStatus();
 }
 $("microphone").addEventListener("click", async () => {
-  if (mode === "image") return;
+  if (mode === "image" || mode === "document") return;
   if (recorder?.state === "recording") {
     stopRecording();
     return;
@@ -937,7 +1029,8 @@ $("microphone").addEventListener("click", async () => {
   micStarting = true;
   setMicrophoneState("requesting");
   const epoch = ++recordingEpoch;
-  const [language] = activeLanguages();
+  const [language] = activeLanguages(),
+    vocabulary = microphoneVocabulary(language);
   const live = mode === "live";
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -989,6 +1082,8 @@ $("microphone").addEventListener("click", async () => {
             : "webm";
       form.append("file", blob, `recording.${extension}`);
       form.append("language", language);
+      if (live) form.append("verify", "1");
+      if (vocabulary.length) form.append("vocabulary", JSON.stringify(vocabulary));
       try {
         const data = await responseJson(
           await fetch("/api/transcribe", { method: "POST", body: form, signal: controller.signal })
@@ -1001,7 +1096,12 @@ $("microphone").addEventListener("click", async () => {
         updateInput();
         voiceStatus();
         if (data.review_required || (live && activeFeature().voiceReview === true)) {
-          voiceStatus(t(data.review_required ? "voiceUncertain" : "voiceReview"));
+          const verificationOnly =
+            data.review_reasons?.length === 1 &&
+            data.review_reasons[0] === "verification_unavailable";
+          voiceStatus(
+            t(data.review_required && !verificationOnly ? "voiceUncertain" : "voiceReview")
+          );
           inputEl.focus();
           return;
         }
@@ -1087,18 +1187,18 @@ $("theme").addEventListener("click", () => {
     $("theme").classList.remove("theme-switching");
   }, 500);
 });
-$("ui-language").addEventListener("click", () => {
-  locale = locale === "en" ? "th" : "en";
+function applyInterfaceLocale(language) {
+  locale = language;
   document.documentElement.lang = locale;
+  document.documentElement.dir = LANGUAGE_CATALOG[locale]?.rtl ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.textContent = t(el.dataset.i18n);
   });
-  $("ui-language").querySelector("span").textContent = locale === "en" ? "English" : "ไทย";
   updateThemeLabel();
   refreshMode();
   if (!activeFeature().request) setStatus();
   document.dispatchEvent(new CustomEvent("interface:change"));
-});
+}
 function closeSettings() {
   if ($("settings").open) $("settings").close();
   $("settings-toggle").setAttribute("aria-expanded", "false");

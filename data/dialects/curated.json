@@ -1,0 +1,623 @@
+[
+  {
+    "id": "contextual-challenge-wat-pa-la",
+    "dialect": "slang",
+    "term": "วัดปะล่ะ",
+    "aliases": [
+      "วัดป่ะล่ะ",
+      "วัดป่ะละ"
+    ],
+    "central_thai": "ท้าว่าจะลองแข่งหรือเปรียบเทียบกันไหม เอาไหมล่ะ ตามบริบท",
+    "register": "informal challenge; can be playful, competitive or confrontational",
+    "usage": "A standalone informal challenge: want to test/compare our ability, up for it, wanna go? วัด here refers to testing/comparing, not automatically a Buddhist temple. In gaming or sport use a challenge to compete, not physical violence. In romance it can challenge a comparison of affection; do not invent fighting, threats, stakes or a bet. Without further context keep a broad challenge such as 'Up for it?' rather than inventing a specific contest. Explicit temple, travel, worship, place-name or measurement context takes precedence: a pun may be intended. Do not change วัดไหน (which temple), ไปวัด (visit a temple), วัดป่า (forest temple), วัดปะละ (a place name) or a literal measurement into a challenge. The spelling ปะ/ป่ะ represents informal question particle เปล่า, not a request to identify which temple.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      "https://www.blockdit.com/posts/688474e717f67494cfd08bdc"
+    ]
+  },
+  {
+    "id": "contextual-frame-0",
+    "dialect": "slang",
+    "register": "Context-dependent; explicit pronouns and intent take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "term": "ไหวไหม",
+    "aliases": [
+      "ไหวมั้ย",
+      "ไหวหรือเปล่า"
+    ],
+    "central_thai": "ถามว่ายังรับมือได้หรือไม่ หรือแสดงความห่วงใย/ประชดตามบริบท",
+    "usage": "A question about being able to cope. In a fatigue statement with omitted subject followed by this question and permission to rest, the tired person is usually the LISTENER. Do not invent first-person 'I've been working' then ask a different person 'are you okay?'. A neutral phrasing such as 'Ten hours of work already. Still holding up?' preserves uncertainty. EXPLICIT pronouns take precedence: ฉันทำงาน...แต่เธอ... really changes participants. Preserve sincere concern versus sarcasm; explicit first-person reflection must remain first-person."
+  },
+  {
+    "id": "contextual-frame-1",
+    "dialect": "slang",
+    "register": "Context-dependent; explicit pronouns and intent take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "term": "ไปพักก่อน",
+    "central_thai": "ให้ไปพักหรือให้หยุดการกระทำ ตามบริบทและผู้ที่ถูกพูดถึง",
+    "usage": "Without an explicit first-person intention, a standalone directive is addressed to the LISTENER: take a break / give it a rest. In criticism of accusing someone without reading, it tells the accuser to stop; do not turn it into the speaker announcing 'I'm going to take a break' or admitting 'I haven't read it'. If the source explicitly says ฉันขอไปพัก or ขอไปพัก, retain the speaker's own request/intention. In real fatigue preserve sincere rest advice.",
+    "match_pattern": "(?<!ขอ)(?<!อยาก)(?<!จะ)ไปพักก่อน"
+  },
+  {
+    "id": "contextual-frame-2",
+    "dialect": "slang",
+    "register": "Context-dependent; explicit pronouns and intent take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "term": "คุยเผื่อเลือก",
+    "central_thai": "ทำความรู้จักเชิงความรักโดยเก็บหลายคนไว้เป็นตัวเลือก",
+    "usage": "Dating several possible partners or keeping someone as an option without a committed relationship stated. This is a ROMANTIC CONTEXT CUE: in the same utterance, อยากคุยจริงจัง means wanting something serious romantically, not wanting to have a serious conversation. Preserve the contrast between serious dating intention and being one of several options. Preserve negation; do not invent cheating, sex, agreed exclusivity or official boyfriend/girlfriend status."
+  },
+  {
+    "id": "contextual-standout",
+    "dialect": "slang",
+    "term": "ตัวตึง",
+    "central_thai": "คนเด่น คนเก่ง หรือคนที่เป็นตัวหลักของกลุ่ม",
+    "register": "informal praise; surrounding context can be teasing",
+    "usage": "A standout/top expert/main player in the specified skill or group. Not a stiff body or someone who pushes/coerces others. In fixing bugs it identifies a skilled go-to problem-solver, not a manager pressing the team to work. Preserve explicitly literal physical uses and do not invent a rank or official leadership role.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-crown",
+    "dialect": "slang",
+    "term": "มงลง",
+    "central_thai": "ได้ตำแหน่งชนะ สมควรได้มง หรือคำชมว่าโดดเด่น",
+    "register": "pageant-related praise, sometimes figurative",
+    "usage": "Receiving/winning/deserving the crown/title, often pageant-style praise. Not a crown accidentally falling down or a loss of the crown. Preserve prediction versus a confirmed award; do not turn future certainty into an already completed win. A physical crown falling must be explicit in the source context.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-1",
+    "dialect": "slang",
+    "term": "ได้หมด",
+    "aliases": [],
+    "central_thai": "รับได้ทุกตัวเลือก ไม่เกี่ยง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In a choice/invitation, any option works / no preference / can handle any of them. Not 'I'm full' after eating. Distinguish ability from preference and retain any negation.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-2",
+    "dialect": "slang",
+    "term": "ของแทร่",
+    "aliases": [],
+    "central_thai": "ของแท้ ของจริง เก่งจริง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Playful spelling of ของแท้: praise for genuine quality/skill, the real deal. Not ownership by an invented person named Trae. Preserve explicitly identified names or brands.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-3",
+    "dialect": "slang",
+    "term": "เมพ",
+    "aliases": [],
+    "central_thai": "เก่งมาก",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Playful เทพ: highly skilled/amazing in a game or skill context, not the English noun map. Do not invent a name, origin or achievement.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-4",
+    "dialect": "slang",
+    "term": "ช็อตฟีล",
+    "aliases": [],
+    "central_thai": "ทำให้อารมณ์หรือบรรยากาศสะดุด",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "A comment/action interrupts enjoyment or excitement: kills the mood / a buzzkill. Not a short film or electrical injury. Select the emotion and intensity from context.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {
+        "title": "ช็อตฟีล: สำนวนว่าด้วยการเบรกอารมณ์ — The Momentum",
+        "url": "https://themomentum.co/wordodyssey-buzzkill/",
+        "supports": "Mood-interruption sense; application wording and English suggestions are editorial."
+      }
+    ]
+  },
+  {
+    "id": "contextual-slang-5",
+    "dialect": "slang",
+    "term": "กินขาด",
+    "aliases": [],
+    "central_thai": "เหนือกว่าอย่างชัดเจน",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In comparisons, clearly outclasses / wins hands down. With battery performance it praises superiority, not a battery draining completely. Do not invent a competitor or quantitative advantage.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-6",
+    "dialect": "slang",
+    "term": "สับ",
+    "aliases": [],
+    "central_thai": "เฉียบ มั่นใจ หรือสับของจริงตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In fashion/performance or แบบสับ: confident/striking, slaying/owning the stage, not awkward. With meat/vegetables/knives: literally chop/mince. Preserve food and physical cutting; do not treat สับสน or สับปะรด as slang.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "แบบสับ|สับ(?=มาก|สุด|เว่อร์|หมู|เนื้อ|ผัก|ให้|ละเอียด|$|[\\s!?.,])"
+  },
+  {
+    "id": "contextual-slang-7",
+    "dialect": "slang",
+    "term": "ใจบาง",
+    "aliases": [],
+    "central_thai": "ใจอ่อน หวั่นไหว เอ็นดูง่าย",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "With cute animals or an appealing person: soft spot / heart melts / smitten, not heart pain, sadness or heart disease. Do not invent romantic attraction to an animal.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-8",
+    "dialect": "slang",
+    "term": "ขิต",
+    "aliases": [],
+    "central_thai": "ตาย หรือพูดเกินจริงแสดงอารมณ์",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Slang death; often hyperbole for shock/exhaustion/laughter. In bill shock do not invent vomiting, nausea or an illness. Preserve an actual death if the surrounding text reports one.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "(?<!ลิ)ขิต"
+  },
+  {
+    "id": "contextual-slang-9",
+    "dialect": "slang",
+    "term": "ตุย",
+    "aliases": [],
+    "central_thai": "ตาย หรือพูดเกินจริงแสดงอารมณ์",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Colloquial death. เหนื่อยจะตุย or ขำจะตุย is figurative extreme exhaustion/laughter, not a factual death. Actual deaths must stay factual.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-10",
+    "dialect": "slang",
+    "term": "ด้อม",
+    "aliases": [],
+    "central_thai": "กลุ่มแฟนคลับ",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Fandom / fan community around an actor, singer, series or fan activities. Not a dormitory. Do not infer that the fans live together.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "ด้อม(?!\\s*ๆ|\\s*มอง)"
+  },
+  {
+    "id": "contextual-slang-11",
+    "dialect": "slang",
+    "term": "เมน",
+    "aliases": [],
+    "central_thai": "คนหรือตัวละครที่ชอบหรือใช้เป็นหลัก",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In a band/fandom: favorite member / bias. In games: main character/role. Not a new person named Men. Preserve menu, comment, domain, motherboard and menthol uses and explicitly identified personal names.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "(?<!โด)(?<!คอม)เมน(?!ู|ต์|บอร์ด|ทอล|ชั่น|เดล)"
+  },
+  {
+    "id": "contextual-slang-12",
+    "dialect": "slang",
+    "term": "ทัวร์ลง",
+    "aliases": [],
+    "central_thai": "ถูกคนจำนวนมากวิจารณ์ออนไลน์",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In a controversial-post/brand/person context: online backlash/criticism, not a canceled tour. In explicit travel context it can mean a tour arriving or disembarking. Do not invent cancellation or threats.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-13",
+    "dialect": "slang",
+    "term": "โดนแกง",
+    "aliases": [],
+    "central_thai": "ถูกอำหรือแกล้ง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In deliberately misleading friends: getting pranked / playfully tricked, not getting scolded, assaulted or served curry. Preserve negation and who tricked whom; actual food context can still be literal.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-14",
+    "dialect": "slang",
+    "term": "แกง",
+    "aliases": [],
+    "central_thai": "อำ แกล้ง หรืออาหารตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "With deliberately misleading friends: pranking / trolling. In food/cooking/ingredients: curry/stew. ทำแกงให้เพื่อน is cooking, not pranking; ไม่ได้แกง denies pranking. Do not invent malicious intent.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "โดนแกง|ถูกแกง|แกงเพื่อน|แกงผม|แกงฉัน|แกงเรา|แกงกัน|ไม่ได้แกง|ทำแกง|แกงอ่อม"
+  },
+  {
+    "id": "contextual-slang-15",
+    "dialect": "slang",
+    "term": "ขิง",
+    "aliases": [],
+    "central_thai": "อวด เกทับ หรือขิงที่เป็นอาหาร",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "With showing off purchases/skill to friends: bragging/flexing/one-upping. ใหญ่เลย intensifies the bragging, not a big friend. With tea, food, medicine or ingredients: literal ginger.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-16",
+    "dialect": "slang",
+    "term": "เกลือ",
+    "aliases": [],
+    "central_thai": "ดวงสุ่มไม่ดี หรือเกลือที่เป็นส่วนผสม",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In gacha/draws with duplicates or no desired item: bad luck/disappointing pulls. English salty describes bitterness rather than bad luck itself. สุ่มตัวละคร means drawing/pulling characters, not randomizing attributes. In food/chemistry: salt; preserve grams/amounts.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-17",
+    "dialect": "slang",
+    "term": "ป้ายยา",
+    "aliases": [],
+    "central_thai": "ชวนให้ซื้อหรือสนใจ หรือทายาตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In recommendations/shopping: hyping/recommending something, persuading someone to try/buy it. For a wound: apply/spread medication, NOT attach a medication label. Do not invent purchases or change healthcare instructions into advertising.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-18",
+    "dialect": "slang",
+    "term": "แสงออกเท้า",
+    "aliases": [],
+    "central_thai": "ถูกกลบความเด่นในมุกเปรียบเทียบ",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In a photo/comparison beside a striking person: being overshadowed/outshone. Not showing a foot or emitting light. Retain literal lighting/effects if explicitly described.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-19",
+    "dialect": "slang",
+    "term": "งานเข้า",
+    "aliases": [],
+    "central_thai": "มีปัญหาหรือเรื่องยุ่งเข้ามา",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "After an error/difficulty: now in trouble / a problem on one's hands, not 'the job is in'. In explicit incoming-work/order context, work may literally be coming in. Do not invent damage or recovery.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-20",
+    "dialect": "slang",
+    "term": "ไฟลนก้น",
+    "aliases": [],
+    "central_thai": "ถูกกำหนดเวลาบีบจนต้องรีบ",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Deadline pressure / up against the clock / scrambling to finish. Do NOT calque into 'my pants are on fire', which is not a usual English deadline idiom and may suggest lying. Prefer plain urgency to an invented idiom. Preserve actual fires in literal context.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "ไฟลนก้น(?!\\s*(?:กระทะ|หม้อ|ภาชนะ|เตา))"
+  },
+  {
+    "id": "contextual-slang-21",
+    "dialect": "slang",
+    "term": "คุยจริงจัง",
+    "aliases": [],
+    "central_thai": "ตั้งใจพัฒนาความสัมพันธ์เชิงความรักอย่างจริงจัง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "This entry is retrieved ONLY when a separate explicit dating cue exists in this source and no explicit work/study/budget topic is detected. In this romantic frame, คุยจริงจัง means pursuing a serious relationship / being serious about dating, NOT holding a serious conversation or discussion. Preserve whether commitment is wanted or already established; do not invent exclusivity or current partner status. In other contexts this phrase can mean a serious discussion, but that is not the selected reading for this contextual entry.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "(?s)(?=.*(?:คุยเผื่อเลือก|คนคุย|จีบ|แฟน|ความสัมพันธ์|คบกัน))(?!.*(?:งบประมาณ|เรื่องงาน|เรื่องเรียน|เรื่องบัญชี|เรื่องโครงการ)).*คุยจริงจัง"
+  },
+  {
+    "id": "contextual-slang-22",
+    "dialect": "slang",
+    "term": "คนคุย",
+    "aliases": [],
+    "central_thai": "คนที่กำลังทำความรู้จักเชิงความรัก หรือผู้สนทนาตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In a not-yet-partners romantic context: talking stage / someone one is seeing, not a generic acquaintance. Preserve the absence of an official relationship. Ordinary conversation roles stay literal when explicit.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-23",
+    "dialect": "slang",
+    "term": "เต๊าะ",
+    "aliases": [],
+    "central_thai": "จีบหรือหยอกเชิงชอบพอ",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Flirt / playfully hit on someone, not generic teasing or bullying. Do not invent reciprocal interest, a date or a relationship.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-24",
+    "dialect": "slang",
+    "term": "นก",
+    "aliases": [],
+    "central_thai": "ไม่สมหวัง หรือสัตว์ที่เป็นนกตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In romance/ticket-buying slang: out of luck / missed out / unsuccessful. Do not add being single again or a breakup if there was no relationship. An actual bird stays a bird.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "นก(?=อีก|เลย|แล้ว|ตลอด|ทุก|มาก|นะ|จ้า|$|[\\s!?.,])"
+  },
+  {
+    "id": "contextual-slang-25",
+    "dialect": "slang",
+    "term": "นอย",
+    "aliases": [],
+    "central_thai": "น้อยใจ กังวล คิดมาก หรือเสียใจตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Upset/insecure/anxious/overthinking as context supports. Being left on read often feels hurt/disappointing, not necessarily angry/annoyed. Do not diagnose paranoia or invent another person's motives.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "นอย(?:ด์)?(?=อ่ะ|อ่า|เลย|มาก|แล้ว|สุด|นะ|จัง|แบบ|$|[\\s!?.,])"
+  },
+  {
+    "id": "contextual-slang-26",
+    "dialect": "slang",
+    "term": "เฟล",
+    "aliases": [],
+    "central_thai": "ผิดหวัง เสียความรู้สึก หรือพลาด",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Feeling disappointed / let down when expectations fail; a failed action can mean failure. Do not turn ordinary disappointment into severe psychological damage or blame the speaker for an external cancellation.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "(?<!ไอ)(?<!เอฟ)เฟล(?!ป์)"
+  },
+  {
+    "id": "contextual-slang-27",
+    "dialect": "slang",
+    "term": "เอาอยู่",
+    "aliases": [],
+    "central_thai": "รับมือหรือจัดการได้",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Can handle/manage the situation successfully; not merely accepting or taking on the task. Preserve ability versus a completed result. เอาไม่อยู่ denies that capacity.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-28",
+    "dialect": "slang",
+    "term": "ทำถึง",
+    "aliases": [],
+    "central_thai": "ทำได้ดีและถึงระดับที่คาดหวัง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Praises execution/performance that really delivers or meets a high standard, not simply an event having happened. ทำไม่ถึง means fell short. Do not add budgets, awards or techniques.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-29",
+    "dialect": "slang",
+    "term": "ตัวแม่",
+    "aliases": [],
+    "central_thai": "คนเก่งหรือโดดเด่นระดับแนวหน้า",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Figurative expert/queen/top figure in a skill, not a biological mother. Praise mastery, not just appearance or an assigned task. Explicit family/animal/technical uses stay literal.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-30",
+    "dialect": "slang",
+    "term": "ตัวพ่อ",
+    "aliases": [],
+    "central_thai": "คนเก่งหรือโดดเด่นระดับแนวหน้า",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Figurative expert/master/top figure in a field, not a biological father or merely someone assigned the job. Explicit family/animal/technical uses stay literal.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-31",
+    "dialect": "slang",
+    "term": "สมองไหล",
+    "aliases": [],
+    "central_thai": "สมองล้าในภาษาพูด หรือการย้ายออกของคนเก่ง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "After prolonged work/coding: figurative brain fried / mentally exhausted. With skilled-worker migration: brain drain. Preserve actual physical/medical events rather than turning them into jokes.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-32",
+    "dialect": "slang",
+    "term": "แบตหมด",
+    "aliases": [],
+    "central_thai": "แบตเตอรี่อุปกรณ์หมด หรือหมดพลังตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "For a phone/device: battery dead, charger literal. After socializing/work: drained energy / depleted social battery. Do not invent a broken device or illness.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-33",
+    "dialect": "slang",
+    "term": "ชิป",
+    "aliases": [],
+    "central_thai": "เชียร์ให้เป็นคู่ หรือชิปอุปกรณ์ตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In fandom with people/characters: ship, wanting/imagining a romantic pairing, not proof of real dating. In electronics: processor/chip. Preserve technical names/specs and negation or quotation of a shipping claim.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "ชิป(?=ตัวละคร|คู่|คน|เขา|เธอ|สอง|นี้|กัน|ของ|ใน|ประมวล|คอม|เซ็ต|$|[\\s!?.,])"
+  },
+  {
+    "id": "contextual-slang-34",
+    "dialect": "slang",
+    "term": "เรือแล่น",
+    "aliases": [],
+    "central_thai": "ความหวังของคนเชียร์คู่คืบหน้า หรือเรือจริงแล่น",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In fandom interactions: the ship is sailing / shippers excited; do not assert actors really date. In navigation/travel: an actual boat sailing.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-35",
+    "dialect": "slang",
+    "term": "เรือแตก",
+    "aliases": [],
+    "central_thai": "ความหวังของคนเชียร์คู่พัง หรือเรือจริงอับปาง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In fandom: shipped pairing fails / the ship sinks; preserve plot facts without inventing actors' relationships. With sea, life jackets, rescue or injuries: actual shipwreck/breaking apart, never a fandom joke.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-36",
+    "dialect": "slang",
+    "term": "อ่อม",
+    "aliases": [],
+    "central_thai": "ไม่ถึง ไม่ประทับใจ หรือชื่ออาหารตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "When evaluating a hyped performance: underwhelming / falls flat. In แกงอ่อม: actual regional herb stew; recognizable dish name or brief description without invented ingredients. The food name does not assert bad quality.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-37",
+    "dialect": "slang",
+    "term": "แบก",
+    "aliases": [],
+    "central_thai": "รับหน้าที่หลักช่วยทีม หรือแบกของจริง",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In projects/teams/games: carry/shoulder the work, preserving who did which tasks. Physical loads remain literal. Use singular they for unspecified gender in English, not he/she.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-38",
+    "dialect": "slang",
+    "term": "ออร่าจับ",
+    "aliases": [],
+    "central_thai": "ดูเปล่งประกายหรือโดดเด่น",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Figurative radiant/striking appearance or presence, not a physically catching aura. Do not invent fame, rankings or a makeover.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-39",
+    "dialect": "slang",
+    "term": "หัวร้อน",
+    "aliases": [],
+    "central_thai": "โกรธ หงุดหงิด หรือศีรษะร้อนจริงตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In games/disagreements: angry/frustrated/tilted, not a measured fever. Actual symptom reports retain the symptom without a new diagnosis.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-40",
+    "dialect": "slang",
+    "term": "หัวจะปวด",
+    "aliases": [],
+    "central_thai": "เหนื่อยใจหรือปวดหัวจริงตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In exasperation about work/files: what a headache / this is doing my head in. Do not add a pounding medical headache. In actual symptoms retain head pain; preserve ambiguity if it remains.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-41",
+    "dialect": "slang",
+    "term": "โดนเท",
+    "aliases": [],
+    "central_thai": "ถูกยกเลิกนัด ถูกทิ้ง หรือถูกปฏิเสธตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "For canceled plans: got ditched / someone bailed; do not infer an established romantic relationship or breakup. For actual breakup: got dumped. Actual pouring stays literal.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "contextual-slang-42",
+    "dialect": "slang",
+    "term": "ปัง",
+    "aliases": [],
+    "central_thai": "ดี สำเร็จ หรือเสียง/อาหารตามบริบท",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "In praise for a shop/event/result: successful / a hit / amazing, not an explosion. In ขนมปัง: bread. Actual bangs/noise or impacts stay literal.",
+    "provenance": "editorial_context_note",
+    "sources": [],
+    "match_pattern": "(?<!ขนม)ปัง"
+  },
+  {
+    "id": "contextual-slang-43",
+    "dialect": "slang",
+    "term": "หิวแสง",
+    "aliases": [],
+    "central_thai": "เรียกร้องความสนใจ",
+    "register": "Context-dependent; retain source register and intensity.",
+    "usage": "Disapproving attention-seeking/clout chasing, not literal hunger or light. Preserve criticism without inventing harassment, crimes or another motive.",
+    "provenance": "editorial_context_note",
+    "sources": []
+  },
+  {
+    "id": "slang-saat-pai-samachik",
+    "dialect": "slang",
+    "term": "สาดไปสมาชิก",
+    "aliases": [],
+    "central_thai": "จัดไปเพื่อน / เอาเลย / ลุยเลย / เต็มที่ไปเลย",
+    "register": "informal, enthusiastic acceptance or encouragement between friends",
+    "usage": "User-supplied contextual slang meaning: จัดไปเพื่อน, เอาเลย, ลุยเลย or เต็มที่ไปเลย. When this complete expression is an affirmative response or encouragement, สมาชิก addresses a friend; it is not a recipient list, and สาดไป is not an instruction to send, distribute or splash something. Use a natural equivalent of the speech act in the target language: for example 'Go for it, buddy!', 'Let's do it!' or 'Give it your all!' according to context. Choose one fitting reading, not a list of alternatives. Keep negation, questions, quotation and discussion about the expression intact. Surrounding literal water-splashing or delivery context takes precedence; do not reinterpret ordinary mentions of สมาชิก or สาด as slang. This meaning was supplied by the project user, not independently established as universal usage; do not invent an origin, popularity claim or extra meaning.",
+    "provenance": "project_user_definition",
+    "sources": []
+  },
+  {
+    "id": "northern-retort-parent",
+    "dialect": "northern",
+    "term": "ป้อคิงหยัง",
+    "aliases": [
+      "ป่อคิงหยัง"
+    ],
+    "alias_note": "Application spelling alias for the user-reported variant; not a separate dictionary attestation.",
+    "central_thai": "พ่อมึงเหรอ",
+    "register": "insult / rude rhetorical retort; context may also be teasing",
+    "usage": "A rude rhetorical retort invoking the listener's father; do not turn it into a greeting or a question about what someone is doing. Preserve its confrontational function without inventing a threat or adding stronger abuse. Literal kinship questions and quoted discussion must still be distinguished by the surrounding sentence.",
+    "sources": [
+      {
+        "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+        "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+        "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+      },
+      {
+        "title": "ป้อคิงหยัง — พจนานุกรมภาษาเหนือ",
+        "url": "https://xn--q3cn1ail0ab6b0e.com/dict/%E0%B8%9B%E0%B9%89%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%87%E0%B8%AB%E0%B8%A2%E0%B8%B1%E0%B8%87/",
+        "supports": "Central Thai gloss; author-maintained dictionary entry, not a universal contextual translation."
+      }
+    ],
+    "required_central_fragments": [
+      "พ่อ",
+      "มึง"
+    ]
+  },
+  {
+    "id": "northern-father-noun",
+    "dialect": "northern",
+    "term": "ป้อ",
+    "aliases": [],
+    "central_thai": "พ่อ",
+    "register": "neutral kinship noun; surrounding words may change the speech act",
+    "usage": "Literal kinship noun meaning father. Do not drop the father or turn the sentence into the speaker going somewhere. The compound retort ป้อคิงหยัง has a separate rude rhetorical use. Resolve possessive pronouns from context; do not invent a trip back.",
+    "sources": [
+      {
+        "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+        "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+        "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+      }
+    ],
+    "required_central_fragments": [
+      "พ่อ"
+    ],
+    "match_pattern": "ป้อ(?=$|[\\s.,!?ฯๆ]|เปิ้น|เฮา|ตั๋ว|คิง|แม่|ไป|มา|บ่)"
+  }
+]

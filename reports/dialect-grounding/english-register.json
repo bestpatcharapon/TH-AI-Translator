@@ -1,0 +1,81 @@
+{
+  "scope": "Additional English register development probe on the reported phrase, not a held-out evaluation.",
+  "source": "ป้อคิงหยัง",
+  "result": {
+    "status": "ready",
+    "standard_thai": "พ่อมึงเหรอ",
+    "translation": "The fuck is your dad?",
+    "note": "Translated as an idiomatic, confrontational dismissive retort capturing the insulting force of the Northern Thai expression.",
+    "questions": [],
+    "possibilities": [],
+    "evidence": [
+      {
+        "quote": "ป้อคิงหยัง",
+        "meaning": "พ่อมึงเหรอ"
+      }
+    ],
+    "matched_entries": [],
+    "mode": "northern",
+    "references": [
+      {
+        "id": "northern-retort-parent",
+        "dialect": "northern",
+        "term": "ป้อคิงหยัง",
+        "aliases": [
+          "ป่อคิงหยัง"
+        ],
+        "alias_note": "Application spelling alias for the user-reported variant; not a separate dictionary attestation.",
+        "central_thai": "พ่อมึงเหรอ",
+        "register": "insult / rude rhetorical retort; context may also be teasing",
+        "usage": "A rude rhetorical retort invoking the listener's father; do not turn it into a greeting or a question about what someone is doing. Preserve its confrontational function without inventing a threat or adding stronger abuse. Literal kinship questions and quoted discussion must still be distinguished by the surrounding sentence. Retain both the father reference and taunting/dismissive force in the target language. A plain factual question such as Your dad? loses the insulting function. Where English needs an idiomatic dismissive retort, use one of comparable force; do not invent a threat, a slur, or a stronger obscenity.",
+        "sources": [
+          {
+            "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+            "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+            "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+          },
+          {
+            "title": "ป้อคิงหยัง — พจนานุกรมภาษาเหนือ",
+            "url": "https://xn--q3cn1ail0ab6b0e.com/dict/%E0%B8%9B%E0%B9%89%E0%B8%AD%E0%B8%84%E0%B8%B4%E0%B8%87%E0%B8%AB%E0%B8%A2%E0%B8%B1%E0%B8%87/",
+            "supports": "Central Thai gloss; author-maintained dictionary entry, not a universal contextual translation."
+          }
+        ],
+        "required_central_fragments": [
+          "พ่อ",
+          "มึง"
+        ],
+        "kind": "lexical",
+        "match": "exact_term"
+      },
+      {
+        "id": "northern-father-noun",
+        "dialect": "northern",
+        "term": "ป้อ",
+        "aliases": [],
+        "central_thai": "พ่อ",
+        "register": "neutral kinship noun; surrounding words may change the speech act",
+        "usage": "Literal kinship noun meaning father. Do not drop the father or turn the sentence into the speaker going somewhere. The compound retort ป้อคิงหยัง has a separate rude rhetorical use. Resolve possessive pronouns from context; do not invent a trip back.",
+        "sources": [
+          {
+            "title": "กลวิธีการสร้างคำด่าภาษาล้านนาในเฟซบุ๊ก — ศราวุธ หล่อดี และกรัณย์กร บุญภา (2021), p.119",
+            "url": "https://so03.tci-thaijo.org/index.php/Humanties-up/article/download/210068/170598/",
+            "supports": "Classifies the expression as a Lanna swear expression and analyzes its components."
+          }
+        ],
+        "required_central_fragments": [
+          "พ่อ"
+        ],
+        "match_pattern": "ป้อ(?=$|[\\s.,!?ฯๆ]|เปิ้น|เฮา|ตั๋ว|คิง|แม่|ไป|มา|บ่)",
+        "kind": "lexical",
+        "match": "exact_term"
+      }
+    ],
+    "quality_review": {
+      "status": "revised",
+      "applied": true,
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite"
+    }
+  },
+  "seconds": 3.312
+}

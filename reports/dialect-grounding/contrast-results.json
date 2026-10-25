@@ -1,0 +1,105 @@
+{
+  "scope": "Two novel contrast probes, not a blind human evaluation. Verify negation and quantities, not text similarity to corpus examples.",
+  "results": [
+    {
+      "source": "จ้วยอย่าอู้ดัง",
+      "target": "en",
+      "http": 200,
+      "translation": "Don't speak loudly.",
+      "interpretation": {
+        "evidence": [
+          {
+            "meaning": "คำเรียกผู้ฟังแบบอุทานในกัมพูดเหนือ",
+            "quote": "จ้วย"
+          },
+          {
+            "meaning": "ห้ามทำสิ่งนั้น (คำสั่งห้าม)",
+            "quote": "อย่า"
+          },
+          {
+            "meaning": "พูด (ในภาษากำเมือง)",
+            "quote": "อู้"
+          },
+          {
+            "meaning": "เสียงดัง",
+            "quote": "ดัง"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "note": "ในภาษากำเมือง \"จ้วย\" เป็นคำเรียกผู้ฟังคล้ายกับ \"เฮ้\" หรือ \"คุณ\" ในภาษาไทยกลาง ส่วน \"อู้\" หมายถึง \"พูด\" และ \"ดัง\" หมายถึง \"เสียงดัง\" ดังนั้นประโยคนี้เป็นการสั่งห้ามพูดเสียงดัง",
+        "possibilities": [],
+        "quality_review": {
+          "applied": false,
+          "model": "gemini-3.5-flash-lite",
+          "provider": "gemini",
+          "status": "unavailable"
+        },
+        "questions": [],
+        "references": [],
+        "standard_thai": "อย่าพูดเสียงดัง",
+        "status": "ready",
+        "translation": "Don't speak loudly."
+      },
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "unavailable"
+      },
+      "seconds": 5.026
+    },
+    {
+      "source": "บ่ต้องหยิบ50 หยิบ5",
+      "target": "en",
+      "http": 200,
+      "translation": "Don't take 50, take 5.",
+      "interpretation": {
+        "evidence": [
+          {
+            "meaning": "ไม่ต้อง",
+            "quote": "บ่ต้อง"
+          },
+          {
+            "meaning": "หยิบ",
+            "quote": "หยิบ"
+          },
+          {
+            "meaning": "50",
+            "quote": "50"
+          },
+          {
+            "meaning": "หยิบ",
+            "quote": "หยิบ"
+          },
+          {
+            "meaning": "5",
+            "quote": "5"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "note": "ประโยคคำสั่งในภาษาถิ่นเหนือ แสดงการห้ามและแนะนำจำนวนใหม่",
+        "possibilities": [],
+        "quality_review": {
+          "applied": true,
+          "model": "gemini-3.5-flash-lite",
+          "provider": "gemini",
+          "status": "revised"
+        },
+        "questions": [],
+        "references": [],
+        "standard_thai": "ไม่ต้องหยิบ 50 หยิบ 5",
+        "status": "ready",
+        "translation": "Don't take 50, take 5."
+      },
+      "quality_review": {
+        "applied": true,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised"
+      },
+      "seconds": 5.391
+    }
+  ]
+}

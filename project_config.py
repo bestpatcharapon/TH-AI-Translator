@@ -11,6 +11,10 @@ load_dotenv(PROJECT_ROOT / ".env")
 MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 BASE_URL = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
 SPEECH_MODEL = os.getenv("GROQ_SPEECH_MODEL", "whisper-large-v3")
+SPEECH_VERIFY_MODEL = os.getenv(
+    "GROQ_SPEECH_VERIFY_MODEL",
+    "whisper-large-v3-turbo" if SPEECH_MODEL != "whisper-large-v3-turbo" else "whisper-large-v3",
+)
 CHAT_REASONING_EFFORT = os.getenv(
     "GROQ_CHAT_REASONING_EFFORT", "medium" if MODEL.startswith("openai/gpt-oss") else ""
 )

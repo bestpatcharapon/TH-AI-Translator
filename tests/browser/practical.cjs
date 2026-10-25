@@ -24,10 +24,10 @@ const assert = require("node:assert/strict");
     await page.goto(process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000");
     await page.locator("#settings-toggle").click();
     for (const scenario of ["restaurant", "shopping", "health"]) {
-      await page.locator("#translation-context").selectOption(scenario);
+      await page.locator("#translation-context").selectOption(scenario, { force: true });
       assert((await page.locator("#scenario-help").textContent()).length > 20);
     }
-    await page.locator("#translation-context").selectOption("restaurant");
+    await page.locator("#translation-context").selectOption("restaurant", { force: true });
     await page.locator("#menu-close").click();
     await page.locator("#input").fill("ขอโต๊ะสองที่");
     await page.waitForFunction(
@@ -73,7 +73,7 @@ const assert = require("node:assert/strict");
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 2);
     assert.deepEqual(requests.at(-1).conversation, []);
     await page.evaluate(() => switchFeature("text"));
-    await page.locator("#ui-language").click();
+    await page.evaluate(() => changeInterfaceLanguage("th"));
     await page.locator("#settings-toggle").click();
     assert.match(await page.locator("#scenario-help").textContent(), /สั่งอาหาร/);
     for (const width of [320, 390, 768, 1440]) {

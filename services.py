@@ -12,6 +12,7 @@ from pathlib import Path
 
 import edge_tts
 import pymupdf
+from aiohttp import ClientError
 from docx import Document
 from docx.table import Table
 from langdetect import DetectorFactory, LangDetectException, detect
@@ -200,16 +201,30 @@ def detect_language(text):
 async def create_speech(text, language):
     if language not in VOICES:
         raise ValueError("ยังไม่มีเสียงอ่านสำหรับภาษานี้")
-    audio = bytearray()
+    alternatives = {
+        "th": "th-TH-NiwatNeural",
+        "en": "en-US-GuyNeural",
+        "zh": "zh-CN-YunxiNeural",
+        "zh-TW": "zh-TW-YunJheNeural",
+        "ja": "ja-JP-KeitaNeural",
+        "ko": "ko-KR-InJoonNeural",
+    }
+    voices = [VOICES[language], alternatives.get(language, VOICES[language])]
     async with asyncio.timeout(35):
-        communicate = edge_tts.Communicate(
-            text, VOICES[language], connect_timeout=10, receive_timeout=20
-        )
-        async for chunk in communicate.stream():
-            if chunk["type"] == "audio":
-                data = chunk.get("data")
-                if isinstance(data, bytes):
-                    audio.extend(data)
-    if not audio:
-        raise RuntimeError("บริการอ่านออกเสียงไม่ส่งข้อมูลกลับมา")
-    return bytes(audio)
+        for attempt, voice in enumerate(voices):
+            # A failed partial stream is discarded: replay the whole utterance only once.
+            audio = bytearray()
+            try:
+                communicate = edge_tts.Communicate(
+                    text, voice, connect_timeout=5, receive_timeout=12
+                )
+                async for chunk in communicate.stream():
+                    if chunk["type"] == "audio" and isinstance(chunk.get("data"), bytes):
+                        audio.extend(chunk["data"])
+                if not audio:
+                    raise edge_tts.exceptions.NoAudioReceived("No audio returned")
+                return bytes(audio)
+            except (edge_tts.exceptions.EdgeTTSException, ClientError, TimeoutError):
+                if attempt == len(voices) - 1:
+                    raise
+                await asyncio.sleep(0.25)

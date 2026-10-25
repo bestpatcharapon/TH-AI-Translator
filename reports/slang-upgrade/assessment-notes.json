@@ -1,0 +1,31 @@
+{
+  "reviewer": "Coding assistant qualitative review of source and output against prewritten checklists; not blind, native-speaker or independent human ratings.",
+  "scope": "Separate development iterations. Later targeted reruns must not be presented as a complete rerun of all 112 sentences or as a general accuracy percentage.",
+  "after": {
+    "12": {"verdict": "minor_issue", "note": "ของแทร่ถูกแล้ว แต่ any problem ขยายความว่าสามารถแก้ได้ทุกปัญหาเกินข้อความต้นทาง"},
+    "37": {"verdict": "minor_issue", "note": "race เจาะจงประเภทการแข่งขัน และ just come over ไม่ค่อยเก็บน้ำเสียงรับคำท้า"},
+    "40": {"verdict": "minor_issue", "note": "don't bring it up again เน้นห้ามคุยเรื่องนี้อีก มากกว่าไม่เอาไปพูดต่อ ความหมายอาจซ้อนกันตามบริบท"},
+    "57": {"verdict": "meaning_error", "note": "สลับผู้ที่ยังไม่อ่าน และเปลี่ยนการบอกอีกฝ่ายให้หยุดเป็นผู้พูดขอพัก ตัวตรวจใช้งานไม่ได้ในรอบนี้"},
+    "58": {"verdict": "meaning_error", "note": "ผู้ทำงานสิบชั่วโมงกลายเป็น I แล้วถาม you ว่าไหวไหม ทั้งที่ไม่มีการเปลี่ยนประธานในต้นฉบับ"},
+    "62": {"verdict": "minor_issue", "note": "นกสื่อความผิดหวังถูกแล้ว แต่ girlfriend ระบุเพศของแฟนเกินข้อมูลต้นทาง"},
+    "68": {"verdict": "meaning_error", "note": "ความตั้งใจคบจริงจังยังเป็น serious conversation แม้มีบริบทเก็บคนไว้เป็นตัวเลือกและสถานะ checked"},
+    "87": {"verdict": "minor_issue", "note": "The answer says แข็งและไม่เหมาะเท่า the story reveals แต่ยังเก็บการเฉลยว่าเป็นพี่น้องและความหวังคนเชียร์คู่พังไว้"},
+    "88": {"verdict": "minor_issue", "note": "ขิงถูกเป็นอวดแล้ว แต่ all my friends เพิ่มขอบเขตว่าเพื่อนทุกคน"}
+  },
+  "refinement": {
+    "7": {"verdict": "minor_issue", "note": "ยังเป็นการทำอาหาร ไม่กลายเป็นแกล้ง แต่คำแปล cooked ไม่ระบุว่าเป็นแกง/curry ตามต้นฉบับ"}
+  },
+  "new-sentences": {
+    "2": {"verdict": "minor_issue", "note": "น้องอาจเป็นคนอายุน้อยกว่าหรือรุ่นน้อง ไม่จำเป็นต้องเป็น my little sibling"},
+    "15": {"verdict": "meaning_error", "note": "ไฟลนก้นกระทะจริงถูกเปลี่ยนเป็นเส้นตาย ทั้งที่มีคำว่ากระทะและลดไฟ"},
+    "18": {"verdict": "meaning_error", "note": "ประโยคความสัมพันธ์รูปใหม่ยังเปลี่ยนความตั้งใจจริงจังเป็น serious conversation"},
+    "22": {"verdict": "minor_issue", "note": "my head ใส่ผู้ได้รับบาดเจ็บเป็นผู้พูดทั้งที่ต้นฉบับไม่ระบุ แม้เก็บเหตุการณ์บาดเจ็บจริงและการปฏิเสธอารมณ์เกมไว้"},
+    "27": {"verdict": "meaning_error", "note": "ผู้พูดขอพักเองถูกเปลี่ยนเป็นคำสั่งให้ผู้ฟังหยุด/พัก"}
+  },
+  "final-verification": {
+    "1": {"verdict": "minor_issue", "note": "ไม่สลับเป็นผู้พูดยอมรับว่ายังไม่อ่านหรือผู้พูดขอพักแล้ว แต่ they ในประโยคแรกกับคำสั่ง Give it a rest ยังอ้างบุคคลไม่ชัดและเป็น fragment ควรเกลาถ้อยคำ"}
+  },
+  "context-refinement": {
+    "10": {"verdict": "minor_issue", "note": "ประเด็นงบประมาณถูกแล้ว แต่ choosing a talking stage แทน choosing someone to date ฟังไม่เป็นธรรมชาติและเปลี่ยนคนเป็นช่วงความสัมพันธ์"}
+  }
+}

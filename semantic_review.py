@@ -97,6 +97,11 @@ def review_translation(
                         "Verify the relationship between facts as well as token presence: old versus new price, "
                         "payer versus recipient, permission versus obligation, and until versus after. "
                         "Reject a plausible-sounding idiom translation if its social meaning changes. "
+                        "Use the contextual lexical notes to test the SOURCE sense against the DRAFT, including literal senses: "
+                        "an unfamiliar slang spelling is not evidence of a person's name. Check the social role and action, "
+                        "not just similar sounds. For a figurative phrase, use an established target idiom or plain meaning; "
+                        "do not approve a newly invented literal metaphor. Check omitted subjects across adjacent clauses "
+                        "so that the person being asked if they are okay is still the person described as exhausted. "
                         "Do not change present reluctance into a past decision or invent specific dates. "
                         "Reject contradictory or unnatural frequency wording even when all numeric tokens match. "
                         "Use natural complete sentences when the source is complete, without padding fragments or adding gender alternatives. "
@@ -107,6 +112,7 @@ def review_translation(
                         "For keep return the draft unchanged, empty issues and question. For revise return a complete corrected translation "
                         "and at least one evidenced issue. Use needs_context only if an ambiguity materially changes the meaning "
                         "and cannot be preserved naturally in translation; include evidenced issues and one concise clarification question. "
+                        "Do not invent word origins or etymologies in explanations; explain the contextual meaning only. "
                         "No scores or accuracy guarantees. " + TARGET_GUIDANCE.get(target, "")
                     ),
                 },

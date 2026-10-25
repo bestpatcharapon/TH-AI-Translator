@@ -3,9 +3,22 @@
 import json
 import re
 
+from dialect_references import lexical_references
+
 
 def language_notes(text):
     notes = []
+    for reference in lexical_references(text, "auto"):
+        notes.append(
+            {
+                "quote": reference["term"],
+                "readings": reference["usage"],
+                "central_thai": reference["central_thai"],
+                "register": reference["register"],
+                "sources": reference["sources"],
+                "provenance": reference.get("provenance", "published_reference"),
+            }
+        )
     if "ลูบหน้าปะจมูก" in text:
         notes.append(
             {

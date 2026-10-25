@@ -52,3 +52,11 @@ def review_route(
     if provider == "gemini" and configured and eligible:
         return _gemini_client(os.environ["GEMINI_API_KEY"]), model, "gemini"
     return primary_client, MODEL, "groq"
+
+
+def dialect_review_route():
+    """Select an independent dialect reviewer only when explicitly configured."""
+    provider, model, configured = routing_identity()
+    if provider == "gemini" and configured:
+        return _gemini_client(os.environ["GEMINI_API_KEY"]), model, provider
+    return None, MODEL, "groq"

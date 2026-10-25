@@ -1,0 +1,31 @@
+term	text	meaning_checklist
+new-genuine-negation	คนนี้พูดเก่งอย่างเดียว ยังไม่ใช่ของแทร่	Speaker denies the person's demonstrated authenticity/ability; not a person's property; preserve ยังไม่.
+new-mep-context	น้องวาดรูปเมพมาก ทั้งที่เพิ่งเริ่มเรียนเดือนเดียว	Excellent drawing despite only one month of learning; not map.
+new-slay-negation	วันนี้ไม่ได้เดินแบบสับนะ แค่เดินไปขึ้นรถ	Explicitly denies striking/model walk, simply walking to get in a vehicle.
+new-battery-comparison	รุ่นเก่าแบตอึดกว่า รุ่นใหม่นี้ไม่ได้กินขาดนะ	Old model has longer battery life, new model does not clearly win; do not reverse comparison.
+new-fandom-separation	ฉันอยู่สองด้อม แต่ไม่ได้อยู่หอพัก	Belongs to two fandoms and explicitly does not live in a dormitory.
+new-favorite-switch	เมื่อก่อนเมนมือกลอง ตอนนี้ชอบนักร้องนำมากกว่า	Favorite changed from drummer to lead singer; not people named Men.
+new-mood-question	ถ้าพูดเรื่องเงินตอนนี้จะช็อตฟีลไหม	Question whether mentioning money now would spoil the mood, not a short film.
+new-backlash-negation	โพสต์นี้ยังไม่มีทัวร์ลง แค่มีคนถามสองคน	No online backlash yet; just two people asking, not travel.
+new-prank-denial	เราไม่ได้แกงเธอ ร้านปิดจริง ๆ	Denies pranking the listener; the shop really is closed.
+new-cooking-prank	วันนี้แกงเพื่อนไม่สำเร็จ เลยไปทำแกงกินแทน	Attempted prank failed, then cooked curry; distinguish both senses in one sentence.
+new-flex-question	ซื้อคอมมาใช้หรือซื้อมาเพื่อขิงเพื่อน	Question use versus showing off a new computer; not ginger or teasing a large friend.
+new-salt-shopping	สุ่มมาสามรอบเกลือตลอด เลยเลิกเติมเงินแล้ว	Three unlucky draws/rounds led speaker to stop topping up; not salt as food.
+new-medication-negation	แผลยังไม่ได้ป้ายยา อย่าเพิ่งปิดผ้าก๊อซ	Wound not yet medicated, do not cover with gauze yet; no label.
+new-shopping-no-purchase	เพื่อนป้ายยากล้อง แต่ฉันยังไม่ได้ซื้อ	Friend recommended/hyped camera, explicitly not bought yet.
+new-real-fire	ไฟลนก้นกระทะจนดำ ต้องลดไฟ	Literal fire scorching bottom of a pan until black; reduce heat, no deadline metaphor.
+new-work-orders	วันนี้งานเข้าร้านสิบออร์เดอร์ ไม่ได้มีปัญหาอะไร	Ten orders came into shop, no trouble; ordinary incoming work.
+new-deadline	เหลืออีกครึ่งชั่วโมงก่อนส่ง ตอนนี้ไฟลนก้นแล้ว	Half an hour to deadline, frantic rush; no false English pants-on-fire metaphor.
+new-dating	อยากคุยจริงจังกับเธอ ไม่ได้คุยเผื่อเลือก	Wants a serious romantic connection, not treating listener as one of several options.
+new-serious-discussion	หัวหน้าขอคุยจริงจังเรื่องงบประมาณพรุ่งนี้	Boss wants serious discussion of budget tomorrow; no romance.
+new-bird	นกสองตัวบินหนีไปแล้ว ฉันเลยถ่ายรูปไม่ทัน	Two actual birds flew away, missed photographing them; not romantic rejection.
+new-social-energy	วันนี้แบตสังคมหมด แต่มือถือยังเหลือ 80 เปอร์เซ็นต์	Social energy drained while phone battery is 80 percent; keep subjects and number distinct.
+new-injury	หมอบอกว่าศีรษะได้รับบาดเจ็บ ไม่ได้แค่หัวร้อนจากเกม	Actual head injury reported by doctor, explicitly not just gaming anger; no new diagnosis.
+new-caring-subject	เธออดนอนมาสองคืนแล้ว ยังไหวไหม ไปพักก่อนได้นะ	Listener has missed sleep for two nights, genuine concern; no first-person shift.
+new-neutral-pronoun	เขาแบกงานนี้คนเดียว แต่ไม่ได้เป็นหัวหน้าทีม	Unknown gender, did the work alone, not team leader; natural neutral pronoun.
+new-explicit-first-person	ฉันทำงานมาสิบชั่วโมงแล้ว แต่เธอเพิ่งเริ่มงานใช่ไหม	Speaker worked ten hours; listener just started; do not force both clauses to the same subject.
+new-explicit-listener	เธอบอกว่าฉันผิดทั้งที่เธอยังไม่อ่าน ไปพักก่อน	Listener accused speaker without reading; tell listener to stop, not speaker taking a break.
+new-explicit-self-rest	ฉันบอกผิดเองเพราะฉันยังไม่อ่าน ขอไปพักก่อนนะ	Speaker admits their own mistake and requests to take a break; do not turn into an order to listener.
+new-ordinary-noy-collision	ฉันอยากกินข้าว คนอยากกลับบ้านก็กลับได้เลย	Wanting to eat and people wanting to leave; no anxiety/sadness slang นอย.
+new-likit-name	คุณลิขิตเขียนเรื่องพรหมลิขิต ไม่ได้เขียนเรื่องความตาย	Likit as a person's name, story about destiny, explicitly not death; don't match ขิต inside ลิขิต.
+new-eiffel	ปีหน้าจะไปดูหอไอเฟล แต่ยังไม่ได้จองตั๋ว	Eiffel Tower trip next year, tickets not booked yet; no disappointment/เฟล inferred from the name.

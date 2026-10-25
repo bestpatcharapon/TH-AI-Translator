@@ -1,0 +1,484 @@
+{
+  "created": "2026-10-24T14:17:51.638998+00:00",
+  "endpoint": "/api/translate",
+  "settings": {
+    "source": "th",
+    "target": "en",
+    "tone": "natural",
+    "thai_mode": "standard",
+    "cache_bypass": true
+  },
+  "scope": "Development sentence probes with prewritten meaning checklists. Lexical notes may already cover the expressions. Not blind human evaluation, a Google comparison, OCR or ASR testing. Model self-review is not a correctness score.",
+  "case_file": "reports/slang-upgrade/refinement-cases.tsv",
+  "interval_seconds": 2.5,
+  "results": [
+    {
+      "id": 1,
+      "term": "ไปพักก่อน",
+      "text": "บอกว่าฉันผิดทั้งที่ยังไม่อ่าน ไปพักก่อน",
+      "meaning_checklist": "Sarcastically tell the accuser to stop, not earnest medical rest advice.",
+      "http": 200,
+      "seconds": 5.172,
+      "translation": "Saying I'm wrong even though you haven't read it. Give it a rest.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "They say I'm wrong even though they haven't read it. Take a break first.",
+            "explanation": "The source phrase uses implicit second-person for the accuser (\"even though [you] haven't read it\" and \"go take a break/give it a rest\"), addressing the critic directly rather than third-person plural (\"they\").",
+            "kind": "participants",
+            "source_quote": "บอกว่าฉันผิดทั้งที่ยังไม่อ่าน ไปพักก่อน"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 5.172,
+          "translation": "Saying I'm wrong even though you haven't read it. Give it a rest.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "They say I'm wrong even though they haven't read it. Take a break first.",
+                "explanation": "The source phrase uses implicit second-person for the accuser (\"even though [you] haven't read it\" and \"go take a break/give it a rest\"), addressing the critic directly rather than third-person plural (\"they\").",
+                "kind": "participants",
+                "source_quote": "บอกว่าฉันผิดทั้งที่ยังไม่อ่าน ไปพักก่อน"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "term": "ไหวไหม",
+      "text": "ทำงานมาสิบชั่วโมงแล้ว ไหวไหม พักก่อนได้นะ",
+      "meaning_checklist": "Genuine concern after ten hours of work, not sarcastic criticism.",
+      "http": 200,
+      "seconds": 3.861,
+      "translation": "Working for ten hours already. Still holding up? You can take a break first.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "I've been working for ten hours already.",
+            "explanation": "The source has no explicit subject pronoun, and per the linguistic notes, in a fatigue statement followed by 'ไหวไหม' and an offer to rest, the person who has been working ten hours and is being asked if they can cope is the listener, not the speaker.",
+            "kind": "participants",
+            "source_quote": "ทำงานมาสิบชั่วโมงแล้ว"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 3.861,
+          "translation": "Working for ten hours already. Still holding up? You can take a break first.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "I've been working for ten hours already.",
+                "explanation": "The source has no explicit subject pronoun, and per the linguistic notes, in a fatigue statement followed by 'ไหวไหม' and an offer to rest, the person who has been working ten hours and is being asked if they can cope is the listener, not the speaker.",
+                "kind": "participants",
+                "source_quote": "ทำงานมาสิบชั่วโมงแล้ว"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "term": "คุยเผื่อเลือก",
+      "text": "ฉันอยากคุยจริงจัง ไม่อยากเป็นคนที่เธอคุยเผื่อเลือก",
+      "meaning_checklist": "Wants seriousness, not to be one of several options; no claim of official exclusivity.",
+      "http": 200,
+      "seconds": 6.468,
+      "translation": "I want to be serious about us, not just someone you keep as an option.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.468,
+          "translation": "I want to be serious about us, not just someone you keep as an option.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "term": "นอย",
+      "text": "เขาอ่านแชตแล้วไม่ตอบ ฉันนอยเลย",
+      "meaning_checklist": "Feeling upset/anxious after being left on read.",
+      "http": 200,
+      "seconds": 7.301,
+      "translation": "They read the chat and didn’t reply, so I felt hurt.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "insecure",
+            "explanation": "In this context of being left on read, 'นอย' (noi) commonly means feeling hurt, upset, or disappointed rather than 'insecure'.",
+            "kind": "terminology",
+            "source_quote": "นอย"
+          },
+          {
+            "draft_quote": "He",
+            "explanation": "The pronoun 'เขา' in Thai is gender-neutral; using 'He' introduces an unjustified gender specification.",
+            "kind": "participants",
+            "source_quote": "เขา"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.301,
+          "translation": "They read the chat and didn’t reply, so I felt hurt.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "insecure",
+                "explanation": "In this context of being left on read, 'นอย' (noi) commonly means feeling hurt, upset, or disappointed rather than 'insecure'.",
+                "kind": "terminology",
+                "source_quote": "นอย"
+              },
+              {
+                "draft_quote": "He",
+                "explanation": "The pronoun 'เขา' in Thai is gender-neutral; using 'He' introduces an unjustified gender specification.",
+                "kind": "participants",
+                "source_quote": "เขา"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "term": "ใจบาง",
+      "text": "เห็นแมวตัวเล็ก ๆ แล้วใจบางทุกที",
+      "meaning_checklist": "Soft spot for tiny cats, not heart disease.",
+      "http": 200,
+      "seconds": 6.422,
+      "translation": "Every time I see a tiny cat, my heart melts.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.422,
+          "translation": "Every time I see a tiny cat, my heart melts.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "term": "literal-ป้ายยา",
+      "text": "พยาบาลป้ายยาบนแผลแล้วปิดผ้าก๊อซ",
+      "meaning_checklist": "Nurse applies medication to a wound and covers it with gauze, not product recommendation.",
+      "http": 200,
+      "seconds": 7.436,
+      "translation": "The nurse applied the medication to the wound and then covered it with gauze.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.436,
+          "translation": "The nurse applied the medication to the wound and then covered it with gauze.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "term": "literal-แกง",
+      "text": "เพื่อนทำแกงให้ฉันกิน ไม่ได้แกล้งฉัน",
+      "meaning_checklist": "Friend cooked curry, explicitly did not prank the speaker.",
+      "http": 200,
+      "seconds": 6.821,
+      "translation": "My friend cooked for me, they weren't pranking me.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "curry",
+            "explanation": "Based on the context and linguistic notes, 'แกง' here is used colloquially in the sense of pranking or trolling (e.g., เพื่อนทำแกง/ไม่ได้แกล้ง), not making literal curry.",
+            "kind": "meaning",
+            "source_quote": "แกง"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.821,
+          "translation": "My friend cooked for me, they weren't pranking me.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "curry",
+                "explanation": "Based on the context and linguistic notes, 'แกง' here is used colloquially in the sense of pranking or trolling (e.g., เพื่อนทำแกง/ไม่ได้แกล้ง), not making literal curry.",
+                "kind": "meaning",
+                "source_quote": "แกง"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "term": "literal-สมาชิก",
+      "text": "ส่งเอกสารให้สมาชิก 50 คน ไม่ใช่ 5 คน",
+      "meaning_checklist": "Send documents to 50 members, not 5; not an encouraging address to friends.",
+      "http": 200,
+      "seconds": 6.584,
+      "translation": "Send the documents to 50 members, not 5.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.584,
+          "translation": "Send the documents to 50 members, not 5.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

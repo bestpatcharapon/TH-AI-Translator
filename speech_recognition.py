@@ -1,8 +1,58 @@
 """Inspect Whisper segment evidence without inventing an accuracy percentage."""
 
 import io
+import json
 import math
+import re
+import unicodedata
 import wave
+
+
+def transcription_prompt(raw):
+    """Accept a small spelling vocabulary, never another feature's conversation."""
+    if raw is None:
+        return ""
+    try:
+        words = json.loads(raw)
+    except (TypeError, ValueError) as error:
+        raise ValueError("คำศัพท์ช่วยถอดเสียงไม่ถูกต้อง") from error
+    if not isinstance(words, list) or len(words) > 16:
+        raise ValueError("คำศัพท์ช่วยถอดเสียงไม่ถูกต้อง")
+    if any(
+        not isinstance(word, str)
+        or not word.strip()
+        or len(word) > 120
+        or re.search(r"[\x00-\x1f]", word)
+        for word in words
+    ):
+        raise ValueError("คำศัพท์ช่วยถอดเสียงไม่ถูกต้อง")
+    prompt = ", ".join(dict.fromkeys(word.strip() for word in words))
+    # A UTF-8 byte budget stays below the provider's 224-token prompt allowance.
+    if len(prompt.encode("utf-8")) > 200:
+        raise ValueError("คำศัพท์ช่วยถอดเสียงยาวเกินขีดจำกัด")
+    return prompt
+
+
+def compare_transcripts(primary, secondary):
+    """Keep the original recognition; disagreement is evidence to review, not to rewrite."""
+
+    def normalized(text):
+        return "".join(
+            char
+            for char in unicodedata.normalize("NFKC", text).casefold()
+            if unicodedata.category(char)[0] in {"L", "M", "N"}
+        )
+
+    reasons = set(primary["review_reasons"])
+    if normalized(primary["text"]) != normalized(secondary["text"]):
+        reasons.add("model_disagreement")
+        primary["alternative_text"] = secondary["text"]
+    if secondary["review_required"]:
+        reasons.add("verification_unclear")
+    primary["review_reasons"] = sorted(reasons)
+    primary["review_required"] = bool(reasons)
+    primary["verification_model"] = secondary["model"]
+    return primary
 
 
 def reject_silent_pcm(data):
@@ -35,6 +85,15 @@ def transcript_result(result, model):
     if not isinstance(segments, list) or not segments:
         return dict(text=text, model=model, review_required=True, review_reasons=["no_metadata"])
     reasons = set()
+    # Observed high-confidence Thai ASR substitutions, not automatic corrections.
+    # Require a second fandom cue so ordinary domains/boxes/names remain unaffected.
+    confusions = re.findall(r"มือกล่อง|ดอมเมน", text)
+    surrounding = re.sub(r"มือกล่อง|ดอมเมน", " ", text)
+    if confusions and (
+        len(confusions) > 1
+        or re.search(r"ด้อม|(?<!โด)(?<!คอม)เมน(?!ู|ต์|บอร์ด)|นักร้อง|วงดนตรี|แฟนคลับ|มือกลอง", surrounding)
+    ):
+        reasons.add("possible_word_confusion")
     silent = 0
     for segment in segments:
         if hasattr(segment, "model_dump"):

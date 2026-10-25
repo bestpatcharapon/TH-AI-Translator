@@ -93,6 +93,17 @@
       <symbol id="icon-download" viewBox="0 0 24 24">
         <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
       </symbol>
+      <symbol id="icon-menu-food" viewBox="0 0 24 24">
+        <path d="M4 3v7m4-7v7M6 3v18M2 3v7c0 3 8 3 8 0M18 3v18m0-18c-6 3-6 9 0 9" />
+      </symbol>
+      <symbol id="icon-menu-bag" viewBox="0 0 24 24">
+        <rect x="4" y="7" width="16" height="14" rx="3" />
+        <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+      </symbol>
+      <symbol id="icon-menu-health" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <path d="M12 8v8m-4-4h8" />
+      </symbol>
       <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" /></symbol>
       <symbol id="icon-mic" viewBox="0 0 24 24">
         <rect x="9" y="2" width="6" height="13" rx="3" />
@@ -119,14 +130,6 @@
           >
             <svg class="theme-icon theme-sun" aria-hidden="true"><use href="#icon-sun" /></svg
             ><svg class="theme-icon theme-moon" aria-hidden="true"><use href="#icon-moon" /></svg>
-          </button>
-          <button
-            id="ui-language"
-            class="locale-button"
-            type="button"
-            aria-label="Change interface language"
-          >
-            <svg><use href="#icon-globe" /></svg><span>English</span>
           </button>
           <div class="settings-wrap">
             <button
@@ -236,8 +239,8 @@
       </div>
 
       <section id="thai-tools" class="thai-tools" hidden aria-label="Thai slang and dialects">
-        <label class="thai-mode-label" for="thai-mode"
-          ><span data-i18n="thaiMode">Thai interpretation</span>
+        <div class="thai-mode-label">
+          <span data-i18n="thaiMode">Thai interpretation</span>
           <select id="thai-mode">
             <option value="standard" data-i18n="thaiStandard">Standard translation</option>
             <option value="auto" data-i18n="thaiAuto">Slang / dialect · unsure which</option>
@@ -246,7 +249,7 @@
             <option value="isan" data-i18n="thaiIsan">Isan</option>
             <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
           </select>
-        </label>
+        </div>
         <p id="thai-mode-note" class="menu-help" data-i18n="thaiModeNote" hidden>
           Interpretation can be wrong. Check microphone transcripts before relying on the meaning.
         </p>
@@ -718,33 +721,104 @@
           <svg><use href="#icon-close" /></svg>
         </button>
       </div>
+      <div class="menu-tabs" role="tablist" aria-labelledby="menu-heading">
+        <button
+          id="menu-tab-translation"
+          type="button"
+          role="tab"
+          aria-controls="menu-panel-translation"
+          aria-selected="true"
+          data-i18n="translation"
+        >
+          Translation
+        </button>
+        <button
+          id="menu-tab-history"
+          type="button"
+          role="tab"
+          aria-controls="menu-panel-history"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="historyFavorites"
+        >
+          History &amp; favorites
+        </button>
+        <button
+          id="menu-tab-appearance"
+          type="button"
+          role="tab"
+          aria-controls="menu-panel-appearance"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="appearance"
+        >
+          Appearance
+        </button>
+      </div>
       <div class="menu-content">
-        <section class="menu-translation">
+        <section
+          id="menu-panel-appearance"
+          class="menu-interface"
+          role="tabpanel"
+          aria-labelledby="menu-tab-appearance"
+          tabindex="0"
+          hidden
+        >
+          <h3 data-i18n="appearance">Appearance</h3>
+          <div class="menu-appearance-card">
+            <div class="menu-language-setting">
+              <select id="interface-language" aria-label="App language">
+                <option value="en">English</option>
+                <option value="th">ไทย</option>
+              </select>
+            </div>
+            <button id="menu-theme" class="menu-theme" type="button" aria-pressed="false">
+              <span class="menu-setting-icon"
+                ><svg aria-hidden="true"><use href="#icon-sun" /></svg
+              ></span>
+              <span class="menu-theme-label"></span>
+              <span class="menu-theme-indicator" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p
+            id="interface-language-status"
+            class="feature-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </section>
+        <section
+          id="menu-panel-translation"
+          class="menu-translation"
+          role="tabpanel"
+          aria-labelledby="menu-tab-translation"
+          tabindex="0"
+        >
           <h3 data-i18n="translation">Translation</h3>
-          <label class="menu-setting"
-            ><span
-              ><svg><use href="#icon-sparkles" /></svg><span data-i18n="style">Style</span></span
-            ><select id="tone">
-              <option value="natural" data-i18n="natural">Natural</option>
-              <option value="friendly" data-i18n="friendly">Friendly</option>
-              <option value="formal" data-i18n="formal">Formal</option>
-              <option value="casual" data-i18n="casual">Casual</option>
-            </select></label
-          >
-          <label class="menu-setting"
-            ><span
-              ><svg><use href="#icon-reply" /></svg><span data-i18n="context">Context</span></span
-            ><select id="translation-context">
-              <option value="general" data-i18n="general">General</option>
-              <option value="travel" data-i18n="travel">Travel</option>
-              <option value="work" data-i18n="work">Work</option>
-              <option value="study" data-i18n="study">Study</option>
-              <option value="conversation" data-i18n="conversation">Conversation</option>
-              <option value="restaurant" data-i18n="restaurant">Food &amp; restaurants</option>
-              <option value="shopping" data-i18n="shopping">Shopping</option>
-              <option value="health" data-i18n="health">Symptoms &amp; healthcare</option>
-            </select></label
-          >
+          <div class="menu-preference-grid">
+            <div class="menu-setting">
+              <span data-i18n="tone">Tone</span
+              ><select id="tone">
+                <option value="natural" data-i18n="natural">Natural</option>
+                <option value="friendly" data-i18n="friendly">Friendly</option>
+                <option value="formal" data-i18n="formal">Formal</option>
+                <option value="casual" data-i18n="casual">Casual</option>
+              </select>
+            </div>
+            <div class="menu-setting">
+              <span data-i18n="context">Context</span
+              ><select id="translation-context">
+                <option value="general" data-i18n="general">General</option>
+                <option value="travel" data-i18n="travel">Travel</option>
+                <option value="work" data-i18n="work">Work</option>
+                <option value="study" data-i18n="study">Study</option>
+                <option value="conversation" data-i18n="conversation">Conversation</option>
+                <option value="restaurant" data-i18n="restaurant">Food &amp; restaurants</option>
+                <option value="shopping" data-i18n="shopping">Shopping</option>
+                <option value="health" data-i18n="health">Symptoms &amp; healthcare</option>
+              </select>
+            </div>
+          </div>
           <p id="scenario-help" class="menu-help" aria-live="polite"></p>
           <input
             id="extra-context"
@@ -755,7 +829,8 @@
             placeholder="Extra context (optional), e.g. replying to a friend"
           />
           <label class="menu-checkbox"
-            ><input id="multiple-languages" type="checkbox" /><span data-i18n="multipleLanguages"
+            ><input id="multiple-languages" type="checkbox" role="switch" /><span
+              data-i18n="multipleLanguages"
               >Translate into several languages</span
             ></label
           >
@@ -763,6 +838,7 @@
             <p class="menu-help" data-i18n="additionalHelp">
               Choose up to 3 additional target languages.
             </p>
+            <div id="additional-selected" class="additional-selected" hidden></div>
             <input
               id="additional-search"
               class="menu-input"
@@ -772,10 +848,11 @@
               aria-label="Search additional languages"
             />
             <div id="additional-targets" class="additional-targets"></div>
+            <p id="additional-empty" class="menu-help additional-empty" hidden></p>
             <p id="additional-count" class="menu-help" role="status"></p>
           </div>
         </section>
-        <details id="thai-lexicon-editor" class="glossary-editor">
+        <details id="thai-lexicon-editor" class="glossary-editor" hidden>
           <summary data-i18n="thaiLexicon">My slang &amp; dialect meanings</summary>
           <p class="menu-help" data-i18n="thaiLexiconHelp">
             Personal definitions for Text or Live Chat, saved on this browser. Not shared or
@@ -809,7 +886,7 @@
           <p id="thai-lexicon-status" class="feature-status" role="status"></p>
           <div id="thai-lexicon-list"></div>
         </details>
-        <details id="glossary-editor" class="glossary-editor">
+        <details id="glossary-editor" class="glossary-editor" hidden>
           <summary>
             <span data-i18n="myTerminology">My terminology</span
             ><span id="glossary-count">0 / 30</span>
@@ -842,8 +919,23 @@
           </form>
           <p id="glossary-status" class="feature-status" role="status" aria-live="polite"></p>
         </details>
-        <section class="menu-history">
+        <section
+          id="menu-panel-history"
+          class="menu-history"
+          role="tabpanel"
+          aria-labelledby="menu-tab-history"
+          tabindex="0"
+          hidden
+        >
           <h3 data-i18n="historyFavorites">History &amp; favorites</h3>
+          <input
+            id="history-search"
+            class="menu-input"
+            type="search"
+            autocomplete="off"
+            placeholder="Search your translations…"
+            aria-label="Search your translations"
+          />
           <div class="history-toolbar">
             <label class="menu-checkbox"
               ><input id="history-favorites" type="checkbox" /><span data-i18n="favoritesOnly"
@@ -853,15 +945,6 @@
               <svg><use href="#icon-trash" /></svg><span data-i18n="clearAll">Clear all</span>
             </button>
           </div>
-          <input
-            id="history-search"
-            class="menu-input"
-            type="search"
-            autocomplete="off"
-            placeholder="Search your translations…"
-            aria-label="Search your translations"
-          />
-          <p class="menu-help" data-i18n="starToKeep">Star a translation to keep it.</p>
           <p id="menu-status" class="feature-status" role="status" aria-live="polite"></p>
           <div id="history-list"></div>
         </section>
@@ -869,6 +952,20 @@
           <span data-i18n="savedTranslations">Saved translations</span>
         </button>
       </div>
+    </dialog>
+    <dialog id="preference-dialog" class="preference-dialog" aria-labelledby="preference-title">
+      <div class="preference-header">
+        <h2 id="preference-title"></h2>
+        <button id="preference-close" class="icon-button" type="button">
+          <svg aria-hidden="true"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div
+        id="preference-options"
+        class="preference-options"
+        role="listbox"
+        aria-labelledby="preference-title"
+      ></div>
     </dialog>
     <dialog
       id="language-dialog"
@@ -1026,5 +1123,7 @@
     <script src="/static/menu.js"></script>
     <script src="/static/studio.js"></script>
     <script src="/static/thai.js"></script>
+    <script src="/static/interface-locales.js"></script>
+    <script src="/static/interface.js"></script>
   </body>
 </html>

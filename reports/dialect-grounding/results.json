@@ -1,0 +1,168 @@
+{
+  "created": "2026-10-24T09:34:53.665652+00:00",
+  "scope": "Six development regressions; reported cases and corpus-adjacent examples are NOT held-out evaluation. No blind human ratings or accuracy percentage. Baseline is the last committed generator, not the temporary quarantine behavior. Independent model checks do not prove correctness.",
+  "baseline_commit": "819ba8c445b8a908363c2c09b29982dd9d2384cd",
+  "results": [
+    {
+      "id": "reported-retort-central",
+      "text": "ป่อคิงหยัง",
+      "target": "th",
+      "mode": "northern",
+      "criteria": "Rude rhetorical retort involving the listener's father, as documented by cited sources. Not 'What are you doing?' or a greeting. This is the user-reported development regression, not held-out.",
+      "pipeline": "committed_generator",
+      "result": {
+        "status": "ready",
+        "standard_thai": "เฮ้! คุณทำอะไรอยู่?",
+        "translation": "เฮ้! คุณทำอะไรอยู่?",
+        "note": "เป็นการเรียกความสนใจแล้วถามว่า “คุณกำลังทำอะไรอยู่” ในภาษากำเมือง “ป่อ” ใช้เป็นการดึงความสนใจคล้าย “เฮ้” และ “คิง” คือสรรพนามบุรุษที่สอง “คุณ” ส่วน “หยัง” แปลว่า “อะไร”",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "ป่อ",
+            "meaning": "เฮ้ (เรียกความสนใจ)"
+          },
+          {
+            "quote": "คิง",
+            "meaning": "คุณ (สรรพนามบุรุษที่สอง)"
+          },
+          {
+            "quote": "หยัง",
+            "meaning": "อะไร"
+          },
+          {
+            "quote": "ป่อคิงหยัง",
+            "meaning": "เฮ้! คุณทำอะไรอยู่?"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern"
+      },
+      "seconds": 2.536
+    },
+    {
+      "id": "reported-retort-central",
+      "text": "ป่อคิงหยัง",
+      "target": "th",
+      "mode": "northern",
+      "criteria": "Rude rhetorical retort involving the listener's father, as documented by cited sources. Not 'What are you doing?' or a greeting. This is the user-reported development regression, not held-out.",
+      "pipeline": "sourced_hybrid",
+      "error_type": "RuntimeError",
+      "http_status": null,
+      "seconds": 1.94
+    },
+    {
+      "id": "reported-retort-english",
+      "text": "ป้อคิงหยัง",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "Preserve the rude rhetorical retort and kinship reference without invented threats or turning it into an ordinary activity question.",
+      "pipeline": "committed_generator",
+      "result": {
+        "status": "ready",
+        "standard_thai": "คุณกำลังทำอะไร?",
+        "translation": "What are you doing?",
+        "note": "คำว่า “ป้อคิงหยัง” เป็นประโยคคำถามในภาษากำเมือง (เหนือ) ที่ใช้ถามว่าคนฟังกำลังทำอะไรอยู่ คิง = คุณ, หยัง = อะไร, ป้อ = ทำ (กริยาที่ใช้ในภาษากำเมือง)",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "คิง",
+            "meaning": "คุณ (บุรุษที่สอง)"
+          },
+          {
+            "quote": "หยัง",
+            "meaning": "อะไร"
+          },
+          {
+            "quote": "ป้อ",
+            "meaning": "ทำ (กริยา)"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern"
+      },
+      "seconds": 1.894
+    },
+    {
+      "id": "reported-retort-english",
+      "text": "ป้อคิงหยัง",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "Preserve the rude rhetorical retort and kinship reference without invented threats or turning it into an ordinary activity question.",
+      "pipeline": "sourced_hybrid",
+      "error_type": "RuntimeError",
+      "http_status": null,
+      "seconds": 1.901
+    },
+    {
+      "id": "slow-speech-request",
+      "text": "จ้วยอู้จ้าๆหน่อยได้ก่อ",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "A polite request to speak more slowly, still a question. Related corpus example exists; this is not held-out evidence of model generalization.",
+      "pipeline": "sourced_hybrid",
+      "error_type": "RuntimeError",
+      "http_status": null,
+      "seconds": 1.614
+    },
+    {
+      "id": "father-literal-control",
+      "text": "ป้อเปิ้นไปกาดแล้ว",
+      "target": "th",
+      "mode": "northern",
+      "criteria": "Literal father has gone to the market. Do not introduce insults merely because the word father appears.",
+      "pipeline": "sourced_hybrid",
+      "result": {
+        "status": "ready",
+        "standard_thai": "เราไปตลาดมาแล้ว",
+        "translation": "เราไปตลาดมาแล้ว",
+        "note": "แปลประโยคภาษาถิ่นเหนือเป็นภาษากลางโดยคงความหมายเดิม",
+        "questions": [],
+        "possibilities": [],
+        "evidence": [
+          {
+            "quote": "ป้อเปิ้น",
+            "meaning": "เรา / พวกเรา"
+          },
+          {
+            "quote": "ไปกาดแล้ว",
+            "meaning": "ไปตลาดแล้ว"
+          }
+        ],
+        "matched_entries": [],
+        "mode": "northern",
+        "references": [],
+        "quality_review": {
+          "status": "revised",
+          "applied": true,
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "seconds": 4.812
+    },
+    {
+      "id": "quoted-insult-discussion",
+      "text": "เพื่อนบอกว่า ‘ป้อคิงหยัง’ เป็นคำด่า",
+      "target": "en",
+      "mode": "northern",
+      "criteria": "Translate a statement ABOUT a quoted insult; do not directly insult the reader.",
+      "pipeline": "sourced_hybrid",
+      "error_type": "RateLimitError",
+      "http_status": 429,
+      "seconds": 0.23
+    },
+    {
+      "id": "unknown-private-phrase",
+      "text": "จ๊องกิ๊งแฟลชป๋อง",
+      "target": "en",
+      "mode": "slang",
+      "criteria": "Unfamiliar invented phrase: ask for meaning without fabricated etymology or definitive possibilities.",
+      "pipeline": "sourced_hybrid",
+      "error_type": "RuntimeError",
+      "http_status": null,
+      "seconds": 3.1
+    }
+  ]
+}

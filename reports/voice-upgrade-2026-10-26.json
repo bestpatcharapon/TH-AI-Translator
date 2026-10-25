@@ -1,0 +1,32 @@
+{
+  "kind": "synthetic TTS-to-ASR smoke test, not a microphone accuracy benchmark",
+  "samples": [
+    {
+      "language": "th",
+      "expected": "สวัสดีครับ ขอโต๊ะสำหรับสองคน ไม่ใส่ถั่วลิสง ราคาเท่าไรครับ",
+      "status": 200,
+      "result": {
+        "alternative_text": "สวัสดีครับ ขอตัวสำหรับ 2 คนไม่ใส่ ถูริสงราคาเท่าไรครับ",
+        "model": "whisper-large-v3",
+        "review_reasons": [
+          "model_disagreement"
+        ],
+        "review_required": true,
+        "text": "สวัสดีครับ ขอโต๊ะสำหรับ 2 คน ไม่ใส่ ทุลิสทรงราคาเท่าไรครับ",
+        "verification_model": "whisper-large-v3-turbo"
+      }
+    },
+    {
+      "language": "en",
+      "expected": "Hello, my name is H. M. I am from Indonesia.",
+      "status": 200,
+      "result": {
+        "model": "whisper-large-v3",
+        "review_reasons": [],
+        "review_required": false,
+        "text": "Hello, my name is H. Yam. I am from Indonesia.",
+        "verification_model": "whisper-large-v3-turbo"
+      }
+    }
+  ]
+}

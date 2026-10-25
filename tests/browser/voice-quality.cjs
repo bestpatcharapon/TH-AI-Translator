@@ -20,13 +20,15 @@ const audioFixture = require("./audio-fixture.cjs");
       };
     });
     const errors = [],
-      translations = [];
+      translations = [],
+      speechUploads = [];
     page.on("pageerror", (error) => errors.push(error.message));
     let uncertain = false,
       transcriptions = 0,
       transcript = "ขอจองโต๊ะสองคนครับ";
     await page.route("**/api/transcribe", (route) => {
       transcriptions++;
+      speechUploads.push(route.request().postData());
       return route.fulfill({ json: { text: transcript, review_required: uncertain } });
     });
     await page.route("**/api/translate", (route) => {
@@ -37,7 +39,11 @@ const audioFixture = require("./audio-fixture.cjs");
     });
     await page.goto(process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000");
     await page.evaluate(() => {
+      featureWorkspaces.get("text").glossary = [
+        { source: "TextOnlyName", target: "Text name", language: "en" },
+      ];
       switchFeature("live");
+      activeFeature().glossary = [{ source: "NECTEC", target: "NECTEC", language: "en" }];
       document.querySelector("#auto-speak").checked = false;
     });
     async function record() {
@@ -52,6 +58,9 @@ const audioFixture = require("./audio-fixture.cjs");
     await record();
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 1);
     assert.equal(translations[0].text, transcript);
+    assert.match(speechUploads[0], /NECTEC/);
+    assert.doesNotMatch(speechUploads[0], /TextOnlyName/);
+    assert.match(speechUploads[0], /name="verify"\r\n\r\n1/);
     await page.locator("#live-review-voice").check();
     await record();
     await page.waitForFunction(

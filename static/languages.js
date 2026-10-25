@@ -6,6 +6,24 @@ Object.assign(COPY.en, {
   languageSearchHint: "Search languages, e.g. Japanese",
   languageNoResults: "No languages found. Try another name.",
   closeLanguages: "Close language picker",
+  interfaceLanguage: "App language",
+  appearance: "Appearance",
+  interfaceLanguageHelp:
+    "English by default. Menu languages use bundled translations and do not call AI.",
+  interfaceLanguageTimeout:
+    "Loading the menu language timed out. Your previous language is still active. Please try again.",
+  interfaceLanguageLoading: "Loading menu language… You can choose another language to cancel.",
+  interfaceLanguageFailed:
+    "Could not load this menu language. Your previous language is still active. Please try again.",
+  interfaceLanguages: "{count} menu languages available · Loaded from bundled translations.",
+  wordCharacterCount: "{words} words · {characters} characters",
+  detectLanguage: "Detect language",
+  saveTranslation: "Save translation",
+  unsaveTranslation: "Unsave translation",
+  copyTranslation: "Copy translation",
+  regenerateTranslation: "Translate again",
+  listenTranslation: "Listen to translation",
+  replyInstructions: "Write your reply in {target} and get it in {source}.",
 });
 Object.assign(COPY.th, {
   translateFrom: "แปลจากภาษา",
@@ -14,6 +32,21 @@ Object.assign(COPY.th, {
   languageSearchHint: "ค้นหาภาษา เช่น ญี่ปุ่น",
   languageNoResults: "ไม่พบภาษา ลองค้นหาด้วยชื่ออื่น",
   closeLanguages: "ปิดตัวเลือกภาษา",
+  interfaceLanguage: "ภาษาแอป",
+  appearance: "การแสดงผล",
+  interfaceLanguageHelp: "เริ่มต้นเป็นอังกฤษ ภาษาเมนูใช้คำแปลที่เตรียมไว้ในแอป ไม่เรียก AI",
+  interfaceLanguageTimeout: "โหลดภาษาเมนูนานเกินไป ยังคงใช้ภาษาเดิม กรุณาลองใหม่",
+  interfaceLanguageLoading: "กำลังโหลดภาษาเมนู… เลือกภาษาอื่นเพื่อยกเลิกได้",
+  interfaceLanguageFailed: "โหลดภาษาเมนูไม่สำเร็จ ยังคงใช้ภาษาเดิม กรุณาลองใหม่",
+  interfaceLanguages: "ภาษาเมนูพร้อมใช้ {count} ภาษา · โหลดจากคำแปลที่มีในแอป",
+  wordCharacterCount: "{words} คำ · {characters} ตัวอักษร",
+  detectLanguage: "ตรวจจับภาษา",
+  saveTranslation: "บันทึกคำแปล",
+  unsaveTranslation: "นำคำแปลออกจากรายการบันทึก",
+  copyTranslation: "คัดลอกคำแปล",
+  regenerateTranslation: "แปลใหม่",
+  listenTranslation: "ฟังคำแปล",
+  replyInstructions: "เขียนคำตอบเป็น{target} แล้วแปลกลับเป็น{source}",
 });
 Object.assign(COPY.en, {
   microphoneUnavailable:
@@ -58,7 +91,23 @@ function languageSearchText(value) {
     .trim();
 }
 function languageName(code) {
-  return code === "auto" && locale === "th" ? "ตรวจจับภาษา" : LANGUAGES[code][0];
+  if (code === "auto") return t("detectLanguage");
+  if (locale === "th") return LANGUAGE_CATALOG[code]?.thai || LANGUAGES[code][0];
+  if (locale !== "en") {
+    try {
+      return new Intl.DisplayNames([locale], { type: "language" }).of(code) || LANGUAGES[code][0];
+    } catch {
+      /* Use catalog name. */
+    }
+  }
+  return LANGUAGES[code][0];
+}
+function languagePickerTitle(select) {
+  return select?.id === "interface-language"
+    ? "interfaceLanguage"
+    : select === sourceEl
+      ? "translateFrom"
+      : "translateTo";
 }
 function renderLanguageOptions() {
   if (!languageSelect) return;
@@ -69,7 +118,7 @@ function renderLanguageOptions() {
     if (
       option.disabled ||
       !languageSearchText(
-        `${LANGUAGES[code][0]} ${LANGUAGES[code][1]} ${languageAliases[code] || ""} ${LANGUAGE_CATALOG[code]?.thai || ""} ${code}`
+        `${languageName(code)} ${LANGUAGES[code][0]} ${LANGUAGES[code][1]} ${languageAliases[code] || ""} ${LANGUAGE_CATALOG[code]?.thai || ""} ${code}`
       ).includes(query)
     )
       continue;
@@ -122,32 +171,60 @@ function updateLanguagePickerLabels() {
   for (const [select, trigger] of languageTriggers) {
     trigger.setAttribute(
       "aria-label",
-      `${t(select === sourceEl ? "translateFrom" : "translateTo")} · ${languageName(select.value)}`
+      `${t(languagePickerTitle(select))} · ${languageName(select.value)}`
     );
+    if (select.id === "interface-language") {
+      const icon = document.createElement("span");
+      icon.className = "menu-setting-icon";
+      icon.innerHTML = '<svg aria-hidden="true"><use href="#icon-globe" /></svg>';
+      const label = document.createElement("span");
+      label.className = "menu-language-label";
+      label.textContent = t("interfaceLanguage");
+      const value = document.createElement("bdi");
+      value.className = "menu-language-value";
+      value.textContent = LANGUAGE_CATALOG[select.value]?.native || languageName(select.value);
+      const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.classList.add("menu-language-arrow");
+      const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      use.setAttribute("href", "#icon-chevron");
+      arrow.append(use);
+      trigger.replaceChildren(icon, label, value, arrow);
+    }
   }
   $("language-dialog-close").setAttribute("aria-label", t("closeLanguages"));
   languageSearch.placeholder = t("languageSearchHint");
   languageSearch.setAttribute("aria-label", t("searchLanguages"));
   if (languageSelect)
-    $("language-dialog-title").textContent = t(
-      languageSelect === sourceEl ? "translateFrom" : "translateTo"
-    );
+    $("language-dialog-title").textContent = t(languagePickerTitle(languageSelect));
   const count =
     mode === "image"
       ? Object.values(LANGUAGE_CATALOG).filter((entry) => entry.ocr).length
       : Object.keys(LANGUAGE_CATALOG).length;
   $("language-availability").textContent =
-    t(mode === "image" ? "photoLanguages" : "languageQuality").replace("{count}", count) +
-    (mode === "live" ? " " + t("liveLanguages") : "");
+    t(
+      languageSelect?.id === "interface-language"
+        ? "interfaceLanguages"
+        : mode === "image"
+          ? "photoLanguages"
+          : "languageQuality"
+    ).replace(
+      "{count}",
+      languageSelect?.id === "interface-language" ? languageSelect.options.length : count
+    ) +
+    (mode === "live" && languageSelect?.id !== "interface-language"
+      ? " " + t("liveLanguages")
+      : "");
 }
-for (const select of [sourceEl, targetEl]) {
+for (const select of [sourceEl, targetEl, $("interface-language")]) {
   const trigger = document.createElement("button");
   trigger.type = "button";
-  trigger.className = "language-picker-trigger";
+  trigger.className =
+    select.id === "interface-language" ? "locale-button" : "language-picker-trigger";
   trigger.setAttribute("aria-haspopup", "dialog");
   trigger.setAttribute("aria-controls", "language-dialog");
   trigger.setAttribute("aria-expanded", "false");
-  trigger.id = `${select.id}-picker`;
+  trigger.id = select.id === "interface-language" ? "ui-language" : `${select.id}-picker`;
   languageTriggers.set(select, trigger);
   select.hidden = true;
   select.parentElement.append(trigger);

@@ -102,11 +102,11 @@ const fs = require("node:fs");
     });
     await page.goto(base);
     await page.locator("#settings-toggle").click();
-    await page.locator("#glossary-editor").evaluate((e) => (e.open = true));
-    await page.locator("#glossary-source").fill("ใบเสนอราคา");
-    await page.locator("#glossary-target").fill("quotation");
-    await page.locator("#glossary-language").selectOption("en");
-    await page.locator("#glossary-add").click();
+    assert.equal(await page.locator("#glossary-editor").isVisible(), false);
+    await page.evaluate(async () => {
+      await saveGlossary([{ source: "ใบเสนอราคา", target: "quotation", language: "en" }]);
+      renderGlossary();
+    });
     await page.waitForFunction(() => document.querySelectorAll(".glossary-entry").length === 1);
     assert.equal(await page.locator("#glossary-count").textContent(), "1 / 30");
     await page.locator("#menu-close").click();
@@ -181,10 +181,13 @@ const fs = require("node:fs");
     await page.locator("#settings-toggle").click();
     await page.locator("#glossary-editor").evaluate((e) => (e.open = true));
     assert.equal(await page.locator(".glossary-entry").count(), 1);
-    await page.locator(".glossary-entry button").click();
+    await page.evaluate(async () => {
+      await saveGlossary([]);
+      renderGlossary();
+    });
     await page.waitForFunction(() => document.querySelectorAll(".glossary-entry").length === 0);
     await page.locator("#menu-close").click();
-    await page.locator("#ui-language").click();
+    await page.evaluate(() => changeInterfaceLanguage("th"));
     await page.locator("#settings-toggle").click();
     assert.match(await page.locator("#glossary-editor summary").textContent(), /คำเฉพาะ/);
     for (const width of [320, 390, 768, 1440]) {

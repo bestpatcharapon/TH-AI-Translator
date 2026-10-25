@@ -54,6 +54,6 @@ def translation_preferences(data):
 
 def interface_language(data):
     language = data.get("interface_language", "en")
-    if language not in ("en", "th"):
+    if not isinstance(language, str) or language not in LANGUAGES:
         raise ValueError("ภาษาเมนูไม่ถูกต้อง")
     return language

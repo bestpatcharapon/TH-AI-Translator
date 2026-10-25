@@ -1,0 +1,506 @@
+{
+  "created": "2026-10-24T14:26:11.185001+00:00",
+  "endpoint": "/api/translate",
+  "settings": {
+    "source": "th",
+    "target": "en",
+    "tone": "natural",
+    "thai_mode": "standard",
+    "cache_bypass": true
+  },
+  "scope": "Development sentence probes with prewritten meaning checklists. Lexical notes may already cover the expressions. Not blind human evaluation, a Google comparison, OCR or ASR testing. Model self-review is not a correctness score.",
+  "case_file": "reports/slang-upgrade/context-refinement-cases.tsv",
+  "interval_seconds": 2.5,
+  "results": [
+    {
+      "id": 1,
+      "term": "new-real-fire",
+      "text": "ไฟลนก้นกระทะจนดำ ต้องลดไฟ",
+      "meaning_checklist": "Literal fire scorching bottom of a pan until black; reduce heat, no deadline metaphor.",
+      "http": 200,
+      "seconds": 0.952,
+      "translation": "The bottom of the pan got black—reduce the heat.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.952,
+          "translation": "The bottom of the pan got black—reduce the heat.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "term": "new-deadline",
+      "text": "เหลืออีกครึ่งชั่วโมงก่อนส่ง ตอนนี้ไฟลนก้นแล้ว",
+      "meaning_checklist": "Half an hour to deadline, frantic rush; no false English pants-on-fire metaphor.",
+      "http": 200,
+      "seconds": 8.199,
+      "translation": "Only half an hour left before the deadline, and I'm already feeling the pressure.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 8.199,
+          "translation": "Only half an hour left before the deadline, and I'm already feeling the pressure.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "term": "new-dating",
+      "text": "อยากคุยจริงจังกับเธอ ไม่ได้คุยเผื่อเลือก",
+      "meaning_checklist": "Wants a serious romantic connection, not treating listener as one of several options.",
+      "http": 200,
+      "seconds": 7.765,
+      "translation": "I want to be serious with you, not just keep you as an option.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.765,
+          "translation": "I want to be serious with you, not just keep you as an option.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "term": "new-serious-discussion",
+      "text": "หัวหน้าขอคุยจริงจังเรื่องงบประมาณพรุ่งนี้",
+      "meaning_checklist": "Boss wants serious discussion of budget tomorrow; no romance.",
+      "http": 200,
+      "seconds": 0.974,
+      "translation": "My boss wants to have a serious talk about the budget tomorrow.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.974,
+          "translation": "My boss wants to have a serious talk about the budget tomorrow.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "term": "new-caring-subject",
+      "text": "เธออดนอนมาสองคืนแล้ว ยังไหวไหม ไปพักก่อนได้นะ",
+      "meaning_checklist": "Listener has missed sleep for two nights, genuine concern; no first-person shift.",
+      "http": 200,
+      "seconds": 7.502,
+      "translation": "You've been up for two nights now—still hanging in there? You can go take a break.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.502,
+          "translation": "You've been up for two nights now—still hanging in there? You can go take a break.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "term": "new-explicit-first-person",
+      "text": "ฉันทำงานมาสิบชั่วโมงแล้ว แต่เธอเพิ่งเริ่มงานใช่ไหม",
+      "meaning_checklist": "Speaker worked ten hours; listener just started; do not force both clauses to the same subject.",
+      "http": 200,
+      "seconds": 0.884,
+      "translation": "I've been working for ten hours already, but you just started, right?",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.884,
+          "translation": "I've been working for ten hours already, but you just started, right?",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "term": "new-explicit-listener",
+      "text": "เธอบอกว่าฉันผิดทั้งที่เธอยังไม่อ่าน ไปพักก่อน",
+      "meaning_checklist": "Listener accused speaker without reading; tell listener to stop, not speaker taking a break.",
+      "http": 200,
+      "seconds": 6.03,
+      "translation": "You say I'm wrong even though you haven't even read it. Take a break first.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.03,
+          "translation": "You say I'm wrong even though you haven't even read it. Take a break first.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "term": "new-explicit-self-rest",
+      "text": "ฉันบอกผิดเองเพราะฉันยังไม่อ่าน ขอไปพักก่อนนะ",
+      "meaning_checklist": "Speaker admits their own mistake and requests to take a break; do not turn into an order to listener.",
+      "http": 200,
+      "seconds": 5.256,
+      "translation": "I misspoke because I haven’t read it yet. I’m going to take a break first.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 5.256,
+          "translation": "I misspoke because I haven’t read it yet. I’m going to take a break first.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "term": "new-literal-pot",
+      "text": "ไฟลนก้นหม้อจนดำ อย่าเพิ่งจับหม้อ",
+      "meaning_checklist": "Actual scorching at the pot bottom; do not touch yet; not deadline pressure.",
+      "http": 200,
+      "seconds": 8.431,
+      "translation": "The fire has blackened the bottom of the pot—don’t touch the pot yet.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 8.431,
+          "translation": "The fire has blackened the bottom of the pot—don’t touch the pot yet.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "term": "new-budget-with-partner",
+      "text": "ขอคุยจริงจังเรื่องงบประมาณกับแฟน ไม่ได้พูดถึงการเลือกคนคุย",
+      "meaning_checklist": "Serious discussion of budget with existing partner, not asking for a serious relationship.",
+      "http": 200,
+      "seconds": 7.715,
+      "translation": "I want to have a serious talk about the budget with my partner, not about choosing a talking stage.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "who to talk to",
+            "explanation": "The draft translates 'คนคุย' generically as 'who to talk to', missing the specific contextual meaning of someone one is seeing or a talking stage in a romantic context, as outlined in the glossary note.",
+            "kind": "terminology",
+            "source_quote": "คนคุย"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.715,
+          "translation": "I want to have a serious talk about the budget with my partner, not about choosing a talking stage.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "who to talk to",
+                "explanation": "The draft translates 'คนคุย' generically as 'who to talk to', missing the specific contextual meaning of someone one is seeing or a talking stage in a romantic context, as outlined in the glossary note.",
+                "kind": "terminology",
+                "source_quote": "คนคุย"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

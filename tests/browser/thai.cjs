@@ -50,6 +50,17 @@ const audioFixture = require("./audio-fixture.cjs");
               possibilities: [],
               evidence: [],
               matched_entries: entry ? [{ ...entry, origin: "personal" }] : [],
+              references: [
+                {
+                  term: "คำอ้างอิงทดสอบ",
+                  central_thai: "ความหมายทดสอบ",
+                  match: "related_example",
+                  sources: [
+                    { title: "Published reference", url: "https://zenodo.org/records/13283454" },
+                    { title: "Blocked non-HTTPS source", url: "javascript:alert(1)" },
+                  ],
+                },
+              ],
               mode: body.thai_mode,
             }
           : null,
@@ -70,7 +81,7 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.route("**/api/transcribe", (route) => route.fulfill({ json: { text: "ลำแต้ๆ" } }));
     await page.goto(process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000");
     assert(await page.locator("#thai-tools").isVisible());
-    await page.locator("#thai-mode").selectOption("slang");
+    await page.locator("#thai-mode").selectOption("slang", { force: true });
     await page.locator("#input").fill("คำที่เพิ่งสร้าง");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(await page.locator("#output").inputValue(), "");
@@ -81,19 +92,37 @@ const audioFixture = require("./audio-fixture.cjs");
       () => document.querySelector("#output").value === "Let's go, everyone."
     );
     assert.match(await page.locator(".thai-central").textContent(), /ไปกันเลย/);
+    await page.locator(".thai-references summary").click();
+    assert.equal(await page.locator(".thai-reference a").count(), 1);
+    assert.equal(
+      await page.locator(".thai-reference a").getAttribute("href"),
+      "https://zenodo.org/records/13283454"
+    );
+    assert.equal(
+      await page.locator(".thai-reference a").getAttribute("rel"),
+      "noopener noreferrer"
+    );
+    assert.match(await page.locator(".thai-reference").textContent(), /not a definition/);
+
     assert.equal(requests.at(-1).thai_clarification, "ไปกันเลยเพื่อนๆ");
     await page.locator("#input").fill("อีกคำที่ยังไม่รู้");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(requests.at(-1).thai_clarification, "");
 
-    // Save a personal definition through the real, local validation endpoint.
+    // Retained personal definitions still validate; their editor is absent from the menu.
     await page.locator("#settings-toggle").click();
-    await page.locator("#thai-lexicon-editor summary").click();
-    await page.locator("#thai-term").fill("อีกคำที่ยังไม่รู้");
-    await page.locator("#thai-meaning").fill("ไปกันเลยเพื่อนๆ");
-    await page.locator("#thai-example").fill("ใช้ชวนเพื่อนออกเดินทาง");
-    await page.locator("#thai-save").click();
-    await page.locator(".thai-lexicon-entry").waitFor();
+    assert.equal(await page.locator("#thai-lexicon-editor").isVisible(), false);
+    await page.evaluate(() =>
+      saveThaiLexicon([
+        {
+          term: "อีกคำที่ยังไม่รู้",
+          meaning: "ไปกันเลยเพื่อนๆ",
+          dialect: "slang",
+          example: "ใช้ชวนเพื่อนออกเดินทาง",
+        },
+      ])
+    );
+    await page.waitForFunction(() => document.querySelectorAll(".thai-lexicon-entry").length === 1);
     await page.locator("#menu-close").click();
     await page.waitForFunction(
       () => document.querySelector("#output").value === "Let's go, everyone."
@@ -105,7 +134,7 @@ const audioFixture = require("./audio-fixture.cjs");
     assert.equal(await page.locator("#thai-mode").inputValue(), "standard");
     assert.equal(await page.evaluate(() => activeFeature().thai.lexicon.length), 0);
     await page.locator("#live-audio").click();
-    await page.locator("#thai-mode").selectOption("slang");
+    await page.locator("#thai-mode").selectOption("slang", { force: true });
     await page.locator("#input").fill("แชตที่ไม่รู้ความหมาย");
     await page.locator("#live-send").click();
     await page.locator("#thai-clarification-form").waitFor();
@@ -132,7 +161,7 @@ const audioFixture = require("./audio-fixture.cjs");
 
     await page.reload();
     assert.equal(await page.evaluate(() => activeFeature().thai.lexicon.length), 1);
-    await page.locator("#thai-mode").selectOption("northern");
+    await page.locator("#thai-mode").selectOption("northern", { force: true });
     // In dialect mode, a microphone transcript must be reviewed before translation.
     const count = requests.length;
     await page.locator("#microphone").click();
@@ -149,7 +178,7 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.waitForFunction(
       () => document.querySelector("#output").value === "Let's go, everyone."
     );
-    await page.locator("#ui-language").click();
+    await page.evaluate(() => changeInterfaceLanguage("th"));
     assert.match(await page.locator("#thai-mode-note").textContent(), /ตรวจข้อความจากไมค์/);
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 844 });

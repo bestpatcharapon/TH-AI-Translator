@@ -17,7 +17,9 @@ from statistics import median
 from openai import OpenAIError
 from PIL import Image, ImageOps, ImageStat
 
+from dialect_references import reference_identity
 from language_catalog import LANGUAGES, OCR_LANGUAGES
+from linguistic_guidance import language_notes
 from paddle_ocr_backend import models_ready, recognition_model, recognize_image
 from performance import ResultCache, ordered_map
 from photo_detection import numeric_text, text_boxes
@@ -539,6 +541,7 @@ def translate_regions(regions, source, target, tone, client, model, glossary=Non
                                 "text": region["text"],
                                 "alternate_readings": region.get("ocr_variants", []),
                                 "meaning_hint": menu_meaning_hint(region["text"]),
+                                "linguistic_notes": language_notes(region["text"]),
                             }
                             for i, region in enumerate(batch)
                         ],
@@ -883,7 +886,16 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
 
 def translate_photo(data, source, target, tone, client, model, glossary_json="[]"):
     """Reuse successful results and share uploads with bounded memory and expiry."""
-    key = (hashlib.sha256(data).digest(), source, target, tone, client, model, glossary_json)
+    key = (
+        hashlib.sha256(data).digest(),
+        source,
+        target,
+        tone,
+        client,
+        model,
+        glossary_json,
+        reference_identity()[0],
+    )
     result, status = _photo_result_cache.run(
         key,
         lambda: _translate_photo(data, source, target, tone, client, model, glossary_json),

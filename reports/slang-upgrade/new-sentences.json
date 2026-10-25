@@ -1,0 +1,1584 @@
+{
+  "created": "2026-10-24T14:19:16.668351+00:00",
+  "endpoint": "/api/translate",
+  "settings": {
+    "source": "th",
+    "target": "en",
+    "tone": "natural",
+    "thai_mode": "standard",
+    "cache_bypass": true
+  },
+  "scope": "Development sentence probes with prewritten meaning checklists. Lexical notes may already cover the expressions. Not blind human evaluation, a Google comparison, OCR or ASR testing. Model self-review is not a correctness score.",
+  "case_file": "tests/data/slang_new_sentences.tsv",
+  "interval_seconds": 2.5,
+  "results": [
+    {
+      "id": 1,
+      "term": "new-genuine-negation",
+      "text": "คนนี้พูดเก่งอย่างเดียว ยังไม่ใช่ของแทร่",
+      "meaning_checklist": "Speaker denies the person's demonstrated authenticity/ability; not a person's property; preserve ยังไม่.",
+      "http": 200,
+      "seconds": 7.252,
+      "translation": "They're only good at talking; they're not the real deal.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.252,
+          "translation": "They're only good at talking; they're not the real deal.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "term": "new-mep-context",
+      "text": "น้องวาดรูปเมพมาก ทั้งที่เพิ่งเริ่มเรียนเดือนเดียว",
+      "meaning_checklist": "Excellent drawing despite only one month of learning; not map.",
+      "http": 200,
+      "seconds": 8.55,
+      "translation": "My little sibling draws such amazing pictures, even though they've only been learning for a month.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 8.55,
+          "translation": "My little sibling draws such amazing pictures, even though they've only been learning for a month.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "term": "new-slay-negation",
+      "text": "วันนี้ไม่ได้เดินแบบสับนะ แค่เดินไปขึ้นรถ",
+      "meaning_checklist": "Explicitly denies striking/model walk, simply walking to get in a vehicle.",
+      "http": 200,
+      "seconds": 7.206,
+      "translation": "I'm not strutting today—just walking to get into the car.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.206,
+          "translation": "I'm not strutting today—just walking to get into the car.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "term": "new-battery-comparison",
+      "text": "รุ่นเก่าแบตอึดกว่า รุ่นใหม่นี้ไม่ได้กินขาดนะ",
+      "meaning_checklist": "Old model has longer battery life, new model does not clearly win; do not reverse comparison.",
+      "http": 200,
+      "seconds": 7.504,
+      "translation": "The older model’s battery lasts longer. The new one doesn’t outshine it.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.504,
+          "translation": "The older model’s battery lasts longer. The new one doesn’t outshine it.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "term": "new-fandom-separation",
+      "text": "ฉันอยู่สองด้อม แต่ไม่ได้อยู่หอพัก",
+      "meaning_checklist": "Belongs to two fandoms and explicitly does not live in a dormitory.",
+      "http": 200,
+      "seconds": 7.394,
+      "translation": "I'm in two fandoms, but I don't live in a dorm.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "two fan groups",
+            "explanation": "\"ด้อม\" is commonly used to mean \"fandoms\" in modern Thai internet/pop culture context.",
+            "kind": "terminology",
+            "source_quote": "สองด้อม"
+          },
+          {
+            "draft_quote": "I'm not staying in a dorm",
+            "explanation": "\"อยู่หอพัก\" means living in a dormitory, not just staying temporarily.",
+            "kind": "meaning",
+            "source_quote": "ไม่ได้อยู่หอพัก"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.394,
+          "translation": "I'm in two fandoms, but I don't live in a dorm.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "two fan groups",
+                "explanation": "\"ด้อม\" is commonly used to mean \"fandoms\" in modern Thai internet/pop culture context.",
+                "kind": "terminology",
+                "source_quote": "สองด้อม"
+              },
+              {
+                "draft_quote": "I'm not staying in a dorm",
+                "explanation": "\"อยู่หอพัก\" means living in a dormitory, not just staying temporarily.",
+                "kind": "meaning",
+                "source_quote": "ไม่ได้อยู่หอพัก"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "term": "new-favorite-switch",
+      "text": "เมื่อก่อนเมนมือกลอง ตอนนี้ชอบนักร้องนำมากกว่า",
+      "meaning_checklist": "Favorite changed from drummer to lead singer; not people named Men.",
+      "http": 200,
+      "seconds": 8.368,
+      "translation": "I used to favor the drummer, but now I prefer the lead singer.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 8.368,
+          "translation": "I used to favor the drummer, but now I prefer the lead singer.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "term": "new-mood-question",
+      "text": "ถ้าพูดเรื่องเงินตอนนี้จะช็อตฟีลไหม",
+      "meaning_checklist": "Question whether mentioning money now would spoil the mood, not a short film.",
+      "http": 200,
+      "seconds": 6.917,
+      "translation": "Will talking about money now be a buzzkill?",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "condition_or_health",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.917,
+          "translation": "Will talking about money now be a buzzkill?",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "condition_or_health",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "term": "new-backlash-negation",
+      "text": "โพสต์นี้ยังไม่มีทัวร์ลง แค่มีคนถามสองคน",
+      "meaning_checklist": "No online backlash yet; just two people asking, not travel.",
+      "http": 200,
+      "seconds": 6.788,
+      "translation": "This post hasn't gotten any backlash yet, just two people have asked.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.788,
+          "translation": "This post hasn't gotten any backlash yet, just two people have asked.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "term": "new-prank-denial",
+      "text": "เราไม่ได้แกงเธอ ร้านปิดจริง ๆ",
+      "meaning_checklist": "Denies pranking the listener; the shop really is closed.",
+      "http": 200,
+      "seconds": 6.139,
+      "translation": "I didn't prank you; the shop is really closed.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.139,
+          "translation": "I didn't prank you; the shop is really closed.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "term": "new-cooking-prank",
+      "text": "วันนี้แกงเพื่อนไม่สำเร็จ เลยไปทำแกงกินแทน",
+      "meaning_checklist": "Attempted prank failed, then cooked curry; distinguish both senses in one sentence.",
+      "http": 200,
+      "seconds": 7.108,
+      "translation": "The prank on my friends didn’t work out today, so I just made some curry to eat instead.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.108,
+          "translation": "The prank on my friends didn’t work out today, so I just made some curry to eat instead.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "term": "new-flex-question",
+      "text": "ซื้อคอมมาใช้หรือซื้อมาเพื่อขิงเพื่อน",
+      "meaning_checklist": "Question use versus showing off a new computer; not ginger or teasing a large friend.",
+      "http": 200,
+      "seconds": 4.463,
+      "translation": "Buy a computer to use, or just to show off to friends?",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 4.463,
+          "translation": "Buy a computer to use, or just to show off to friends?",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "term": "new-salt-shopping",
+      "text": "สุ่มมาสามรอบเกลือตลอด เลยเลิกเติมเงินแล้ว",
+      "meaning_checklist": "Three unlucky draws/rounds led speaker to stop topping up; not salt as food.",
+      "http": 200,
+      "seconds": 7.452,
+      "translation": "I've done three pulls and they've all been unlucky, so I stopped topping up.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.452,
+          "translation": "I've done three pulls and they've all been unlucky, so I stopped topping up.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "term": "new-medication-negation",
+      "text": "แผลยังไม่ได้ป้ายยา อย่าเพิ่งปิดผ้าก๊อซ",
+      "meaning_checklist": "Wound not yet medicated, do not cover with gauze yet; no label.",
+      "http": 200,
+      "seconds": 7.049,
+      "translation": "The wound hasn't been medicated yet—don't cover it with gauze yet.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "cover the gauze",
+            "explanation": "The draft translates 'ปิดผ้าก๊อซ' as 'cover the gauze', which means to cover the gauze itself. The source means to cover the wound with gauze ('ปิด [แผล] ด้วยผ้าก๊อซ' or 'don't cover [it] with gauze yet').",
+            "kind": "terminology",
+            "source_quote": "ปิดผ้าก๊อซ"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.049,
+          "translation": "The wound hasn't been medicated yet—don't cover it with gauze yet.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "cover the gauze",
+                "explanation": "The draft translates 'ปิดผ้าก๊อซ' as 'cover the gauze', which means to cover the gauze itself. The source means to cover the wound with gauze ('ปิด [แผล] ด้วยผ้าก๊อซ' or 'don't cover [it] with gauze yet').",
+                "kind": "terminology",
+                "source_quote": "ปิดผ้าก๊อซ"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "term": "new-shopping-no-purchase",
+      "text": "เพื่อนป้ายยากล้อง แต่ฉันยังไม่ได้ซื้อ",
+      "meaning_checklist": "Friend recommended/hyped camera, explicitly not bought yet.",
+      "http": 200,
+      "seconds": 6.661,
+      "translation": "My friend keeps recommending the camera, but I haven't bought it yet.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.661,
+          "translation": "My friend keeps recommending the camera, but I haven't bought it yet.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "term": "new-real-fire",
+      "text": "ไฟลนก้นกระทะจนดำ ต้องลดไฟ",
+      "meaning_checklist": "Literal fire scorching bottom of a pan until black; reduce heat, no deadline metaphor.",
+      "http": 200,
+      "seconds": 7.051,
+      "translation": "We're under severe deadline pressure and it's getting critical—we need to ease up.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "The bottom of the pan is burnt black—turn the heat down.",
+            "explanation": "The draft mistranslated the idiomatic expression 'ไฟลนก้น' (which denotes severe deadline pressure or urgency) as a literal pan being burnt, ignoring the contextual instructions.",
+            "kind": "meaning",
+            "source_quote": "ไฟลนก้นกระทะจนดำ ต้องลดไฟ"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.051,
+          "translation": "We're under severe deadline pressure and it's getting critical—we need to ease up.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "The bottom of the pan is burnt black—turn the heat down.",
+                "explanation": "The draft mistranslated the idiomatic expression 'ไฟลนก้น' (which denotes severe deadline pressure or urgency) as a literal pan being burnt, ignoring the contextual instructions.",
+                "kind": "meaning",
+                "source_quote": "ไฟลนก้นกระทะจนดำ ต้องลดไฟ"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "term": "new-work-orders",
+      "text": "วันนี้งานเข้าร้านสิบออร์เดอร์ ไม่ได้มีปัญหาอะไร",
+      "meaning_checklist": "Ten orders came into shop, no trouble; ordinary incoming work.",
+      "http": 200,
+      "seconds": 6.64,
+      "translation": "Today, ten orders came into the shop, and there were no problems.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.64,
+          "translation": "Today, ten orders came into the shop, and there were no problems.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "term": "new-deadline",
+      "text": "เหลืออีกครึ่งชั่วโมงก่อนส่ง ตอนนี้ไฟลนก้นแล้ว",
+      "meaning_checklist": "Half an hour to deadline, frantic rush; no false English pants-on-fire metaphor.",
+      "http": 200,
+      "seconds": 5.974,
+      "translation": "Only half an hour left before the deadline, and I'm already feeling the pressure.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 5.974,
+          "translation": "Only half an hour left before the deadline, and I'm already feeling the pressure.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "term": "new-dating",
+      "text": "อยากคุยจริงจังกับเธอ ไม่ได้คุยเผื่อเลือก",
+      "meaning_checklist": "Wants a serious romantic connection, not treating listener as one of several options.",
+      "http": 200,
+      "seconds": 7.667,
+      "translation": "I want to have a serious conversation with you, not just keep you as an option.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.667,
+          "translation": "I want to have a serious conversation with you, not just keep you as an option.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "term": "new-serious-discussion",
+      "text": "หัวหน้าขอคุยจริงจังเรื่องงบประมาณพรุ่งนี้",
+      "meaning_checklist": "Boss wants serious discussion of budget tomorrow; no romance.",
+      "http": 200,
+      "seconds": 6.487,
+      "translation": "My boss wants to have a serious talk about the budget tomorrow.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.487,
+          "translation": "My boss wants to have a serious talk about the budget tomorrow.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "term": "new-bird",
+      "text": "นกสองตัวบินหนีไปแล้ว ฉันเลยถ่ายรูปไม่ทัน",
+      "meaning_checklist": "Two actual birds flew away, missed photographing them; not romantic rejection.",
+      "http": 200,
+      "seconds": 6.463,
+      "translation": "Two birds flew away, so I didn't get a chance to snap a photo.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.463,
+          "translation": "Two birds flew away, so I didn't get a chance to snap a photo.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "term": "new-social-energy",
+      "text": "วันนี้แบตสังคมหมด แต่มือถือยังเหลือ 80 เปอร์เซ็นต์",
+      "meaning_checklist": "Social energy drained while phone battery is 80 percent; keep subjects and number distinct.",
+      "http": 200,
+      "seconds": 2.161,
+      "translation": "My social battery is dead today, but my phone still has 80 percent left.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 2.161,
+          "translation": "My social battery is dead today, but my phone still has 80 percent left.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "term": "new-injury",
+      "text": "หมอบอกว่าศีรษะได้รับบาดเจ็บ ไม่ได้แค่หัวร้อนจากเกม",
+      "meaning_checklist": "Actual head injury reported by doctor, explicitly not just gaming anger; no new diagnosis.",
+      "http": 200,
+      "seconds": 6.606,
+      "translation": "The doctor said my head was injured, not just a case of getting heated from a game.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.606,
+          "translation": "The doctor said my head was injured, not just a case of getting heated from a game.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "term": "new-caring-subject",
+      "text": "เธออดนอนมาสองคืนแล้ว ยังไหวไหม ไปพักก่อนได้นะ",
+      "meaning_checklist": "Listener has missed sleep for two nights, genuine concern; no first-person shift.",
+      "http": 200,
+      "seconds": 13.587,
+      "translation": "You've been up for two nights now—still hanging in there? You can go take a break.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 13.587,
+          "translation": "You've been up for two nights now—still hanging in there? You can go take a break.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "term": "new-neutral-pronoun",
+      "text": "เขาแบกงานนี้คนเดียว แต่ไม่ได้เป็นหัวหน้าทีม",
+      "meaning_checklist": "Unknown gender, did the work alone, not team leader; natural neutral pronoun.",
+      "http": 200,
+      "seconds": 6.269,
+      "translation": "They carried this work all by themselves, but they're not the team leader.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "He",
+            "explanation": "The linguistic notes specify to use singular 'they' for unspecified gender in English, not 'he'.",
+            "kind": "participants",
+            "source_quote": "เขา"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 6.269,
+          "translation": "They carried this work all by themselves, but they're not the team leader.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "He",
+                "explanation": "The linguistic notes specify to use singular 'they' for unspecified gender in English, not 'he'.",
+                "kind": "participants",
+                "source_quote": "เขา"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "term": "new-explicit-first-person",
+      "text": "ฉันทำงานมาสิบชั่วโมงแล้ว แต่เธอเพิ่งเริ่มงานใช่ไหม",
+      "meaning_checklist": "Speaker worked ten hours; listener just started; do not force both clauses to the same subject.",
+      "http": 200,
+      "seconds": 1.319,
+      "translation": "I've been working for ten hours already, but you just started, right?",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 1.319,
+          "translation": "I've been working for ten hours already, but you just started, right?",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "term": "new-explicit-listener",
+      "text": "เธอบอกว่าฉันผิดทั้งที่เธอยังไม่อ่าน ไปพักก่อน",
+      "meaning_checklist": "Listener accused speaker without reading; tell listener to stop, not speaker taking a break.",
+      "http": 200,
+      "seconds": 7.507,
+      "translation": "You say I'm wrong even though you haven't even read it. Take a break first.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.507,
+          "translation": "You say I'm wrong even though you haven't even read it. Take a break first.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "term": "new-explicit-self-rest",
+      "text": "ฉันบอกผิดเองเพราะฉันยังไม่อ่าน ขอไปพักก่อนนะ",
+      "meaning_checklist": "Speaker admits their own mistake and requests to take a break; do not turn into an order to listener.",
+      "http": 200,
+      "seconds": 15.072,
+      "translation": "I gave you the wrong info because I haven't read it yet. Give it a rest.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "I'm going to take a break for now.",
+            "explanation": "The linguistic note specifies that 'ไปพักก่อน' without an explicit first-person pronoun in this context functions as a directive to the listener ('give it a rest' / stop), rather than the speaker announcing they are going to take a break.",
+            "kind": "meaning",
+            "source_quote": "ขอไปพักก่อนนะ"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception",
+          "idiom_or_regional_usage"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 15.072,
+          "translation": "I gave you the wrong info because I haven't read it yet. Give it a rest.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "I'm going to take a break for now.",
+                "explanation": "The linguistic note specifies that 'ไปพักก่อน' without an explicit first-person pronoun in this context functions as a directive to the listener ('give it a rest' / stop), rather than the speaker announcing they are going to take a break.",
+                "kind": "meaning",
+                "source_quote": "ขอไปพักก่อนนะ"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "term": "new-ordinary-noy-collision",
+      "text": "ฉันอยากกินข้าว คนอยากกลับบ้านก็กลับได้เลย",
+      "meaning_checklist": "Wanting to eat and people wanting to leave; no anxiety/sadness slang นอย.",
+      "http": 200,
+      "seconds": 0.863,
+      "translation": "I want to eat. If you want to go home, you can go.",
+      "quality_review": {
+        "applied": false,
+        "model": "openai/gpt-oss-120b",
+        "provider": "groq",
+        "status": "not_requested",
+        "triggers": []
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 0.863,
+          "translation": "I want to eat. If you want to go home, you can go.",
+          "quality_review": {
+            "applied": false,
+            "model": "openai/gpt-oss-120b",
+            "provider": "groq",
+            "status": "not_requested",
+            "triggers": []
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "term": "new-likit-name",
+      "text": "คุณลิขิตเขียนเรื่องพรหมลิขิต ไม่ได้เขียนเรื่องความตาย",
+      "meaning_checklist": "Likit as a person's name, story about destiny, explicitly not death; don't match ขิต inside ลิขิต.",
+      "http": 200,
+      "seconds": 7.972,
+      "translation": "Khun Likit writes about destiny, not about death.",
+      "quality_review": {
+        "applied": true,
+        "issues": [
+          {
+            "draft_quote": "Likit",
+            "explanation": "คุณลิขิต includes the honorific title 'Khun', which should be preserved when referring to the person by name.",
+            "kind": "terminology",
+            "source_quote": "คุณลิขิต"
+          }
+        ],
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "revised",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.972,
+          "translation": "Khun Likit writes about destiny, not about death.",
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "Likit",
+                "explanation": "คุณลิขิต includes the honorific title 'Khun', which should be preserved when referring to the person by name.",
+                "kind": "terminology",
+                "source_quote": "คุณลิขิต"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "term": "new-eiffel",
+      "text": "ปีหน้าจะไปดูหอไอเฟล แต่ยังไม่ได้จองตั๋ว",
+      "meaning_checklist": "Eiffel Tower trip next year, tickets not booked yet; no disappointment/เฟล inferred from the name.",
+      "http": 200,
+      "seconds": 7.037,
+      "translation": "I'm planning to go see the Eiffel Tower next year, but I haven't booked tickets yet.",
+      "quality_review": {
+        "applied": false,
+        "model": "gemini-3.5-flash-lite",
+        "provider": "gemini",
+        "status": "checked",
+        "triggers": [
+          "negation_or_exception"
+        ]
+      },
+      "audit": {
+        "issues": [],
+        "status": "clear",
+        "terms_checked": 0,
+        "terms_matched": 0
+      },
+      "error": null,
+      "attempts": [
+        {
+          "http": 200,
+          "seconds": 7.037,
+          "translation": "I'm planning to go see the Eiffel Tower next year, but I haven't booked tickets yet.",
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception"
+            ]
+          },
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

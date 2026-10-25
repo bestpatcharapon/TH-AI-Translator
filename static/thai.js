@@ -37,6 +37,10 @@ Object.assign(COPY.en, {
   thaiContextEmpty: "Explain the intended meaning first.",
   thaiExperimental: "AI interpretation · check the intended meaning with the speaker",
   thaiLearnMatched: "Definitions used as context",
+  thaiReferences: "Reference material found",
+  thaiRelatedReference: "Related example · not a definition of this whole message",
+  thaiExactReference: "Matching expression / sentence",
+  thaiReferenceCaution: "Examples can contain errors; check their context and variety.",
 });
 Object.assign(COPY.th, {
   thaiMode: "ตีความภาษาไทย",
@@ -75,6 +79,10 @@ Object.assign(COPY.th, {
   thaiContextEmpty: "กรุณาอธิบายความหมายที่ต้องการก่อน",
   thaiExperimental: "AI ช่วยตีความ · ควรตรวจความหมายกับผู้พูด",
   thaiLearnMatched: "ความหมายที่นำมาใช้เป็นบริบท",
+  thaiReferences: "แหล่งอ้างอิงที่ค้นพบ",
+  thaiRelatedReference: "ตัวอย่างใกล้เคียง · ไม่ใช่คำแปลของประโยคนี้ทั้งประโยค",
+  thaiExactReference: "คำหรือประโยคที่ตรงกัน",
+  thaiReferenceCaution: "ตัวอย่างอาจมีข้อผิดพลาด ควรตรวจบริบทและถิ่นที่ใช้",
 });
 const thaiState = () => activeFeature().thai;
 const thaiModeKeys = {
@@ -90,6 +98,109 @@ const thaiNode = (tag, text, className = "") => {
   if (className) node.className = className;
   return node;
 };
+const thaiModeSelect = $("thai-mode"),
+  thaiModeTrigger = document.createElement("button"),
+  thaiModeDropdown = document.createElement("div");
+thaiModeSelect.hidden = true;
+thaiModeTrigger.id = "thai-mode-trigger";
+thaiModeTrigger.type = "button";
+thaiModeTrigger.setAttribute("aria-haspopup", "listbox");
+thaiModeTrigger.setAttribute("aria-expanded", "false");
+thaiModeTrigger.setAttribute("aria-controls", "thai-mode-options");
+thaiModeSelect.parentElement.append(thaiModeTrigger);
+thaiModeDropdown.id = "thai-mode-options";
+thaiModeDropdown.className = "thai-mode-dropdown";
+thaiModeDropdown.popover = "auto";
+thaiModeDropdown.setAttribute("role", "listbox");
+document.body.append(thaiModeDropdown);
+thaiModeTrigger.popoverTargetElement = thaiModeDropdown;
+function positionThaiModeDropdown() {
+  const rect = thaiModeTrigger.getBoundingClientRect(),
+    width = Math.min(Math.max(rect.width, 280), innerWidth - 24),
+    below = innerHeight - rect.bottom - 12,
+    above = rect.top - 12,
+    upward = below < 220 && above > below,
+    height = Math.min(340, upward ? above : below);
+  thaiModeDropdown.style.width = width + "px";
+  thaiModeDropdown.style.maxHeight = height + "px";
+  const left = document.documentElement.dir === "rtl" ? rect.right - width : rect.left;
+  thaiModeDropdown.style.left = Math.max(12, Math.min(left, innerWidth - width - 12)) + "px";
+  thaiModeDropdown.style.top = upward ? "auto" : rect.bottom + 6 + "px";
+  thaiModeDropdown.style.bottom = upward ? innerHeight - rect.top + 6 + "px" : "auto";
+}
+function refreshThaiModeChoice() {
+  const name = t(thaiModeSelect.selectedOptions[0].dataset.i18n);
+  thaiModeTrigger.replaceChildren(thaiNode("span", name), preferenceIcon("chevron"));
+  thaiModeTrigger.setAttribute("aria-label", t("thaiMode") + " · " + name);
+  thaiModeDropdown.setAttribute("aria-label", t("thaiMode"));
+  if ($("thai-tools").hidden) thaiModeDropdown.hidePopover();
+  thaiModeDropdown.replaceChildren();
+  for (const option of thaiModeSelect.options) {
+    const button = thaiNode("button", t(option.dataset.i18n));
+    button.type = "button";
+    button.dataset.value = option.value;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(option.selected));
+    button.tabIndex = option.selected ? 0 : -1;
+    button.append(preferenceIcon("check"));
+    button.addEventListener("click", () => {
+      thaiModeDropdown.hidePopover();
+      if (thaiModeSelect.value !== option.value) {
+        thaiModeSelect.value = option.value;
+        thaiModeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      thaiModeTrigger.focus({ preventScroll: true });
+    });
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const options = [...thaiModeDropdown.children],
+        index = options.indexOf(button),
+        next =
+          event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? options.length - 1
+              : (index + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length;
+      options.forEach((item, i) => (item.tabIndex = i === next ? 0 : -1));
+      options[next].focus();
+    });
+    thaiModeDropdown.append(button);
+  }
+}
+function openThaiModeDropdown() {
+  thaiModeDropdown.showPopover({ source: thaiModeTrigger });
+}
+thaiModeDropdown.addEventListener("beforetoggle", (event) => {
+  if (event.newState !== "open") return;
+  refreshThaiModeChoice();
+  positionThaiModeDropdown();
+});
+thaiModeTrigger.addEventListener("keydown", (event) => {
+  if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
+  event.preventDefault();
+  openThaiModeDropdown();
+});
+thaiModeDropdown.addEventListener("toggle", () => {
+  const open = thaiModeDropdown.matches(":popover-open");
+  thaiModeTrigger.setAttribute("aria-expanded", String(open));
+  if (open) thaiModeDropdown.querySelector('[aria-selected="true"]').focus({ preventScroll: true });
+});
+window.addEventListener("resize", () => {
+  if (thaiModeDropdown.matches(":popover-open")) positionThaiModeDropdown();
+});
+window.addEventListener(
+  "scroll",
+  (event) => {
+    if (thaiModeDropdown.contains(event.target) || !thaiModeDropdown.matches(":popover-open"))
+      return;
+    const rect = thaiModeTrigger.getBoundingClientRect();
+    if (rect.bottom <= 0 || rect.top >= innerHeight) thaiModeDropdown.hidePopover();
+    else positionThaiModeDropdown();
+  },
+  true
+);
+document.addEventListener("mode:leaving", () => thaiModeDropdown.hidePopover());
 function validThaiLexicon(entries) {
   if (!Array.isArray(entries) || entries.length > 30) return false;
   const seen = new Set();
@@ -156,8 +267,8 @@ function renderThai() {
   document
     .querySelector(".translator")
     .classList.toggle("thai-interpreting", eligible && state.mode !== "standard");
-  $("thai-lexicon-editor").hidden = !available;
   $("thai-mode").value = state.mode;
+  refreshThaiModeChoice();
   $("thai-mode-note").hidden = state.mode === "standard";
   const result = state.result,
     visible = eligible && state.mode !== "standard" && !!result;
@@ -193,6 +304,40 @@ function renderThai() {
     });
     row.append(thaiNode("p", possibility.meaning), thaiNode("small", possibility.reason), button);
     content.append(row);
+  }
+  if (result.references?.length) {
+    const sources = thaiNode("details", "", "thai-references");
+    sources.append(
+      thaiNode("summary", t("thaiReferences")),
+      thaiNode("small", t("thaiReferenceCaution"), "menu-help")
+    );
+    for (const reference of result.references) {
+      const row = thaiNode("div", "", "thai-reference");
+      row.append(
+        thaiNode(
+          "small",
+          t(reference.match === "related_example" ? "thaiRelatedReference" : "thaiExactReference"),
+          "menu-help"
+        ),
+        thaiNode("p", `${reference.term || reference.text} → ${reference.central_thai}`)
+      );
+      for (const source of reference.sources || []) {
+        let url;
+        try {
+          url = new URL(source.url);
+        } catch {
+          continue;
+        }
+        if (url.protocol !== "https:") continue;
+        const link = thaiNode("a", source.title);
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        row.append(link);
+      }
+      sources.append(row);
+    }
+    content.append(sources);
   }
   if (result.evidence.length || result.matched_entries.length) {
     const details = thaiNode("details", ""),

@@ -8,3 +8,6 @@ node_modules/
 .ruff_cache/
 playwright-report/
 test-results/
+
+# Downloaded dialect datasets and generated search indexes
+.data/

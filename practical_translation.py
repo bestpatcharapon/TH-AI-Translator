@@ -28,7 +28,7 @@ SCENARIOS = {
 
 TARGET_GUIDANCE = {
     "th": "Use idiomatic Thai word order and familiar spoken expressions. In a polite request, 'when you get a chance' means เมื่อสะดวก, not a literal opportunity. Do not append slash alternatives such as ครับ/ค่ะ or ผม/ฉัน. If speaker gender is unknown, use natural neutral phrasing and omit unnecessary pronouns or gendered particles. Do not infer speaker gender from a name.",
-    "en": "Use idiomatic contemporary English; contractions are appropriate for casual/friendly speech. Thai particles such as ครับ/ค่ะ signal politeness, not sir/madam or a speaker's gender. Render เกรงใจ and similar expressions by their function in context. Do not turn เรา into plural 'we' when the supported meaning is singular.",
+    "en": "Use idiomatic contemporary English; contractions are appropriate for casual/friendly speech. Thai particles such as ครับ/ค่ะ signal politeness, not sir/madam or a speaker's gender. Render เกรงใจ and similar expressions by their function in context. Do not turn เรา into plural 'we' when the supported meaning is singular. Use singular they or a neutral construction for an unknown person's gender, never he/she or slash alternatives. If no established English idiom matches the source meaning, express the meaning plainly rather than inventing or calquing an idiom.",
     "ja": "Use natural Japanese with appropriate politeness; neutral requests to staff normally use polite forms, not exaggerated honorifics. Omit unnecessary personal pronouns and do not invent gender or status.",
     "ko": "Use natural Korean speech levels; neutral interactions with staff normally use polite speech. Do not invent kinship titles, gender or social rank.",
     "fr": "Use idiomatic French. For unknown people or service staff, polite requests normally use vous; retain tu when a familiar relationship is explicit. Preserve conditional politeness and distinguish ne pas devoir (must not) from ne pas être obligé (need not). Do not invent gender for the speaker.",
@@ -48,6 +48,12 @@ def practical_guidance(target, context="general", structured=False):
         "First infer the source speech act and proposition, then express that proposition as idiomatic target-language sentences. "
         "A complete sentence should read as a complete natural sentence; do not invent endings for fragments. "
         "Resolve figurative readings from surrounding context before translating individual words. "
+        "Read informal spelling, loanwords and online slang as language in context; do not turn an unfamiliar expression "
+        "into an invented person's name or a similar-sounding English word. Distinguish fandom, gaming, shopping, "
+        "food and healthcare uses before choosing a reading; explicit literal context takes precedence. "
+        "In subject-omitting languages, resolve the subject from adjacent clauses and who is addressed: "
+        "a concern followed by 'are you okay?' usually concerns the listener, not a new first-person speaker. "
+        "Keep that participant consistent unless the source signals a change. "
         "Keep generic nouns generic when their subtype is unknown; do not assume a shop is a restaurant. "
         "Distinguish questions from statements in regional dialects, even without a question mark. "
         "Preserve temporal frequency and exception scope, not merely the words or digits. "

@@ -1,4 +1,5 @@
 import json
+import os
 import unittest
 from unittest.mock import patch
 
@@ -34,6 +35,9 @@ def uncertain():
 
 class ThaiInterpretationTests(unittest.TestCase):
     def setUp(self):
+        provider = patch.dict(os.environ, {"TRANSLATION_REVIEW_PROVIDER": "groq"})
+        provider.start()
+        self.addCleanup(provider.stop)
         self.client = server.app.test_client()
         self.body = {
             "text": "แกงนี้ลำแต้ๆ",
@@ -230,6 +234,93 @@ class ThaiInterpretationTests(unittest.TestCase):
                 },
             )
             self.assertEqual(confirmed.json["translation"], "I'm very tired today.")
+
+    def test_reported_phrase_still_requires_meaning_when_reference_is_unavailable(self):
+        with (
+            patch("thai_interpretation.retrieve_references", return_value=[]),
+            patch.object(server, "get_client") as provider,
+            patch.object(server, "additional_translations") as additional,
+        ):
+            for text in ("ป่อคิงหยัง", "ป้อคิงหยัง", "ป่อ คิง หยัง"):
+                with self.subTest(text=text):
+                    response = self.client.post(
+                        "/api/translate",
+                        json={
+                            **self.body,
+                            "text": text,
+                            "additional_targets": ["ja"],
+                            "cache_bypass": True,
+                        },
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.json["translation"], "")
+                    result = response.json["interpretation"]
+                    self.assertEqual(result["status"], "needs_context")
+                    self.assertEqual(result["standard_thai"], "")
+                    self.assertEqual(result["evidence"], [])
+                    self.assertEqual(result["possibilities"], [])
+                    self.assertTrue(result["questions"])
+            provider.return_value.chat.completions.create.assert_not_called()
+            additional.assert_not_called()
+
+    def test_partial_pronoun_definition_does_not_define_the_reported_whole_phrase(self):
+        with (
+            patch.object(server, "get_client") as provider,
+            patch("thai_interpretation.retrieve_references", return_value=[]),
+        ):
+            response = self.client.post(
+                "/api/translate",
+                json={
+                    **self.body,
+                    "text": "ป่อคิงหยัง",
+                    "thai_lexicon": [
+                        {
+                            "term": "คิง",
+                            "meaning": "ความหมายที่ผู้ใช้กำหนดเฉพาะคำนี้",
+                            "dialect": "northern",
+                            "example": "",
+                        }
+                    ],
+                },
+            )
+            self.assertEqual(response.json["interpretation"]["status"], "needs_context")
+            provider.return_value.chat.completions.create.assert_not_called()
+
+    def test_speaker_meaning_and_whole_phrase_definition_can_resolve_reported_case(self):
+        for overrides in (
+            {"thai_clarification": "ความหมายเฉพาะที่ผู้พูดยืนยันสำหรับการทดสอบ"},
+            {
+                "thai_lexicon": [
+                    {
+                        "term": "ป่อคิงหยัง",
+                        "meaning": "ความหมายเฉพาะที่ผู้ใช้กำหนดสำหรับการทดสอบ",
+                        "dialect": "northern",
+                        "example": "",
+                    }
+                ]
+            },
+        ):
+            with patch.object(server, "get_client") as provider:
+                result = ready()
+                result["evidence"] = []
+                result["standard_thai"] = "ความหมายเฉพาะสำหรับการทดสอบ"
+                result["translation"] = "Speaker-confirmed test meaning."
+                provider.return_value.chat.completions.create.return_value = completion(
+                    json.dumps(result)
+                )
+                response = self.client.post(
+                    "/api/translate",
+                    json={
+                        **self.body,
+                        "text": "ป่อคิงหยัง",
+                        "cache_bypass": True,
+                        **overrides,
+                    },
+                )
+                self.assertEqual(response.json["interpretation"]["status"], "ready")
+                self.assertEqual(response.json["translation"], result["translation"])
+                request = provider.return_value.chat.completions.create.call_args.kwargs
+                self.assertIn("must not erase a source insult", request["messages"][0]["content"])
 
 
 if __name__ == "__main__":

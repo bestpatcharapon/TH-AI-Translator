@@ -160,14 +160,15 @@ class PracticalTranslationTests(unittest.TestCase):
             )
             server.translate_text(text, "en", "th", "natural")
             self.assertEqual(create.call_count, len(pieces))
-            for index, call in enumerate(create.call_args_list):
-                messages = call.kwargs["messages"]
-                self.assertEqual(messages[1]["content"], pieces[index])
+            # Worker execution order is not document order. Match each request to its chunk.
+            requests = [call.kwargs["messages"] for call in create.call_args_list]
+            self.assertCountEqual([messages[1]["content"] for messages in requests], pieces)
+            for messages in requests:
                 self.assertIn("reference only", messages[0]["content"])
-            self.assertIn(
-                json.dumps(pieces[-1][:350]),
-                create.call_args_list[-2].kwargs["messages"][0]["content"],
+            previous = next(
+                messages for messages in requests if messages[1]["content"] == pieces[-2]
             )
+            self.assertIn(json.dumps(pieces[-1][:350]), previous[0]["content"])
 
 
 if __name__ == "__main__":

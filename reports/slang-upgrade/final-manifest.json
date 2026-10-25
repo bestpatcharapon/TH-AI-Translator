@@ -1,0 +1,14 @@
+{
+  "scope": "Final verification inputs and runtime component hashes; earlier reports are distinct development iterations, not identical-version repeats.",
+  "sha256": {
+    "data/dialects/curated.json": "a048b49b32534fc256e3963d78c92a0eb48448af4aff74d353925b9ca1ddfcbf",
+    "linguistic_guidance.py": "1c575d92c2eeb6d0b395536f9c69c32f6ff6cd5d0f3b112cc6d207b0a1217476",
+    "dialect_references.py": "1e61e25f5fda0aa7e6b74bd597ef78d74f9cff28fb59cf94134f1be0b62bd5d6",
+    "practical_translation.py": "0152f2199527bf119fbce26bb7223aba63086990b658cefc7091b7f0118de48f",
+    "semantic_review.py": "1d579ae25446dbc6e46c1d3a1947abc929660a5ccefe365d4cfbb7e3b86da779",
+    "speech_recognition.py": "9195b9428505d2e6e261abda29d8337359d733fd79d244f00a7e9a0ca024c7ff",
+    "translation_quality.py": "14261fa28c66545c185cab416190908d15b62d1af12f232c865cb986728e6688",
+    "photo_translation.py": "35f52eccc8dd31c6ddb6b64b17cdaad5ac7cf5c9cb48d9c96b6759fdbfbe3035",
+    "assistant_features.py": "e9acd0c99608687ee4e841b488ecdce44141bcbd0628b2c9e4158da0d941ab95"
+  }
+}

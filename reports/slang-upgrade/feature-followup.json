@@ -1,0 +1,68 @@
+{
+  "scope": "Small targeted checks after observed ASR confusion and number-word false flag. Same synthetic slang audio; no proof of general ASR accuracy. No automatic transcript rewriting.",
+  "results": [
+    {
+      "kind": "slang_asr_followup",
+      "source": "Same saved synthetic clip, no re-recording or automatic correction",
+      "http": 200,
+      "reading": {
+        "model": "whisper-large-v3",
+        "review_reasons": [
+          "possible_word_confusion"
+        ],
+        "review_required": true,
+        "text": "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+      },
+      "auto_send_blocked_by_existing_ui": true
+    },
+    {
+      "kind": "allergy_speech_retry",
+      "expected": "อย่าใส่ถั่วลิสงนะ ฉันแพ้ถั่วลิสง",
+      "attempts": [
+        {
+          "http": 200,
+          "reading": {
+            "model": "whisper-large-v3",
+            "review_reasons": [],
+            "review_required": false,
+            "text": "อย่าใส่ถั่วลิสงนะฉันแพ้ถั่วลิสง"
+          },
+          "translation": {
+            "http": 200,
+            "additional_translations": [],
+            "audit": {
+              "issues": [],
+              "status": "clear",
+              "terms_checked": 0,
+              "terms_matched": 0
+            },
+            "quality_review": {
+              "applied": false,
+              "model": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "status": "checked",
+              "triggers": [
+                "negation_or_exception",
+                "condition_or_health",
+                "conversation"
+              ]
+            },
+            "source_language": "th",
+            "translation": "Don't put peanuts—I’m allergic to them."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "number_word_followup",
+      "source": "ฉันอยู่ 2 ด้อม",
+      "translation": "I'm in two fandoms.",
+      "audit": {
+        "status": "clear",
+        "issues": [],
+        "terms_checked": 0,
+        "terms_matched": 0
+      }
+    }
+  ]
+}

@@ -282,14 +282,7 @@ function updateSavedButton() {
       (item) => item.favorite !== false && savedId(item) === savedId(currentTranslation)
     );
   $("save-translation").setAttribute("aria-pressed", String(!!saved));
-  const label =
-    locale === "th"
-      ? saved
-        ? "นำคำแปลออกจากรายการบันทึก"
-        : "บันทึกคำแปล"
-      : saved
-        ? "Unsave translation"
-        : "Save translation";
+  const label = t(saved ? "unsaveTranslation" : "saveTranslation");
   $("save-translation").setAttribute("aria-label", label);
   $("save-translation").title = label;
 }
@@ -297,9 +290,9 @@ function refreshFeatureLabels() {
   updateSavedButton();
   $("reply-input").placeholder = t("replyPlaceholder");
   const labels = {
-    copy: locale === "th" ? "คัดลอกคำแปล" : "Copy translation",
-    regenerate: locale === "th" ? "แปลใหม่" : "Translate again",
-    "speak-output": locale === "th" ? "ฟังคำแปล" : "Listen to translation",
+    copy: t("copyTranslation"),
+    regenerate: t("regenerateTranslation"),
+    "speak-output": t("listenTranslation"),
   };
   for (const [id, label] of Object.entries(labels)) {
     $(id).setAttribute("aria-label", label);
@@ -309,10 +302,9 @@ function refreshFeatureLabels() {
   const source = effectiveSource(),
     target = currentTranslation.target;
   $("output-language").textContent = LANGUAGES[target][0];
-  $("reply-instructions").textContent =
-    locale === "th"
-      ? `เขียนคำตอบเป็น${LANGUAGES[target][1]} แล้วแปลกลับเป็น${LANGUAGES[source][1]}`
-      : `Write your reply in ${LANGUAGES[target][0]} and get it in ${LANGUAGES[source][0]}.`;
+  $("reply-instructions").textContent = t("replyInstructions")
+    .replace("{target}", languageName(target))
+    .replace("{source}", languageName(source));
   $("reply-input").lang = target;
   $("reply-output").lang = source;
   $("reply-language").textContent = LANGUAGES[source][0];

@@ -16,6 +16,7 @@ from openai import OpenAI, OpenAIError
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from assistant_features import assistant_result
+from dialect_references import reference_identity
 from language_catalog import CATALOG, LANGUAGES, OCR_LANGUAGES, VOICES
 from linguistic_guidance import linguistic_guidance
 from model_routing import review_route, routing_identity
@@ -37,13 +38,19 @@ from project_config import (
     PROJECT_ROOT,
     SEMANTIC_REVIEW_ENABLED,
     SPEECH_MODEL,
+    SPEECH_VERIFY_MODEL,
     TONES,
     TRANSLATION_REASONING_EFFORT,
 )
 from request_validation import interface_language, settings, text_value, translation_preferences
 from semantic_review import review_translation
 from services import create_speech, detect_language, extract_file
-from speech_recognition import reject_silent_pcm, transcript_result
+from speech_recognition import (
+    compare_transcripts,
+    reject_silent_pcm,
+    transcript_result,
+    transcription_prompt,
+)
 from thai_interpretation import (
     INTERPRETATION_LIMIT,
     interpret_thai,
@@ -76,6 +83,7 @@ _transcription_cache = ResultCache(max_entries=16, ttl=120)
 _speech_cache = ResultCache(max_entries=12, max_bytes=16 * 1024 * 1024, ttl=180)
 _source_info_cache = ResultCache(max_entries=64, ttl=300)
 _document_pool = ThreadPoolExecutor(max_workers=3, thread_name_prefix="document-translate")
+_speech_pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="speech-check")
 _reasoning = (
     {"reasoning_effort": TRANSLATION_REASONING_EFFORT} if TRANSLATION_REASONING_EFFORT else {}
 )
@@ -117,6 +125,7 @@ def cached_json(cache, key, producer, *, cacheable=lambda value: True, bypass=Fa
 
 class TranscriptionOptions(TypedDict, total=False):
     language: str
+    prompt: str
 
 
 def get_client():
@@ -534,6 +543,7 @@ def translate():
                     translation="",
                     source_language="th",
                     interpretation=result,
+                    quality_review=result.get("quality_review", {"status": "needs_context"}),
                     additional_translations=[],
                 )
             primary = result["translation"]
@@ -547,6 +557,7 @@ def translate():
                 translation=primary,
                 source_language="th",
                 interpretation=result,
+                quality_review=result.get("quality_review", {"status": "not_requested"}),
                 audit=audit_translation(text, primary, target, glossary),
                 additional_translations=extra_results(
                     text,
@@ -601,6 +612,7 @@ def translate():
         MODEL,
         BASE_URL,
         routing_identity(),
+        reference_identity() if dialect != "standard" else reference_identity()[0],
         digest_key({key: value for key, value in data.items() if key != "cache_bypass"}),
     )
     return cached_json(
@@ -663,7 +675,9 @@ def assist():
 
     if action == "source_info":
         return cached_json(
-            _source_info_cache, (get_client, assistant_result, MODEL, digest_key(data)), produce
+            _source_info_cache,
+            (get_client, assistant_result, MODEL, reference_identity()[0], digest_key(data)),
+            produce,
         )
     return jsonify(produce())
 
@@ -866,19 +880,62 @@ def transcribe():
     options: TranscriptionOptions = (
         {"language": CATALOG[language]["whisper"]} if language != "auto" else {}
     )
+    prompt = transcription_prompt(request.form.get("vocabulary"))
+    if prompt:
+        options["prompt"] = prompt
+    verify_model = (
+        SPEECH_VERIFY_MODEL
+        if request.form.get("verify") == "1" and SPEECH_VERIFY_MODEL != SPEECH_MODEL
+        else ""
+    )
 
-    def produce():
-        result = get_client().audio.transcriptions.create(
-            model=SPEECH_MODEL,
+    def recognize(model, verification=False):
+        client = get_client()
+        if verification:
+            client = client.with_options(timeout=12, max_retries=0)
+        result = client.audio.transcriptions.create(
+            model=model,
             file=(file.filename, data, file.mimetype),
             response_format="verbose_json",
             temperature=0,
             **options,
         )
-        return transcript_result(result, SPEECH_MODEL)
+        return transcript_result(result, model)
 
-    key = (get_client, SPEECH_MODEL, language, file.mimetype, digest_key(data))
-    return cached_json(_transcription_cache, key, produce)
+    def produce():
+        if not verify_model:
+            return recognize(SPEECH_MODEL)
+        verification = _speech_pool.submit(recognize, verify_model, True)
+        try:
+            primary = recognize(SPEECH_MODEL)
+        except BaseException:
+            verification.cancel()
+            raise
+        try:
+            return compare_transcripts(primary, verification.result(timeout=13))
+        except (OpenAIError, ValueError, TimeoutError):
+            verification.cancel()
+            primary["review_required"] = True
+            primary["review_reasons"] = sorted(
+                set(primary["review_reasons"]) | {"verification_unavailable"}
+            )
+            return primary
+
+    key = (
+        get_client,
+        SPEECH_MODEL,
+        verify_model,
+        language,
+        prompt,
+        file.mimetype,
+        digest_key(data),
+    )
+    return cached_json(
+        _transcription_cache,
+        key,
+        produce,
+        cacheable=lambda value: "verification_unavailable" not in value["review_reasons"],
+    )
 
 
 @app.post("/api/speech")

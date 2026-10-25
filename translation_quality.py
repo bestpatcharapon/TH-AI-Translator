@@ -80,6 +80,48 @@ def _numbers(text):
     ]
 
 
+_SMALL_CARDINALS = dict(
+    zip(
+        "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split(),
+        map(str, range(21)),
+    )
+)
+_NUMBER_WORDS = "|".join(
+    [
+        *_SMALL_CARDINALS,
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+        "hundred",
+        "thousand",
+        "million",
+        "billion",
+        "point",
+        "minus",
+        "negative",
+        "plus",
+    ]
+)
+_WORD_NUMBER_RUN = re.compile(
+    rf"(?<![\w-])(?:{_NUMBER_WORDS})(?:[\s\-‐-―]+(?:and[\s\-‐-―]+)?(?:{_NUMBER_WORDS}))*(?![\w-])",
+    re.I,
+)
+
+
+def _small_number_words(text):
+    # Only isolated cardinals 0–20, never pieces of twenty-two / two hundred /
+    # minus two / two point five. This is deliberately not a full number parser.
+    return Counter(
+        _SMALL_CARDINALS[match.group().lower()]
+        for match in _WORD_NUMBER_RUN.finditer(text)
+        if match.group().lower() in _SMALL_CARDINALS
+    )
+
+
 def audit_translation(text, translation, target, glossary):
     """These are review flags, not a semantic accuracy score or a guarantee."""
     extractors = {
@@ -94,7 +136,21 @@ def audit_translation(text, translation, target, glossary):
     issues = []
     for kind, extractor in extractors.items():
         original, output = Counter(extractor(text)), Counter(extractor(translation))
-        missing, added = list((original - output).elements()), list((output - original).elements())
+        missing_counts, added_counts = original - output, output - original
+        if kind == "numbers":
+            # Reconcile unmatched digits only; ordinary pronouns such as "one"
+            # must not introduce numeric flags into an otherwise digit-free text.
+            source_words, target_words = _small_number_words(text), _small_number_words(translation)
+            shared_words = source_words & target_words
+            source_words -= shared_words
+            target_words -= shared_words
+            # Extra/alternative word quantities must not conceal a mismatch
+            # (e.g. original 2 -> "one or two", or an extra repeated "two").
+            if not target_words - missing_counts:
+                missing_counts -= target_words
+            if not source_words - added_counts:
+                added_counts -= source_words
+        missing, added = list(missing_counts.elements()), list(added_counts.elements())
         if missing or added:
             issues.append({"kind": kind, "missing": missing[:20], "added": added[:20]})
     terms = matching_terms(text, target, glossary)
@@ -115,13 +171,13 @@ def audit_translation(text, translation, target, glossary):
     }
 
 
-def json_result(client, model, instruction, payload, limit=6500):
+def json_result(client, model, instruction, payload, limit=6500, *, timeout=60):
     response = client.chat.completions.create(
         model=model,
         temperature=0.2,
         max_completion_tokens=limit,
         response_format={"type": "json_object"},
-        timeout=60,
+        timeout=timeout,
         messages=[
             {
                 "role": "system",
