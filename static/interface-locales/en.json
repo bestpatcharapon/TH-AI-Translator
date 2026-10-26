@@ -167,7 +167,7 @@
   "favoritesOnly": "Favorites only",
   "clearAll": "Clear all",
   "starToKeep": "Star a translation to keep it.",
-  "extraContextHint": "Extra context (optional), e.g. replying to a friend",
+  "extraContextHint": "Extra context (optional)",
   "historySearchHint": "Search your translations…",
   "noHistory": "Your translations will appear here.",
   "noHistoryMatch": "No matching translations.",

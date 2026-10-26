@@ -925,7 +925,7 @@ textarea::placeholder {
 }
 @media (max-width: 700px) {
   .translator:has(.file-tools:not([hidden])) .panels {
-    min-height: 510px;
+    min-height: 0;
   }
 }
 
@@ -2358,7 +2358,7 @@ textarea[dir="auto"],
   flex-shrink: 0;
 }
 .menu-header h2 {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--text);
   text-transform: none;
   letter-spacing: -0.5px;
@@ -2505,8 +2505,8 @@ textarea[dir="auto"],
   border-radius: 8px;
 }
 .menu-content [role="tabpanel"] > h3 {
-  margin: 22px 0 18px;
-  font-size: 17px;
+  margin: 18px 0 12px;
+  font-size: 15px;
 }
 .menu-preference-grid {
   display: grid;
@@ -3065,24 +3065,27 @@ textarea[dir="auto"],
 }
 .history-entry {
   border-bottom: 1px solid var(--border);
-  padding: 18px 0;
+  padding: 10px 0 12px;
 }
 .history-entry header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 2px;
+  margin-bottom: 2px;
 }
 .history-entry header > span {
-  font-size: 10px;
-  line-height: 1.8;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.5;
   color: var(--muted);
-  margin-right: auto;
+  margin-inline-end: 4px;
 }
 .history-entry p {
   font-size: 13px;
-  line-height: 1.8;
-  margin: 8px 0;
+  line-height: 1.65;
+  margin: 4px 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   max-height: 160px;
@@ -3095,9 +3098,9 @@ textarea[dir="auto"],
   color: var(--muted);
 }
 .history-entry .speaker-button {
-  width: 32px;
-  height: 32px;
-  padding: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 12px;
 }
 .history-entry [aria-pressed="true"] {
   color: var(--accent);
@@ -3105,9 +3108,9 @@ textarea[dir="auto"],
 .history-entry [aria-pressed="true"] use {
   fill: var(--accent);
 }
-.history-entry footer {
-  display: flex;
-  justify-content: flex-end;
+.history-entry .speaker-button svg {
+  width: 20px;
+  height: 20px;
 }
 #additional-language-options {
   padding: 0 1px;
@@ -4183,5 +4186,160 @@ textarea[dir="auto"],
   }
   .live-heading p {
     display: none;
+  }
+}
+
+/* Text and documents on phones occupy one viewport; long messages and optional tools scroll inside. */
+@media (max-width: 700px) {
+  .translator:is(.text-mode, .document-mode) {
+    height: 100dvh;
+    min-height: 0;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    overflow: hidden;
+  }
+  :is(.text-mode, .document-mode) .app-header {
+    position: relative;
+    top: auto;
+    flex-shrink: 0;
+    margin-bottom: 12px;
+  }
+  :is(.text-mode, .document-mode) .language-controls {
+    flex-shrink: 0;
+    margin-bottom: 12px;
+  }
+  :is(.text-mode, .document-mode) .language-picker {
+    height: 52px;
+  }
+  :is(.text-mode, .document-mode) .thai-tools {
+    flex-shrink: 0;
+    margin-bottom: 12px;
+    max-height: 25dvh;
+    overflow: auto;
+  }
+  :is(.text-mode, .document-mode) .panels {
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
+    grid-template-rows: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 12px;
+  }
+  :is(.text-mode, .document-mode) .panel {
+    position: relative;
+    min-height: 0;
+    padding: 14px 16px 10px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  :is(.text-mode, .document-mode) .panel-heading,
+  :is(.text-mode, .document-mode) .panel-footer,
+  :is(.text-mode, .document-mode) .translation-tools,
+  :is(.text-mode, .document-mode) .reply-section {
+    flex-shrink: 0;
+  }
+  :is(.text-mode, .document-mode) .source-panel #input {
+    flex: 1 0 64px;
+    min-height: 64px;
+    height: auto !important;
+    max-height: none;
+    padding: 12px 0 8px;
+    overflow: auto;
+  }
+  :is(.text-mode, .document-mode) #output {
+    flex: 1 0 64px;
+    min-height: 64px;
+    max-height: 28dvh;
+    padding-top: 10px;
+  }
+  :is(.text-mode, .document-mode) .output-language {
+    margin-top: 8px;
+  }
+  :is(.text-mode, .document-mode) .source-insights {
+    margin: 4px 0 8px;
+  }
+  :is(.text-mode, .document-mode) #pronunciation {
+    margin-bottom: 8px;
+  }
+  :is(.text-mode, .document-mode) .bottom-bar {
+    position: relative;
+    order: 10;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: none;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin-top: 46px;
+  }
+  :is(.text-mode, .document-mode) .mode-nav {
+    padding: 5px;
+  }
+  :is(.text-mode, .document-mode) .mode {
+    min-height: 54px;
+    padding: 6px 3px;
+  }
+  :is(.text-mode, .document-mode) > .voice-status,
+  :is(.text-mode, .document-mode) .additional-results {
+    flex-shrink: 0;
+    max-height: 15dvh;
+    overflow: auto;
+  }
+}
+@media (max-width: 700px) and (max-height: 650px) {
+  :is(.text-mode, .document-mode) .app-header {
+    margin-bottom: 8px;
+  }
+  :is(.text-mode, .document-mode) .language-controls,
+  :is(.text-mode, .document-mode) .thai-tools {
+    margin-bottom: 8px;
+  }
+  :is(.text-mode, .document-mode) .language-picker {
+    height: 44px;
+  }
+  :is(.text-mode, .document-mode) .language-label > span {
+    display: none;
+  }
+  :is(.text-mode, .document-mode) .panels {
+    gap: 8px;
+  }
+  :is(.text-mode, .document-mode) .panel {
+    padding: 10px 12px 6px;
+  }
+}
+/* Give the editor room when the on-screen keyboard reduces the visible viewport. */
+@media (max-width: 700px) and (max-height: 450px) {
+  .translator:is(.text-mode, .document-mode) {
+    --page-top: 8px;
+    padding-top: 8px;
+  }
+  :is(.text-mode, .document-mode) .app-header {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .document-mode .bottom-bar {
+    margin-top: 12px;
+  }
+  .document-mode .file-tools {
+    flex-shrink: 0;
+    margin-bottom: 12px;
+    max-height: 25dvh;
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+  .document-mode .upload-zone {
+    padding: 12px 14px;
+    gap: 3px 10px;
+  }
+  .document-mode #file-status:empty {
+    display: none;
+  }
+  .document-mode .file-preview {
+    padding-top: 8px;
+    gap: 8px;
+  }
+  .document-mode .file-preview .text-button {
+    min-height: 44px;
   }
 }

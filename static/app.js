@@ -560,6 +560,7 @@ function refreshMode() {
         : mode === "image" && !LANGUAGE_CATALOG[option.value]?.ocr;
   }
   if (mode === "image" && !LANGUAGE_CATALOG[sourceEl.value]?.ocr) sourceEl.value = "auto";
+  document.querySelector(".translator").classList.toggle("text-mode", mode === "text");
   document.querySelector(".translator").classList.toggle("live-mode", mode === "live");
   document.querySelector(".translator").classList.toggle("image-mode", mode === "image");
   document.querySelector(".translator").classList.toggle("document-mode", mode === "document");

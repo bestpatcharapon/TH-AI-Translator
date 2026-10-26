@@ -41,7 +41,9 @@ const assert = require("node:assert/strict");
         const source = page.locator("#input"),
           shortHeight = await source.evaluate((el) => el.clientHeight);
         await source.fill("ทดสอบข้อความในโทรศัพท์หลายบรรทัด\n".repeat(12));
-        assert(await source.evaluate((el) => el.clientHeight > 150));
+        if (size.width <= 700)
+          assert(await source.evaluate((el) => el.scrollHeight > el.clientHeight));
+        else assert(await source.evaluate((el) => el.clientHeight > 150));
         await source.fill("สั้น");
         assert((await source.evaluate((el) => el.clientHeight)) <= shortHeight + 1);
 

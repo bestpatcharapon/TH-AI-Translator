@@ -17,7 +17,7 @@ Object.assign(COPY.en, {
   favoritesOnly: "Favorites only",
   clearAll: "Clear all",
   starToKeep: "Star a translation to keep it.",
-  extraContextHint: "Extra context (optional), e.g. replying to a friend",
+  extraContextHint: "Extra context (optional)",
   historySearchHint: "Search your translations…",
   noHistory: "Your translations will appear here.",
   noHistoryMatch: "No matching translations.",
@@ -44,7 +44,7 @@ Object.assign(COPY.th, {
   favoritesOnly: "รายการโปรดเท่านั้น",
   clearAll: "ล้างทั้งหมด",
   starToKeep: "กดดาวเพื่อเก็บคำแปลเป็นรายการโปรด",
-  extraContextHint: "บริบทเพิ่มเติม (ไม่บังคับ) เช่น ตอบเพื่อน",
+  extraContextHint: "บริบทเพิ่มเติม (ไม่บังคับ)",
   historySearchHint: "ค้นหาคำแปลของคุณ…",
   noHistory: "คำแปลของคุณจะแสดงที่นี่",
   noHistoryMatch: "ไม่พบคำแปลที่ตรงกัน",
@@ -373,14 +373,13 @@ function renderHistory() {
     result.textContent = item.translation;
     result.lang = item.target;
     result.dir = "auto";
-    const footer = document.createElement("footer");
-    footer.append(
+    header.append(
       menuIconButton("trash", t("deleteTranslation"), () => {
         if (persistSaved(savedTranslations.filter((record) => savedId(record) !== savedId(item))))
           updateSavedButton();
       })
     );
-    card.append(header, original, result, footer);
+    card.append(header, original, result);
     $("history-list").append(card);
   }
 }
