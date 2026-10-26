@@ -13,7 +13,7 @@ Object.assign(COPY.en, {
   photoChange: "Change photo",
   photoRemove: "Remove photo",
   photoDownload: "Download translated image",
-  photoProcessing: "Reading and translating your photo…",
+  photoProcessing: "Translating photo…",
   photoDone: "Translation is on the photo. Tap a label or open full screen to read it.",
   photoTarget: "Translate into {language} · Change",
   photoDoneCount: "Translated {count} text areas into {language}. Tap a label to read it.",
@@ -42,7 +42,7 @@ Object.assign(COPY.th, {
   photoChange: "เปลี่ยนรูป",
   photoRemove: "นำรูปออก",
   photoDownload: "ดาวน์โหลดรูปที่แปลแล้ว",
-  photoProcessing: "กำลังอ่านข้อความและแปลบนภาพ…",
+  photoProcessing: "กำลังแปลรูปภาพ…",
   photoDone: "แปลบนรูปแล้ว กดข้อความหรือเปิดเต็มจอเพื่ออ่านให้ชัดขึ้น",
   photoTarget: "แปลเป็น{language} · เปลี่ยนภาษา",
   photoDoneCount: "แปลเป็น{language}แล้ว {count} ส่วน แตะข้อความเพื่ออ่านให้ชัดขึ้น",
@@ -244,6 +244,8 @@ function setPhotoBusy(busy) {
   $("photo-loading").hidden = !busy;
   $("photo-mode").setAttribute("aria-busy", String(busy));
   $("photo-original").disabled = !photoData;
+  $("photo-original").hidden = !photoData;
+  document.querySelector(".photo-actions").classList.toggle("has-translation", !!photoData);
   $("photo-fullscreen").disabled = !photoFile;
   $("photo-download").hidden = !photoData || busy;
   syncPhotoViewerStatus();
@@ -343,6 +345,14 @@ function renderPhotoStage(id) {
   const image = document.createElement("img");
   image.src = src;
   image.alt = t(photoData && !showingOriginal ? "photoTranslated" : "photoOriginal");
+  if (id === "photo-main-stage") {
+    stage.style.removeProperty("--photo-ratio");
+    const fitPreview = () => {
+      if (stage.contains(image) && image.naturalHeight)
+        stage.style.setProperty("--photo-ratio", image.naturalWidth / image.naturalHeight);
+    };
+    image.addEventListener("load", fitPreview, { once: true });
+  }
   stage.append(image);
   if (!photoData || showingOriginal) return;
   const data = photoData;
@@ -425,6 +435,8 @@ function renderPhoto() {
   );
   $("photo-viewer-original").textContent = t(showingOriginal ? "photoTranslated" : "photoOriginal");
   $("photo-original").disabled = !photoData;
+  $("photo-original").hidden = !photoData;
+  document.querySelector(".photo-actions").classList.toggle("has-translation", !!photoData);
   $("photo-download").hidden = !photoData;
   syncPhotoViewerStatus();
 }

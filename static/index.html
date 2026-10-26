@@ -117,7 +117,7 @@
           ><span class="brand-icon"
             ><img src="/static/brand/logo-v1.png" alt="" width="44" height="44" />
           </span>
-          <h1>TH <span class="brand-ai">AI</span> Translator</h1></a
+          <h1>TH <span class="brand-ai">AI</span> <span class="brand-name">Translator</span></h1></a
         >
         <div class="header-actions">
           <div class="settings-wrap">
@@ -297,22 +297,21 @@
         <div id="photo-result" class="photo-result" hidden>
           <div id="photo-preview" class="photo-preview">
             <div id="photo-main-stage" class="photo-stage"></div>
-            <div id="photo-loading" class="photo-loading" hidden>
-              <span class="photo-spinner" aria-hidden="true"></span
-              ><span data-i18n="photoProcessing">Reading and translating your photo…</span
-              ><span id="photo-elapsed"></span
-              ><button
-                id="photo-cancel"
-                class="outline-button"
-                type="button"
-                data-i18n="photoCancel"
-              >
-                Cancel
-              </button>
+          </div>
+          <div id="photo-loading" class="photo-loading" hidden>
+            <span class="photo-spinner" aria-hidden="true"></span>
+            <div class="photo-loading-copy">
+              <strong role="status" data-i18n="photoProcessing">Translating photo…</strong>
+              <span id="photo-elapsed" aria-live="off"></span>
             </div>
-            <div id="photo-error" class="photo-error" role="alert" tabindex="-1" hidden>
-              <strong data-i18n="photoNotCompleted">Translation not completed</strong>
-              <p id="photo-error-message"></p>
+            <button id="photo-cancel" class="outline-button" type="button" data-i18n="photoCancel">
+              Cancel
+            </button>
+          </div>
+          <div id="photo-error" class="photo-error" role="alert" tabindex="-1" hidden>
+            <strong data-i18n="photoNotCompleted">Translation not completed</strong>
+            <p id="photo-error-message"></p>
+            <div class="photo-error-actions">
               <p id="photo-retry-wait"></p>
               <button
                 id="photo-retry"

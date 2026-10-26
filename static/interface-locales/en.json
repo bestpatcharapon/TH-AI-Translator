@@ -86,7 +86,7 @@
   "photoChange": "Change photo",
   "photoRemove": "Remove photo",
   "photoDownload": "Download translated image",
-  "photoProcessing": "Reading and translating your photo…",
+  "photoProcessing": "Translating photo…",
   "photoDone": "Translation is on the photo. Tap a label or open full screen to read it.",
   "photoTarget": "Translate into {language} · Change",
   "photoDoneCount": "Translated {count} text areas into {language}. Tap a label to read it.",

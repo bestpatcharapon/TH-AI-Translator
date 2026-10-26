@@ -86,7 +86,7 @@
   "photoChange": "เปลี่ยนรูป",
   "photoRemove": "นำรูปออก",
   "photoDownload": "ดาวน์โหลดรูปที่แปลแล้ว",
-  "photoProcessing": "กำลังอ่านข้อความและแปลบนภาพ…",
+  "photoProcessing": "กำลังแปลรูปภาพ…",
   "photoDone": "แปลบนรูปแล้ว กดข้อความหรือเปิดเต็มจอเพื่ออ่านให้ชัดขึ้น",
   "photoTarget": "แปลเป็น{language} · เปลี่ยนภาษา",
   "photoDoneCount": "แปลเป็น{language}แล้ว {count} ส่วน แตะข้อความเพื่ออ่านให้ชัดขึ้น",
