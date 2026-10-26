@@ -544,7 +544,26 @@
                   ><span data-i18n="deepReview">Deep review</span>
                 </button>
               </div>
-              <button id="studio-audit-badge" class="audit-badge" type="button" hidden></button>
+              <div class="reply-suggestions-tools">
+                <button
+                  id="suggest-replies"
+                  class="outline-button"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="reply-suggestions"
+                >
+                  <svg><use href="#icon-sparkles" /></svg>
+                  <span data-i18n="suggestReplies">Suggest 3 replies</span>
+                </button>
+                <button id="studio-audit-badge" class="audit-badge" type="button" hidden></button>
+                <p
+                  id="suggestion-status"
+                  class="feature-status"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+              </div>
+              <div id="reply-suggestions" class="reply-suggestions" hidden></div>
               <section
                 id="explanation-panel"
                 class="assistant-panel"
@@ -649,58 +668,6 @@
                 <svg><use href="#icon-download" /></svg
                 ><span data-i18n="exportReview">Export review</span>
               </button>
-            </section>
-            <section
-              id="reply-section"
-              class="reply-section"
-              hidden
-              aria-labelledby="reply-heading"
-            >
-              <div class="reply-heading">
-                <svg><use href="#icon-reply" /></svg>
-                <h3 id="reply-heading" data-i18n="reply">Reply</h3>
-                <span data-i18n="replySubtitle">Translate a reply · Suggestions</span>
-              </div>
-              <p id="reply-instructions"></p>
-              <button id="suggest-replies" class="outline-button" type="button">
-                <svg><use href="#icon-sparkles" /></svg
-                ><span data-i18n="suggestReplies">Suggest 3 replies</span>
-              </button>
-              <div id="reply-suggestions" class="reply-suggestions"></div>
-              <label for="reply-input" class="sr-only" data-i18n="yourReply">Your reply</label>
-              <textarea
-                dir="auto"
-                id="reply-input"
-                class="reply-input"
-                maxlength="5000"
-                placeholder="Type your reply..."
-              ></textarea>
-              <button id="translate-reply" class="reply-primary" type="button">
-                <svg><use href="#icon-arrow" /></svg
-                ><span data-i18n="translateReply">Translate reply</span>
-              </button>
-              <p id="reply-status" class="feature-status" role="status" aria-live="polite"></p>
-              <div id="reply-result" class="reply-result" hidden>
-                <strong id="reply-language"></strong>
-                <p id="reply-output"></p>
-                <div class="reply-result-actions">
-                  <button
-                    id="copy-reply"
-                    class="speaker-button"
-                    type="button"
-                    aria-label="Copy translated reply"
-                  >
-                    <svg><use href="#icon-copy" /></svg></button
-                  ><button
-                    id="speak-reply"
-                    class="speaker-button"
-                    type="button"
-                    aria-label="Listen to translated reply"
-                  >
-                    <svg><use href="#icon-volume" /></svg>
-                  </button>
-                </div>
-              </div>
             </section>
           </div>
         </section>
@@ -1014,6 +981,31 @@
       <button id="live-message-copy" class="outline-button" type="button">
         <svg><use href="#icon-copy" /></svg><span data-i18n="copy">Copy</span>
       </button>
+    </dialog>
+    <dialog
+      id="reply-edit-dialog"
+      class="preference-dialog reply-edit-dialog"
+      aria-labelledby="reply-edit-heading"
+    >
+      <div class="preference-header">
+        <h2 id="reply-edit-heading" data-i18n="yourReply">Your reply</h2>
+        <button id="reply-edit-close" class="icon-button" type="button" aria-label="Close">
+          <svg><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <form id="reply-edit-form" class="reply-edit-body">
+        <p id="reply-edit-instructions"></p>
+        <textarea id="reply-edit-input" rows="4" maxlength="5000" dir="auto" required></textarea>
+        <p id="reply-edit-status" class="feature-status" role="status" aria-live="polite"></p>
+        <button
+          id="reply-edit-submit"
+          class="reply-primary"
+          type="submit"
+          data-i18n="translateReply"
+        >
+          Translate reply
+        </button>
+      </form>
     </dialog>
     <dialog id="photo-viewer" class="photo-viewer" aria-label="Full screen photo">
       <div class="photo-viewer-toolbar">

@@ -1,45 +1,58 @@
-/* Provider responses are mocked; reply actions never send a message automatically. */
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({
-      viewport: { width: 393, height: 852 },
+      viewport: { width: 390, height: 844 },
       permissions: ["clipboard-read", "clipboard-write"],
     });
     const errors = [],
-      calls = [];
-    page.on("pageerror", (error) => errors.push(error.message));
-    const details = [
-      {
-        style: "friendly",
-        text: "Okay, thanks for letting me know.",
-        translation: "โอเค ขอบคุณที่บอกนะ",
-      },
-      {
-        style: "professional",
-        text: "Noted, thank you for informing me.",
-        translation: "รับทราบ ขอบคุณที่แจ้งให้ทราบ",
-      },
-      { style: "short", text: "Okay, noted.", translation: "โอเค รับทราบ" },
-    ];
-    await page.route("**/api/translate", (route) => {
-      calls.push("translate");
-      return route.fulfill({ json: { translation: "I am heading out.", source_language: "th" } });
+      drafts = ["Thanks for telling me.", "Thank you for the update.", "Okay."],
+      outgoing = ["ขอบคุณที่บอกนะ", "ขอบคุณที่แจ้งให้ทราบ", "โอเค"];
+    let suggestions = 0,
+      translations = 0,
+      fail = true,
+      editFailure = true,
+      lateEditResolve;
+    const lateEditRequest = new Promise((resolve) => {
+      lateEditResolve = resolve;
     });
-    let fail = false;
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.route("**/api/translate", (route) => {
+      translations++;
+      const body = route.request().postDataJSON();
+      if (body.text === "Late edit") {
+        lateEditResolve(route);
+        return;
+      }
+      if (body.text !== "จะไปแล้วครับ") {
+        assert.equal(body.source, "en");
+        assert.equal(body.target, "th");
+        if (editFailure)
+          return route.fulfill({ status: 503, json: { error: "Translation unavailable" } });
+        return route.fulfill({
+          json: { translation: "ขอบคุณ ฉันจะไปถึงตอนหกโมง", source_language: "en" },
+        });
+      }
+      return route.fulfill({ json: { translation: "I'm going now.", source_language: "th" } });
+    });
     await page.route("**/api/assist", (route) => {
       const body = route.request().postDataJSON();
-      calls.push(body.action);
       if (body.action !== "replies")
-        return route.fulfill({ json: { pronunciation: "", alternatives: [] } });
-      if (fail) return route.fulfill({ status: 503, json: { error: "Please try again" } });
+        return route.fulfill({ json: { pronunciation: "ja pai", alternatives: [] } });
+      suggestions++;
+      if (fail) return route.fulfill({ status: 503, json: { error: "Try again" } });
+      assert.equal(body.text, "จะไปแล้วครับ");
       return route.fulfill({
         json: {
+          replies: drafts,
           source_language: "th",
-          replies: details.map((item) => item.text),
-          reply_details: details,
+          reply_details: drafts.map((text, i) => ({
+            text,
+            translation: outgoing[i],
+            style: ["friendly", "professional", "short"][i],
+          })),
         },
       });
     });
@@ -48,66 +61,112 @@ const assert = require("node:assert/strict");
       window.replyAudio = [];
       speak = (text, language) => window.replyAudio.push({ text, language });
     });
-    await page.locator("#input").fill("ไปแล้วนะ");
-    await page.locator("#suggest-replies").click();
-    await page.waitForFunction(
-      () => document.querySelectorAll(".reply-suggestion-card").length === 3
-    );
-    assert.equal(
-      await page.locator("#reply-suggestions > h4").textContent(),
-      "Suggested replies (3)"
-    );
-    for (const [index, detail] of details.entries()) {
-      const card = page.locator(".reply-suggestion-card").nth(index);
-      assert.equal(await card.locator(".reply-suggestion-text").textContent(), detail.translation);
-      assert.equal(await card.locator(".reply-suggestion-text").getAttribute("lang"), "th");
-      assert.equal(await card.locator(".reply-suggestion-meaning").textContent(), detail.text);
-      await card.locator("button").nth(0).click();
-      assert.equal(await page.evaluate(() => navigator.clipboard.readText()), detail.translation);
-      await card.locator("button").nth(1).click();
-      assert.deepEqual(await page.evaluate(() => window.replyAudio.at(-1)), {
-        text: detail.translation,
-        language: "th",
-      });
-    }
-    const requestCount = calls.length;
-    await page.locator(".reply-suggestion-edit").first().click();
-    assert.equal(await page.locator("#reply-input").inputValue(), details[0].text);
-    assert.equal(
-      calls.length,
-      requestCount,
-      "Edit/copy/listen must not invoke translation or send"
-    );
-    for (const width of [320, 393, 430, 1280]) {
-      await page.setViewportSize({ width, height: 852 });
-      assert(
-        await page
-          .locator("#reply-suggestions")
-          .evaluate((el) => el.scrollWidth <= el.clientWidth + 1)
-      );
-    }
-    await page.setViewportSize({ width: 393, height: 852 });
-    await page.evaluate(() => switchFeature("document"));
-    assert.equal(await page.locator(".reply-suggestion-card").count(), 0);
-    await page.evaluate(() => switchFeature("text"));
-    assert.equal(await page.locator(".reply-suggestion-card").count(), 3);
-    assert.equal(await page.locator("#reply-input").inputValue(), details[0].text);
-    fail = true;
+    await page.locator("#input").fill("จะไปแล้วครับ");
+    await page.waitForFunction(() => document.querySelector("#output").value === "I'm going now.");
+    assert.equal(await page.locator("#reply-input, #translate-reply, #reply-section").count(), 0);
     await page.locator("#suggest-replies").click();
     await page.waitForFunction(() =>
-      document.querySelector("#reply-status").classList.contains("error")
+      document.querySelector("#suggestion-status").classList.contains("error")
     );
+    fail = false;
+    await page.locator("#suggest-replies").click();
+    await page.locator(".reply-suggestion-card").first().waitFor();
+    assert.equal(await page.locator(".reply-suggestion-card").count(), 3);
+    assert.deepEqual(
+      await page.locator(".reply-suggestion-card > p:first-of-type").allTextContents(),
+      outgoing
+    );
+    assert.deepEqual(await page.locator(".reply-suggestion-meaning").allTextContents(), drafts);
+    await page
+      .locator(".reply-suggestion-card")
+      .first()
+      .getByRole("button", { name: "Copy", exact: true })
+      .click();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), outgoing[0]);
+    await page
+      .locator(".reply-suggestion-card")
+      .first()
+      .getByRole("button", { name: "Listen", exact: true })
+      .click();
+    assert.deepEqual(await page.evaluate(() => window.replyAudio[0]), {
+      text: outgoing[0],
+      language: "th",
+    });
+    assert.equal(translations, 1, "Suggestions must not send a reply automatically");
+    assert.equal(await page.locator(".reply-suggestion-edit").count(), 3);
+    await page.locator(".reply-suggestion-edit").first().click();
+    assert.equal(await page.locator("#reply-edit-input").inputValue(), drafts[0]);
+    await page.locator("#reply-edit-input").fill("Thanks, I'll arrive at six.");
+    await page.locator("#reply-edit-submit").click();
+    await page.waitForFunction(() =>
+      document.querySelector("#reply-edit-status").classList.contains("error")
+    );
+    assert(await page.locator("#reply-edit-dialog").isVisible());
     assert.equal(
-      await page.locator(".reply-suggestion-card").count(),
-      3,
-      "Failed refresh keeps previous suggestions"
+      await page.locator("#reply-edit-input").inputValue(),
+      "Thanks, I'll arrive at six."
     );
-    assert.equal(await page.locator("#reply-input").inputValue(), details[0].text);
+    editFailure = false;
+    await page.locator("#reply-edit-submit").click();
+    await page.locator("#reply-edit-dialog").waitFor({ state: "hidden" });
+    drafts[0] = "Thanks, I'll arrive at six.";
+    outgoing[0] = "ขอบคุณ ฉันจะไปถึงตอนหกโมง";
+    assert.equal(await page.locator(".reply-suggestion-text").first().textContent(), outgoing[0]);
+    assert.equal(await page.locator(".reply-suggestion-meaning").first().textContent(), drafts[0]);
+    await page.locator(".reply-suggestion-edit").nth(1).click();
+    await page.locator("#reply-edit-input").fill("Discard this draft.");
+    await page.locator("#reply-edit-close").click();
+    assert.equal(translations, 3, "Canceling edits must not call the API");
+    assert.equal(await page.locator(".reply-suggestion-meaning").nth(1).textContent(), drafts[1]);
+    await page.locator("#suggest-replies").click();
+    assert(await page.locator("#reply-suggestions").isHidden());
+    await page.locator("#suggest-replies").click();
+    assert.equal(suggestions, 2, "Opening saved suggestions must not call AI again");
+    await page.evaluate(() => switchFeature("document"));
+    assert(await page.locator("#reply-suggestions").isHidden());
+    await page.evaluate(() => switchFeature("text"));
+    assert.equal(await page.locator(".reply-suggestion-card").count(), 3);
+    assert(await page.locator("#reply-suggestions").isVisible());
+    await page.evaluate(() => changeInterfaceLanguage("th"));
+    assert.equal(await page.locator(".reply-suggestion-style").first().textContent(), "เป็นมิตร");
+    for (const width of [320, 390, 768]) {
+      await page.setViewportSize({ width, height: 844 });
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      assert(
+        await page.locator("#reply-suggestions").evaluate((e) => e.scrollWidth <= e.clientWidth)
+      );
+    }
+    await page.evaluate(() => {
+      const originalFetch = window.fetch;
+      window.fetch = (url, options = {}) => {
+        if (url === "/api/translate" && JSON.parse(options.body || "{}").text === "Late edit") {
+          return originalFetch(url, { ...options, signal: undefined }).finally(() => {
+            window.lateReplyFinished = true;
+          });
+        }
+        return originalFetch(url, options);
+      };
+    });
+    await page.locator(".reply-suggestion-edit").first().click();
+    await page.locator("#reply-edit-input").fill("Late edit");
+    await page.locator("#reply-edit-submit").click();
+    const lateRoute = await lateEditRequest;
+    await page.evaluate(() => switchFeature("document"));
+    assert(await page.locator("#reply-edit-dialog").isHidden());
+    await lateRoute.fulfill({ json: { translation: "MUST NOT APPLY", source_language: "en" } });
+    await page.waitForFunction(() => window.lateReplyFinished);
+    await page.evaluate(() => switchFeature("text"));
+    assert.equal(await page.locator(".reply-suggestion-text").first().textContent(), outgoing[0]);
+    assert.equal(await page.locator("#output").inputValue(), "I'm going now.");
+    assert.equal(await page.locator(".chat-turn").count(), 0);
     assert.deepEqual(errors, []);
     console.log(
-      "PASS bilingual reply cards, clipboard/audio direction, edit without sending, responsive layout, feature restoration and failure recovery."
+      "PASS bilingual suggestion cards, edit/translate, failure recovery, cancel, late-response isolation, copy/listen, collapse and no automatic sending."
     );
   } finally {
     await browser.close();
   }
-})();
+})().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

@@ -44,10 +44,17 @@ const assert = require("node:assert/strict");
     unavailable = true;
     await page.locator("#input").fill("ไม่ต้องจ่าย 150 บาทแล้ว");
     await page.locator("#live-send").click();
-    await page.waitForFunction(() =>
-      document.querySelector("#live-status").textContent.includes("could not be completed")
-    );
+    await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 2);
     assert.equal(await page.locator(".chat-turn").count(), 2);
+    assert.equal(
+      await page.locator(".translated-message").last().textContent(),
+      "You don't have to pay 150 baht."
+    );
+    assert.equal(
+      await page.evaluate(() => conversation.at(-1).quality_review.status),
+      "unavailable"
+    );
+    assert.equal(await page.locator("#live-status").textContent(), "");
     await page.locator("#live-back").click();
     assert(
       !(await page
@@ -78,7 +85,7 @@ const assert = require("node:assert/strict");
     assert.equal(await page.evaluate(() => savedTranslations.length), savedBefore);
     assert.deepEqual(errors, []);
     console.log(
-      "PASS clarification does not send or save ambiguous chat; revised meaning is shown; unavailable review stays explicit and feature-scoped."
+      "PASS clarification does not send or save ambiguous chat; revised meaning is shown; unavailable review preserves the translation and review metadata without a completion notice."
     );
   } finally {
     await browser.close();

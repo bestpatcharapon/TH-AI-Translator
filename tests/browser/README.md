@@ -1,8 +1,14 @@
 # Browser regression checks
 
+`runtime-contract.cjs` sends real same-language requests for all six Style menu
+values. It consumes no AI quota and catches stale Flask processes that serve the
+updated menu but still reject Standard or Business. Restart Flask after backend
+changes if this check reports an unsupported style.
+
 `semantic-review.cjs` checks that ambiguous text stays editable and is not sent or
 saved as a chat turn, corrected wording reaches the conversation, and a failed
-meaning review is disclosed without leaking its status into another feature.
+meaning review preserves the primary translation and its review metadata without
+restoring the removed completion notice or leaking status into another feature.
 
 `voice-quality.cjs` checks real browser recording with fake microphone input: audio
 capture settings, automatic send by default, optional transcript review, editing, uncertainty even with

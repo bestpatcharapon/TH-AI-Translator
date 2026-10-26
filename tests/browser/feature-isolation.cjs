@@ -128,15 +128,11 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await page.locator("#input").fill("TEXT INPUT");
     await waitOutput("ja:formal:TEXT INPUT");
     await page.locator("#source-insights").waitFor();
-    await page.locator("#reply-input").fill("TEXT REPLY");
-    await page.locator("#translate-reply").click();
-    await page.locator("#reply-result").waitFor();
     await page.locator("#explain").click();
     await page.waitForFunction(
       () => document.querySelector("#explanation-text").textContent === "why:TEXT INPUT"
     );
     await page.locator("#save-translation").click();
-    const textReply = await page.locator("#reply-output").textContent();
 
     await page.locator('[data-mode="document"]').click();
     assert.equal(await page.locator("#input").inputValue(), "");
@@ -144,13 +140,11 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     assert.equal(await page.locator("#source").inputValue(), "auto");
     assert.equal(await page.locator("#target").inputValue(), "en");
     assert.equal(await page.locator("#tone").inputValue(), "natural");
-    assert.equal(await page.locator("#reply-input").inputValue(), "");
     await upload("#file-input", "document.txt", Buffer.from("DOCUMENT INPUT"));
     await waitOutput("en:natural:DOCUMENT INPUT");
     await select("#target", "fr");
     await select("#tone", "casual");
     await waitOutput("fr:casual:DOCUMENT INPUT");
-    await page.locator("#reply-input").fill("DOCUMENT REPLY");
     await page.locator("#save-translation").click();
     await page.evaluate(() => document.querySelector("#show-saved").click());
     await page.locator("#saved-dialog").waitFor();
@@ -182,6 +176,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await page.locator("#speaker-reverse").click();
     await page.locator("#input").fill("LIVE DRAFT");
 
+    assert.equal(await page.locator("#reply-section, #reply-input, #translate-reply").count(), 0);
     const countBeforeSwitches = calls.length;
     for (let pass = 0; pass < 2; pass++) {
       await go("text");
@@ -189,8 +184,6 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
       assert.equal(await page.locator("#output").inputValue(), "ja:formal:TEXT INPUT");
       assert.equal(await page.locator("#target").inputValue(), "ja");
       assert.equal(await page.locator("#tone").inputValue(), "formal");
-      assert.equal(await page.locator("#reply-input").inputValue(), "TEXT REPLY");
-      assert.equal(await page.locator("#reply-output").textContent(), textReply);
       assert.equal(await page.locator("#explanation-text").textContent(), "why:TEXT INPUT");
       assert.match(await page.locator("#pronunciation").textContent(), /TEXT INPUT/);
       await go("document");
@@ -199,7 +192,6 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
       assert.equal(await page.locator("#target").inputValue(), "fr");
       assert.equal(await page.locator("#tone").inputValue(), "casual");
       assert.equal(await page.locator("#file-name").textContent(), "document.txt");
-      assert.equal(await page.locator("#reply-input").inputValue(), "DOCUMENT REPLY");
       await go("image");
       assert.equal(await page.locator("#target").inputValue(), "ko");
       assert.equal(await page.locator("#tone").inputValue(), "formal");
@@ -218,7 +210,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     assert.match(await page.locator(".saved-original").textContent(), /TEXT INPUT/);
     await page.locator("#close-saved").click();
     console.log(
-      "PASS independent text/results/languages/tone/files/replies/assistant panels/saved items/chat history; repeated switching starts no requests."
+      "PASS independent text/results/languages/tone/files/assistant panels/saved items/chat history; repeated switching starts no requests."
     );
 
     await page.locator("#input").fill("LATE TEXT");
@@ -290,16 +282,6 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await page.waitForTimeout(80);
     assert.notEqual(await page.locator("#explanation-text").textContent(), "MUST NOT LEAK");
     await go("text");
-    await page.locator("#reply-input").fill("LATE REPLY");
-    await page.locator("#translate-reply").click();
-    await waitPending("LATE REPLY");
-    await go("document");
-    await fulfill(pending.get("LATE REPLY").route, pending.get("LATE REPLY").body);
-    await page.waitForTimeout(80);
-    assert.equal(await page.locator("#reply-output").textContent(), "");
-    await go("text");
-    assert.equal(await page.locator("#reply-input").inputValue(), "LATE REPLY");
-    assert.equal(await page.locator("#reply-result").isVisible(), false);
     await page.locator("#microphone").click();
     await page.waitForFunction(
       () => document.querySelector("#microphone").dataset.voiceState === "recording"
@@ -362,7 +344,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
       "PASS late transcription, audio playback, clipboard feedback and old IME events cannot affect another feature; microphone resources close on exit."
     );
     assert.deepEqual(errors, []);
-    console.log("PASS late explanation/reply responses remain isolated; no JavaScript errors.");
+    console.log("PASS late explanation responses remain isolated; no JavaScript errors.");
   } finally {
     await browser.close();
   }

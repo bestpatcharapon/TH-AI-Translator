@@ -1107,56 +1107,6 @@ p:lang(zh) {
 #check-revision {
   padding: 12px 0;
 }
-.reply-section {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-.reply-heading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.reply-heading > svg {
-  color: var(--muted);
-}
-.reply-heading h3 {
-  margin: 0;
-  font-size: 14px;
-}
-.reply-heading > span {
-  font-size: 11px;
-  color: var(--muted);
-}
-#reply-instructions {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  margin: 10px 0 12px;
-}
-#suggest-replies {
-  border-radius: 14px;
-  min-height: 44px;
-  font-size: 13px;
-  padding: 8px 12px;
-}
-.reply-input {
-  flex: initial;
-  min-height: 80px;
-  height: 80px;
-  max-height: 300px;
-  resize: vertical;
-  margin: 12px 0;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 10px 12px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-.reply-input:focus {
-  border-color: var(--accent);
-}
 .reply-primary {
   display: inline-flex;
   align-items: center;
@@ -1167,37 +1117,6 @@ p:lang(zh) {
   color: var(--on-accent);
   padding: 13px 17px;
   font-size: 14px;
-}
-.reply-suggestions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 14px;
-}
-.reply-suggestions:empty {
-  display: none;
-}
-.reply-suggestions .suggestion-chip {
-  text-align: left;
-  border-radius: 14px;
-}
-.reply-result {
-  border-top: 1px solid var(--border);
-  margin-top: 20px;
-  padding-top: 18px;
-}
-.reply-result > strong {
-  color: var(--accent);
-  font-size: 13px;
-}
-#reply-output {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  line-height: 1.8;
-}
-.reply-result-actions {
-  display: flex;
-  gap: 8px;
 }
 .bottom-bar {
   position: fixed;
@@ -4053,8 +3972,7 @@ textarea[dir="auto"],
   .menu-input,
   .language-search input,
   .live-input-row #input,
-  #thai-clarification,
-  #reply-input {
+  #thai-clarification {
     font-size: 16px;
   }
   .menu-dialog,
@@ -4328,8 +4246,7 @@ textarea[dir="auto"],
   }
   :is(.text-mode, .document-mode) .panel-heading,
   :is(.text-mode, .document-mode) .panel-footer,
-  :is(.text-mode, .document-mode) .translation-tools,
-  :is(.text-mode, .document-mode) .reply-section {
+  :is(.text-mode, .document-mode) .translation-tools {
     flex-shrink: 0;
   }
   :is(.text-mode, .document-mode) .source-panel #input {
@@ -4437,29 +4354,6 @@ textarea[dir="auto"],
   }
   .document-mode .file-preview .text-button {
     min-height: 44px;
-  }
-}
-
-/* Reply tools keep the same compact type and touch targets as the translation controls. */
-.reply-section .reply-primary {
-  min-height: 44px;
-  padding: 8px 12px;
-  gap: 8px;
-  border-radius: 14px;
-  font-size: 13px;
-}
-.reply-section :is(#suggest-replies, .reply-primary) svg {
-  width: 20px;
-  height: 20px;
-}
-@media (max-width: 700px) {
-  #reply-input {
-    font-size: 14px;
-    max-height: 160px;
-  }
-  .reply-heading > svg {
-    width: 20px;
-    height: 20px;
   }
 }
 
@@ -4611,73 +4505,6 @@ textarea[dir="auto"],
   color: color-mix(in srgb, var(--text) 70%, var(--accent));
 }
 
-/* Bilingual reply choices: ready-to-send text, meaning, and explicit actions. */
-.reply-suggestions {
-  border-top: 1px solid var(--border);
-  padding-top: 14px;
-  gap: 10px;
-}
-.reply-suggestions:empty {
-  border: 0;
-  padding: 0;
-}
-.reply-suggestions > h4 {
-  margin: 0 0 2px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-}
-.reply-suggestion-card {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  min-width: 0;
-}
-.reply-suggestion-style {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 500;
-}
-.reply-suggestion-card p {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  margin: 5px 0 8px;
-  font-size: 13px;
-  line-height: 1.65;
-}
-.reply-suggestion-text {
-  font-weight: 600;
-}
-.reply-suggestion-meaning {
-  color: var(--muted);
-}
-.reply-suggestion-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 4px;
-}
-.reply-suggestion-actions .speaker-button {
-  width: 40px;
-  height: 40px;
-}
-.reply-suggestion-actions .speaker-button svg,
-.reply-suggestion-edit svg {
-  width: 20px;
-  height: 20px;
-}
-.reply-suggestion-edit {
-  min-height: 36px;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-:root[data-theme="light"] .reply-suggestion-style {
-  color: var(--muted);
-}
-
 /* Use compact explanatory rows for Style, matching the Context picker. */
 .style-options {
   grid-template-columns: minmax(0, 1fr);
@@ -4699,4 +4526,127 @@ textarea[dir="auto"],
   overflow: visible;
   line-height: 1.6;
   padding-inline-end: 12px;
+}
+
+/* Reply suggestions are available on demand, without a second reply editor. */
+.reply-suggestions-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+#suggest-replies {
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+}
+#suggest-replies svg {
+  width: 17px;
+  height: 17px;
+}
+.reply-suggestions-tools .audit-badge {
+  margin-top: 0;
+}
+#suggestion-status {
+  flex-basis: 100%;
+  margin: 0;
+}
+.reply-suggestions {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.reply-suggestion-card {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  min-width: 0;
+}
+.reply-suggestion-style {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+.reply-suggestion-card p {
+  margin: 6px 0;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reply-suggestion-meaning {
+  color: var(--muted);
+}
+.reply-suggestion-actions {
+  display: flex;
+  gap: 4px;
+}
+.reply-suggestion-actions .speaker-button {
+  width: 44px;
+  height: 44px;
+}
+.reply-suggestion-actions svg {
+  width: 20px;
+  height: 20px;
+}
+
+.reply-suggestion-text {
+  font-weight: 600;
+}
+.reply-suggestion-actions {
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.reply-suggestion-edit {
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+}
+.reply-suggestion-edit svg {
+  width: 18px;
+  height: 18px;
+}
+:root[data-theme="light"] .reply-suggestion-style {
+  color: color-mix(in srgb, var(--text) 70%, var(--accent));
+}
+.reply-edit-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  min-height: 0;
+  overflow: auto;
+}
+#reply-edit-instructions {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+#reply-edit-input {
+  min-height: 120px;
+  height: 120px;
+  max-height: 220px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  font-size: 16px;
+  line-height: 1.65;
+}
+#reply-edit-input:focus {
+  border-color: var(--accent);
+}
+#reply-edit-submit {
+  justify-self: end;
+  min-height: 44px;
+  font-size: 13px;
+  padding: 9px 14px;
+}
+#reply-edit-status {
+  margin: 0;
 }

@@ -52,10 +52,10 @@ const assert = require("node:assert/strict");
         await page.waitForFunction(() => document.querySelector("#output").value.length > 100);
         assert(await page.locator("#input").evaluate((el) => el.scrollHeight > el.clientHeight));
         assert(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1));
-        await page.locator("#reply-input").scrollIntoViewIfNeeded();
-        await page.locator("#reply-input").fill("Thank you");
-        assert(await page.locator("#reply-input").isVisible());
-        assert(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1));
+        assert.equal(
+          await page.locator("#reply-section, #reply-input, #translate-reply").count(),
+          0
+        );
       }
     }
     await page.setViewportSize({ width: 393, height: 852 });
@@ -68,7 +68,7 @@ const assert = require("node:assert/strict");
     }
     assert.deepEqual(errors, []);
     console.log(
-      "PASS Text fits phone viewports in English, Thai and RTL; long text and reply tools remain reachable without page scrolling; other modes keep their layout."
+      "PASS Text fits phone viewports in English, Thai and RTL; long text remains reachable without page scrolling; other modes keep their layout."
     );
   } finally {
     await browser.close();

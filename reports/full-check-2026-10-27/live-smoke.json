@@ -1,0 +1,642 @@
+{
+  "scope": "Local HTTP smoke checks with real configured providers; synthetic fixtures only. Not a translation accuracy benchmark or physical phone/microphone test.",
+  "checks": [
+    {
+      "name": "/",
+      "path": "/",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.01,
+      "bytes": 47112,
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "name": "/api/languages",
+      "path": "/api/languages",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.0,
+      "result": {
+        "af": "Afrikaans",
+        "am": "Amharic",
+        "ar": "Arabic",
+        "as": "Assamese",
+        "az": "Azerbaijani",
+        "ba": "Bashkir",
+        "be": "Belarusian",
+        "bg": "Bulgarian",
+        "bn": "Bangla",
+        "bo": "Tibetan",
+        "br": "Breton",
+        "bs": "Bosnian",
+        "ca": "Catalan",
+        "cs": "Czech",
+        "cy": "Welsh",
+        "da": "Danish",
+        "de": "German",
+        "dv": "Divehi",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "et": "Estonian",
+        "eu": "Basque",
+        "fa": "Persian",
+        "fi": "Finnish",
+        "fo": "Faroese",
+        "fr": "French",
+        "ga": "Irish",
+        "gd": "Scottish Gaelic",
+        "gl": "Galician",
+        "gu": "Gujarati",
+        "ha": "Hausa",
+        "haw": "Hawaiian",
+        "he": "Hebrew",
+        "hi": "Hindi",
+        "hr": "Croatian",
+        "ht": "Haitian Creole",
+        "hu": "Hungarian",
+        "hy": "Armenian",
+        "id": "Indonesian",
+        "is": "Icelandic",
+        "it": "Italian",
+        "ja": "Japanese",
+        "jv": "Javanese",
+        "ka": "Georgian",
+        "kk": "Kazakh",
+        "km": "Khmer",
+        "kn": "Kannada",
+        "ko": "Korean",
+        "ku": "Kurdish",
+        "ky": "Kyrgyz",
+        "la": "Latin",
+        "lb": "Luxembourgish",
+        "ln": "Lingala",
+        "lo": "Lao",
+        "lt": "Lithuanian",
+        "lv": "Latvian",
+        "mg": "Malagasy",
+        "mi": "Māori",
+        "mk": "Macedonian",
+        "ml": "Malayalam",
+        "mn": "Mongolian",
+        "mr": "Marathi",
+        "ms": "Malay",
+        "mt": "Maltese",
+        "my": "Burmese",
+        "ne": "Nepali",
+        "nl": "Dutch",
+        "nn": "Norwegian Nynorsk",
+        "no": "Norwegian",
+        "ny": "Nyanja",
+        "oc": "Occitan",
+        "om": "Oromo",
+        "or": "Odia",
+        "pa": "Punjabi",
+        "pl": "Polish",
+        "ps": "Pashto",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sa": "Sanskrit",
+        "sd": "Sindhi",
+        "si": "Sinhala",
+        "sk": "Slovak",
+        "sl": "Slovenian",
+        "sn": "Shona",
+        "so": "Somali",
+        "sq": "Albanian",
+        "sr": "Serbian",
+        "st": "Southern Sotho",
+        "su": "Sundanese",
+        "sv": "Swedish",
+        "sw": "Swahili",
+        "ta": "Tamil",
+        "te": "Telugu",
+        "tg": "Tajik",
+        "th": "Thai",
+        "ti": "Tigrinya",
+        "tk": "Turkmen",
+        "tl": "Filipino",
+        "tr": "Turkish",
+        "tt": "Tatar",
+        "ug": "Uyghur",
+        "uk": "Ukrainian",
+        "ur": "Urdu",
+        "uz": "Uzbek",
+        "vi": "Vietnamese",
+        "yi": "Yiddish",
+        "yo": "Yoruba",
+        "yue": "Cantonese",
+        "zh": "Simplified Chinese",
+        "zh-TW": "Traditional Chinese",
+        "zu": "Zulu"
+      }
+    },
+    {
+      "name": "/api/language-catalog.js",
+      "path": "/api/language-catalog.js",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.0,
+      "bytes": 26215,
+      "content_type": "application/javascript; charset=utf-8"
+    },
+    {
+      "name": "/api/ocr-status",
+      "path": "/api/ocr-status",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.01,
+      "result": {
+        "detector": "PP-OCRv6_medium_det",
+        "enabled": true,
+        "general_ready": true,
+        "general_recognizer": "PP-OCRv6_medium_rec",
+        "local_inference": true,
+        "ready": true,
+        "thai_recognizer": "th_PP-OCRv5_mobile_rec"
+      }
+    },
+    {
+      "name": "Standard translation",
+      "path": "/api/translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.63,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "Hello."
+      }
+    },
+    {
+      "name": "Business translation",
+      "path": "/api/translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.62,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "Hello."
+      }
+    },
+    {
+      "name": "Assistant source_info",
+      "path": "/api/assist",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 1.06,
+      "result": {
+        "alternatives": [
+          "สวัสดีค่ะ",
+          "สวัสดีครับทุกคน"
+        ],
+        "pronunciation": "sawasdee khráp",
+        "source_language": "th"
+      }
+    },
+    {
+      "name": "Assistant explain",
+      "path": "/api/assist",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.81,
+      "result": {
+        "explanation": "The Thai phrase สวัสดีครับ combines the standard greeting สวัสดี with the polite male particle ครับ, which signals respect but has no direct English equivalent, so the translator rendered it simply as “Hello.” This choice reflects a neutral, faithful tone that avoids adding gender‑specific politeness. The translation preserves the basic meaning without embellishment, and the only ambiguity lies in whether to convey the politeness marker, which was omitted for natural English usage.",
+        "source_language": "th"
+      }
+    },
+    {
+      "name": "Assistant check",
+      "path": "/api/assist",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.8,
+      "result": {
+        "assessment": "good",
+        "notes": "The translation accurately conveys the meaning of the Thai greeting \"สวัสดีครับ\" as \"Hello.\" It matches the neutral, faithful tone requested and does not omit or add any content.",
+        "revision": "",
+        "source_language": "th"
+      }
+    },
+    {
+      "name": "Assistant replies",
+      "path": "/api/assist",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 1.08,
+      "result": {
+        "replies": [
+          "Hi there! Nice to meet you.",
+          "Hello. How may I assist you today?",
+          "Hello."
+        ],
+        "reply_details": [
+          {
+            "style": "friendly",
+            "text": "Hi there! Nice to meet you.",
+            "translation": "สวัสดีครับ! ยินดีที่ได้รู้จักคุณครับ"
+          },
+          {
+            "style": "professional",
+            "text": "Hello. How may I assist you today?",
+            "translation": "สวัสดีครับ ผมพร้อมให้ความช่วยเหลือคุณในวันนี้"
+          },
+          {
+            "style": "short",
+            "text": "Hello.",
+            "translation": "สวัสดีครับ"
+          }
+        ],
+        "source_language": "th"
+      }
+    },
+    {
+      "name": "Meaning analysis",
+      "path": "/api/analyze",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 2.43,
+      "result": {
+        "alternatives": [],
+        "assessment": "review",
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "back_translation": "สวัสดี",
+        "issues": [
+          {
+            "explanation": "The source includes the polite particle \"ครับ\" indicating a courteous, male‑speaker tone. The English \"Hello.\" is neutral and does not reflect this politeness nuance.",
+            "kind": "tone",
+            "source_quote": "สวัสดีครับ",
+            "translation_quote": "Hello."
+          }
+        ],
+        "questions": [],
+        "revision": "",
+        "source_language": "th",
+        "summary": "The translation conveys the basic greeting but omits the polite particle \"ครับ\" present in the Thai source, which slightly alters the tone from a polite male greeting to a neutral English greeting."
+      }
+    },
+    {
+      "name": "Translation comparison",
+      "path": "/api/compare",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 1.36,
+      "result": {
+        "audits": {
+          "current": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "other": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          }
+        },
+        "blind_order": true,
+        "criteria": [
+          {
+            "criterion": "meaning",
+            "preferred": "current",
+            "reason": "A adds the word “there,” which is not present in the source and changes the meaning slightly; B matches the source exactly.",
+            "source_quote": "สวัสดีครับ"
+          },
+          {
+            "criterion": "fluency",
+            "preferred": "tie",
+            "reason": "Both sentences are grammatically correct and natural English.",
+            "source_quote": ""
+          },
+          {
+            "criterion": "tone",
+            "preferred": "current",
+            "reason": "B is a plain, neutral greeting as requested; A’s “there” adds a casual, slightly informal nuance.",
+            "source_quote": ""
+          },
+          {
+            "criterion": "terminology",
+            "preferred": "tie",
+            "reason": "No specialized terminology is involved in either translation.",
+            "source_quote": ""
+          }
+        ],
+        "display_order": {
+          "a": "other",
+          "b": "current"
+        },
+        "source_language": "th",
+        "summary": "Translation B (“Hello.”) is more faithful to the source. It conveys exactly the greeting without adding the unnecessary word “there,” keeping the neutral, direct tone requested. Both versions are fluent, but B better matches the intended tone and meaning, while terminology is irrelevant.",
+        "winner": "current"
+      }
+    },
+    {
+      "name": "Live chat translation",
+      "path": "/api/translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.6,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "reason": "provider_error",
+          "status": "unavailable",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Hello."
+      },
+      "review_note": "Primary translation returned, but optional meaning review was unavailable. A later retry passed."
+    },
+    {
+      "name": "Document extraction",
+      "path": "/api/extract",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.0,
+      "result": {
+        "filename": "sample.txt",
+        "text": "Hello from a document."
+      }
+    },
+    {
+      "name": "Document translation",
+      "path": "/api/translate",
+      "status": 429,
+      "expected_status": 200,
+      "passed": false,
+      "seconds": 0.11,
+      "result": {
+        "code": "rate_limit_exceeded",
+        "error": "บริการ AI ถึงขีดจำกัดการใช้งาน กรุณารอสักครู่แล้วลองอีกครั้ง",
+        "retry_after": 2
+      }
+    },
+    {
+      "name": "Photo preview",
+      "path": "/api/photo-preview",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.02,
+      "bytes": 26550,
+      "content_type": "image/png"
+    },
+    {
+      "name": "Photo translation",
+      "path": "/api/photo-translate",
+      "status": 429,
+      "expected_status": 200,
+      "passed": false,
+      "seconds": 6.7,
+      "result": {
+        "code": "rate_limit_exceeded",
+        "error": "บริการ AI ถึงขีดจำกัดการใช้งาน กรุณารอสักครู่แล้วลองอีกครั้ง",
+        "retry_after": 2
+      }
+    },
+    {
+      "name": "Speech en",
+      "path": "/api/speech",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.77,
+      "bytes": 11232,
+      "content_type": "audio/mpeg"
+    },
+    {
+      "name": "Speech th",
+      "path": "/api/speech",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.54,
+      "bytes": 11808,
+      "content_type": "audio/mpeg"
+    },
+    {
+      "name": "Transcription",
+      "path": "/api/transcribe",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.37,
+      "result": {
+        "model": "whisper-large-v3",
+        "review_reasons": [
+          "possible_word_confusion"
+        ],
+        "review_required": true,
+        "text": "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+      },
+      "accuracy_note": "HTTP success only. Expected: ฉันอยู่สองด้อม เมนของฉันคือมือกลอง. Observed transcription differs; review_required is true."
+    },
+    {
+      "name": "Document translation retry",
+      "path": "/api/translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 0.84,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "en",
+        "translation": "สวัสดีจากเอกสาร."
+      }
+    },
+    {
+      "name": "Photo translation retry",
+      "path": "/api/photo-translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 1.18,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "cache_status": "miss",
+        "height": 480,
+        "ocr_engine": "paddle",
+        "protected_boxes": [],
+        "regions": [
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 50,
+            "id": 0,
+            "ocr_text": "เพื่อนป้ายยาหูฟังจนฉันซื้อ",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "เพื่อนป้ายยาหูฟังจนฉันซื้อ",
+            "translation": "My friend kept hyping the earphones until I bought them.",
+            "width": 384,
+            "x": 28,
+            "y": 33
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 41,
+            "id": 1,
+            "ocr_text": "รุ่นนี้แบตอึด กินขาดจริง",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "รุ่นนี้แบตอึด กินขาดจริง",
+            "translation": "This model’s battery is durable and truly outclasses everything.",
+            "width": 351,
+            "x": 30,
+            "y": 139
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 42,
+            "id": 2,
+            "ocr_text": "ราคา 1,250 บาท",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "ราคา 1,250 บาท",
+            "translation": "Price: 1,250 Baht",
+            "width": 249,
+            "x": 29,
+            "y": 239
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 39,
+            "id": 3,
+            "ocr_text": "รับประกัน 2 ปี",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "รับประกัน 2 ปี",
+            "translation": "Warranty: 2 years",
+            "width": 207,
+            "x": 30,
+            "y": 339
+          }
+        ],
+        "review_required": 0,
+        "source_language": "th",
+        "target_language": "en",
+        "translated_regions": 4,
+        "width": 1000
+      }
+    },
+    {
+      "name": "Live chat review retry",
+      "path": "/api/translate",
+      "status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "seconds": 1.0,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "checked",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Hello."
+      }
+    }
+  ]
+}

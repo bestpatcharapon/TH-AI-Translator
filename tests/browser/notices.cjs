@@ -15,7 +15,8 @@ const assert = require("node:assert/strict");
       "voice-status",
       "file-status",
       "source-info-status",
-      "reply-status",
+      "suggestion-status",
+      "reply-edit-status",
       "menu-status",
       "glossary-status",
       "thai-lexicon-status",
@@ -63,19 +64,11 @@ const assert = require("node:assert/strict");
       setStatus(t("loading"));
       voiceStatus(t("recording"));
       fileStatus(t("extracting"));
-      featureStatus("reply-status", t("working"));
       document.getElementById("explanation-text").textContent = "A useful explanation.";
       document.getElementById("check-text").textContent = "A translation review.";
     });
     await page.clock.fastForward(5000);
-    for (const id of [
-      "status",
-      "voice-status",
-      "file-status",
-      "reply-status",
-      "explanation-text",
-      "check-text",
-    ])
+    for (const id of ["status", "voice-status", "file-status", "explanation-text", "check-text"])
       assert(await page.locator(`#${id}`).textContent(), `${id} must remain`);
     await page.evaluate(() => featureStatus("explanation-text", "Review unavailable", true));
     await page.clock.fastForward(3000);

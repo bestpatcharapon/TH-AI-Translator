@@ -60,7 +60,8 @@ Object.assign(COPY.th, {
 let currentTranslation = null,
   featureRevision = 0,
   suggestedRevision = "",
-  translatedReply = "";
+  replySuggestions = null,
+  replyEditState = null;
 const assistantRequests = () => activeFeature().assistantRequests;
 const sourceCache = () => activeFeature().sourceInfoCache;
 const SAVED_KEY = "translator-history-v2";
@@ -140,37 +141,35 @@ function resizeOutput() {
 }
 function resetFeatures() {
   featureRevision++;
+  closeReplyEditor();
   clearTimeout(activeFeature().sourceInfoTimer);
   activeFeature().sourceInfoTimer = null;
   assistantRequests().forEach((controller) => controller.abort());
   assistantRequests().clear();
   currentTranslation = null;
   suggestedRevision = "";
-  translatedReply = "";
+  replySuggestions = null;
+  $("reply-suggestions").replaceChildren();
+  $("reply-suggestions").hidden = true;
+  $("suggest-replies").setAttribute("aria-expanded", "false");
   for (const id of [
     "source-insights",
     "translation-tools",
     "output-language",
-    "reply-section",
     "explanation-panel",
     "check-panel",
     "apply-revision",
     "check-revision",
-    "reply-result",
   ])
     $(id).hidden = true;
-  for (const id of ["source-info-status", "explanation-text", "check-text", "reply-status"]) {
+  for (const id of ["source-info-status", "explanation-text", "check-text", "suggestion-status"]) {
     $(id).textContent = "";
     $(id).classList.remove("error");
   }
   $("source-alternatives").replaceChildren();
-  $("reply-suggestions").replaceChildren();
-  for (const id of ["explain", "check-translation", "suggest-replies", "translate-reply"])
-    $(id).disabled = false;
+  for (const id of ["explain", "check-translation", "suggest-replies"]) $(id).disabled = false;
   $("explain").setAttribute("aria-expanded", "false");
   $("check-translation").setAttribute("aria-expanded", "false");
-  $("reply-input").value = "";
-  $("reply-output").textContent = "";
   $("check-revision").textContent = "";
   $("pronunciation").textContent = "";
   resizeOutput();
@@ -290,7 +289,6 @@ function updateSavedButton() {
 }
 function refreshFeatureLabels() {
   updateSavedButton();
-  $("reply-input").placeholder = t("replyPlaceholder");
   const labels = {
     copy: t("copyTranslation"),
     regenerate: t("regenerateTranslation"),
@@ -301,21 +299,13 @@ function refreshFeatureLabels() {
     $(id).title = label;
   }
   if (!currentTranslation) return;
-  const source = effectiveSource(),
-    target = currentTranslation.target;
-  $("output-language").textContent = LANGUAGES[target][0];
-  $("reply-instructions").textContent = t("replyInstructions")
-    .replace("{target}", languageName(target))
-    .replace("{source}", languageName(source));
-  $("reply-input").lang = target;
-  $("reply-output").lang = source;
-  $("reply-language").textContent = LANGUAGES[source][0];
+  $("output-language").textContent = LANGUAGES[currentTranslation.target][0];
 }
 document.addEventListener("translation:invalidated", resetFeatures);
 document.addEventListener("translation:complete", (event) => {
   resetFeatures();
   currentTranslation = { ...event.detail, feature: mode };
-  for (const id of ["translation-tools", "output-language", "reply-section"]) $(id).hidden = false;
+  for (const id of ["translation-tools", "output-language"]) $(id).hidden = false;
   refreshFeatureLabels();
   resizeOutput();
   activeFeature().sourceInfoTimer = setTimeout(() => {
@@ -357,129 +347,167 @@ $("check-translation").addEventListener("click", async () => {
 $("apply-revision").addEventListener("click", () => {
   if (currentTranslation && suggestedRevision) applyStudioWording(suggestedRevision);
 });
-const replyCardLabels = {
-  en: {
-    heading: "Suggested replies",
-    friendly: "Friendly",
-    professional: "Professional",
-    short: "Short",
-    edit: "Edit first",
-  },
-  th: {
-    heading: "คำตอบแนะนำ",
-    friendly: "เป็นมิตร",
-    professional: "เป็นทางการ",
-    short: "สั้นกระชับ",
-    edit: "แก้ไขก่อน",
-  },
+const replyStyleLabels = {
+  en: { friendly: "Friendly", professional: "Professional", short: "Short", edit: "Edit first" },
+  th: { friendly: "เป็นมิตร", professional: "เป็นทางการ", short: "สั้นกระชับ", edit: "แก้ไขก่อน" },
 };
 function renderReplySuggestions(data) {
-  const container = $("reply-suggestions"),
-    source = data.source_language || effectiveSource(),
-    target = currentTranslation.target,
-    workspace = activeFeature(),
-    labels = replyCardLabels[locale] || replyCardLabels.en;
-  container.replaceChildren();
-  const heading = document.createElement("h4");
-  heading.textContent = `${labels.heading} (${data.replies.length})`;
-  container.append(heading);
+  if (!currentTranslation || !Array.isArray(data.replies)) return;
+  replySuggestions = data;
+  const list = $("reply-suggestions"),
+    workspace = activeFeature();
+  const labels = replyStyleLabels[locale] || replyStyleLabels.en;
+  list.replaceChildren();
   for (const [index, draft] of data.replies.entries()) {
-    const detail = data.reply_details?.[index],
-      bilingual = detail && detail.text === draft && typeof detail.translation === "string",
-      outgoing = bilingual ? detail.translation : draft,
-      language = bilingual ? source : target,
-      card = document.createElement("article"),
-      style = document.createElement("strong"),
-      text = document.createElement("p"),
+    const detail = data.reply_details?.[index];
+    const bilingual = detail && detail.text === draft && typeof detail.translation === "string";
+    const text = bilingual ? detail.translation : draft;
+    const language = bilingual
+      ? data.source_language || effectiveSource()
+      : currentTranslation.target;
+    const card = document.createElement("article"),
+      heading = document.createElement("strong"),
+      outgoing = document.createElement("p"),
       actions = document.createElement("div");
     card.className = "reply-suggestion-card";
-    style.className = "reply-suggestion-style";
-    style.textContent = bilingual ? labels[detail.style] : `${labels.heading} ${index + 1}`;
-    text.className = "reply-suggestion-text";
-    text.textContent = outgoing;
-    text.lang = language;
-    text.dir = "auto";
-    card.append(style, text);
+    heading.className = "reply-suggestion-style";
+    heading.textContent = bilingual
+      ? labels[detail.style] || detail.style
+      : `${t("reply")} ${index + 1}`;
+    outgoing.className = "reply-suggestion-text";
+    outgoing.textContent = text;
+    outgoing.lang = language;
+    outgoing.dir = "auto";
+    card.append(heading, outgoing);
     if (bilingual) {
       const meaning = document.createElement("p");
       meaning.className = "reply-suggestion-meaning";
       meaning.textContent = draft;
-      meaning.lang = target;
+      meaning.lang = currentTranslation.target;
       meaning.dir = "auto";
       card.append(meaning);
     }
     actions.className = "reply-suggestion-actions";
-    function action(icon, label, className, handler) {
+    for (const [icon, label, handler] of [
+      [
+        "copy",
+        t("copy"),
+        async () => {
+          const epoch = modeEpoch,
+            copied = await copyText(text);
+          if (workspace === activeFeature() && modeEpoch === epoch)
+            featureStatus("suggestion-status", t(copied ? "copied" : "copyFailed"), !copied);
+        },
+      ],
+      ["volume", t("listen"), (button) => speak(text, language, button)],
+      ["text", labels.edit, () => openReplyEditor(index)],
+    ]) {
       const button = document.createElement("button"),
         svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"),
         use = document.createElementNS("http://www.w3.org/2000/svg", "use");
       button.type = "button";
-      button.className = className;
+      button.className =
+        icon === "text" ? "outline-button reply-suggestion-edit" : "speaker-button";
       button.setAttribute("aria-label", label);
       button.title = label;
       svg.setAttribute("aria-hidden", "true");
       use.setAttribute("href", `#icon-${icon}`);
       svg.append(use);
       button.append(svg);
+      if (icon === "text") {
+        const caption = document.createElement("span");
+        caption.textContent = label;
+        button.append(caption);
+      }
       button.addEventListener("click", () => {
         if (workspace === activeFeature()) handler(button);
       });
-      return button;
+      actions.append(button);
     }
-    const copy = action("copy", t("copy"), "speaker-button", async () => {
-      const epoch = modeEpoch,
-        copied = await copyText(outgoing);
-      if (workspace === activeFeature() && modeEpoch === epoch)
-        featureStatus("reply-status", t(copied ? "copied" : "copyFailed"), !copied);
-    });
-    const listen = action("volume", t("listen"), "speaker-button", (button) =>
-      speak(outgoing, language, button)
-    );
-    const edit = action("text", labels.edit, "outline-button reply-suggestion-edit", () => {
-      $("reply-input").value = draft;
-      $("reply-input").dispatchEvent(new Event("input"));
-      $("reply-input").focus();
-    });
-    const editLabel = document.createElement("span");
-    editLabel.textContent = labels.edit;
-    edit.append(editLabel);
-    actions.append(copy, listen, edit);
     card.append(actions);
-    container.append(card);
+    list.append(card);
   }
+  list.hidden = false;
+  $("suggest-replies").setAttribute("aria-expanded", "true");
 }
 $("suggest-replies").addEventListener("click", async () => {
-  const data = await requestAssistant("replies", "reply-status", $("suggest-replies"));
+  if (replySuggestions) {
+    const expanded = $("reply-suggestions").hidden;
+    $("reply-suggestions").hidden = !expanded;
+    $("suggest-replies").setAttribute("aria-expanded", String(expanded));
+    return;
+  }
+  const data = await requestAssistant("replies", "suggestion-status", $("suggest-replies"));
   if (data) renderReplySuggestions(data);
 });
-function invalidateReply() {
-  abortFeature("reply");
-  translatedReply = "";
-  $("reply-result").hidden = true;
-  $("translate-reply").disabled = false;
-  featureStatus("reply-status");
+function closeReplyEditor() {
+  replyEditState?.controller?.abort();
+  replyEditState = null;
+  if ($("reply-edit-dialog").open) $("reply-edit-dialog").close();
+  $("reply-edit-submit").disabled = false;
+  $("reply-edit-input").readOnly = false;
 }
-$("reply-input").addEventListener("input", invalidateReply);
-$("translate-reply").addEventListener("click", async () => {
-  const text = $("reply-input").value.trim();
-  if (!text) {
-    featureStatus("reply-status", t("replyEmpty"), true);
-    $("reply-input").focus();
+function openReplyEditor(index) {
+  if (!currentTranslation || !replySuggestions?.replies[index]) return;
+  closeReplyEditor();
+  replyEditState = {
+    index,
+    workspace: activeFeature(),
+    feature: mode,
+    revision: featureRevision,
+    translation: currentTranslation,
+    suggestions: replySuggestions,
+    original: replySuggestions.replies[index],
+    draftLanguage: currentTranslation.target,
+    outgoingLanguage: replySuggestions.source_language || effectiveSource(),
+    controller: null,
+  };
+  const input = $("reply-edit-input");
+  input.value = replyEditState.original;
+  input.lang = replyEditState.draftLanguage;
+  input.placeholder = t("replyPlaceholder");
+  input.setAttribute("aria-label", t("yourReply"));
+  $("reply-edit-close").setAttribute("aria-label", t("close"));
+  $("reply-edit-instructions").textContent = t("replyInstructions")
+    .replace("{target}", languageName(replyEditState.draftLanguage))
+    .replace("{source}", languageName(replyEditState.outgoingLanguage));
+  featureStatus("reply-edit-status");
+  $("reply-edit-dialog").showModal();
+  input.focus();
+}
+$("reply-edit-close").addEventListener("click", closeReplyEditor);
+$("reply-edit-dialog").addEventListener("close", () => {
+  if (!$("reply-edit-dialog").open) closeReplyEditor();
+});
+$("reply-edit-input").addEventListener("keydown", (event) => {
+  if (!event.isComposing && (event.ctrlKey || event.metaKey) && event.key === "Enter") {
+    event.preventDefault();
+    $("reply-edit-form").requestSubmit();
+  }
+});
+$("reply-edit-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const state = replyEditState,
+    draft = $("reply-edit-input").value.trim();
+  if (!state || !draft || $("reply-edit-submit").disabled) return;
+  if (draft === state.original) {
+    closeReplyEditor();
     return;
   }
-  if (!currentTranslation) return;
-  const source = currentTranslation.target,
-    target = effectiveSource();
-  if (target === "auto") {
-    featureStatus("reply-status", t("chooseSpeaker"), true);
+  if (!LANGUAGES[state.outgoingLanguage] || state.outgoingLanguage === "auto") {
+    featureStatus("reply-edit-status", t("chooseSpeaker"), true);
     return;
   }
-  invalidateReply();
-  const controller = new AbortController(),
-    revision = featureRevision;
-  assistantRequests().set("reply", controller);
-  $("translate-reply").disabled = true;
-  featureStatus("reply-status", t("loading"));
+  const controller = new AbortController();
+  state.controller = controller;
+  $("reply-edit-submit").disabled = true;
+  $("reply-edit-input").readOnly = true;
+  featureStatus("reply-edit-status", t("working"));
+  const ownsEditor = () =>
+    replyEditState === state &&
+    activeFeature() === state.workspace &&
+    featureRevision === state.revision &&
+    $("reply-edit-dialog").open;
   try {
     const data = await responseJson(
       await fetch("/api/translate", {
@@ -487,47 +515,52 @@ $("translate-reply").addEventListener("click", async () => {
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cache_scope: mode,
-          text,
-          source,
-          target,
-          tone: currentTranslation.tone,
-          context: currentTranslation.context || "general",
-          extra_context: currentTranslation.extra_context || "",
-          glossary: currentTranslation.glossary || [],
+          cache_scope: state.feature,
+          text: draft,
+          source: state.draftLanguage,
+          target: state.outgoingLanguage,
+          tone: state.translation.tone,
+          context: state.translation.context || "general",
+          extra_context: state.translation.extra_context || "",
+          glossary: state.translation.glossary || [],
         }),
       })
     );
-    if (featureRevision !== revision || assistantRequests().get("reply") !== controller) return;
-    translatedReply = data.translation;
-    $("reply-output").textContent = translatedReply;
-    $("reply-result").hidden = false;
-    featureStatus("reply-status");
-  } catch (error) {
+    if (!ownsEditor()) return;
     if (
-      error.name !== "AbortError" &&
-      featureRevision === revision &&
-      assistantRequests().get("reply") === controller
+      typeof data.translation !== "string" ||
+      !data.translation.trim() ||
+      data.quality_review?.status === "needs_context"
     )
-      featureStatus("reply-status", error.message || t("failed"), true);
+      throw new Error(data.quality_review?.question || t("failed"));
+    const suggestions = {
+      ...state.suggestions,
+      replies: [...state.suggestions.replies],
+      reply_details: [...(state.suggestions.reply_details || [])],
+    };
+    suggestions.replies[state.index] = draft;
+    suggestions.source_language = state.outgoingLanguage;
+    suggestions.reply_details[state.index] = {
+      style:
+        state.suggestions.reply_details?.[state.index]?.style ||
+        ["friendly", "professional", "short"][state.index],
+      text: draft,
+      translation: data.translation,
+    };
+    closeReplyEditor();
+    renderReplySuggestions(suggestions);
+    $("reply-suggestions")
+      .querySelectorAll(".reply-suggestion-edit")
+      [state.index]?.focus({ preventScroll: true });
+  } catch (error) {
+    if (ownsEditor() && error.name !== "AbortError")
+      featureStatus("reply-edit-status", error.message || t("failed"), true);
   } finally {
-    if (assistantRequests().get("reply") === controller) {
-      assistantRequests().delete("reply");
-      $("translate-reply").disabled = false;
+    if (ownsEditor()) {
+      $("reply-edit-submit").disabled = false;
+      $("reply-edit-input").readOnly = false;
     }
   }
-});
-$("reply-input").addEventListener("keydown", (event) => {
-  if (!event.isComposing && (event.ctrlKey || event.metaKey) && event.key === "Enter") {
-    event.preventDefault();
-    $("translate-reply").click();
-  }
-});
-$("copy-reply").addEventListener("click", () => {
-  if (translatedReply) copyText(translatedReply);
-});
-$("speak-reply").addEventListener("click", () => {
-  if (translatedReply) speak(translatedReply, effectiveSource(), $("speak-reply"));
 });
 function rememberTranslation(detail) {
   if (!detail.text || !detail.translation) return;
@@ -633,6 +666,7 @@ $("show-saved").addEventListener("click", () => {
 });
 $("close-saved").addEventListener("click", () => $("saved-dialog").close());
 document.addEventListener("interface:change", () => {
+  closeReplyEditor();
   for (const name of ["explain", "check", "replies"]) abortFeature(name);
   for (const id of ["explain", "check-translation", "suggest-replies"]) $(id).disabled = false;
   $("explanation-panel").hidden = true;
@@ -641,7 +675,13 @@ document.addEventListener("interface:change", () => {
   $("check-text").textContent = "";
   $("explain").setAttribute("aria-expanded", "false");
   $("check-translation").setAttribute("aria-expanded", "false");
-  featureStatus("reply-status");
+  featureStatus("suggestion-status");
+  if (replySuggestions) {
+    const expanded = !$("reply-suggestions").hidden;
+    renderReplySuggestions(replySuggestions);
+    $("reply-suggestions").hidden = !expanded;
+    $("suggest-replies").setAttribute("aria-expanded", String(expanded));
+  }
   refreshFeatureLabels();
   renderSaved();
 });
@@ -653,12 +693,10 @@ const assistantHiddenIds = [
   "source-insights",
   "translation-tools",
   "output-language",
-  "reply-section",
   "explanation-panel",
   "check-panel",
   "apply-revision",
   "check-revision",
-  "reply-result",
   "pronunciation",
 ];
 const assistantTextIds = [
@@ -667,16 +705,14 @@ const assistantTextIds = [
   "check-text",
   "check-heading",
   "check-revision",
-  "reply-output",
   "source-info-status",
-  "reply-status",
+  "suggestion-status",
 ];
 document.addEventListener("mode:leaving", () => {
   clearTimeout(activeFeature().sourceInfoTimer);
   activeFeature().sourceInfoTimer = null;
   if (assistantRequests().has("source_info")) featureStatus("source-info-status");
-  if (assistantRequests().has("reply") || assistantRequests().has("replies"))
-    featureStatus("reply-status");
+  if (assistantRequests().has("replies")) featureStatus("suggestion-status");
   for (const [name, id] of [
     ["explain", "explanation-text"],
     ["check", "check-text"],
@@ -688,8 +724,8 @@ document.addEventListener("mode:leaving", () => {
   activeFeature().assistant = {
     translation: currentTranslation,
     suggestedRevision,
-    translatedReply,
-    replyInput: $("reply-input").value,
+    suggestions: replySuggestions,
+    suggestionsExpanded: !$("reply-suggestions").hidden,
     hidden: Object.fromEntries(assistantHiddenIds.map((id) => [id, $(id).hidden])),
     text: Object.fromEntries(
       assistantTextIds.map((id) => [
@@ -698,7 +734,6 @@ document.addEventListener("mode:leaving", () => {
       ])
     ),
     sourceChips: [...$("source-alternatives").children],
-    replyChips: [...$("reply-suggestions").children],
     explainExpanded: $("explain").getAttribute("aria-expanded"),
     checkExpanded: $("check-translation").getAttribute("aria-expanded"),
   };
@@ -713,15 +748,15 @@ document.addEventListener("mode:restored", () => {
   }
   currentTranslation = saved.translation;
   suggestedRevision = saved.suggestedRevision;
-  translatedReply = saved.translatedReply;
-  $("reply-input").value = saved.replyInput;
+  if (saved.suggestions) renderReplySuggestions(saved.suggestions);
+  $("reply-suggestions").hidden = !saved.suggestionsExpanded;
+  $("suggest-replies").setAttribute("aria-expanded", String(!!saved.suggestionsExpanded));
   for (const [id, hidden] of Object.entries(saved.hidden)) $(id).hidden = hidden;
   for (const [id, value] of Object.entries(saved.text)) {
     $(id).textContent = value.text;
     $(id).classList.toggle("error", value.error);
   }
   $("source-alternatives").replaceChildren(...saved.sourceChips);
-  $("reply-suggestions").replaceChildren(...saved.replyChips);
   $("explain").setAttribute("aria-expanded", saved.explainExpanded);
   $("check-translation").setAttribute("aria-expanded", saved.checkExpanded);
   refreshFeatureLabels();
