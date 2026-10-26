@@ -50,6 +50,56 @@ class AssistantTests(unittest.TestCase):
                     self.assertEqual(payload["target_language"], "English")
                     self.assertEqual(options["response_format"], {"type": "json_object"})
 
+    def test_bilingual_reply_cards_keep_draft_and_outgoing_languages_separate(self):
+        replies = [
+            {"style": "friendly", "text": "Okay, thanks!", "translation": "โอเค ขอบคุณนะ"},
+            {
+                "style": "professional",
+                "text": "Noted, thank you.",
+                "translation": "รับทราบ ขอบคุณครับ",
+            },
+            {"style": "short", "text": "Got it.", "translation": "เข้าใจแล้ว"},
+        ]
+        with patch.object(server, "get_client") as client:
+            client.return_value.chat.completions.create.return_value = completion(
+                json.dumps({"replies": list(reversed(replies))})
+            )
+            response = self.client.post("/api/assist", json={**self.context, "action": "replies"})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json["replies"], [item["text"] for item in replies])
+            self.assertEqual(response.json["reply_details"], replies)
+            prompt = client.return_value.chat.completions.create.call_args.kwargs["messages"][0][
+                "content"
+            ]
+            self.assertIn("TARGET", prompt)
+            self.assertIn("SOURCE", prompt)
+
+    def test_invalid_bilingual_replies_are_rejected(self):
+        good = [
+            {"style": "friendly", "text": "Thanks!", "translation": "ขอบคุณนะ"},
+            {"style": "professional", "text": "Thank you.", "translation": "ขอบคุณครับ"},
+            {"style": "short", "text": "Okay.", "translation": "โอเค"},
+        ]
+        bad = [
+            good[:2],
+            [good[0], good[0], good[2]],
+            [good[0], good[1], {**good[2], "translation": ""}],
+            [good[0], good[1], {**good[2], "text": ["invalid"]}],
+            [good[0], good[1], {**good[2], "style": "unexpected"}],
+            [good[0], good[1], {**good[2], "translation": "a" * 2001}],
+            [good[0], good[1], {**good[2], "text": good[0]["text"]}],
+        ]
+        with patch.object(server, "get_client") as client:
+            for replies in bad:
+                with self.subTest(replies=replies):
+                    client.return_value.chat.completions.create.return_value = completion(
+                        json.dumps({"replies": replies})
+                    )
+                    response = self.client.post(
+                        "/api/assist", json={**self.context, "action": "replies"}
+                    )
+                    self.assertEqual(response.status_code, 503)
+
     def test_bad_inputs_do_not_call_model(self):
         with patch.object(server, "get_client") as client:
             for overrides in [

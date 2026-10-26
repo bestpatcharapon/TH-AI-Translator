@@ -25,7 +25,15 @@ const assert = require("node:assert/strict");
     await page.locator("#settings-toggle").click();
     for (const scenario of ["restaurant", "shopping", "health"]) {
       await page.locator("#translation-context").selectOption(scenario, { force: true });
-      assert((await page.locator("#scenario-help").textContent()).length > 20);
+      await page.locator("#translation-context-trigger").click();
+      assert(
+        (
+          await page
+            .locator(`#preference-options [data-value="${scenario}"] .preference-option-help`)
+            .textContent()
+        ).length > 20
+      );
+      await page.keyboard.press("Escape");
     }
     await page.locator("#translation-context").selectOption("restaurant", { force: true });
     await page.locator("#menu-close").click();
@@ -75,7 +83,14 @@ const assert = require("node:assert/strict");
     await page.evaluate(() => switchFeature("text"));
     await page.evaluate(() => changeInterfaceLanguage("th"));
     await page.locator("#settings-toggle").click();
-    assert.match(await page.locator("#scenario-help").textContent(), /สั่งอาหาร/);
+    await page.locator("#translation-context-trigger").click();
+    assert.match(
+      await page
+        .locator('#preference-options [data-value="restaurant"] .preference-option-help')
+        .textContent(),
+      /สั่งอาหาร/
+    );
+    await page.keyboard.press("Escape");
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 844 });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));

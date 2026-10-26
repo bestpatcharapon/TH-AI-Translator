@@ -34,6 +34,14 @@ class PhotoReadingTests(unittest.TestCase):
             self.assertGreater(image.height, 60)
         self.assertEqual(source["x"], 20)
 
+    def test_many_crops_use_a_compact_sheet_without_dropping_region_ids(self):
+        with Image.open(io.BytesIO(large_image())) as image:
+            regions = [region(y=10 + i * 25) for i in range(30)]
+            sheet = reading_sheet(image, list(enumerate(regions)), regions)
+        with Image.open(io.BytesIO(sheet)) as image:
+            self.assertEqual(image.width, 1020)
+            self.assertLessEqual(image.height, 1500)
+
     def test_verified_transcription_keeps_original_and_measured_boxes(self):
         client = MagicMock()
         client.chat.completions.create.return_value = completion(
@@ -55,6 +63,37 @@ class PhotoReadingTests(unittest.TestCase):
         self.assertTrue(result[0]["reading_verified"])
         self.assertTrue(result[1]["reading_review"])
         self.assertEqual(original[0]["text"], "ข้าวกระเพาไก่")
+
+    def test_rate_limited_reading_retry_resumes_after_successful_small_batches(self):
+        client = MagicMock()
+        sources = [region(y=10 + index * 30) for index in range(20)]
+        calls = []
+        error = OpenAIError("rate limited")
+
+        def provider(**options):
+            prompt = options["messages"][0]["content"][0]["text"]
+            ids = [int(value) for value in prompt.split("with exactly these ids: ")[1].split(",")]
+            calls.append(ids)
+            self.assertLessEqual(len(ids), 10)
+            if len(calls) == 2:
+                raise error
+            return completion(
+                json.dumps(
+                    {
+                        "readings": [
+                            {"id": index, "text": "ข้าวผัด", "readable": True} for index in ids
+                        ]
+                    }
+                )
+            )
+
+        client.chat.completions.create.side_effect = provider
+        with self.assertRaises(OpenAIError):
+            verify_photo_readings(large_image(), sources, client)
+        result = verify_photo_readings(large_image(), sources, client)
+        self.assertEqual([len(batch) for batch in calls], [10, 10, 10])
+        self.assertEqual(calls[1], calls[2])
+        self.assertTrue(all(region["reading_verified"] for region in result))
 
     def test_invalid_readings_are_not_cached_as_success(self):
         client = MagicMock()
@@ -111,6 +150,16 @@ class PhotoReadingTests(unittest.TestCase):
         self.assertEqual(result[0]["text"], "8ลท")
         client.chat.completions.create.assert_not_called()
 
+    def test_visual_verification_cannot_silently_change_numeric_words(self):
+        client = MagicMock()
+        client.chat.completions.create.return_value = completion(
+            '{"readings":[{"id":0,"text":"80 บาท","readable":true}]}'
+        )
+        result = verify_photo_readings(large_image(), [region("50 บาท")], client)
+        self.assertEqual(result[0]["text"], "50 บาท")
+        self.assertTrue(result[0]["reading_review"])
+        self.assertFalse(result[0]["reading_verified"])
+
     def test_translation_cannot_silently_change_a_price(self):
         client = MagicMock()
         client.chat.completions.create.side_effect = [
@@ -119,9 +168,9 @@ class PhotoReadingTests(unittest.TestCase):
         ]
         with patch("photo_translation.positioned_text", return_value=[region("50 บาท")]):
             result = _translate_photo(image_file(), "th", "en", "natural", client, "model")
-        self.assertEqual(result["regions"][0]["translation"], "50 บาท")
-        self.assertTrue(result["regions"][0]["preserve_original"])
-        client.chat.completions.create.assert_not_called()
+        self.assertEqual(result["regions"][0]["translation"], "50 Baht")
+        self.assertFalse(result["regions"][0]["preserve_original"])
+        self.assertEqual(client.chat.completions.create.call_count, 2)
 
     def test_duplicate_or_foreign_reading_ids_cannot_replace_other_labels(self):
         for entries in [

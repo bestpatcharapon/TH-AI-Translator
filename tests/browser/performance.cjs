@@ -61,7 +61,7 @@ const assert = require("node:assert/strict");
     await page.waitForFunction(() => document.querySelector("#output").value === "en:PERF FINAL");
     await page.waitForFunction(() => activeFeature().additionalRequests.has("ja"));
     assert(lateText);
-    assert.match(await page.locator("#status").textContent(), /Translation complete/);
+    assert.equal(await page.locator("#status").textContent(), "");
     assert.equal(calls.filter((call) => call.text === "PERF INTERMEDIATE").length, 0);
     assert(!assist.some((call) => call.text === "PERF FIRST"));
     assert(

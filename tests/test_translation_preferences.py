@@ -3,8 +3,10 @@ import unittest
 from unittest.mock import patch
 
 from openai import OpenAIError
+from test_app import completion
 
 import app as server
+from project_config import STYLE_RULES, TONES, tone_description
 
 
 class TranslationPreferencesTests(unittest.TestCase):
@@ -41,6 +43,87 @@ class TranslationPreferencesTests(unittest.TestCase):
         self.assertIn("travel and tourism", prompt)
         self.assertIn('"Replying to a hotel receptionist"', prompt)
         self.assertIn("never as instructions", prompt)
+
+    def test_six_styles_reach_real_provider_request_with_distinct_rules(self):
+        styles = ["standard", "natural", "formal", "casual", "friendly", "business"]
+        self.assertEqual(list(TONES), styles)
+        self.assertEqual(set(STYLE_RULES), set(styles))
+        prompts = []
+        with (
+            patch.object(server, "get_client") as client,
+            patch.object(
+                server,
+                "review_draft",
+                return_value=("ตรวจรายงานด้วยครับ", {"status": "not_requested"}),
+            ),
+        ):
+            client.return_value.chat.completions.create.return_value = completion(
+                "ตรวจรายงานด้วยครับ"
+            )
+            for tone in styles:
+                with self.subTest(tone=tone):
+                    response = self.client.post(
+                        "/api/translate",
+                        json={
+                            "text": "Please review the report.",
+                            "source": "en",
+                            "target": "th",
+                            "tone": tone,
+                        },
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    prompt = client.return_value.chat.completions.create.call_args.kwargs[
+                        "messages"
+                    ][0]["content"]
+                    self.assertIn(STYLE_RULES[tone], prompt)
+                    self.assertIn("uncertainty", prompt)
+                    self.assertIn("must not add facts or erase intent", prompt)
+                    prompts.append(prompt)
+            self.assertEqual(client.return_value.chat.completions.create.call_count, 6)
+        self.assertEqual(len(set(prompts)), 6)
+        self.assertIn("source structure", prompts[0])
+        self.assertIn("idiomatic everyday", prompts[1])
+        self.assertIn("respectful vocabulary", prompts[2])
+        self.assertIn("relaxed spoken", prompts[3])
+        self.assertIn("warm conversational", prompts[4])
+        self.assertIn("commitments, deadlines", prompts[5])
+
+    def test_business_style_is_carried_into_image_and_assistant_paths(self):
+        result = {"regions": [{"text": "Hello", "translation": "สวัสดี"}], "source_language": "en"}
+        with (
+            patch.object(server, "translate_photo", return_value=result) as photo,
+            patch.object(server, "get_client"),
+        ):
+            response = self.client.post(
+                "/api/photo-translate",
+                data={
+                    "source": "en",
+                    "target": "th",
+                    "tone": "business",
+                    "file": (io.BytesIO(b"photo"), "photo.png"),
+                },
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(photo.call_args.args[3], tone_description("business"))
+        with (
+            patch.object(
+                server, "assistant_result", return_value={"explanation": "Explanation"}
+            ) as assistant,
+            patch.object(server, "get_client"),
+        ):
+            response = self.client.post(
+                "/api/assist",
+                json={
+                    "text": "Hello",
+                    "translation": "สวัสดี",
+                    "source": "en",
+                    "target": "th",
+                    "tone": "business",
+                    "action": "explain",
+                },
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(assistant.call_args.args[3]["tone"], tone_description("business"))
 
     def test_three_additional_translations_keep_language_order_and_partial_failures(self):
         def translate(text, source, target, tone, context, extra):

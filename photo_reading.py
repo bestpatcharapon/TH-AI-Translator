@@ -6,17 +6,17 @@ import io
 import json
 import re
 import unicodedata
-from concurrent.futures import ThreadPoolExecutor
 from difflib import SequenceMatcher
 
 from PIL import Image, ImageDraw
 
-from performance import ResultCache, digest_key, ordered_map
-from photo_detection import numeric_text
+from performance import ResultCache, digest_key
+from photo_detection import preserve_numeric_pixels
 from project_config import VISION_MODEL
+from translation_quality import audit_translation
 
-_reading_pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix="photo-reading")
 _reading_cache = ResultCache(max_entries=8, max_bytes=8 * 1024 * 1024, ttl=300)
+_reading_batch_cache = ResultCache(max_entries=64, max_bytes=4 * 1024 * 1024, ttl=300)
 MAX_VERIFIED_REGIONS = 30
 
 
@@ -37,21 +37,28 @@ def reading_bounds(image, region, regions=()):
 def reading_sheet(image, indexed_regions, regions=()):
     """Put enlarged, numbered crops on one image; row ids map to measured OCR boxes."""
     rows = []
+    columns = 2 if len(indexed_regions) > 8 else 1
+    column_width = 1020 // columns
     for index, region in indexed_regions:
         box = reading_bounds(image, region, regions)
         crop = image.crop(box).convert("RGB")
-        scale = min(6, 1000 / max(1, crop.width), 120 / max(1, crop.height))
+        scale = min(6, (column_width - 20) / max(1, crop.width), 72 / max(1, crop.height))
         crop = crop.resize(
             (max(1, round(crop.width * scale)), max(1, round(crop.height * scale))),
             Image.Resampling.LANCZOS,
         )
         rows.append((index, crop))
-    sheet = Image.new("RGB", (1020, sum(crop.height + 36 for _, crop in rows)), "#dddddd")
+    bands = [rows[start : start + columns] for start in range(0, len(rows), columns)]
+    sheet = Image.new(
+        "RGB", (1020, sum(max(crop.height for _, crop in band) + 28 for band in bands)), "#dddddd"
+    )
     draw, top = ImageDraw.Draw(sheet), 0
-    for index, crop in rows:
-        draw.text((8, top + 3), f"Region {index}", fill="black")
-        sheet.paste(crop, (8, top + 24))
-        top += crop.height + 36
+    for band in bands:
+        for column, (index, crop) in enumerate(band):
+            left = column * column_width + 8
+            draw.text((left, top + 3), f"Region {index}", fill="black")
+            sheet.paste(crop, (left, top + 24))
+        top += max(crop.height for _, crop in band) + 28
     output = io.BytesIO()
     sheet.save(output, format="PNG", compress_level=3)
     return output.getvalue()
@@ -68,8 +75,7 @@ def verify_photo_readings(normalized, regions, client):
             if (region.get("detected_only") or any(char.isalpha() for char in region["text"]))
             and not region.get("preserve_original")
             and not (region.get("native_ocr") and region.get("confidence", 0) >= 80)
-            and not re.fullmatch(r"(?:[\d\s.,]+)?(?:baht|บาท|usd|eur)", region["text"], re.I)
-            and not numeric_text(region["text"])
+            and not preserve_numeric_pixels(region["text"])
             and (
                 region["height"] <= 24
                 or region.get("confidence", 100) < 80
@@ -79,9 +85,9 @@ def verify_photo_readings(normalized, regions, client):
         if not candidates:
             return regions
         image = image.convert("RGB")
-        # One image request stays within the small provider input-token budget.
-        # Splitting a menu into several requests pays the image-token cost repeatedly.
-        batches = [candidates]
+        # Bound each vision request; one tall sheet of 30 labels can exceed the
+        # provider token budget or time out before returning complete readings.
+        batches = [candidates[start : start + 10] for start in range(0, len(candidates), 10)]
         # Build sheets on this thread; network workers receive only immutable encoded bytes.
         sheets = [(batch, reading_sheet(image, batch, regions)) for batch in batches]
         bounds = {index: reading_bounds(image, region, regions) for index, region in candidates}
@@ -93,7 +99,9 @@ def verify_photo_readings(normalized, regions, client):
             response = client.chat.completions.create(
                 model=VISION_MODEL,
                 temperature=0,
-                max_completion_tokens=2048,
+                max_completion_tokens=min(
+                    2048, max(1536, 128 + sum(32 + len(region["text"]) * 3 for _, region in batch))
+                ),
                 reasoning_effort="none",
                 timeout=18,
                 messages=[
@@ -159,13 +167,37 @@ def verify_photo_readings(normalized, regions, client):
 
     def produce():
         result = [dict(region) for region in regions]
-        for readings in ordered_map(_reading_pool, verify_batch, sheets):
+        for batch, sheet in sheets:
+            originals = dict(batch)
+            readings, _ = _reading_batch_cache.run(
+                (hashlib.sha256(sheet).digest(), digest_key(batch), client, VISION_MODEL),
+                lambda batch=batch, sheet=sheet: verify_batch((batch, sheet)),
+                cacheable=lambda readings, originals=originals: all(
+                    readable
+                    and not any(
+                        issue["kind"] == "numbers"
+                        for issue in audit_translation(originals[index]["text"], text, "en", [])[
+                            "issues"
+                        ]
+                    )
+                    for index, (text, readable) in readings.items()
+                ),
+            )
             for index, (text, readable) in readings.items():
                 region = result[index]
                 region["reading_verified"] = readable
                 region["reading_review"] = not readable
                 region["ocr_text"] = region["text"]
                 if readable:
+                    if any(
+                        issue["kind"] == "numbers"
+                        for issue in audit_translation(region["text"], text, "en", [])["issues"]
+                    ):
+                        # A new word reading must not silently change an amount,
+                        # opening time or phone number before translation validation.
+                        region["reading_verified"] = False
+                        region["reading_review"] = True
+                        continue
                     original = unicodedata.normalize("NFKC", region["text"]).replace("ำ", "ํา")
                     visual = unicodedata.normalize("NFKC", text).replace("ำ", "ํา")
                     ingredient_lost = any(

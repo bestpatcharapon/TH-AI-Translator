@@ -229,13 +229,14 @@ class PerformanceTests(unittest.TestCase):
             with lock:
                 active += 1
                 peak = max(peak, active)
-            time.sleep(0.03)
+            barrier.wait(timeout=5)
             text = options["messages"][1]["content"]
             with lock:
                 active -= 1
             return completion("translated:" + text.strip())
 
         text = "paragraph words\n" * 650
+        barrier = threading.Barrier(min(3, len(list(server.chunks(text)))))
         with patch.object(server, "get_client") as client:
             client.return_value.chat.completions.create.side_effect = provider
             result = server.translate_text(text, "en", "th", "natural")
@@ -245,7 +246,7 @@ class PerformanceTests(unittest.TestCase):
         self.assertGreater(peak, 1)
         self.assertLessEqual(peak, 3)
 
-    def test_photo_batches_keep_ids_and_order_with_bounded_concurrency(self):
+    def test_photo_batches_keep_ids_and_order_without_parallel_provider_bursts(self):
         lock = threading.Lock()
         active = 0
         peak = 0
@@ -275,7 +276,7 @@ class PerformanceTests(unittest.TestCase):
             client.return_value.chat.completions.create.side_effect = provider
             result = translate_regions(regions, "en", "th", "natural", client.return_value, "model")
         self.assertEqual(result, ["translated:" + item["text"] for item in regions])
-        self.assertEqual(peak, 2)
+        self.assertEqual(peak, 1)
 
     def test_all_three_ocr_variants_are_preserved(self):
         lock = threading.Lock()

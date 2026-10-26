@@ -22,6 +22,11 @@ def numeric_text(text):
     )
 
 
+def preserve_numeric_pixels(text):
+    """Keep bare numeric facts, but translate words attached to them (50 บาท)."""
+    return numeric_text(text) and not any(char.isalpha() for char in text)
+
+
 def text_boxes(image):
     # Load only the detector: its bundled model needs no API key, GPU, or network.
     global _detector

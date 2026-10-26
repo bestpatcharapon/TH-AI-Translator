@@ -1,14 +1,15 @@
 """Mixed-language menus must not be skipped because their heading is English."""
 
 import io
+import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from test_app import completion
 from test_photo_translation import image_file
 
 import app as server
-from photo_translation import _photo_language, ocr_languages, translate_regions
+from photo_translation import _photo_language, _translate_photo, ocr_languages, translate_regions
 
 
 class MixedPhotoTests(unittest.TestCase):
@@ -67,6 +68,66 @@ class MixedPhotoTests(unittest.TestCase):
             )
             self.assertEqual(result.status_code, 200)
             self.assertEqual(result.json["translated_regions"], 0)
+
+    def test_price_hours_and_phone_words_translate_without_repainting_original_thai(self):
+        class Regions(list):
+            protected_boxes = []
+
+        originals = ["50 บาท", "เวลา 10:00 - 20:00 น.", "โทร 091 234 5678", "ร้านสุข", "50"]
+        translated = ["50 Baht", "Hours 10:00 - 20:00", "Tel 091 234 5678", "Suk Restaurant"]
+        regions = Regions(
+            [
+                {
+                    "x": 10,
+                    "y": 5 + i * 30,
+                    "width": 180,
+                    "height": 20,
+                    "text": text,
+                    "preserve_original": True,
+                }
+                for i, text in enumerate(originals)
+            ]
+        )
+        regions.protected_boxes = [
+            {key: region[key] for key in ("x", "y", "width", "height")} for region in regions
+        ]
+        client = MagicMock()
+
+        client.chat.completions.create.return_value = completion(
+            json.dumps(
+                {"translations": [{"id": i, "text": text} for i, text in enumerate(translated)]}
+            )
+        )
+        with patch("photo_translation.positioned_text", return_value=regions):
+            result = _translate_photo(image_file(), "th", "en", "natural", client, "model")
+        self.assertEqual([r["translation"] for r in result["regions"]], translated + ["50"])
+        self.assertTrue(all(not r["preserve_original"] for r in result["regions"][:4]))
+        self.assertTrue(result["regions"][4]["preserve_original"])
+        self.assertEqual(result["protected_boxes"], [regions.protected_boxes[4]])
+        self.assertEqual(result["translated_regions"], 4)
+        self.assertEqual(result["review_required"], 0)
+
+    def test_same_language_setting_does_not_skip_foreign_thai_labels(self):
+        client = MagicMock()
+        client.chat.completions.create.return_value = completion(
+            '{"translations":[{"id":0,"text":"50 Baht"}]}'
+        )
+        result = translate_regions([{"text": "50 บาท"}], "en", "en", "natural", client, "model")
+        self.assertEqual(result, ["50 Baht"])
+        client.chat.completions.create.assert_called_once()
+
+    def test_price_with_wrong_digits_after_repair_fails_instead_of_returning_success(self):
+        client = MagicMock()
+        client.chat.completions.create.return_value = completion(
+            '{"translations":[{"id":0,"text":"80 Baht"}]}'
+        )
+        with patch(
+            "photo_translation.positioned_text",
+            return_value=[{"x": 10, "y": 10, "width": 90, "height": 20, "text": "50 บาท"}],
+        ):
+            with self.assertRaises(RuntimeError):
+                _translate_photo(image_file(), "th", "en", "natural", client, "model")
+        self.assertEqual(client.chat.completions.create.call_count, 2)
 
     def test_mixed_label_prompt_keeps_existing_target_text(self):
         with patch.object(server, "get_client") as provider:

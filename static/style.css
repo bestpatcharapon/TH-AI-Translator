@@ -1108,8 +1108,8 @@ p:lang(zh) {
   padding: 12px 0;
 }
 .reply-section {
-  margin-top: 21px;
-  padding-top: 26px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px solid var(--border);
 }
 .reply-heading {
@@ -1123,7 +1123,7 @@ p:lang(zh) {
 }
 .reply-heading h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 .reply-heading > span {
   font-size: 11px;
@@ -1133,24 +1133,26 @@ p:lang(zh) {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.7;
-  margin: 20px 0 15px;
+  margin: 10px 0 12px;
 }
 #suggest-replies {
-  border-radius: 15px;
-  font-size: 15px;
-  padding: 11px 16px;
+  border-radius: 14px;
+  min-height: 44px;
+  font-size: 13px;
+  padding: 8px 12px;
 }
 .reply-input {
   flex: initial;
-  min-height: 110px;
-  height: 110px;
+  min-height: 80px;
+  height: 80px;
   max-height: 300px;
   resize: vertical;
-  margin: 20px 0 22px;
+  margin: 12px 0;
   border: 1px solid var(--border);
   border-radius: 15px;
-  padding: 14px;
-  font-size: 16px;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 .reply-input:focus {
   border-color: var(--accent);
@@ -1319,54 +1321,114 @@ p:lang(zh) {
   max-width: 720px;
   align-self: center;
 }
+.photo-mode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
 #photo-heading {
-  margin: 0 0 17px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  flex-shrink: 0;
 }
 .photo-empty {
   text-align: center;
   border: 1px solid var(--border);
   border-radius: 25px;
   background: var(--card);
-  padding: 27px 18px;
+  padding: 22px 24px 18px;
 }
-.photo-eyebrow {
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.4px;
-  margin: 0 0 20px;
-}
-.photo-hero-icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 19px;
-  border-radius: 18px;
-  background: var(--raised);
+.photo-illustration {
+  position: relative;
+  width: 174px;
+  height: 100px;
+  margin: 0 auto 16px;
   color: var(--accent);
 }
-.photo-hero-icon svg {
-  width: 27px;
-  height: 27px;
+.photo-illustration-frame {
+  position: absolute;
+  inset: 0 26px 16px 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg);
+}
+.photo-illustration-frame > svg {
+  width: 52px;
+  height: 52px;
+  stroke-width: 1.2;
+}
+.photo-illustration-caption {
+  position: absolute;
+  inset-inline-end: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  background: var(--raised);
+  color: var(--text);
+  font-size: 21px;
+  line-height: 1.4;
+  box-shadow: 0 6px 14px #0001;
+}
+.photo-illustration-caption svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
 }
 .photo-empty h3 {
-  font-size: 22px;
+  font-family:
+    "Manrope Brand", var(--interface-font, "Noto Sans Thai"), "Noto Sans Thai", sans-serif;
+  font-size: 21px;
   font-weight: 650;
-  letter-spacing: -0.6px;
-  line-height: 1.45;
-  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+  text-wrap: balance;
 }
 .photo-intro {
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.8;
-  margin: 0 0 25px;
+  font-size: 14px;
+  line-height: 1.75;
+  max-width: 360px;
+  margin: 0 auto 16px;
+  text-wrap: pretty;
 }
 .photo-upload-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
+  max-width: 360px;
+  margin-inline: auto;
+}
+.photo-upload-actions button {
+  min-height: 46px;
+  font-size: 14px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+.photo-upload-actions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .photo-upload-actions .photo-primary:hover {
+    background: color-mix(in srgb, var(--accent) 88%, var(--text));
+  }
+  .photo-upload-actions .outline-button:hover {
+    background: var(--raised);
+  }
 }
 .photo-primary {
   background: var(--accent);
@@ -1384,16 +1446,12 @@ p:lang(zh) {
   width: 18px;
   height: 18px;
 }
-.photo-help {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 20px 0 0;
-  line-height: 1.7;
-}
 .photo-formats {
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.6;
   color: var(--muted);
-  margin: 9px 0 0;
+  margin: 16px 0 0;
+  text-wrap: balance;
 }
 .photo-preview {
   position: relative;
@@ -1576,6 +1634,17 @@ p:lang(zh) {
   touch-action: pan-x pan-y pinch-zoom;
   padding: 12px;
 }
+.photo-viewer-status {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
 #photo-viewer-stage {
   margin: 0 auto;
 }
@@ -1610,7 +1679,7 @@ p:lang(zh) {
 }
 @media (max-width: 370px) {
   .photo-empty {
-    padding: 24px 14px;
+    padding: 20px 14px 18px;
   }
   .photo-empty h3 {
     font-size: 20px;
@@ -2458,7 +2527,7 @@ textarea[dir="auto"],
 /* Settings navigation stays visible while each panel scrolls independently. */
 .menu-tabs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(max-content, 1fr) max-content minmax(max-content, 1fr);
   gap: 4px;
   margin: 14px 18px 0;
   padding: 4px;
@@ -2466,6 +2535,7 @@ textarea[dir="auto"],
   border-radius: 15px;
   background: var(--bg);
   flex-shrink: 0;
+  overflow-x: auto;
 }
 .menu-tabs button {
   min-width: 0;
@@ -2479,7 +2549,7 @@ textarea[dir="auto"],
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
   cursor: pointer;
 }
 .menu-tabs button[aria-selected="true"] {
@@ -2718,46 +2788,6 @@ textarea[dir="auto"],
   .preference-options:not(.context-options) .preference-option-name {
     padding-inline: 0;
   }
-}
-.tone-picker .preference-header {
-  display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 44px;
-  gap: 10px;
-}
-.tone-picker #preference-title {
-  grid-column: 2;
-  grid-row: 1;
-  text-align: center;
-}
-.tone-picker #preference-close {
-  grid-column: 3;
-  grid-row: 1;
-}
-.tone-picker .preference-options {
-  grid-auto-rows: 1fr;
-  gap: 12px;
-}
-.tone-picker .preference-option {
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-  align-content: center;
-  min-height: 120px;
-  padding: 20px 12px;
-  gap: 12px;
-  text-align: center;
-}
-.tone-picker .preference-option-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
-}
-.tone-picker .preference-option-icon svg {
-  width: 21px;
-  height: 21px;
-}
-.tone-picker .preference-option-name {
-  padding-inline: 0;
-  line-height: 1.5;
 }
 #thai-mode-trigger {
   display: flex;
@@ -3014,6 +3044,7 @@ textarea[dir="auto"],
   }
   .menu-tabs button {
     padding-inline: 2px;
+    font-size: 11px;
   }
 }
 #multiple-languages {
@@ -3633,7 +3664,10 @@ textarea[dir="auto"],
 }
 
 #photo-target-language {
-  margin-bottom: 8px;
+  margin-bottom: 0;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 12px;
   max-width: 100%;
   white-space: normal;
 }
@@ -3935,15 +3969,20 @@ textarea[dir="auto"],
     height: 44px;
   }
   .mode-nav {
-    padding: 8px;
+    padding: 5px;
   }
   .mode {
-    min-height: 64px;
-    height: auto;
-    padding: 8px 3px;
+    min-height: 54px;
+    height: 54px;
+    padding: 4px 3px;
+    gap: 3px;
     white-space: normal;
-    line-height: 1.3;
+    line-height: 1.1;
     font-size: clamp(10px, 2.8vw, 11px);
+  }
+  .mode svg {
+    width: 20px;
+    height: 20px;
   }
   .mode span {
     max-width: 100%;
@@ -3984,9 +4023,6 @@ textarea[dir="auto"],
     overflow: visible;
     -webkit-line-clamp: unset;
     line-height: 1.85;
-  }
-  .photo-upload-actions {
-    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
   }
   .photo-upload-actions button {
     min-height: 46px;
@@ -4238,8 +4274,8 @@ textarea[dir="auto"],
     flex-shrink: 0;
   }
   :is(.text-mode, .document-mode) .source-panel #input {
-    flex: 1 0 64px;
-    min-height: 64px;
+    flex: 1 1 48px;
+    min-height: 48px;
     height: auto !important;
     max-height: none;
     padding: 12px 0 8px;
@@ -4255,7 +4291,15 @@ textarea[dir="auto"],
     margin-top: 8px;
   }
   :is(.text-mode, .document-mode) .source-insights {
-    margin: 4px 0 8px;
+    flex-shrink: 0;
+    margin: 4px 0 6px;
+  }
+  :is(.text-mode, .document-mode) .source-insights .suggestion-chips {
+    gap: 6px;
+  }
+  :is(.text-mode, .document-mode) .source-insights .suggestion-chip {
+    padding: 7px 10px;
+    line-height: 1.5;
   }
   :is(.text-mode, .document-mode) #pronunciation {
     margin-bottom: 8px;
@@ -4270,13 +4314,6 @@ textarea[dir="auto"],
     bottom: auto;
     transform: none;
     margin-top: 46px;
-  }
-  :is(.text-mode, .document-mode) .mode-nav {
-    padding: 5px;
-  }
-  :is(.text-mode, .document-mode) .mode {
-    min-height: 54px;
-    padding: 6px 3px;
   }
   :is(.text-mode, .document-mode) > .voice-status,
   :is(.text-mode, .document-mode) .additional-results {
@@ -4342,4 +4379,254 @@ textarea[dir="auto"],
   .document-mode .file-preview .text-button {
     min-height: 44px;
   }
+}
+
+/* Reply tools keep the same compact type and touch targets as the translation controls. */
+.reply-section .reply-primary {
+  min-height: 44px;
+  padding: 8px 12px;
+  gap: 8px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+.reply-section :is(#suggest-replies, .reply-primary) svg {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 700px) {
+  #reply-input {
+    font-size: 14px;
+    max-height: 160px;
+  }
+  .reply-heading > svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Compact translation actions, scoped to the result toolbar. */
+.translation-icons {
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.translation-icons .speaker-button {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+.translation-icons .speaker-button svg {
+  width: 20px;
+  height: 20px;
+}
+.review-buttons .outline-button {
+  min-height: 36px;
+  padding: 6px 10px;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.review-buttons .outline-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Keep the three review actions together without widening the result panel. */
+.review-buttons {
+  flex-wrap: nowrap;
+}
+.review-buttons .outline-button {
+  min-width: 0;
+}
+.review-buttons .outline-button span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.output-footer:has(#status:empty) {
+  display: none;
+}
+@media (max-width: 700px) {
+  .review-buttons {
+    gap: 5px;
+  }
+  .review-buttons .outline-button {
+    flex: 1 1 auto;
+    padding: 6px;
+    gap: 4px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .review-buttons .outline-button svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+@media (max-width: 370px) {
+  .review-buttons .outline-button {
+    font-size: 11px;
+    padding-inline: 5px;
+  }
+}
+
+/* Scroll within the cards, leaving rounded edges and headings clear. */
+.panel-scroll {
+  display: contents;
+}
+@media (max-width: 700px) {
+  :is(.text-mode, .document-mode) .panel {
+    overflow: hidden;
+  }
+  :is(.text-mode, .document-mode) .panel-scroll {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--muted) 45%, transparent) transparent;
+    scrollbar-gutter: stable;
+    padding-inline-end: 4px;
+    margin-top: 6px;
+  }
+  :is(.text-mode, .document-mode) .panel-scroll::-webkit-scrollbar {
+    width: 5px;
+  }
+  :is(.text-mode, .document-mode) .panel-scroll::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--muted) 45%, transparent);
+    border-radius: 999px;
+  }
+  :is(.text-mode, .document-mode) .panel-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 6px;
+  }
+}
+
+/* A distinct Latin wordmark, independent of the selected interface language. */
+@font-face {
+  font-family: "Manrope Brand";
+  src: url("/static/fonts/Manrope-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+.app-header .brand h1 {
+  font-family: "Manrope Brand", "Segoe UI", sans-serif;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.55px;
+  line-height: 1.25;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.brand-ai {
+  color: var(--accent);
+  font-weight: 750;
+}
+@media (max-width: 370px) {
+  .app-header .brand h1 {
+    font-size: 15px;
+    letter-spacing: -0.45px;
+  }
+}
+@media (min-width: 1024px) {
+  .app-header .brand h1 {
+    font-size: 19px;
+    letter-spacing: -0.65px;
+  }
+}
+:root[data-theme="light"] .brand-ai {
+  color: color-mix(in srgb, var(--text) 70%, var(--accent));
+}
+
+/* Bilingual reply choices: ready-to-send text, meaning, and explicit actions. */
+.reply-suggestions {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  gap: 10px;
+}
+.reply-suggestions:empty {
+  border: 0;
+  padding: 0;
+}
+.reply-suggestions > h4 {
+  margin: 0 0 2px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.reply-suggestion-card {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  min-width: 0;
+}
+.reply-suggestion-style {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+.reply-suggestion-card p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 5px 0 8px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.reply-suggestion-text {
+  font-weight: 600;
+}
+.reply-suggestion-meaning {
+  color: var(--muted);
+}
+.reply-suggestion-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.reply-suggestion-actions .speaker-button {
+  width: 40px;
+  height: 40px;
+}
+.reply-suggestion-actions .speaker-button svg,
+.reply-suggestion-edit svg {
+  width: 20px;
+  height: 20px;
+}
+.reply-suggestion-edit {
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+:root[data-theme="light"] .reply-suggestion-style {
+  color: var(--muted);
+}
+
+/* Use compact explanatory rows for Style, matching the Context picker. */
+.style-options {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+.style-options .preference-option {
+  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  min-height: 72px;
+  padding: 10px 12px;
+  gap: 3px 10px;
+}
+.style-options .preference-option-icon {
+  grid-row: 1 / 3;
+}
+.style-options .preference-option-help {
+  grid-column: 2;
+  display: block;
+  overflow: visible;
+  line-height: 1.6;
+  padding-inline-end: 12px;
 }

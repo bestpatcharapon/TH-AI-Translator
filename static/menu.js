@@ -17,7 +17,7 @@ Object.assign(COPY.en, {
   favoritesOnly: "Favorites only",
   clearAll: "Clear all",
   starToKeep: "Star a translation to keep it.",
-  extraContextHint: "Extra context (optional)",
+  extraContextHint: "Context, e.g. a friend",
   historySearchHint: "Search your translations…",
   noHistory: "Your translations will appear here.",
   noHistoryMatch: "No matching translations.",
@@ -44,7 +44,7 @@ Object.assign(COPY.th, {
   favoritesOnly: "รายการโปรดเท่านั้น",
   clearAll: "ล้างทั้งหมด",
   starToKeep: "กดดาวเพื่อเก็บคำแปลเป็นรายการโปรด",
-  extraContextHint: "บริบทเพิ่มเติม (ไม่บังคับ)",
+  extraContextHint: "บริบทเพิ่มเติม เช่น คุยกับเพื่อน",
   historySearchHint: "ค้นหาคำแปลของคุณ…",
   noHistory: "คำแปลของคุณจะแสดงที่นี่",
   noHistoryMatch: "ไม่พบคำแปลที่ตรงกัน",
@@ -95,6 +95,8 @@ const preferenceDialog = $("preference-dialog"),
 const preferenceTriggers = new Map();
 let preferenceSource = null;
 const preferenceIcons = {
+  standard: "text",
+  business: "document",
   natural: "sparkles",
   friendly: "star",
   formal: "document",
@@ -118,7 +120,16 @@ function preferenceIcon(name, className = "") {
   return svg;
 }
 function preferenceTitle(select) {
-  return t(select.id === "tone" ? "tone" : "context");
+  return t(select.id === "tone" ? "style" : "context");
+}
+function preferenceOptionLabel(option) {
+  // New style names do not invalidate the already-prepared interface locale schema.
+  const names = {
+    standard: { en: "Standard", th: "มาตรฐาน" },
+    business: { en: "Business", th: "ธุรกิจ" },
+  };
+  const name = names[option.value];
+  return name ? name[locale] || name.en : t(option.dataset.i18n);
 }
 function refreshPreferenceTriggers() {
   for (const [select, button] of preferenceTriggers) {
@@ -126,7 +137,7 @@ function refreshPreferenceTriggers() {
     const selected = select.selectedOptions[0];
     const text = document.createElement("span");
     text.className = "preference-trigger-label";
-    text.textContent = t(selected.dataset.i18n);
+    text.textContent = preferenceOptionLabel(selected);
     const icon = document.createElement("span");
     icon.className = "preference-trigger-icon";
     icon.append(preferenceIcon(preferenceIcons[select.value]));
@@ -135,13 +146,31 @@ function refreshPreferenceTriggers() {
     button.title = text.textContent;
   }
 }
+const styleDescriptions = {
+  en: {
+    standard: "Direct, neutral wording close to the original.",
+    natural: "Smooth, idiomatic phrasing that sounds natural.",
+    formal: "Respectful wording for formal situations.",
+    casual: "Relaxed, spoken language for everyday chats.",
+    friendly: "Warm, approachable wording with a friendly tone.",
+    business: "Concise, professional wording for work or clients.",
+  },
+  th: {
+    standard: "แปลตรงและเป็นกลาง ใกล้เคียงต้นฉบับ",
+    natural: "สำนวนลื่นไหล อ่านเป็นธรรมชาติ",
+    formal: "ใช้ถ้อยคำสุภาพ เหมาะกับสถานการณ์ทางการ",
+    casual: "ภาษาพูดสบาย ๆ สำหรับแชตในชีวิตประจำวัน",
+    friendly: "น้ำเสียงอบอุ่น เป็นมิตร และเข้าถึงง่าย",
+    business: "กระชับ เป็นมืออาชีพ สำหรับงานหรือลูกค้า",
+  },
+};
 function renderPreferenceOptions() {
   if (!preferenceSource) return;
   const context = preferenceSource.id === "translation-context";
-  preferenceDialog.classList.toggle("tone-picker", !context);
+  preferenceOptions.classList.toggle("style-options", !context);
   $("preference-title").textContent = preferenceTitle(preferenceSource);
   $("preference-close").setAttribute("aria-label", t("close"));
-  preferenceOptions.classList.toggle("context-options", context);
+  preferenceOptions.classList.add("context-options");
   preferenceOptions.replaceChildren();
   for (const option of preferenceSource.options) {
     const button = document.createElement("button");
@@ -156,12 +185,14 @@ function renderPreferenceOptions() {
     icon.append(preferenceIcon(preferenceIcons[option.value]));
     const name = document.createElement("span");
     name.className = "preference-option-name";
-    name.textContent = t(option.dataset.i18n);
+    name.textContent = preferenceOptionLabel(option);
     button.append(icon, name);
-    if (context) {
+    {
       const help = document.createElement("span");
       help.className = "preference-option-help";
-      help.textContent = t("scenario" + option.value[0].toUpperCase() + option.value.slice(1));
+      help.textContent = context
+        ? t("scenario" + option.value[0].toUpperCase() + option.value.slice(1))
+        : (styleDescriptions[locale] || styleDescriptions.en)[option.value];
       button.append(help);
       button.title = help.textContent;
     }
@@ -219,6 +250,7 @@ for (const id of ["tone", "translation-context"]) {
   select.hidden = true;
   select.parentElement.append(button);
   preferenceTriggers.set(select, button);
+  select.addEventListener("change", refreshPreferenceTriggers);
   function open() {
     preferenceSource = select;
     renderPreferenceOptions();
@@ -233,7 +265,6 @@ for (const id of ["tone", "translation-context"]) {
     event.preventDefault();
     open();
   });
-  select.addEventListener("change", refreshPreferenceTriggers);
 }
 $("preference-close").addEventListener("click", () => preferenceDialog.close());
 preferenceDialog.addEventListener("close", () => {
@@ -293,14 +324,12 @@ function syncMenuTheme() {
     .querySelector("use")
     .setAttribute("href", light ? "#icon-moon" : "#icon-sun");
 }
-$("menu-theme").addEventListener("click", () => $("theme").click());
-$("theme").addEventListener("click", syncMenuTheme);
+$("menu-theme").addEventListener("click", () => {
+  toggleTheme();
+  syncMenuTheme();
+});
 document.addEventListener("interface:change", syncMenuTheme);
 syncMenuTheme();
-function renderScenarioHelp() {
-  const key = activeFeature().preferences.context;
-  $("scenario-help").textContent = t("scenario" + key[0].toUpperCase() + key.slice(1));
-}
 const menuIconButton = (icon, label, action) => {
   const button = document.createElement("button");
   button.type = "button";
@@ -475,29 +504,20 @@ function renderAdditionalChoices() {
 function refreshMenu() {
   const preferences = activeFeature().preferences;
   $("translation-context").value = preferences.context;
-  $("extra-context").value = preferences.extraContext;
   $("multiple-languages").checked = preferences.multiple;
   $("history-favorites").checked = preferences.favoritesOnly;
   $("history-search").value = preferences.historyQuery;
-  $("extra-context").placeholder = t("extraContextHint");
-  $("extra-context").setAttribute("aria-label", t("extraContextHint"));
   $("history-search").placeholder = t("historySearchHint");
   $("history-search").setAttribute("aria-label", t("historySearchHint"));
   $("additional-search").placeholder = t("additionalSearchHint");
   $("additional-search").setAttribute("aria-label", t("additionalSearchHint"));
   $("menu-close").setAttribute("aria-label", t("closeMenu"));
   refreshPreferenceTriggers();
-  renderScenarioHelp();
   renderAdditionalChoices();
   renderHistory();
 }
 $("translation-context").addEventListener("change", () => {
   activeFeature().preferences.context = $("translation-context").value;
-  renderScenarioHelp();
-  document.dispatchEvent(new CustomEvent("translation:settings"));
-});
-$("extra-context").addEventListener("input", () => {
-  activeFeature().preferences.extraContext = $("extra-context").value;
   document.dispatchEvent(new CustomEvent("translation:settings"));
 });
 $("multiple-languages").addEventListener("change", () => {
@@ -654,12 +674,6 @@ function renderAdditionalResults() {
         menuIconButton("volume", t("listen"), () => speak(result.translation, result.target))
       );
       card.append(header, text);
-      if (["unavailable", "rejected", "length_limit"].includes(result.quality_review?.status)) {
-        const warning = document.createElement("p");
-        warning.className = "feature-status";
-        warning.textContent = t("meaningReviewUnavailable");
-        card.append(warning);
-      }
       if (result.audit?.status === "review") {
         const check = document.createElement("details");
         check.className = "studio-back";

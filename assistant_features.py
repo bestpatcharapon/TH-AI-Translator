@@ -33,11 +33,15 @@ def assistant_result(client, model, action, context, language):
             f"Write notes in {language}. Use plain text without Markdown."
         ),
         "replies": (
-            'Return {"replies": [string, string, string]}. Suggest exactly three different, '
-            "short and contextually appropriate responses to the received message. "
-            "Write each response in the TARGET language, so the user can choose it and "
-            "translate it back to the SOURCE language. Do not translate or repeat the "
-            "incoming message; respond to it. Respect the requested tone."
+            'Return {"replies": [{"style": "friendly", "text": string, "translation": string}, '
+            '{"style": "professional", "text": string, "translation": string}, '
+            '{"style": "short", "text": string, "translation": string}]}. '
+            "Suggest exactly three distinct, contextually appropriate responses to the received "
+            "message: friendly, professional, and short. Each text is a draft in the TARGET "
+            "language for the user to understand and edit. Each translation is the matching "
+            "ready-to-send response in the SOURCE language, preserving the draft's meaning. "
+            "Do not translate or repeat the incoming message; respond to it. Do not invent "
+            "personal facts or commitments. Keep each response concise and plain text."
         ),
     }
     if action not in instructions:
@@ -100,6 +104,30 @@ def assistant_result(client, model, action, context, language):
                 "notes": string("notes"),
                 "revision": string("revision", assessment == "needs_revision"),
             }
-        return {"replies": strings("replies", 3)}
+        replies = result.get("replies")
+        # Older providers/clients may still use drafts without bilingual details.
+        if isinstance(replies, list) and all(isinstance(value, str) for value in replies):
+            return {"replies": strings("replies", 3)}
+        if not isinstance(replies, list) or len(replies) != 3:
+            raise ValueError()
+        styles = ("friendly", "professional", "short")
+        details = {}
+        for reply in replies:
+            if not isinstance(reply, dict):
+                raise ValueError()
+            style = reply.get("style")
+            if not isinstance(style, str) or style not in styles or style in details:
+                raise ValueError()
+            fields = {}
+            for key in ("text", "translation"):
+                value = reply.get(key)
+                if not isinstance(value, str) or not value.strip() or len(value) > 2000:
+                    raise ValueError()
+                fields[key] = value.strip()
+            details[style] = {"style": style, **fields}
+        ordered = [details[style] for style in styles]
+        if any(len({reply[key] for reply in ordered}) != 3 for key in ("text", "translation")):
+            raise ValueError()
+        return {"replies": [reply["text"] for reply in ordered], "reply_details": ordered}
     except (ValueError, TypeError) as error:
         raise RuntimeError("ข้อมูลจากผู้ช่วยไม่สมบูรณ์ กรุณาลองอีกครั้ง") from error

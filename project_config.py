@@ -29,8 +29,46 @@ MAX_TEXT = 30_000
 MAX_UPLOAD = 10 * 1024 * 1024
 MAX_PAGES = 20
 TONES = {
+    "standard": "neutral and faithful",
     "natural": "natural and fluent",
     "formal": "formal and polite",
     "casual": "casual and conversational",
     "friendly": "friendly, warm and approachable",
+    "business": "professional, concise and businesslike",
 }
+STYLE_RULES = {
+    "standard": (
+        "Use neutral, direct wording close to the source structure where idiomatic. "
+        "Avoid stylistic embellishment and unnecessary paraphrasing; do not force word-for-word errors."
+    ),
+    "natural": (
+        "Use idiomatic everyday phrasing and natural target-language word order. "
+        "Rephrase awkward literal constructions without adding or removing meaning."
+    ),
+    "formal": (
+        "Use complete sentences, respectful vocabulary and an appropriate formal register. "
+        "Avoid slang, chat abbreviations and casual contractions where inappropriate."
+    ),
+    "casual": (
+        "Use relaxed spoken phrasing and everyday vocabulary, with natural contractions where suitable. "
+        "Do not add profanity, intimacy or slang absent from the source."
+    ),
+    "friendly": (
+        "Use approachable, considerate wording with a warm conversational register. "
+        "Do not invent greetings, thanks, compliments, emojis or personal familiarity."
+    ),
+    "business": (
+        "Use concise, professional wording suited to workplace or client communication, "
+        "with clear requests and consistent domain terms. Avoid decorative corporate jargon. "
+        "Do not invent commitments, deadlines, approvals or legal force."
+    ),
+}
+
+
+def tone_description(tone):
+    """Carry the same style requirements through translation, OCR and review paths."""
+    return (
+        f"{TONES[tone]} register. {STYLE_RULES[tone]} "
+        "Preserve facts, numbers, negation, uncertainty and the strength of source insults. "
+        "Do not add or omit meaning to achieve a style."
+    )

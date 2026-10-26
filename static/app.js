@@ -253,7 +253,7 @@ function commitTranslation(detail) {
   outputEl.value = detail.translation;
   outputEl.lang = detail.target;
   updateOutput();
-  setStatus(t("done"));
+  setStatus();
   document.dispatchEvent(
     new CustomEvent("translation:complete", { detail: { ...detail, feature: mode } })
   );
@@ -395,7 +395,6 @@ async function translate({ refresh = false } = {}) {
   document.querySelector(".output-panel").setAttribute("aria-busy", "true");
   setStatus(t("loading"));
   if (!isChat) document.dispatchEvent(new CustomEvent("translation:invalidated"));
-  const started = performance.now();
   try {
     const data = await responseJson(
       await fetch("/api/translate", {
@@ -434,7 +433,7 @@ async function translate({ refresh = false } = {}) {
     else {
       outputEl.value = data.translation;
       updateOutput();
-      setStatus(t("done"));
+      setStatus();
     }
     if (isChat) {
       const turn = { ...detail, reversed: reverseSpeaker };
@@ -445,9 +444,7 @@ async function translate({ refresh = false } = {}) {
       updateInput();
       if ($("auto-speak").checked) speak(data.translation, target);
     }
-    setStatus(t("doneIn").replace("{seconds}", ((performance.now() - started) / 1000).toFixed(1)));
-    if (["unavailable", "rejected", "length_limit"].includes(data.quality_review?.status))
-      setStatus(t("meaningReviewUnavailable"));
+    setStatus();
     document.dispatchEvent(new CustomEvent("thai:result", { detail: data.interpretation || null }));
   } catch (error) {
     if (error.name !== "AbortError" && ownsOperation(controller))
@@ -1150,11 +1147,7 @@ window.addEventListener("pagehide", () => {
 });
 
 function updateThemeLabel() {
-  const light = document.documentElement.dataset.theme === "light",
-    label = t(light ? "darkTheme" : "lightTheme");
-  $("theme").setAttribute("aria-label", label);
-  $("theme").title = label;
-  $("theme").setAttribute("aria-pressed", String(light));
+  const light = document.documentElement.dataset.theme === "light";
   document.querySelector('meta[name="theme-color"]').content = light ? "#f6f3ed" : "#211f1b";
 }
 try {
@@ -1168,13 +1161,9 @@ let themeTransitionTimer = null;
 requestAnimationFrame(() =>
   requestAnimationFrame(() => document.documentElement.classList.add("theme-ready"))
 );
-$("theme").addEventListener("click", () => {
+function toggleTheme() {
   clearTimeout(themeTransitionTimer);
   document.documentElement.classList.add("theme-changing");
-  $("theme").classList.remove("theme-switching");
-  // Restart the small button animation on every click, including quick toggles.
-  void $("theme").offsetWidth;
-  $("theme").classList.add("theme-switching");
   const theme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
   document.documentElement.dataset.theme = theme;
   try {
@@ -1185,9 +1174,8 @@ $("theme").addEventListener("click", () => {
   updateThemeLabel();
   themeTransitionTimer = setTimeout(() => {
     document.documentElement.classList.remove("theme-changing");
-    $("theme").classList.remove("theme-switching");
   }, 500);
-});
+}
 function applyInterfaceLocale(language) {
   locale = language;
   document.documentElement.lang = locale;

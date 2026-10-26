@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from photo_detection import numeric_text
+from photo_detection import preserve_numeric_pixels
 
 MODEL_ROOT = Path(__file__).resolve().parent / ".ocr/paddle"
 DETECTION_MODEL = "PP-OCRv6_medium_det"
@@ -147,7 +147,7 @@ def recognize_image(normalized, source):
             score = float(reading.get("rec_score", 0))
             if not math.isfinite(score) or not 0 <= score <= 1:
                 score = 0
-            numeric = numeric_text(text)
+            numeric = preserve_numeric_pixels(text)
             region = dict(
                 x=left,
                 y=top,

@@ -86,7 +86,9 @@ function readSaved() {
               item.target !== "auto" &&
               (item.sourceLanguage === undefined ||
                 (validLanguage(item.sourceLanguage) && item.sourceLanguage !== "auto")) &&
-              ["natural", "formal", "casual", "friendly"].includes(item.tone)
+              ["standard", "natural", "formal", "casual", "friendly", "business"].includes(
+                item.tone
+              )
           )
           .map((item) => ({
             ...item,
@@ -355,23 +357,100 @@ $("check-translation").addEventListener("click", async () => {
 $("apply-revision").addEventListener("click", () => {
   if (currentTranslation && suggestedRevision) applyStudioWording(suggestedRevision);
 });
-$("suggest-replies").addEventListener("click", async () => {
-  const data = await requestAssistant("replies", "reply-status", $("suggest-replies"));
-  if (!data) return;
-  $("reply-suggestions").replaceChildren();
-  for (const text of data.replies) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "suggestion-chip";
-    button.textContent = text;
-    button.lang = currentTranslation.target;
-    button.addEventListener("click", () => {
-      $("reply-input").value = text;
+const replyCardLabels = {
+  en: {
+    heading: "Suggested replies",
+    friendly: "Friendly",
+    professional: "Professional",
+    short: "Short",
+    edit: "Edit first",
+  },
+  th: {
+    heading: "คำตอบแนะนำ",
+    friendly: "เป็นมิตร",
+    professional: "เป็นทางการ",
+    short: "สั้นกระชับ",
+    edit: "แก้ไขก่อน",
+  },
+};
+function renderReplySuggestions(data) {
+  const container = $("reply-suggestions"),
+    source = data.source_language || effectiveSource(),
+    target = currentTranslation.target,
+    workspace = activeFeature(),
+    labels = replyCardLabels[locale] || replyCardLabels.en;
+  container.replaceChildren();
+  const heading = document.createElement("h4");
+  heading.textContent = `${labels.heading} (${data.replies.length})`;
+  container.append(heading);
+  for (const [index, draft] of data.replies.entries()) {
+    const detail = data.reply_details?.[index],
+      bilingual = detail && detail.text === draft && typeof detail.translation === "string",
+      outgoing = bilingual ? detail.translation : draft,
+      language = bilingual ? source : target,
+      card = document.createElement("article"),
+      style = document.createElement("strong"),
+      text = document.createElement("p"),
+      actions = document.createElement("div");
+    card.className = "reply-suggestion-card";
+    style.className = "reply-suggestion-style";
+    style.textContent = bilingual ? labels[detail.style] : `${labels.heading} ${index + 1}`;
+    text.className = "reply-suggestion-text";
+    text.textContent = outgoing;
+    text.lang = language;
+    text.dir = "auto";
+    card.append(style, text);
+    if (bilingual) {
+      const meaning = document.createElement("p");
+      meaning.className = "reply-suggestion-meaning";
+      meaning.textContent = draft;
+      meaning.lang = target;
+      meaning.dir = "auto";
+      card.append(meaning);
+    }
+    actions.className = "reply-suggestion-actions";
+    function action(icon, label, className, handler) {
+      const button = document.createElement("button"),
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+        use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      button.type = "button";
+      button.className = className;
+      button.setAttribute("aria-label", label);
+      button.title = label;
+      svg.setAttribute("aria-hidden", "true");
+      use.setAttribute("href", `#icon-${icon}`);
+      svg.append(use);
+      button.append(svg);
+      button.addEventListener("click", () => {
+        if (workspace === activeFeature()) handler(button);
+      });
+      return button;
+    }
+    const copy = action("copy", t("copy"), "speaker-button", async () => {
+      const epoch = modeEpoch,
+        copied = await copyText(outgoing);
+      if (workspace === activeFeature() && modeEpoch === epoch)
+        featureStatus("reply-status", t(copied ? "copied" : "copyFailed"), !copied);
+    });
+    const listen = action("volume", t("listen"), "speaker-button", (button) =>
+      speak(outgoing, language, button)
+    );
+    const edit = action("text", labels.edit, "outline-button reply-suggestion-edit", () => {
+      $("reply-input").value = draft;
       $("reply-input").dispatchEvent(new Event("input"));
       $("reply-input").focus();
     });
-    $("reply-suggestions").append(button);
+    const editLabel = document.createElement("span");
+    editLabel.textContent = labels.edit;
+    edit.append(editLabel);
+    actions.append(copy, listen, edit);
+    card.append(actions);
+    container.append(card);
   }
+}
+$("suggest-replies").addEventListener("click", async () => {
+  const data = await requestAssistant("replies", "reply-status", $("suggest-replies"));
+  if (data) renderReplySuggestions(data);
 });
 function invalidateReply() {
   abortFeature("reply");
@@ -423,7 +502,7 @@ $("translate-reply").addEventListener("click", async () => {
     translatedReply = data.translation;
     $("reply-output").textContent = translatedReply;
     $("reply-result").hidden = false;
-    featureStatus("reply-status", t("done"));
+    featureStatus("reply-status");
   } catch (error) {
     if (
       error.name !== "AbortError" &&

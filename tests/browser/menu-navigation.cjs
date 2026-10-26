@@ -61,7 +61,9 @@ const assert = require("node:assert/strict");
         );
         assert.equal(
           await page.locator("#menu-theme .menu-theme-label").textContent(),
-          await page.locator("#theme").getAttribute("aria-label")
+          await page.evaluate(() =>
+            t(document.documentElement.dataset.theme === "light" ? "darkTheme" : "lightTheme")
+          )
         );
         assert(await page.locator("#settings").evaluate((el) => el.scrollWidth <= el.clientWidth));
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));

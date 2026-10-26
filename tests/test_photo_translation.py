@@ -78,6 +78,59 @@ class PhotoTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     translate_regions(self.regions, "th", "en", "natural", client, "model")
 
+    def test_retry_reuses_validated_batches_after_a_later_rate_limit(self):
+        regions = [{"text": f"รายการ {index}"} for index in range(25)]
+        error = OpenAIError("Rate limited")
+        error.status_code = 429
+        sizes = []
+        with patch.object(server, "get_client") as client:
+
+            def provider(**options):
+                batch = json.loads(options["messages"][1]["content"])
+                sizes.append(len(batch))
+                self.assertLessEqual(options["max_completion_tokens"], 4096)
+                if len(sizes) == 2:
+                    raise error
+                return completion(
+                    json.dumps(
+                        {
+                            "translations": [
+                                {"id": item["id"], "text": "Item " + item["text"].split()[-1]}
+                                for item in batch
+                            ]
+                        }
+                    )
+                )
+
+            client.return_value.chat.completions.create.side_effect = provider
+            with self.assertRaises(OpenAIError):
+                translate_regions(regions, "th", "en", "natural", client.return_value, "model")
+            result = translate_regions(regions, "th", "en", "natural", client.return_value, "model")
+        self.assertEqual(sizes, [20, 5, 5])
+        self.assertEqual(result, [f"Item {index}" for index in range(25)])
+
+    def test_long_alternate_readings_are_split_without_losing_labels(self):
+        regions = [{"text": f"label {i}", "ocr_variants": ["x" * 900]} for i in range(3)]
+        with patch.object(server, "get_client") as client:
+
+            def provider(**options):
+                items = json.loads(options["messages"][1]["content"])
+                return completion(
+                    json.dumps(
+                        {
+                            "translations": [
+                                {"id": item["id"], "text": "translated " + item["text"]}
+                                for item in items
+                            ]
+                        }
+                    )
+                )
+
+            client.return_value.chat.completions.create.side_effect = provider
+            result = translate_regions(regions, "en", "th", "natural", client.return_value, "model")
+            self.assertEqual(client.return_value.chat.completions.create.call_count, 3)
+        self.assertEqual(result, ["translated " + r["text"] for r in regions])
+
     def test_bad_photo_and_invalid_settings_are_json_errors(self):
         for settings in [{"source": "bad"}, {"target": "bad"}, {"tone": "bad"}, {}]:
             response = self.client.post(

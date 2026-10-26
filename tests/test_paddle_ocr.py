@@ -54,9 +54,9 @@ class PaddleOCRTests(unittest.TestCase):
             self.assertIsNone(backend.recognize_image(b"", "ar"))
             model.assert_not_called()
 
-    def test_readings_keep_original_numbers_and_flag_weak_text(self):
+    def test_readings_translate_currency_words_keep_bare_numbers_and_flag_weak_text(self):
         polygons = np.array(
-            [[[10, y], [110, y], [110, y + 16], [10, y + 16]] for y in (10, 40, 70)],
+            [[[10, y], [110, y], [110, y + 16], [10, y + 16]] for y in (10, 40, 70, 100)],
             dtype="float32",
         )
         detector, recognizer = MagicMock(), MagicMock()
@@ -65,6 +65,7 @@ class PaddleOCRTests(unittest.TestCase):
             {"rec_text": "50 Baht", "rec_score": 0.96},
             {"rec_text": "ข้าวผัด", "rec_score": 0.5},
             {"rec_text": "เมนูต้ม", "rec_score": 0.95},
+            {"rec_text": "50", "rec_score": 0.96},
         ]
         with (
             patch.object(backend, "models_ready", return_value=True),
@@ -72,9 +73,10 @@ class PaddleOCRTests(unittest.TestCase):
         ):
             result = backend.recognize_image(photo(), "th")
         self.assertEqual(result["engine"], "paddle")
-        price, weak, confident = result["regions"]
+        price, weak, confident, numeric = result["regions"]
         self.assertEqual(price["text"], "50 Baht")
-        self.assertTrue(price["preserve_original"])
+        self.assertFalse(price["preserve_original"])
+        self.assertTrue(numeric["preserve_original"])
         self.assertEqual(len(result["protected_boxes"]), 1)
         self.assertTrue(weak["reading_review"])
         self.assertTrue(weak["needs_visual_check"])

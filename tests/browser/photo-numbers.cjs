@@ -44,6 +44,16 @@ const fs = require("node:fs/promises");
               background: "#aa0000",
               foreground: "#ffffff",
             },
+            {
+              x: 0,
+              y: 88,
+              width: 140,
+              height: 30,
+              text: "50 บาท",
+              translation: "50 Baht",
+              background: "#141414",
+              foreground: "#ffffff",
+            },
             // Deliberately wrong OCR: the original PNG says 50, the server text says 5.
             {
               x: 165,
@@ -72,9 +82,28 @@ const fs = require("node:fs/promises");
           ?.getContext("2d")
           .getImageData(170, 20, 1, 1).data[3] === 255
     );
-    assert.equal(await page.locator("#photo-main-stage .photo-label").count(), 1);
+    assert.equal(await page.locator("#photo-main-stage .photo-label").count(), 2);
     assert.equal(await page.locator("#photo-number-note").isVisible(), true);
-    assert.doesNotMatch(await page.locator("#photo-readings-list").textContent(), /5/);
+    assert(await page.getByRole("button", { name: "50 Baht", exact: true }).isVisible());
+    await page.locator("#photo-fullscreen").click();
+    assert.equal(await page.locator("#photo-viewer-stage .photo-label").count(), 2);
+    assert(!(await page.locator("#photo-viewer-status").isVisible()));
+    await page.locator("#photo-viewer-close").click();
+    await page.evaluate(() => {
+      window.exportedPhotoWords = [];
+      const draw = CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText = function (text, ...args) {
+        window.exportedPhotoWords.push(text);
+        return draw.call(this, text, ...args);
+      };
+    });
+
+    assert.equal(
+      await page
+        .locator("#photo-readings-list small")
+        .evaluateAll((items) => items.some((item) => item.textContent === "5")),
+      false
+    );
     const displayMatches = await page.evaluate(async (src) => {
       const original = new Image();
       original.src = src;
@@ -99,6 +128,7 @@ const fs = require("node:fs/promises");
     const event = page.waitForEvent("download");
     await page.locator("#photo-download").click();
     const download = await event;
+    assert((await page.evaluate(() => window.exportedPhotoWords.join(""))).includes("50 Baht"));
     const exported = `data:image/png;base64,${(await fs.readFile(await download.path())).toString("base64")}`;
     const result = await page.evaluate(
       async ({ source, output }) => {

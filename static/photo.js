@@ -2,7 +2,7 @@
 Object.assign(COPY.en, {
   photoEyebrow: "AI PHOTO TRANSLATION",
   photoTitle: "Translate text in photos",
-  photoIntro: "Snap or choose a menu, sign or document and see the translation right on the photo.",
+  photoIntro: "Menus, signs or documents. Read the translation right on your photo.",
   photoChoose: "Choose image",
   photoCamera: "Use camera",
   photoHelp: "Choose a photo and see its translation on the image.",
@@ -20,7 +20,7 @@ Object.assign(COPY.en, {
   photoReview: "{count} text areas need checking. Open the readings below or use a clearer photo.",
   photoReadings: "Read all translations ({count})",
   photoReadingUnclear: "Text unclear — check the original photo",
-  photoNumbersKept: "Prices, numbers, times and contact details are kept from the original photo.",
+  photoNumbersKept: "Numeric-only areas are kept from the original photo.",
   photoUnchanged: "No text changed. Check the source language or try a clearer photo.",
   photoCapture: "Take photo",
   photoCameraLoading: "Opening camera…",
@@ -31,7 +31,7 @@ Object.assign(COPY.en, {
 Object.assign(COPY.th, {
   photoEyebrow: "แปลข้อความบนภาพด้วย AI",
   photoTitle: "แปลข้อความทับบนรูปภาพ",
-  photoIntro: "ถ่ายหรือเลือกรูปเมนู ป้าย หรือเอกสาร แล้วดูคำแปลบนรูปเดิมได้ทันที",
+  photoIntro: "เมนู ป้าย หรือเอกสาร อ่านคำแปลบนรูปเดิมได้เลย",
   photoChoose: "เลือกรูปภาพ",
   photoCamera: "ใช้กล้อง",
   photoHelp: "เลือกรูป แล้วดูคำแปลที่วางบนข้อความในภาพ",
@@ -49,7 +49,7 @@ Object.assign(COPY.th, {
   photoReview: "มี {count} ส่วนที่ยังอ่านไม่ชัด เปิดรายการด้านล่างเพื่อตรวจ หรือใช้รูปที่ชัดขึ้น",
   photoReadings: "อ่านคำแปลทั้งหมด ({count})",
   photoReadingUnclear: "ยังอ่านไม่ชัด กรุณาเทียบกับรูปต้นฉบับ",
-  photoNumbersKept: "คงราคา ตัวเลข เวลา และข้อมูลติดต่อจากภาพต้นฉบับ",
+  photoNumbersKept: "ส่วนที่เป็นตัวเลขล้วนคงไว้จากภาพต้นฉบับ",
   photoUnchanged:
     "ยังไม่มีข้อความที่เปลี่ยนเป็นคำแปล ลองเลือกภาษาต้นทางให้ตรงกับข้อความหรือใช้รูปที่ชัดขึ้น",
   photoCapture: "ถ่ายภาพ",
@@ -107,6 +107,7 @@ function clearPhotoError() {
   $("photo-retry").hidden = true;
   $("photo-retry").disabled = false;
   $("photo-retry-wait").textContent = "";
+  syncPhotoViewerStatus();
 }
 function showPhotoError(message, retryAfter = 0, isError = true) {
   clearPhotoError();
@@ -119,6 +120,7 @@ function showPhotoError(message, retryAfter = 0, isError = true) {
     : 0;
   const readyAt = Date.now() + seconds * 1000;
   photoLastError = { message, readyAt, isError };
+  syncPhotoViewerStatus();
   const update = () => {
     const remaining = Math.max(0, Math.ceil((readyAt - Date.now()) / 1000));
     $("photo-retry").disabled = remaining > 0;
@@ -153,6 +155,20 @@ let completedPhotoSettings = "";
 function photoStatus(message = "", error = false) {
   $("photo-status").textContent = message;
   $("photo-status").classList.toggle("error", error);
+}
+function syncPhotoViewerStatus() {
+  const status = $("photo-viewer-status");
+  let message = "";
+  if (photoLastError) {
+    message = `${t("photoNotCompleted")} · ${t("photoOriginal")}\n${photoLastError.message}`;
+  } else if (photoFile && !photoData) {
+    message = `${t("photoOriginal")} · ${t($("photo-loading").hidden ? "photoNotCompleted" : "photoProcessing")}`;
+  } else if (photoData?.review_required) {
+    message = t("photoReview").replace("{count}", String(photoData.review_required));
+  }
+  status.textContent = message;
+  status.hidden = !message;
+  $("photo-viewer-original").disabled = !photoData;
 }
 function photoCompletionStatus() {
   if (photoData?.review_required) {
@@ -230,6 +246,7 @@ function setPhotoBusy(busy) {
   $("photo-original").disabled = !photoData;
   $("photo-fullscreen").disabled = !photoFile;
   $("photo-download").hidden = !photoData || busy;
+  syncPhotoViewerStatus();
 }
 function labelRect(region, regions, width, height) {
   let left = region.x,
@@ -337,7 +354,6 @@ function renderPhotoStage(id) {
   for (const region of data.regions) {
     if (
       region.preserve_original ||
-      /\p{N}/u.test(region.text) ||
       region.reading_review ||
       region.translation.trim() === region.text.trim()
     )
@@ -410,6 +426,7 @@ function renderPhoto() {
   $("photo-viewer-original").textContent = t(showingOriginal ? "photoTranslated" : "photoOriginal");
   $("photo-original").disabled = !photoData;
   $("photo-download").hidden = !photoData;
+  syncPhotoViewerStatus();
 }
 async function importPhoto(file) {
   if (file.size > 10 * 1024 * 1024) {
@@ -601,6 +618,7 @@ $("photo-fullscreen").addEventListener("click", () => {
   $("photo-viewer").showModal();
   sizePhotoViewer();
   renderPhotoStage("photo-viewer-stage");
+  syncPhotoViewerStatus();
 });
 $("photo-viewer-close").addEventListener("click", () => $("photo-viewer").close());
 for (const [id, step] of [
@@ -670,7 +688,6 @@ $("photo-download").addEventListener("click", async () => {
     for (const region of data.regions) {
       if (
         region.preserve_original ||
-        /\p{N}/u.test(region.text) ||
         region.reading_review ||
         region.translation.trim() === region.text.trim()
       )
