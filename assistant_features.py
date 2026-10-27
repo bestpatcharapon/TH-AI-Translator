@@ -2,6 +2,7 @@
 
 import json
 
+from dialect_references import introduces_laughter
 from linguistic_guidance import language_notes
 
 
@@ -16,7 +17,10 @@ def assistant_result(client, model, action, context, language):
             "For non-Latin source scripts give a readable Latin romanization of the entire source text, "
             "not an English translation. For Latin scripts use an empty pronunciation. "
             "Give exactly two short, natural alternative phrasings in the SOURCE language "
-            "with the same intent, suitable as clickable examples. Never answer the source message."
+            "with the same intent, suitable as clickable examples. Never answer the source message. "
+            "Use thai_interpretation_context and its published references to preserve regional pronouns. "
+            "When that context explicitly identifies Northern Thai first-person ฮา, keep it as the speaker, not ฮ่า or an invented laugh. "
+            "Do not introduce laughter into alternatives when absent from the original intent."
         ),
         "explain": (
             'Return {"explanation": string}. In 2-4 concise sentences explain the vocabulary, '
@@ -89,9 +93,27 @@ def assistant_result(client, model, action, context, language):
             return values
 
         if action == "source_info":
+            alternatives = strings("alternatives", 2)
+            hint = context.get("thai_interpretation_context", {})
+            if (
+                any(
+                    ref.get("id") == "northern-first-person-ha"
+                    for ref in hint.get("published_references", [])
+                )
+                and not any(
+                    item.get("origin") == "personal" and "ฮา" in item.get("term", "")
+                    for item in hint.get("definition_clues", [])
+                )
+                and not introduces_laughter("", hint.get("suggested_central_thai", ""))
+                and any(
+                    introduces_laughter(context.get("source_text", ""), alternative)
+                    for alternative in alternatives
+                )
+            ):
+                raise ValueError("Alternative adds laughter to a Northern Thai pronoun")
             return {
                 "pronunciation": string("pronunciation", False),
-                "alternatives": strings("alternatives", 2),
+                "alternatives": alternatives,
             }
         if action == "explain":
             return {"explanation": string("explanation")}

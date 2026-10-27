@@ -5,7 +5,7 @@ from typing import Any
 
 from openai import OpenAIError
 
-from dialect_references import normalize, retrieve_references
+from dialect_references import introduces_laughter, normalize, retrieve_references
 from language_catalog import LANGUAGES
 from linguistic_guidance import language_notes
 from model_routing import dialect_review_route
@@ -23,6 +23,12 @@ THAI_MODES = {
     "southern": "Southern Thai",
 }
 INTERPRETATION_LIMIT = 3000
+
+
+class DialectMeaningError(RuntimeError):
+    pass
+
+
 # Starter examples only; these are not a comprehensive or community-verified dictionary.
 STARTER_ENTRIES = [
     {"term": "ลำแต้ๆ", "meaning": "อร่อยมาก", "dialect": "northern", "example": "ใช้ชมรสชาติอาหาร"},
@@ -261,9 +267,38 @@ def interpret_thai(
     data = None
     result = None
     primary_failure = None
+    pronoun_ha = (
+        any(ref.get("id") == "northern-first-person-ha" for ref in lexical)
+        and not clarification.strip()
+        and not any(entry["origin"] == "personal" and "ฮา" in entry["term"] for entry in entries)
+    )
+
+    def checked_interpretation(value):
+        interpretation = validate_interpretation(value, text, target, mode, entries, references)
+        if (
+            pronoun_ha
+            and interpretation["status"] == "ready"
+            and (
+                introduces_laughter(text, interpretation["standard_thai"])
+                or (target == "en" and introduces_laughter(text, interpretation["translation"]))
+            )
+        ):
+            raise DialectMeaningError("คำแปลเพิ่มเสียงหัวเราะจากสรรพนามภาษาเหนือ กรุณาลองใหม่")
+        return interpretation
+
     try:
         data = json_result(client, model, instruction, payload)
-        result = validate_interpretation(data, text, target, mode, entries, references)
+        try:
+            result = checked_interpretation(data)
+        except DialectMeaningError:
+            data = json_result(
+                client,
+                model,
+                instruction
+                + " The previous draft incorrectly added laughter. In this Northern Thai predicate, ฮา is the first-person subject. Remove invented laugh interjections from BOTH the Central Thai meaning and the final translation; retain all other source facts. Return the complete original JSON schema.",
+                {**payload, "rejected_interpretation": data},
+            )
+            result = checked_interpretation(data)
     except (RuntimeError, OpenAIError) as error:
         if reviewer is None:
             raise
@@ -289,7 +324,7 @@ def interpret_thai(
                 limit=4500,
                 timeout=20,
             )
-            candidate = validate_interpretation(checked, text, target, mode, entries, references)
+            candidate = checked_interpretation(checked)
             if result is None:
                 result = candidate
                 independent = not isinstance(primary_failure, OpenAIError)

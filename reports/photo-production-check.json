@@ -1,0 +1,10 @@
+{
+  "scope": "Production endpoint with repository synthetic fixture, not the user menu image. No project environment variables or provider dashboard access.",
+  "status": 200,
+  "seconds": 7.47,
+  "result": {
+    "ocr_engine": "rapidocr-vision",
+    "translated_regions": 4,
+    "review_required": 0
+  }
+}

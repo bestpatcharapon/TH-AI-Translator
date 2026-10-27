@@ -1,0 +1,83 @@
+{
+  "scope": "Single real-provider run for the reported Northern Thai pronoun; not a benchmark of dialect coverage.",
+  "checks": [
+    {
+      "kind": "translation",
+      "status": 200,
+      "seconds": 3.17,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "interpretation": {
+          "evidence": [
+            {
+              "meaning": "ฮา = ฉัน (สรรพนามบุรุษที่หนึ่ง)",
+              "quote": "ฮาจะไปกินข้าวแล้ว"
+            }
+          ],
+          "matched_entries": [],
+          "mode": "northern",
+          "note": "ใช้คำว่า “ฮา” ตามพจนานุกรมภาษาถิ่นเหนือเป็นสรรพนามบุรุษที่หนึ่ง (ฉัน) แล้วแปลความหมายของประโยคให้เป็นภาษากลางและอังกฤษตามที่ต้องการ",
+          "possibilities": [],
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "unavailable"
+          },
+          "questions": [],
+          "references": [
+            {
+              "aliases": [],
+              "central_thai": "สรรพนามบุรุษที่หนึ่ง ฉัน/กู ตามระดับความสนิทและบริบท",
+              "dialect": "northern",
+              "id": "northern-first-person-ha",
+              "kind": "lexical",
+              "match": "exact_term",
+              "match_pattern": "(?:^|[\\s“\"(])ฮา(?=\\s*(?:จะ|บ่|กิ๋น|กินข้าว|หิว|อยาก|ต้อง|กำลัง|ขอ|เป็น|อยู่|มี|เฮียน|ฮัก|ไป(?:กิน|กิ๋น|กาด|เฮียน|บ้าน|ทำงาน)))",
+              "only_modes": [
+                "northern"
+              ],
+              "provenance": "editorial_context_note",
+              "register": "informal Northern Thai first-person pronoun; do not infer gender or add profanity",
+              "sources": [
+                "https://th.wiktionary.org/wiki/ฮา",
+                "https://db.sac.or.th/thailand-cultural-encyclopedia/detail.php?id=12741"
+              ],
+              "term": "ฮา",
+              "usage": "In explicitly selected Northern Thai, a single ฮา before a predicate can mean the first-person speaker (I/me), as in ฮาจะไปกินข้าวแล้ว. Preserve the first-person intention and all tense/aspect, negation and other content. Do not turn this subject into haha, ha!, laughter, a joke, or the Central Thai interjection ฮ่า. Genuine laughter such as ฮ่าๆ, ฮาฮา, ฮาๆ, 555, or an explicitly funny/laughing context must keep its actual meaning. This contextual rule does not define every ฮา or words containing ฮา, and does not by itself prove a dialect in Standard/Auto mode. Personal meanings and explicit clarification take precedence. This note is about the word, not a fixed sentence translation."
+            }
+          ],
+          "standard_thai": "ฉันจะไปกินข้าวแล้ว",
+          "status": "ready",
+          "translation": "I'm about to go eat."
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "gemini-3.5-flash-lite",
+          "provider": "gemini",
+          "status": "unavailable"
+        },
+        "source_language": "th",
+        "translation": "I'm about to go eat."
+      }
+    },
+    {
+      "kind": "source_info",
+      "status": 200,
+      "result": {
+        "alternatives": [
+          "ฮาจะไปกินข้าวเดี๋ยวนี้",
+          "ฮาจะไปกินข้าวเร็วๆ นี้"
+        ],
+        "pronunciation": "ha ja pai kin khao laeo",
+        "source_language": "th"
+      }
+    }
+  ]
+}

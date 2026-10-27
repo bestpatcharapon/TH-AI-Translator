@@ -113,29 +113,42 @@ def verify_photo_readings(normalized, regions, client):
             if vision_only
             else (client, VISION_MODEL, reasoning_options("none"))
         )
+        multi_image = (
+            vision_only and os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower() == "gemini"
+        )
         image = image.convert("RGB")
         # Bound each vision request; one tall sheet of 30 labels can exceed the
         # provider token budget or time out before returning complete readings.
-        batch_size = 5 if vision_only else 10
+        batch_size = 20 if multi_image else 5 if vision_only else 10
         batches = [
             candidates[start : start + batch_size]
             for start in range(0, len(candidates), batch_size)
         ]
         # Build sheets on this thread; network workers receive only immutable encoded bytes.
         sheets = [
-            (batch, reading_sheet(image, batch, regions, high_resolution=vision_only))
+            (
+                batch,
+                [
+                    reading_sheet(image, batch[start : start + 5], regions, high_resolution=True)
+                    for start in range(0, len(batch), 5)
+                ]
+                if multi_image
+                else [reading_sheet(image, batch, regions, high_resolution=vision_only)],
+            )
             for batch in batches
         ]
         bounds = {index: reading_bounds(image, region, regions) for index, region in candidates}
 
     def verify_batch(item):
-        batch, sheet = item
+        batch, batch_sheets = item
         ids = {index for index, _ in batch}
         try:
             response = client.chat.completions.create(
                 model=reading_model,
                 temperature=0,
-                max_completion_tokens=min(
+                max_completion_tokens=min(8192, max(2048, len(batch) * 256))
+                if multi_image
+                else min(
                     2048, max(1536, 128 + sum(32 + len(region["text"]) * 3 for _, region in batch))
                 ),
                 **reading_options,
@@ -148,6 +161,7 @@ def verify_photo_readings(normalized, regions, client):
                                 "type": "text",
                                 "text": (
                                     "Read the actual text in EACH numbered crop, in its ORIGINAL language. "
+                                    "Read ALL attached crop sheets; region ids remain unique across sheets. "
                                     "This is transcription, not translation. The gray Region labels are ids, not image text. "
                                     "Never complete missing words, invent menu items, prices or ingredients. "
                                     'If a crop cannot be read reliably, use readable:false and text:"". '
@@ -156,13 +170,16 @@ def verify_photo_readings(normalized, regions, client):
                                     "with exactly these ids: " + ",".join(map(str, sorted(ids)))
                                 ),
                             },
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": "data:image/png;base64,"
-                                    + base64.b64encode(sheet).decode("ascii")
-                                },
-                            },
+                            *[
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": "data:image/png;base64,"
+                                        + base64.b64encode(sheet).decode("ascii")
+                                    },
+                                }
+                                for sheet in batch_sheets
+                            ],
                         ],
                     }
                 ],
@@ -203,11 +220,16 @@ def verify_photo_readings(normalized, regions, client):
 
     def produce():
         result = [dict(region) for region in regions]
-        for batch, sheet in sheets:
+        for batch, batch_sheets in sheets:
             originals = dict(batch)
             readings, _ = _reading_batch_cache.run(
-                (hashlib.sha256(sheet).digest(), digest_key(batch), client, reading_model),
-                lambda batch=batch, sheet=sheet: verify_batch((batch, sheet)),
+                (
+                    digest_key([hashlib.sha256(sheet).hexdigest() for sheet in batch_sheets]),
+                    digest_key(batch),
+                    client,
+                    reading_model,
+                ),
+                lambda batch=batch, batch_sheets=batch_sheets: verify_batch((batch, batch_sheets)),
                 cacheable=lambda readings, originals=originals: all(
                     readable
                     and not any(

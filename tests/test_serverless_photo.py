@@ -152,3 +152,57 @@ class ServerlessPhotoTests(unittest.TestCase):
         with patch.dict("os.environ", {"VERCEL": "1", "PHOTO_OCR_BACKEND": "auto"}):
             response = server.app.test_client().get("/api/ocr-status")
             self.assertEqual(response.get_json()["photo_backend"], "vision")
+
+
+class GeminiPhotoBatchTests(unittest.TestCase):
+    def test_multiple_full_resolution_sheets_share_one_request_and_resume_after_failure(self):
+        provider = MagicMock()
+        calls = []
+
+        def respond(**kwargs):
+            content = kwargs["messages"][0]["content"]
+            ids = [
+                int(value)
+                for value in content[0]["text"].split("with exactly these ids: ")[-1].split(",")
+            ]
+            calls.append(ids)
+            images = [item for item in content if item["type"] == "image_url"]
+            self.assertEqual(len(images), (len(ids) + 4) // 5)
+            import base64
+
+            for part in images:
+                encoded = part["image_url"]["url"].split(",", 1)[1]
+                with Image.open(io.BytesIO(base64.b64decode(encoded))) as sheet:
+                    self.assertEqual(sheet.width, 1536)
+                    self.assertLessEqual(sheet.height, 1100)
+            if len(calls) == 2:
+                from openai import OpenAIError
+
+                raise OpenAIError("Simulated rate limit")
+            return completion(
+                json.dumps(
+                    {
+                        "readings": [
+                            {"id": index, "text": f"Menu {index}", "readable": True}
+                            for index in ids
+                        ]
+                    }
+                )
+            )
+
+        provider.chat.completions.create.side_effect = respond
+        regions = [{**box(i), "vision_only": True} for i in range(45)]
+        with (
+            patch.dict(
+                "os.environ", {"PHOTO_READING_PROVIDER": "gemini", "GEMINI_API_KEY": "test-only"}
+            ),
+            patch("photo_reading._gemini_client", return_value=provider),
+        ):
+            from openai import OpenAIError
+
+            with self.assertRaises(OpenAIError):
+                verify_photo_readings(image_bytes((640, 1000)), regions, MagicMock())
+            result = verify_photo_readings(image_bytes((640, 1000)), regions, MagicMock())
+        self.assertEqual([len(ids) for ids in calls], [20, 20, 20, 5])
+        self.assertEqual([region["text"] for region in result], [f"Menu {i}" for i in range(45)])
+        self.assertTrue(all(not region["reading_review"] for region in result))

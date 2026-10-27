@@ -1,5 +1,23 @@
 [
   {
+    "id": "northern-first-person-ha",
+    "dialect": "northern",
+    "only_modes": [
+      "northern"
+    ],
+    "term": "ฮา",
+    "aliases": [],
+    "match_pattern": "(?:^|[\\s“\"(])ฮา(?=\\s*(?:จะ|บ่|กิ๋น|กินข้าว|หิว|อยาก|ต้อง|กำลัง|ขอ|เป็น|อยู่|มี|เฮียน|ฮัก|ไป(?:กิน|กิ๋น|กาด|เฮียน|บ้าน|ทำงาน)))",
+    "central_thai": "สรรพนามบุรุษที่หนึ่ง ฉัน/กู ตามระดับความสนิทและบริบท",
+    "register": "informal Northern Thai first-person pronoun; do not infer gender or add profanity",
+    "usage": "In explicitly selected Northern Thai, a single ฮา before a predicate can mean the first-person speaker (I/me), as in ฮาจะไปกินข้าวแล้ว. Preserve the first-person intention and all tense/aspect, negation and other content. Do not turn this subject into haha, ha!, laughter, a joke, or the Central Thai interjection ฮ่า. Genuine laughter such as ฮ่าๆ, ฮาฮา, ฮาๆ, 555, or an explicitly funny/laughing context must keep its actual meaning. This contextual rule does not define every ฮา or words containing ฮา, and does not by itself prove a dialect in Standard/Auto mode. Personal meanings and explicit clarification take precedence. This note is about the word, not a fixed sentence translation.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      "https://th.wiktionary.org/wiki/ฮา",
+      "https://db.sac.or.th/thailand-cultural-encyclopedia/detail.php?id=12741"
+    ]
+  },
+  {
     "id": "contextual-challenge-wat-pa-la",
     "dialect": "slang",
     "term": "วัดปะล่ะ",

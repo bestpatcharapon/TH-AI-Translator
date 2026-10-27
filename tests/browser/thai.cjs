@@ -177,7 +177,7 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.waitForTimeout(900);
     assert.equal(requests.length, count);
     assert.match(await page.locator("#voice-status").textContent(), /Check or edit/);
-    await page.locator("#translate").click();
+    await page.locator("#input").press("Control+Enter");
     await page.waitForFunction(
       () => document.querySelector("#output").value === "Let's go, everyone."
     );

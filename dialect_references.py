@@ -35,6 +35,8 @@ def lexical_references(text, mode):
     query = normalize(text)
     result = []
     for entry in _curated(reference_identity()[0]):
+        if entry.get("only_modes") and mode not in entry["only_modes"]:
+            continue
         if mode not in ("auto", "slang", entry["dialect"]):
             continue
         aliases = [entry["term"], *entry.get("aliases", [])]
@@ -51,6 +53,14 @@ def lexical_references(text, mode):
             continue
         selected.append(item)
     return selected[:8]
+
+
+def introduces_laughter(source, candidate):
+    """Reject an added laugh interjection, while retaining explicit source laughter."""
+    explicit = r"ฮ่า|ฮาฮา|ฮาๆ|555|หัวเราะ|ตลก|ขำ|\b(?:haha|lol)\b"
+    if re.search(explicit, source, re.I):
+        return False
+    return bool(re.search(r"ฮ่า|ฮาฮา|ฮาๆ|^\s*(?:ha(?:ha)*|lol)[\s,.!—-]", candidate, re.I))
 
 
 def corpus_references(text, mode, *, index=INDEX, limit=3):

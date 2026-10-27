@@ -574,12 +574,12 @@ function renderStudio() {
   $("translation-studio").hidden = !available || !state.open;
   $("open-studio").setAttribute("aria-expanded", String(available && state.open));
   const badge = $("studio-audit-badge");
-  badge.hidden = !available || !state.audit;
+  badge.hidden = !available || state.audit?.status !== "review";
   if (state.audit) {
     badge.textContent =
       state.audit.status === "review"
         ? t("consistencyReview").replace("{count}", state.audit.issues.length)
-        : t("consistencyClear");
+        : "";
     badge.classList.toggle("needs-review", state.audit.status === "review");
   }
   $("studio-cancel").hidden = !state.requests.size;

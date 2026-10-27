@@ -73,6 +73,10 @@
         <circle cx="12" cy="12" r="10" />
         <path d="M12 11v6m0-10v.1" />
       </symbol>
+      <symbol id="icon-question" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.5 8.5a2.5 2.5 0 0 1 5 .5c0 1.8-2.5 2-2.5 4m0 3v.1" />
+      </symbol>
       <symbol id="icon-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" /></symbol>
       <symbol id="icon-sparkles" viewBox="0 0 24 24">
         <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Zm7-2v4m-2-2h4" />
@@ -238,16 +242,6 @@
             <option value="isan" data-i18n="thaiIsan">Isan</option>
             <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
           </select>
-          <button
-            id="thai-help"
-            class="speaker-button"
-            type="button"
-            hidden
-            aria-label="About Thai interpretation"
-            aria-haspopup="dialog"
-          >
-            <svg><use href="#icon-info" /></svg>
-          </button>
         </div>
         <button id="thai-result-preview" type="button" hidden aria-haspopup="dialog"></button>
       </section>
@@ -484,9 +478,6 @@
               <svg><use href="#icon-volume" /></svg>
             </button>
             <span id="count" class="count" hidden>0 / 5000</span>
-            <button id="translate" class="translate-button" type="button" hidden>
-              <span data-i18n="translate">Translate</span><svg><use href="#icon-arrow" /></svg>
-            </button>
           </div>
         </section>
         <section class="panel output-panel" aria-labelledby="translation-heading" aria-busy="false">

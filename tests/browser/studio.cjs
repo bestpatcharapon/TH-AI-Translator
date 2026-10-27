@@ -125,7 +125,7 @@ const fs = require("node:fs");
     await page.waitForFunction(
       () => document.querySelector("#output").value === "Please pay 500 baht."
     );
-    assert.match(await page.locator("#studio-audit-badge").textContent(), /No consistency/);
+    assert(!(await page.locator("#studio-audit-badge").isVisible()));
     assert.equal(await page.locator("#studio-undo").isVisible(), true);
     await page.locator("#studio-undo").click();
     await page.waitForFunction(() => document.querySelector("#output").value === "Pay 50 baht.");

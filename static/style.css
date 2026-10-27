@@ -172,13 +172,10 @@ select:focus-visible {
   margin: 0 0 18px;
   flex-shrink: 0;
 }
-.translator.thai-interpreting .source-panel .translate-button {
-  display: flex;
-}
 .thai-mode-label {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   font-size: 12px;
   color: var(--muted);
@@ -444,11 +441,24 @@ h1 {
   border-color: var(--accent);
 }
 .panel-heading {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   min-height: 20px;
+}
+.panel-heading h2 {
+  position: relative;
+}
+.panel-heading h2::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  pointer-events: none;
 }
 h2 {
   margin: 0;
@@ -510,26 +520,6 @@ textarea::placeholder {
   font-size: 10px;
   margin-left: auto;
   white-space: nowrap;
-}
-.translate-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 0;
-  border-radius: 20px;
-  padding: 10px 13px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 12px;
-}
-.translate-button svg {
-  width: 16px;
-  height: 16px;
-}
-.translate-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
 }
 #status {
   font-size: 12px;
@@ -1024,9 +1014,6 @@ p:lang(zh) {
 .assistant-panel p.error {
   color: var(--error);
 }
-.source-panel .translate-button {
-  display: none;
-}
 .output-panel {
   min-height: 260px;
 }
@@ -1211,9 +1198,6 @@ p:lang(zh) {
   .translation-icons {
     gap: 7px;
   }
-}
-.panels:has(#status.error) .source-panel .translate-button {
-  display: flex;
 }
 
 .source-panel #input,
@@ -4656,36 +4640,26 @@ textarea[dir="auto"],
 /* Dialect controls stay compact; full interpretation and clarification have their own space. */
 .thai-mode-label #thai-mode-trigger {
   order: 1;
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
   max-width: none;
-  width: auto;
+  width: max-content;
   min-height: 44px;
 }
 .thai-mode-label > span {
-  flex-shrink: 1;
-  max-width: 35%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: none;
 }
 .thai-mode-label #thai-mode-trigger span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#thai-help {
-  order: 2;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 44px;
-}
 #thai-result-preview {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr) 16px;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
+  gap: 6px;
+  width: max-content;
+  max-width: 100%;
   min-height: 44px;
   margin-top: 8px;
   padding: 8px 12px;
@@ -4694,17 +4668,9 @@ textarea[dir="auto"],
   background: var(--card);
   text-align: start;
   color: var(--text);
-}
-#thai-result-preview .thai-preview-label {
   font-size: 12px;
-  color: var(--muted);
 }
-#thai-result-preview strong {
-  font-size: 14px;
-  font-weight: 500;
-}
-#thai-result-preview span,
-#thai-result-preview strong {
+#thai-result-preview span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4712,7 +4678,7 @@ textarea[dir="auto"],
 #thai-result-preview svg {
   width: 16px;
   height: 16px;
-  transform: rotate(-90deg);
+  flex-shrink: 0;
 }
 #thai-result-preview:hover,
 #thai-result-preview.needs-context {
@@ -4752,7 +4718,7 @@ textarea[dir="auto"],
     overflow: visible;
   }
 }
-@media (max-width: 700px) and (max-height: 650px) {
+@media (max-width: 700px) {
   .text-mode.thai-interpreting .thai-tools {
     display: flex;
     align-items: center;
@@ -4761,19 +4727,34 @@ textarea[dir="auto"],
   .text-mode.thai-interpreting .panels {
     grid-template-rows: minmax(136px, 0.9fr) minmax(0, 1.1fr);
   }
-  .text-mode.thai-interpreting .thai-mode-label {
-    flex: 1;
-    min-width: 0;
+  .text-mode.thai-interpreting .source-panel #input {
+    flex: 1 0 56px;
+    min-height: 56px;
+    padding-block: 8px;
   }
-  .text-mode.thai-interpreting .thai-mode-label > span,
-  .text-mode.thai-interpreting #thai-result-preview .thai-preview-label,
-  .text-mode.thai-interpreting .thai-tools:has(#thai-result-preview:not([hidden])) #thai-help {
+  .text-mode.thai-interpreting .source-insights {
+    margin: 0 0 4px;
+  }
+  .text-mode.thai-interpreting #pronunciation {
+    margin: 0 0 6px;
+    line-height: 1.6;
+  }
+  .text-mode.thai-interpreting .source-insights .suggestion-chip {
+    min-height: 30px;
+    padding: 5px 10px;
+    line-height: 1.5;
+  }
+  .text-mode.thai-interpreting .thai-mode-label {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .text-mode.thai-interpreting .thai-mode-label > span {
     display: none;
   }
   .text-mode.thai-interpreting #thai-result-preview {
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 0;
     margin: 0;
-    grid-template-columns: minmax(0, 1fr) 16px;
   }
 }

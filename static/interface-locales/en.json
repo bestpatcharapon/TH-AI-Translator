@@ -254,7 +254,7 @@
   "thaiAny": "Any Thai usage",
   "thaiModeNote": "Up to 3,000 characters. AI interpretation can be wrong. Check microphone transcripts; this does not add a dialect-trained speech model.",
   "thaiNeedContext": "More context is needed before translating this phrase.",
-  "thaiReviewTranscript": "Check or edit the heard text, then press Translate or Send to interpret it.",
+  "thaiReviewTranscript": "Check or edit the heard text. Editing starts automatic translation; use Send in Live Chat.",
   "thaiClarification": "What does the speaker mean here?",
   "thaiClarify": "Explain and translate again",
   "thaiCentral": "Meaning in Central Thai",

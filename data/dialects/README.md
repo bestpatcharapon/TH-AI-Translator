@@ -52,3 +52,22 @@ route only queries Khummuang. Auto mode can retrieve exact matches from explicit
 named varieties; no approximate cross-variety matching is performed. The corpus
 contains noisy spellings and translations and is reference material, not verified
 truth for every sentence. Examples are never silently substituted for the input.
+
+`northern-first-person-ha` addresses the reported first-person ฮา → laughter error.
+Its `only_modes: ["northern"]` requires an explicit Northern selection, and its
+predicate-position pattern avoids repeated laughter, standard-Thai funny/laughing
+contexts and unrelated words. The lexical fact is sourced; the predicate matching
+and English guidance are editorial scope restrictions. It is not a fixed
+sentence replacement and does not infer gender or add profanity.
+
+The interpretation path retries an invented laugh once, then rejects repeated bad
+output. Explicit source laughter, private definitions and speaker clarification
+retain precedence. Source alternatives use the same contextual guard. Changing
+curated data invalidates backend text/source-info cache identities; refresh an
+existing browser session to discard its older in-memory suggestions.
+
+The real-provider regression run is in `reports/northern-ha-regression.json`.
+The original phrase reached the model unchanged and produced first-person Central
+Thai and English without laughter. This is one reported-case check, not a dialect
+accuracy benchmark. Optional independent Gemini review was unavailable during
+that run, so it is not claimed as an independently checked translation.

@@ -3,8 +3,7 @@ const sourceEl = $("source"),
   targetEl = $("target"),
   inputEl = $("input"),
   outputEl = $("output");
-const statusEl = $("status"),
-  translateBtn = $("translate");
+const statusEl = $("status");
 const LANGUAGES = {
   auto: ["Detect language", "อัตโนมัติ", "🌐", ""],
   ...Object.fromEntries(
@@ -186,7 +185,6 @@ function updateInput() {
     .replace("{characters}", characters);
   $("count").title = `${text.length} / ${maxInput()}`;
   $("count").hidden = !inputEl.value.length;
-  translateBtn.hidden = !inputEl.value.trim();
   resizeSourceInput();
 }
 function updateOutput() {
@@ -217,7 +215,6 @@ function cancelOperation() {
   const wasExtracting = $("file-tools").getAttribute("aria-busy") === "true";
   activeFeature().request?.abort();
   activeFeature().request = null;
-  translateBtn.disabled = false;
   $("live-send").disabled = false;
   $("choose-file").disabled = false;
   document.querySelector(".output-panel").setAttribute("aria-busy", "false");
@@ -390,7 +387,6 @@ async function translate({ refresh = false } = {}) {
   stopRecording(true);
   stopAudio();
   const controller = startOperation();
-  translateBtn.disabled = true;
   if (isChat) $("live-send").disabled = true;
   document.querySelector(".output-panel").setAttribute("aria-busy", "true");
   setStatus(t("loading"));
@@ -453,7 +449,6 @@ async function translate({ refresh = false } = {}) {
     if (ownsOperation(controller)) cancelOperation();
   }
 }
-translateBtn.addEventListener("click", translate);
 inputEl.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
     event.preventDefault();
@@ -571,7 +566,6 @@ function refreshMode() {
   $("show-saved").hidden = true;
   $("source-heading").textContent = t(mode === "live" ? "message" : "source");
   inputEl.placeholder = t(mode === "live" ? "chatPlaceholder" : "placeholder");
-  translateBtn.querySelector("span").textContent = t(mode === "live" ? "send" : "translate");
   document.querySelectorAll("[data-mode]").forEach((button) => {
     const active = button.dataset.mode === mode;
     button.classList.toggle("active", active);
