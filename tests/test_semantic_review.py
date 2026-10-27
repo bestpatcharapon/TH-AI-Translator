@@ -127,10 +127,10 @@ class SemanticReviewTests(unittest.TestCase):
             body = {"text": TEXT, "source": "th", "target": "en"}
             client = server.app.test_client()
             first = client.post("/api/translate", json=body)
-            self.assertEqual(first.json["translation"], DRAFT)
-            self.assertEqual(first.json["quality_review"]["status"], "unavailable")
+            self.assertEqual(first.get_json()["translation"], DRAFT)
+            self.assertEqual(first.get_json()["quality_review"]["status"], "unavailable")
             second = client.post("/api/translate", json=body)
-            self.assertEqual(second.json["quality_review"]["status"], "revised")
+            self.assertEqual(second.get_json()["quality_review"]["status"], "revised")
             self.assertEqual(
                 client.post("/api/translate", json=body).headers["X-Result-Cache"], "hit"
             )
@@ -151,8 +151,8 @@ class SemanticReviewTests(unittest.TestCase):
                 "/api/translate",
                 json={"text": TEXT, "source": "th", "target": "en", "additional_targets": ["ja"]},
             )
-            self.assertEqual(response.json["quality_review"]["status"], "needs_context")
-            self.assertEqual(response.json["additional_translations"], [])
+            self.assertEqual(response.get_json()["quality_review"]["status"], "needs_context")
+            self.assertEqual(response.get_json()["additional_translations"], [])
             extras.assert_not_called()
 
 

@@ -149,12 +149,12 @@ class TranslationQualityTests(unittest.TestCase):
         with patch.object(server, "get_client") as client:
             result = self.client.post("/api/audit", json=self.body)
             self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json["audit"]["status"], "review")
+            self.assertEqual(result.get_json()["audit"]["status"], "review")
             result = self.client.post(
                 "/api/glossary/validate",
                 json={"glossary": [{"source": " API ", "target": " API ", "language": "en"}]},
             )
-            self.assertEqual(result.json["glossary"][0]["source"], "API")
+            self.assertEqual(result.get_json()["glossary"][0]["source"], "API")
             client.assert_not_called()
 
     def test_glossary_reaches_translation_and_checks_are_returned(self):
@@ -178,7 +178,7 @@ class TranslationQualityTests(unittest.TestCase):
                     "content"
                 ],
             )
-            self.assertEqual(result.json["audit"]["terms_matched"], 1)
+            self.assertEqual(result.get_json()["audit"]["terms_matched"], 1)
 
     def test_back_translation_does_not_see_original_text(self):
         with patch.object(server, "get_client") as client:
@@ -194,8 +194,10 @@ class TranslationQualityTests(unittest.TestCase):
             self.assertNotIn(self.body["text"], json.dumps(first, ensure_ascii=False))
             second = json.loads(calls[1].kwargs["messages"][1]["content"])
             self.assertEqual(second["back_translation"], "จ่าย 50 บาท")
-            self.assertEqual(result.json["audit"]["status"], "review")
-            self.assertEqual(result.json["alternatives"][0]["translation"], "Please pay 500 baht.")
+            self.assertEqual(result.get_json()["audit"]["status"], "review")
+            self.assertEqual(
+                result.get_json()["alternatives"][0]["translation"], "Please pay 500 baht."
+            )
 
     def test_hallucinated_quotes_and_bad_analysis_are_rejected(self):
         with patch.object(server, "get_client") as client:
@@ -306,6 +308,6 @@ class TranslationQualityTests(unittest.TestCase):
                     },
                 )
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.json["regions"][0]["translation"], preferred)
-                self.assertEqual(response.json["audit"]["terms_matched"], 1)
+                self.assertEqual(response.get_json()["regions"][0]["translation"], preferred)
+                self.assertEqual(response.get_json()["audit"]["terms_matched"], 1)
             self.assertEqual(client.return_value.chat.completions.create.call_count, 2)

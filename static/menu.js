@@ -251,19 +251,19 @@ for (const id of ["tone", "translation-context"]) {
   select.parentElement.append(button);
   preferenceTriggers.set(select, button);
   select.addEventListener("change", refreshPreferenceTriggers);
-  function open() {
+  const openPreference = () => {
     preferenceSource = select;
     renderPreferenceOptions();
     for (const candidate of preferenceTriggers.values())
       candidate.setAttribute("aria-expanded", String(candidate === button));
     preferenceDialog.showModal();
     preferenceOptions.querySelector('[aria-selected="true"]').focus();
-  }
-  button.addEventListener("click", open);
+  };
+  button.addEventListener("click", openPreference);
   button.addEventListener("keydown", (event) => {
     if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
     event.preventDefault();
-    open();
+    openPreference();
   });
 }
 $("preference-close").addEventListener("click", () => preferenceDialog.close());

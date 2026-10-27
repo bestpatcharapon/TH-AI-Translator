@@ -2731,6 +2731,7 @@ textarea[dir="auto"],
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   color: var(--muted);
   font-size: 12px;
@@ -3999,6 +4000,7 @@ textarea[dir="auto"],
     display: block;
     overflow: visible;
     -webkit-line-clamp: unset;
+    line-clamp: unset;
     line-height: 1.85;
   }
   .photo-upload-actions button {
@@ -4649,4 +4651,129 @@ textarea[dir="auto"],
 }
 #reply-edit-status {
   margin: 0;
+}
+
+/* Dialect controls stay compact; full interpretation and clarification have their own space. */
+.thai-mode-label #thai-mode-trigger {
+  order: 1;
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  width: auto;
+  min-height: 44px;
+}
+.thai-mode-label > span {
+  flex-shrink: 1;
+  max-width: 35%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thai-mode-label #thai-mode-trigger span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#thai-help {
+  order: 2;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 44px;
+}
+#thai-result-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  text-align: start;
+  color: var(--text);
+}
+#thai-result-preview .thai-preview-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+#thai-result-preview strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+#thai-result-preview span,
+#thai-result-preview strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#thai-result-preview svg {
+  width: 16px;
+  height: 16px;
+  transform: rotate(-90deg);
+}
+#thai-result-preview:hover,
+#thai-result-preview.needs-context {
+  border-color: var(--accent);
+}
+.thai-details .thai-details-body {
+  padding: 16px 20px 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.thai-details #thai-mode-note {
+  display: block;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+.thai-details .thai-result {
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 16px 0 0;
+  margin: 0;
+  max-height: none;
+  overflow: visible;
+}
+.thai-details #thai-clarification {
+  font-size: 16px;
+  min-height: 88px;
+}
+.thai-details #thai-clarify {
+  min-height: 44px;
+  font-size: 13px;
+}
+@media (max-width: 700px) {
+  :is(.text-mode, .document-mode) .thai-tools {
+    max-height: none;
+    overflow: visible;
+  }
+}
+@media (max-width: 700px) and (max-height: 650px) {
+  .text-mode.thai-interpreting .thai-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .text-mode.thai-interpreting .panels {
+    grid-template-rows: minmax(136px, 0.9fr) minmax(0, 1.1fr);
+  }
+  .text-mode.thai-interpreting .thai-mode-label {
+    flex: 1;
+    min-width: 0;
+  }
+  .text-mode.thai-interpreting .thai-mode-label > span,
+  .text-mode.thai-interpreting #thai-result-preview .thai-preview-label,
+  .text-mode.thai-interpreting .thai-tools:has(#thai-result-preview:not([hidden])) #thai-help {
+    display: none;
+  }
+  .text-mode.thai-interpreting #thai-result-preview {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    grid-template-columns: minmax(0, 1fr) 16px;
+  }
 }

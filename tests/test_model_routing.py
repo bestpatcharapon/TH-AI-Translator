@@ -67,9 +67,21 @@ class RoutedReviewAPITests(unittest.TestCase):
             for _ in range(2):
                 response = client.post("/api/translate", json=body)
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.json["translation"], draft)
-                self.assertEqual(response.json["quality_review"]["provider"], "gemini")
-                self.assertEqual(response.json["quality_review"]["status"], "unavailable")
+                self.assertEqual(response.get_json()["translation"], draft)
+                self.assertEqual(response.get_json()["quality_review"]["provider"], "gemini")
+                self.assertEqual(response.get_json()["quality_review"]["status"], "unavailable")
                 self.assertNotEqual(response.headers["X-Result-Cache"], "hit")
             self.assertEqual(create.call_count, 2)
             primary.return_value.chat.completions.create.assert_not_called()
+
+
+class ReasoningOptionsTests(unittest.TestCase):
+    def test_configured_reasoning_options_match_sdk_contract(self):
+        from project_config import reasoning_options
+
+        self.assertEqual(reasoning_options(""), {})
+        for effort in ("none", "minimal", "low", "medium", "high", "xhigh", "max"):
+            with self.subTest(effort=effort):
+                self.assertEqual(reasoning_options(effort), {"reasoning_effort": effort})
+        with self.assertRaises(ValueError):
+            reasoning_options("unsupported-level")

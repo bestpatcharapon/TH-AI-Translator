@@ -72,8 +72,8 @@ class ThaiInterpretationTests(unittest.TestCase):
             )
             response = self.client.post("/api/translate", json=self.body)
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["translation"], "This curry is delicious.")
-            interpretation = response.json["interpretation"]
+            self.assertEqual(response.get_json()["translation"], "This curry is delicious.")
+            interpretation = response.get_json()["interpretation"]
             self.assertEqual(interpretation["standard_thai"], "แกงนี้อร่อยมาก")
             self.assertEqual(interpretation["matched_entries"][0]["origin"], "starter")
             payload = json.loads(
@@ -96,9 +96,9 @@ class ThaiInterpretationTests(unittest.TestCase):
                 json={**self.body, "text": "คำที่เพิ่งสร้าง", "additional_targets": ["ja"]},
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["translation"], "")
-            self.assertEqual(response.json["interpretation"]["status"], "needs_context")
-            self.assertNotIn("audit", response.json)
+            self.assertEqual(response.get_json()["translation"], "")
+            self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
+            self.assertNotIn("audit", response.get_json())
             extra.assert_not_called()
 
     def test_personal_definitions_are_scoped_and_override_starter_entries(self):
@@ -147,7 +147,7 @@ class ThaiInterpretationTests(unittest.TestCase):
                 json.dumps(ready())
             )
             response = self.client.post("/api/translate", json={**self.body, "target": "th"})
-            self.assertEqual(response.json["translation"], "แกงนี้อร่อยมาก")
+            self.assertEqual(response.get_json()["translation"], "แกงนี้อร่อยมาก")
 
     def test_invented_evidence_and_inconsistent_model_results_are_rejected(self):
         invented = ready()
@@ -177,9 +177,9 @@ class ThaiInterpretationTests(unittest.TestCase):
         good = {"term": "คำใหม่", "meaning": "ความหมายที่ผู้ใช้บอก", "dialect": "slang", "example": ""}
         with patch.object(server, "get_client") as provider:
             response = self.client.post("/api/thai-lexicon/validate", json={"entries": [good]})
-            self.assertEqual(response.json["entries"], [good])
+            self.assertEqual(response.get_json()["entries"], [good])
             empty = self.client.post("/api/thai-lexicon/validate", json={"entries": []})
-            self.assertEqual(empty.json["entries"], [])
+            self.assertEqual(empty.get_json()["entries"], [])
             for value in [
                 None,
                 [good] * 31,
@@ -213,9 +213,9 @@ class ThaiInterpretationTests(unittest.TestCase):
                 "/api/translate", json={**self.body, "text": "มื้อนี้เมื่อยหลาย", "thai_mode": "isan"}
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["translation"], "")
-            self.assertEqual(response.json["interpretation"]["status"], "needs_context")
-            self.assertEqual(len(response.json["interpretation"]["possibilities"]), 2)
+            self.assertEqual(response.get_json()["translation"], "")
+            self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
+            self.assertEqual(len(response.get_json()["interpretation"]["possibilities"]), 2)
             provider.return_value.chat.completions.create.assert_not_called()
             result = ready()
             result["evidence"] = []
@@ -233,7 +233,7 @@ class ThaiInterpretationTests(unittest.TestCase):
                     "thai_clarification": "เหนื่อยล้า ไม่ได้ปวด",
                 },
             )
-            self.assertEqual(confirmed.json["translation"], "I'm very tired today.")
+            self.assertEqual(confirmed.get_json()["translation"], "I'm very tired today.")
 
     def test_reported_phrase_still_requires_meaning_when_reference_is_unavailable(self):
         with (
@@ -253,8 +253,8 @@ class ThaiInterpretationTests(unittest.TestCase):
                         },
                     )
                     self.assertEqual(response.status_code, 200)
-                    self.assertEqual(response.json["translation"], "")
-                    result = response.json["interpretation"]
+                    self.assertEqual(response.get_json()["translation"], "")
+                    result = response.get_json()["interpretation"]
                     self.assertEqual(result["status"], "needs_context")
                     self.assertEqual(result["standard_thai"], "")
                     self.assertEqual(result["evidence"], [])
@@ -283,7 +283,7 @@ class ThaiInterpretationTests(unittest.TestCase):
                     ],
                 },
             )
-            self.assertEqual(response.json["interpretation"]["status"], "needs_context")
+            self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
             provider.return_value.chat.completions.create.assert_not_called()
 
     def test_speaker_meaning_and_whole_phrase_definition_can_resolve_reported_case(self):
@@ -317,8 +317,8 @@ class ThaiInterpretationTests(unittest.TestCase):
                         **overrides,
                     },
                 )
-                self.assertEqual(response.json["interpretation"]["status"], "ready")
-                self.assertEqual(response.json["translation"], result["translation"])
+                self.assertEqual(response.get_json()["interpretation"]["status"], "ready")
+                self.assertEqual(response.get_json()["translation"], result["translation"])
                 request = provider.return_value.chat.completions.create.call_args.kwargs
                 self.assertIn("must not erase a source insult", request["messages"][0]["content"])
 

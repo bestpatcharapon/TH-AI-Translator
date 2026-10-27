@@ -101,6 +101,13 @@ const thaiNode = (tag, text, className = "") => {
 const thaiModeSelect = $("thai-mode"),
   thaiModeTrigger = document.createElement("button"),
   thaiModeDropdown = document.createElement("div");
+let displayedThaiResult = null;
+function openThaiDetails() {
+  if (!$("thai-details").open) $("thai-details").showModal();
+}
+$("thai-help").addEventListener("click", openThaiDetails);
+$("thai-result-preview").addEventListener("click", openThaiDetails);
+$("thai-details-close").addEventListener("click", () => $("thai-details").close());
 thaiModeSelect.hidden = true;
 thaiModeTrigger.id = "thai-mode-trigger";
 thaiModeTrigger.type = "button";
@@ -132,6 +139,7 @@ function refreshThaiModeChoice() {
   const name = t(thaiModeSelect.selectedOptions[0].dataset.i18n);
   thaiModeTrigger.replaceChildren(thaiNode("span", name), preferenceIcon("chevron"));
   thaiModeTrigger.setAttribute("aria-label", t("thaiMode") + " · " + name);
+  thaiModeTrigger.title = name;
   thaiModeDropdown.setAttribute("aria-label", t("thaiMode"));
   if ($("thai-tools").hidden) thaiModeDropdown.hidePopover();
   thaiModeDropdown.replaceChildren();
@@ -270,13 +278,36 @@ function renderThai() {
   $("thai-mode").value = state.mode;
   refreshThaiModeChoice();
   $("thai-mode-note").hidden = state.mode === "standard";
+  $("thai-help").hidden = !eligible || state.mode === "standard";
+  $("thai-help").setAttribute("aria-label", t("thaiMode"));
+  $("thai-details-close").setAttribute("aria-label", t("close"));
   const result = state.result,
     visible = eligible && state.mode !== "standard" && !!result;
   $("thai-result").hidden = !visible;
   $("thai-result-content").replaceChildren();
   $("thai-clarification-form").hidden = !visible || result.status !== "needs_context";
   $("thai-clarification").value = state.clarification;
-  if (!visible) return;
+  const preview = $("thai-result-preview");
+  preview.hidden = !visible;
+  if (!visible) {
+    displayedThaiResult = null;
+    if ($("thai-details").open) $("thai-details").close();
+    return;
+  }
+  const needsContext = result.status === "needs_context";
+  const label = t(needsContext ? "thaiNeedContext" : "thaiCentral");
+  preview.replaceChildren(
+    thaiNode("span", label, "thai-preview-label"),
+    thaiNode("strong", result.standard_thai || result.questions[0] || label),
+    preferenceIcon("chevron")
+  );
+  preview.title = result.standard_thai || label;
+  preview.classList.toggle("needs-context", needsContext);
+  if (result !== displayedThaiResult) {
+    if (needsContext) openThaiDetails();
+    else if ($("thai-details").open) $("thai-details").close();
+  }
+  displayedThaiResult = result;
   const content = $("thai-result-content");
   content.append(
     thaiNode("h3", t(result.status === "needs_context" ? "thaiNeedContext" : "thaiCentral"))
@@ -498,6 +529,7 @@ document.addEventListener("translation:invalidated", () => {
 });
 document.addEventListener("languages:change", renderThai);
 document.addEventListener("mode:leaving", () => {
+  if ($("thai-details").open) $("thai-details").close();
   thaiState().request?.abort();
   thaiState().request = null;
 });

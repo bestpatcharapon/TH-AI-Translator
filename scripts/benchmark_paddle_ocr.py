@@ -54,12 +54,15 @@ def main():
 
     data, expected = fixture()
     runs = []
+    result = None
     for _ in range(2):
         started = time.perf_counter()
         result = recognize_image(data, "th,en")
         if result is None:
             raise SystemExit("Install models first: python scripts/setup_paddle_ocr.py")
         runs.append(round(time.perf_counter() - started, 3))
+    if result is None:
+        raise RuntimeError("No OCR result was produced")
     readings = [region["text"] for region in result["regions"]]
     report = {
         "scope": "Generated 640x1000 menu with 15px Thai; raw exact matches, no corrections. Not a Google comparison or a test on the user's original photo.",

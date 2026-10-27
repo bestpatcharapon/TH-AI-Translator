@@ -108,7 +108,7 @@ class SpeechQualityTests(unittest.TestCase):
                 data={"language": "th", "file": (io.BytesIO(b"quality-audio"), "voice.webm")},
             )
             self.assertEqual(response.status_code, 200)
-            self.assertFalse(response.json["review_required"])
+            self.assertFalse(response.get_json()["review_required"])
             options = client.return_value.audio.transcriptions.create.call_args.kwargs
             self.assertEqual(options["language"], "th")
             self.assertEqual(options["temperature"], 0)

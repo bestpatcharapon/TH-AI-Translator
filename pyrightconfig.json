@@ -1,4 +1,7 @@
 {
   "venvPath": ".",
-  "venv": ".venv"
+  "venv": ".venv",
+  "typeCheckingMode": "standard",
+  "exclude": [".venv", ".ocr", ".data", ".oil-ui", "node_modules", "public"],
+  "executionEnvironments": [{ "root": ".", "extraPaths": [".", "tests"] }]
 }

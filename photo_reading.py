@@ -9,12 +9,13 @@ import re
 import unicodedata
 from difflib import SequenceMatcher
 
+from openai import OpenAI
 from PIL import Image, ImageDraw
 
 from model_routing import DEFAULT_REVIEW_MODEL, _gemini_client
 from performance import ResultCache, digest_key
 from photo_detection import preserve_numeric_pixels
-from project_config import VISION_MODEL
+from project_config import VISION_MODEL, ReasoningOptions, reasoning_options
 from translation_quality import audit_translation
 
 _reading_cache = ResultCache(max_entries=8, max_bytes=8 * 1024 * 1024, ttl=300)
@@ -23,11 +24,11 @@ MAX_VERIFIED_REGIONS = 30
 MAX_VISION_REGIONS = 160
 
 
-def reading_provider(client):
+def reading_provider(client: OpenAI) -> tuple[OpenAI, str, ReasoningOptions]:
     """Gemini image reading is opt-in; ordinary local OCR keeps its provider."""
     provider = os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower()
     if provider == "groq":
-        return client, VISION_MODEL, {"reasoning_effort": "none"}
+        return client, VISION_MODEL, reasoning_options("none")
     if provider != "gemini":
         raise RuntimeError("PHOTO_READING_PROVIDER ต้องเป็น groq หรือ gemini")
     key = os.getenv("GEMINI_API_KEY")
@@ -110,7 +111,7 @@ def verify_photo_readings(normalized, regions, client):
         client, reading_model, reading_options = (
             reading_provider(client)
             if vision_only
-            else (client, VISION_MODEL, {"reasoning_effort": "none"})
+            else (client, VISION_MODEL, reasoning_options("none"))
         )
         image = image.convert("RGB")
         # Bound each vision request; one tall sheet of 30 labels can exceed the

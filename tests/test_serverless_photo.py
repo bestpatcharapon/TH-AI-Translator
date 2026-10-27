@@ -101,13 +101,13 @@ class ServerlessPhotoTests(unittest.TestCase):
                     "file": (io.BytesIO(image_bytes()), "small.png"),
                 },
             )
-            self.assertEqual(response.status_code, 200, response.json)
-            self.assertEqual(response.json["ocr_engine"], "rapidocr-vision")
-            self.assertEqual(response.json["regions"][0]["translation"], "Fried rice")
-            self.assertEqual(response.json["review_required"], 0)
-            self.assertTrue(response.json["regions"][1]["preserve_original"])
-            self.assertEqual(response.json["regions"][1]["text"], "50")
-            self.assertEqual(response.json["regions"][0]["x"], 10)
+            self.assertEqual(response.status_code, 200, response.get_json())
+            self.assertEqual(response.get_json()["ocr_engine"], "rapidocr-vision")
+            self.assertEqual(response.get_json()["regions"][0]["translation"], "Fried rice")
+            self.assertEqual(response.get_json()["review_required"], 0)
+            self.assertTrue(response.get_json()["regions"][1]["preserve_original"])
+            self.assertEqual(response.get_json()["regions"][1]["text"], "50")
+            self.assertEqual(response.get_json()["regions"][0]["x"], 10)
             native.assert_not_called()
 
     def test_every_detected_region_is_read_beyond_legacy_thirty_region_limit(self):
@@ -151,4 +151,4 @@ class ServerlessPhotoTests(unittest.TestCase):
     def test_ocr_status_discloses_active_backend(self):
         with patch.dict("os.environ", {"VERCEL": "1", "PHOTO_OCR_BACKEND": "auto"}):
             response = server.app.test_client().get("/api/ocr-status")
-            self.assertEqual(response.json["photo_backend"], "vision")
+            self.assertEqual(response.get_json()["photo_backend"], "vision")

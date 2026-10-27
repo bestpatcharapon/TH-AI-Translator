@@ -3,7 +3,7 @@ import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from openai import OpenAIError
 from test_app import completion
@@ -105,7 +105,7 @@ class GroundedDialectTests(unittest.TestCase):
             if checked is None:
                 route.return_value = (None, "model", "groq")
             else:
-                reviewer = unittest.mock.MagicMock()
+                reviewer = MagicMock()
                 if isinstance(checked, Exception):
                     reviewer.chat.completions.create.side_effect = checked
                 else:
@@ -132,28 +132,28 @@ class GroundedDialectTests(unittest.TestCase):
     def test_sourced_case_translates_without_speaker_definition(self):
         response, payload = self.request(interpretation(), target="th")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["translation"], "พ่อมึงเหรอ")
+        self.assertEqual(response.get_json()["translation"], "พ่อมึงเหรอ")
         self.assertEqual(payload["source_text"], "ป่อคิงหยัง")
         self.assertEqual(payload["published_references"][0]["kind"], "lexical")
-        self.assertTrue(response.json["interpretation"]["references"])
+        self.assertTrue(response.get_json()["interpretation"]["references"])
 
     def test_independent_review_corrects_both_meaning_and_translation(self):
         response, _ = self.request(
             interpretation("คุณทำอะไรอยู่", "What are you doing?"), interpretation()
         )
-        self.assertEqual(response.json["interpretation"]["standard_thai"], "พ่อมึงเหรอ")
-        self.assertEqual(response.json["translation"], "Your father, huh?!")
-        self.assertEqual(response.json["quality_review"]["status"], "revised")
-        self.assertEqual(response.json["quality_review"]["provider"], "gemini")
+        self.assertEqual(response.get_json()["interpretation"]["standard_thai"], "พ่อมึงเหรอ")
+        self.assertEqual(response.get_json()["translation"], "Your father, huh?!")
+        self.assertEqual(response.get_json()["quality_review"]["status"], "revised")
+        self.assertEqual(response.get_json()["quality_review"]["provider"], "gemini")
 
     def test_unavailable_review_cannot_expose_a_reference_contradiction_as_ready(self):
         response, _ = self.request(
             interpretation("คุณทำอะไรอยู่", "What are you doing?"), OpenAIError("unavailable")
         )
-        self.assertEqual(response.json["translation"], "")
-        self.assertEqual(response.json["interpretation"]["status"], "needs_context")
-        self.assertEqual(response.json["additional_translations"], [])
-        self.assertEqual(response.json["quality_review"]["reason"], "reference_conflict")
+        self.assertEqual(response.get_json()["translation"], "")
+        self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
+        self.assertEqual(response.get_json()["additional_translations"], [])
+        self.assertEqual(response.get_json()["quality_review"]["reason"], "reference_conflict")
 
     def test_review_cannot_change_prices(self):
         response, _ = self.request(
@@ -161,15 +161,15 @@ class GroundedDialectTests(unittest.TestCase):
             interpretation("ของนี้ราคา500บาท", "This costs 500 baht."),
             text="ของนี้ราคา50บาท",
         )
-        self.assertEqual(response.json["translation"], "This costs 50 baht.")
-        self.assertEqual(response.json["quality_review"]["status"], "rejected")
+        self.assertEqual(response.get_json()["translation"], "This costs 50 baht.")
+        self.assertEqual(response.get_json()["quality_review"]["status"], "rejected")
 
     def test_ordinary_father_and_personal_meaning_are_not_forced_into_insults(self):
         response, _ = self.request(
             interpretation("พ่อเขาไปตลาดแล้ว", "His father has gone to the market."),
             text="ป้อเปิ้นไปกาดแล้ว",
         )
-        self.assertEqual(response.json["interpretation"]["status"], "ready")
+        self.assertEqual(response.get_json()["interpretation"]["status"], "ready")
         response, _ = self.request(
             interpretation("ไงเพื่อน", "Hey, friend."),
             thai_lexicon=[
@@ -181,7 +181,7 @@ class GroundedDialectTests(unittest.TestCase):
                 }
             ],
         )
-        self.assertEqual(response.json["translation"], "Hey, friend.")
+        self.assertEqual(response.get_json()["translation"], "Hey, friend.")
 
     def test_invalid_draft_evidence_is_repaired_by_independent_review(self):
         primary = interpretation()
@@ -190,9 +190,11 @@ class GroundedDialectTests(unittest.TestCase):
         ]
         response, _ = self.request(primary, interpretation())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["interpretation"]["status"], "ready")
-        self.assertEqual(response.json["quality_review"]["reason"], "invalid_primary_repaired")
-        self.assertEqual(response.json["interpretation"]["evidence"], [])
+        self.assertEqual(response.get_json()["interpretation"]["status"], "ready")
+        self.assertEqual(
+            response.get_json()["quality_review"]["reason"], "invalid_primary_repaired"
+        )
+        self.assertEqual(response.get_json()["interpretation"]["evidence"], [])
 
 
 class ReferenceContextTests(unittest.TestCase):

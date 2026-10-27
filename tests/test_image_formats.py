@@ -45,7 +45,7 @@ class ImageFormatTests(unittest.TestCase):
                 "/api/photo-preview", data={"file": (io.BytesIO(b"not an image"), "fake.heic")}
             )
             self.assertEqual(bad.status_code, 400)
-            self.assertIn("error", bad.json)
+            self.assertIn("error", bad.get_json())
             provider.assert_not_called()
 
     def test_heif_photo_translation_returns_normalized_original(self):
@@ -64,9 +64,9 @@ class ImageFormatTests(unittest.TestCase):
                     "file": (io.BytesIO(heif_image()), "phone.heic"),
                 },
             )
-            self.assertEqual(result.status_code, 200, result.json)
-            self.assertTrue(result.json["image"].startswith("data:image/png;base64,"))
-            self.assertEqual(result.json["regions"][0]["translation"], "สวัสดี")
+            self.assertEqual(result.status_code, 200, result.get_json())
+            self.assertTrue(result.get_json()["image"].startswith("data:image/png;base64,"))
+            self.assertEqual(result.get_json()["regions"][0]["translation"], "สวัสดี")
 
     def test_exif_orientation_is_applied(self):
         for format_name in ["JPEG", "HEIF"]:

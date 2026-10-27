@@ -136,9 +136,9 @@ class TranscriptVerificationTests(unittest.TestCase):
                 },
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["text"], "table for two")
-            self.assertTrue(response.json["review_required"])
-            self.assertEqual(response.json["verification_model"], "whisper-large-v3-turbo")
+            self.assertEqual(response.get_json()["text"], "table for two")
+            self.assertTrue(response.get_json()["review_required"])
+            self.assertEqual(response.get_json()["verification_model"], "whisper-large-v3-turbo")
             self.assertEqual(secondary.call_count, 1)
 
     def test_verification_failure_is_reviewable_and_is_not_cached(self):
@@ -158,6 +158,6 @@ class TranscriptVerificationTests(unittest.TestCase):
                     },
                 )
                 self.assertEqual(response.status_code, 200)
-                self.assertTrue(response.json["review_required"])
-                self.assertIn("verification_unavailable", response.json["review_reasons"])
+                self.assertTrue(response.get_json()["review_required"])
+                self.assertIn("verification_unavailable", response.get_json()["review_reasons"])
             self.assertEqual(provider.return_value.audio.transcriptions.create.call_count, 2)

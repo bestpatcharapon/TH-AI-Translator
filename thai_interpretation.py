@@ -1,6 +1,7 @@
 """Contextual Thai dialect/slang interpretation with explicit ambiguity handling."""
 
 import re
+from typing import Any
 
 from openai import OpenAIError
 
@@ -335,6 +336,8 @@ def interpret_thai(
             if result is None:
                 raise RuntimeError("ผลตีความภาษาถิ่นยังตรวจสอบไม่ได้ กรุณาลองใหม่") from None
             quality.update(status="unavailable")
+    if result is None:
+        raise RuntimeError("ผลตีความภาษาถิ่นยังตรวจสอบไม่ได้ กรุณาลองใหม่")
     # A whole, source-backed expression must not regress to the reported neutral meaning.
     # Explicit personal definitions/clarifications can intentionally use a different private sense.
     if (
@@ -382,7 +385,7 @@ def interpret_thai(
     return result
 
 
-def validate_interpretation(data, text, target, mode, entries, references):
+def validate_interpretation(data, text, target, mode, entries, references) -> dict[str, Any]:
     try:
         status = data.get("status")
         if status not in ("ready", "needs_context"):

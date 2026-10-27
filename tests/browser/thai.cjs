@@ -92,6 +92,7 @@ const audioFixture = require("./audio-fixture.cjs");
       () => document.querySelector("#output").value === "Let's go, everyone."
     );
     assert.match(await page.locator(".thai-central").textContent(), /ไปกันเลย/);
+    await page.locator("#thai-result-preview").click();
     await page.locator(".thai-references summary").click();
     assert.equal(await page.locator(".thai-reference a").count(), 1);
     assert.equal(
@@ -103,11 +104,13 @@ const audioFixture = require("./audio-fixture.cjs");
       "noopener noreferrer"
     );
     assert.match(await page.locator(".thai-reference").textContent(), /not a definition/);
+    await page.locator("#thai-details-close").click();
 
     assert.equal(requests.at(-1).thai_clarification, "ไปกันเลยเพื่อนๆ");
     await page.locator("#input").fill("อีกคำที่ยังไม่รู้");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(requests.at(-1).thai_clarification, "");
+    await page.locator("#thai-details-close").click();
 
     // Retained personal definitions still validate; their editor is absent from the menu.
     await page.locator("#settings-toggle").click();

@@ -42,11 +42,11 @@ class MixedPhotoTests(unittest.TestCase):
                     "file": (io.BytesIO(image_file()), "menu.png"),
                 },
             )
-            self.assertEqual(response.status_code, 200, response.json)
+            self.assertEqual(response.status_code, 200, response.get_json())
             self.assertEqual(ocr.call_args.args[1], "th,en")
-            self.assertEqual(response.json["regions"][1]["translation"], "Fried rice")
-            self.assertEqual(response.json["translated_regions"], 1)
-            self.assertEqual(response.json["source_language"], "th")
+            self.assertEqual(response.get_json()["regions"][1]["translation"], "Fried rice")
+            self.assertEqual(response.get_json()["translated_regions"], 1)
+            self.assertEqual(response.get_json()["source_language"], "th")
             prompt = provider.return_value.chat.completions.create.call_args.kwargs["messages"][0][
                 "content"
             ]
@@ -67,7 +67,7 @@ class MixedPhotoTests(unittest.TestCase):
                 },
             )
             self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json["translated_regions"], 0)
+            self.assertEqual(result.get_json()["translated_regions"], 0)
 
     def test_price_hours_and_phone_words_translate_without_repainting_original_thai(self):
         class Regions(list):

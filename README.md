@@ -164,10 +164,13 @@ python -m unittest discover -s tests -v
 ruff check .
 ruff format --check .
 npm run check
+npm run typecheck
 npm run format:check
 ```
 
 ชุดทดสอบไม่เรียกบริการเสียเงิน ตรวจสอบไฟล์จริง TXT/DOCX/PDF และจำลองเฉพาะคำตอบ AI/เสียง เพื่อทดสอบการตรวจข้อมูล การแบ่งเอกสารยาว PDF สแกน ขีดจำกัดไฟล์ และการตอบข้อผิดพลาด
+
+`npm run typecheck` ใช้ BasedPyright รุ่นที่ล็อกใน `package-lock.json` และ `pyrightconfig.json` ร่วมกับเอดิเตอร์ ตั้งระดับ `standard` สำหรับโครงการ Python ที่ยังไม่ได้ใส่ annotation ทุกฟังก์ชัน โดยยังตรวจไฟล์แอป สคริปต์ และ tests ครบ และข้ามเฉพาะ dependencies/โมเดล/ไฟล์ build ไม่ใช้ระดับ `off` หรือปิดกฎรายข้อเพื่อซ่อน error ระบุ `.venv` และเส้นทางนำเข้า tests ให้ตรงกับวิธีรัน unittest ค่าจาก JSON และตัวเลือก SDK มีชนิดข้อมูลที่กำหนดไว้ตามขอบเขตการใช้งาน
 
 จัดรูปแบบ Python ด้วย `ruff format .` และ frontend ด้วย `npm run format` เครื่องมือ Node เป็น development dependencies เท่านั้น การรันเว็บยังใช้ `python app.py` ตามเดิม ต้องการทดสอบเบราว์เซอร์ให้รัน `npx playwright install chromium` แล้วเปิด Flask อีก terminal ก่อนสั่ง `npm run test:browser` ดูข้อกำหนดไลบรารีระบบใน `tests/browser/README.md`
 

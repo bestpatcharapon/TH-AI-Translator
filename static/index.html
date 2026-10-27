@@ -238,23 +238,53 @@
             <option value="isan" data-i18n="thaiIsan">Isan</option>
             <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
           </select>
+          <button
+            id="thai-help"
+            class="speaker-button"
+            type="button"
+            hidden
+            aria-label="About Thai interpretation"
+            aria-haspopup="dialog"
+          >
+            <svg><use href="#icon-info" /></svg>
+          </button>
         </div>
-        <p id="thai-mode-note" class="menu-help" data-i18n="thaiModeNote" hidden>
-          Interpretation can be wrong. Check microphone transcripts before relying on the meaning.
-        </p>
-        <section id="thai-result" class="thai-result" aria-live="polite" hidden>
-          <div id="thai-result-content"></div>
-          <form id="thai-clarification-form" hidden>
-            <label for="thai-clarification" data-i18n="thaiClarification"
-              >What does the speaker mean here?</label
-            >
-            <textarea id="thai-clarification" maxlength="1000" rows="2"></textarea>
-            <button id="thai-clarify" class="outline-button" type="submit" data-i18n="thaiClarify">
-              Explain and translate again
-            </button>
-          </form>
-        </section>
+        <button id="thai-result-preview" type="button" hidden aria-haspopup="dialog"></button>
       </section>
+      <dialog
+        id="thai-details"
+        class="preference-dialog thai-details"
+        aria-labelledby="thai-details-title"
+      >
+        <div class="preference-header">
+          <h2 id="thai-details-title" data-i18n="thaiMode">Thai interpretation</h2>
+          <button id="thai-details-close" class="icon-button" type="button" aria-label="Close">
+            <svg><use href="#icon-close" /></svg>
+          </button>
+        </div>
+        <div class="thai-details-body">
+          <p id="thai-mode-note" class="menu-help" data-i18n="thaiModeNote" hidden>
+            Interpretation can be wrong. Check microphone transcripts before relying on the meaning.
+          </p>
+          <section id="thai-result" class="thai-result" aria-live="polite" hidden>
+            <div id="thai-result-content"></div>
+            <form id="thai-clarification-form" hidden>
+              <label for="thai-clarification" data-i18n="thaiClarification"
+                >What does the speaker mean here?</label
+              >
+              <textarea id="thai-clarification" maxlength="1000" rows="2"></textarea>
+              <button
+                id="thai-clarify"
+                class="outline-button"
+                type="submit"
+                data-i18n="thaiClarify"
+              >
+                Explain and translate again
+              </button>
+            </form>
+          </section>
+        </div>
+      </dialog>
 
       <section id="photo-mode" class="photo-mode" hidden aria-labelledby="photo-heading">
         <div class="photo-mode-header">

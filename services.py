@@ -198,7 +198,7 @@ def detect_language(text):
         return "en"
 
 
-async def create_speech(text, language):
+async def create_speech(text, language) -> bytes:
     if language not in VOICES:
         raise ValueError("ยังไม่มีเสียงอ่านสำหรับภาษานี้")
     alternatives = {
@@ -219,8 +219,9 @@ async def create_speech(text, language):
                     text, voice, connect_timeout=5, receive_timeout=12
                 )
                 async for chunk in communicate.stream():
-                    if chunk["type"] == "audio" and isinstance(chunk.get("data"), bytes):
-                        audio.extend(chunk["data"])
+                    data = chunk.get("data")
+                    if chunk["type"] == "audio" and isinstance(data, bytes):
+                        audio.extend(data)
                 if not audio:
                     raise edge_tts.exceptions.NoAudioReceived("No audio returned")
                 return bytes(audio)
@@ -228,3 +229,4 @@ async def create_speech(text, language):
                 if attempt == len(voices) - 1:
                     raise
                 await asyncio.sleep(0.25)
+    raise RuntimeError("บริการอ่านออกเสียงไม่ส่งเสียงกลับมา")

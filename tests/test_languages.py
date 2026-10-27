@@ -14,7 +14,7 @@ class LanguageCoverageTests(unittest.TestCase):
         self.client = server.app.test_client()
 
     def test_catalog_and_frontend_share_choices(self):
-        choices = self.client.get("/api/languages").json
+        choices = self.client.get("/api/languages").get_json()
         self.assertGreater(len(choices), 100)
         script = self.client.get("/api/language-catalog.js")
         self.assertEqual(script.mimetype, "application/javascript")
@@ -68,7 +68,7 @@ class LanguageCoverageTests(unittest.TestCase):
                 },
             )
             self.assertEqual(result.status_code, 400)
-            self.assertIn("รูป", result.json["error"])
+            self.assertIn("รูป", result.get_json()["error"])
             ocr.assert_not_called()
 
     def test_transcription_maps_language_variants(self):
@@ -94,16 +94,16 @@ class LanguageCoverageTests(unittest.TestCase):
                 data={"language": "zu", "file": (io.BytesIO(b"audio"), "voice.webm")},
             )
             self.assertEqual(result.status_code, 400)
-            self.assertIn("พิมพ์", result.json["error"])
+            self.assertIn("พิมพ์", result.get_json()["error"])
             result = self.client.post(
                 "/api/photo-translate",
                 data={"source": "haw", "target": "th", "file": (io.BytesIO(b"photo"), "photo.png")},
             )
             self.assertEqual(result.status_code, 400)
-            self.assertIn("รูป", result.json["error"])
+            self.assertIn("รูป", result.get_json()["error"])
             client.assert_not_called()
         with patch.object(server, "create_speech") as speech:
             result = self.client.post("/api/speech", json={"text": "Salve", "language": "la"})
             self.assertEqual(result.status_code, 400)
-            self.assertIn("เสียงอ่าน", result.json["error"])
+            self.assertIn("เสียงอ่าน", result.get_json()["error"])
             speech.assert_not_called()

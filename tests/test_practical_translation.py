@@ -133,8 +133,8 @@ class PracticalTranslationTests(unittest.TestCase):
                     "/api/translate", json={"text": "จ่าย 1500 บาท", "source": "th", "target": "en"}
                 )
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.json["translation"], "Pay 150 baht.")
-                self.assertEqual(response.json["audit"]["status"], "review")
+                self.assertEqual(response.get_json()["translation"], "Pay 150 baht.")
+                self.assertEqual(response.get_json()["audit"]["status"], "review")
                 self.assertEqual(provider.return_value.chat.completions.create.call_count, 2)
 
     def test_repair_preserves_links_placeholders_and_glossary(self):

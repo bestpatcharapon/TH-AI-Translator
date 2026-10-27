@@ -61,13 +61,13 @@ class AppTests(unittest.TestCase):
             with self.subTest(body=str(body)[:50]):
                 result = self.client.post("/api/translate", json=body)
                 self.assertEqual(result.status_code, 400)
-                self.assertIn("error", result.json)
+                self.assertIn("error", result.get_json())
 
     def test_same_language_and_long_translation(self):
         result = self.client.post(
             "/api/translate", json={"text": "สวัสดี", "source": "th", "target": "th"}
         )
-        self.assertEqual(result.json["translation"], "สวัสดี")
+        self.assertEqual(result.get_json()["translation"], "สวัสดี")
         text = ("First paragraph.\n" * 400) + "The last line."
         self.assertEqual("".join(server.chunks(text)), text)
         with patch.object(server, "get_client") as client:
@@ -78,7 +78,7 @@ class AppTests(unittest.TestCase):
                 "/api/translate", json={"text": text, "source": "en", "target": "th"}
             )
             self.assertEqual(result.status_code, 200)
-            self.assertIn("The last line.", result.json["translation"])
+            self.assertIn("The last line.", result.get_json()["translation"])
             self.assertGreater(client.return_value.chat.completions.create.call_count, 1)
 
     def test_truncated_response_is_error(self):
@@ -88,7 +88,7 @@ class AppTests(unittest.TestCase):
             )
             result = self.client.post("/api/translate", json={"text": "hello", "target": "th"})
             self.assertEqual(result.status_code, 503)
-            self.assertNotIn("translation", result.json)
+            self.assertNotIn("translation", result.get_json())
 
     def test_document_order_and_formats(self):
         self.assertEqual(
@@ -103,7 +103,7 @@ class AppTests(unittest.TestCase):
                     "/api/extract",
                     data={"kind": "document", "file": (io.BytesIO(b"hello"), f"test.{extension}")},
                 )
-                self.assertEqual(result.json["text"], "hello")
+                self.assertEqual(result.get_json()["text"], "hello")
 
     def test_scanned_pdf_calls_ocr(self):
         with patch("services.read_image", return_value="Scanned text") as ocr:
@@ -128,7 +128,7 @@ class AppTests(unittest.TestCase):
                     "/api/extract", data={"kind": kind, "file": (io.BytesIO(data), name)}
                 )
                 self.assertEqual(result.status_code, 400)
-                self.assertIn("error", result.json)
+                self.assertIn("error", result.get_json())
         result = self.client.post(
             "/api/extract", data={"file": (io.BytesIO(b"x" * (MAX_UPLOAD + 1)), "huge.txt")}
         )
@@ -157,9 +157,9 @@ class AppTests(unittest.TestCase):
                 "/api/transcribe",
                 data={"language": "th", "file": (io.BytesIO(b"audio"), "recording.webm")},
             )
-            self.assertEqual(result.json["text"], "สวัสดี")
-            self.assertTrue(result.json["review_required"])
-            self.assertEqual(result.json["review_reasons"], ["no_metadata"])
+            self.assertEqual(result.get_json()["text"], "สวัสดี")
+            self.assertTrue(result.get_json()["review_required"])
+            self.assertEqual(result.get_json()["review_reasons"], ["no_metadata"])
             self.assertEqual(
                 client.return_value.audio.transcriptions.create.call_args.kwargs["language"], "th"
             )

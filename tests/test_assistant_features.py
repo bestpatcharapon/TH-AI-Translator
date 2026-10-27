@@ -43,7 +43,7 @@ class AssistantTests(unittest.TestCase):
                         "/api/assist", json={**self.context, "action": action}
                     )
                     self.assertEqual(response.status_code, 200)
-                    self.assertEqual(response.json, {**expected, "source_language": "th"})
+                    self.assertEqual(response.get_json(), {**expected, "source_language": "th"})
                     options = client.return_value.chat.completions.create.call_args.kwargs
                     payload = json.loads(options["messages"][1]["content"])
                     self.assertEqual(payload["source_language"], "Thai")
@@ -66,8 +66,8 @@ class AssistantTests(unittest.TestCase):
             )
             response = self.client.post("/api/assist", json={**self.context, "action": "replies"})
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["replies"], [item["text"] for item in replies])
-            self.assertEqual(response.json["reply_details"], replies)
+            self.assertEqual(response.get_json()["replies"], [item["text"] for item in replies])
+            self.assertEqual(response.get_json()["reply_details"], replies)
             prompt = client.return_value.chat.completions.create.call_args.kwargs["messages"][0][
                 "content"
             ]
@@ -112,7 +112,7 @@ class AssistantTests(unittest.TestCase):
             ]:
                 response = self.client.post("/api/assist", json={**self.context, **overrides})
                 self.assertEqual(response.status_code, 400)
-                self.assertIn("error", response.json)
+                self.assertIn("error", response.get_json())
             client.assert_not_called()
 
     def test_invalid_or_truncated_ai_output_is_not_presented_as_success(self):
@@ -132,7 +132,7 @@ class AssistantTests(unittest.TestCase):
                         "/api/assist", json={**self.context, "action": action}
                     )
                     self.assertEqual(response.status_code, 503)
-                    self.assertIn("error", response.json)
+                    self.assertIn("error", response.get_json())
             client.return_value.chat.completions.create.return_value = completion(
                 '{"explanation":"partial"}', "length"
             )
@@ -145,14 +145,14 @@ class AssistantTests(unittest.TestCase):
             response = self.client.post(
                 "/api/translate", json={"text": "สวัสดีครับ", "source": "auto", "target": "en"}
             )
-            self.assertEqual(response.json["source_language"], "th")
+            self.assertEqual(response.get_json()["source_language"], "th")
             client.return_value.chat.completions.create.return_value = completion(
                 '{"replies":["Hello!","How are you?","Good morning."]}'
             )
             response = self.client.post(
                 "/api/assist", json={**self.context, "source": "auto", "action": "replies"}
             )
-            self.assertEqual(response.json["source_language"], "th")
+            self.assertEqual(response.get_json()["source_language"], "th")
 
 
 if __name__ == "__main__":

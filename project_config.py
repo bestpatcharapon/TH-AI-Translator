@@ -2,8 +2,23 @@
 
 import os
 from pathlib import Path
+from typing import TypedDict, cast
 
 from dotenv import load_dotenv
+from openai.types.shared_params import ReasoningEffort
+
+
+class ReasoningOptions(TypedDict, total=False):
+    reasoning_effort: ReasoningEffort
+
+
+def reasoning_options(effort: str) -> ReasoningOptions:
+    if not effort:
+        return {}
+    if effort not in {"none", "minimal", "low", "medium", "high", "xhigh", "max"}:
+        raise ValueError("ค่าระดับ reasoning ไม่ถูกต้อง")
+    return {"reasoning_effort": cast(ReasoningEffort, effort)}
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 load_dotenv(PROJECT_ROOT / ".env")

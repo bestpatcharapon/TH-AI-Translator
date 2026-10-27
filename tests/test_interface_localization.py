@@ -20,7 +20,7 @@ class InterfaceLocalizationTests(unittest.TestCase):
         with patch.object(server, "get_client") as provider:
             response = server.app.test_client().get("/static/interface-locales/zh-TW.json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["menu"], "選單")
+        self.assertEqual(response.get_json()["menu"], "選單")
         provider.assert_not_called()
         response.close()
 

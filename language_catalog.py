@@ -12,6 +12,8 @@ from pathlib import Path
 CATALOG = json.loads(
     (Path(__file__).parent / "static/language-catalog.json").read_text(encoding="utf-8")
 )
-LANGUAGES = {code: entry["name"] for code, entry in CATALOG.items()}
-VOICES = {code: entry["voice"] for code, entry in CATALOG.items() if entry["voice"]}
-OCR_LANGUAGES = {code: entry["ocr"] for code, entry in CATALOG.items() if entry["ocr"]}
+LANGUAGES: dict[str, str] = {code: entry["name"] for code, entry in CATALOG.items()}
+VOICES: dict[str, str] = {code: entry["voice"] for code, entry in CATALOG.items() if entry["voice"]}
+OCR_LANGUAGES: dict[str, str] = {
+    code: entry["ocr"] for code, entry in CATALOG.items() if entry["ocr"]
+}

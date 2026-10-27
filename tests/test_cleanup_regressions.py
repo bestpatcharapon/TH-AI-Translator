@@ -30,7 +30,7 @@ class CleanupRegressionTests(unittest.TestCase):
                         "/api/extract", data={"file": (io.BytesIO(data), name)}
                     )
                     self.assertEqual(response.status_code, 200)
-                    self.assertTrue(response.json["text"])
+                    self.assertTrue(response.get_json()["text"])
             provider.assert_not_called()
 
     def test_scanned_documents_resolve_the_client_only_when_ocr_is_needed(self):
@@ -43,7 +43,7 @@ class CleanupRegressionTests(unittest.TestCase):
                 "/api/extract", data={"file": (io.BytesIO(pdf_bytes(scanned=True)), "scan.pdf")}
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["text"], "Scanned text")
+            self.assertEqual(response.get_json()["text"], "Scanned text")
             provider.assert_called_once_with()
             self.assertIs(ocr.call_args.args[1], client)
 

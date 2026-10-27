@@ -56,7 +56,9 @@ def main():
             json={"text": text, "source": language, "target": target, "cache_scope": "live"},
         )
         sample["translation_http_status"] = response.status_code
-        sample["translation"] = response.json.get("translation", response.json.get("error"))
+        sample["translation"] = response.get_json().get(
+            "translation", response.get_json().get("error")
+        )
         report["samples"].append(sample)
     # Silence may produce fluent hallucinations; verify segment evidence gates it.
     audio = io.BytesIO()
@@ -69,7 +71,7 @@ def main():
         "/api/transcribe",
         data={"language": "th", "file": (io.BytesIO(audio.getvalue()), "silence.wav")},
     )
-    report["silence"] = {"http_status": response.status_code, "result": response.json}
+    report["silence"] = {"http_status": response.status_code, "result": response.get_json()}
     report["translation_checks"] = []
     for source, target, text in (
         ("th", "en", "ผมเป็นคนไทย"),
@@ -83,7 +85,9 @@ def main():
         report["translation_checks"].append(
             {
                 "text": text,
-                "translation": response.json.get("translation", response.json.get("error")),
+                "translation": response.get_json().get(
+                    "translation", response.get_json().get("error")
+                ),
                 "http_status": response.status_code,
             }
         )

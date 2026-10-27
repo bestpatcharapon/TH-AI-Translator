@@ -145,8 +145,8 @@ class TranslationPreferencesTests(unittest.TestCase):
                 },
             )
             self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json["translation"], "th:Hello")
-            extras = result.json["additional_translations"]
+            self.assertEqual(result.get_json()["translation"], "th:Hello")
+            extras = result.get_json()["additional_translations"]
             self.assertEqual([item["target"] for item in extras], ["fr", "ja", "ko"])
             self.assertEqual(extras[0]["translation"], "fr:Hello")
             self.assertIn("error", extras[1])
@@ -188,7 +188,7 @@ class TranslationPreferencesTests(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn("travel and tourism", photo.call_args.args[3])
             self.assertEqual(
-                response.json["additional_translations"][0]["translation"], "こんにちは"
+                response.get_json()["additional_translations"][0]["translation"], "こんにちは"
             )
             self.assertNotIn(
                 "additional_translations", result, "Cached photo result must not be mutated"

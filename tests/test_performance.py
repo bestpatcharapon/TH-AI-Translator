@@ -172,9 +172,9 @@ class PerformanceTests(unittest.TestCase):
                 },
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["translation"], "สวัสดี")
+            self.assertEqual(response.get_json()["translation"], "สวัสดี")
             self.assertEqual(
-                response.json["additional_translations"],
+                response.get_json()["additional_translations"],
                 [{"target": "ja", "pending": True}, {"target": "fr", "pending": True}],
             )
             primary.assert_called_once()
@@ -214,7 +214,7 @@ class PerformanceTests(unittest.TestCase):
             )
             self.assertEqual(response.status_code, 200)
             self.assertEqual(
-                response.json["additional_translations"], [{"target": "ja", "pending": True}]
+                response.get_json()["additional_translations"], [{"target": "ja", "pending": True}]
             )
             self.assertEqual(response.headers["X-Result-Cache"], "hit")
             extras.assert_not_called()
@@ -318,7 +318,9 @@ class PerformanceTests(unittest.TestCase):
 
         def read(data, client):
             with Image.open(io.BytesIO(data)) as image:
-                label = "white" if image.getpixel((0, 0))[0] > 128 else "black"
+                pixel = image.convert("RGB").getpixel((0, 0))
+                assert isinstance(pixel, tuple)
+                label = "white" if pixel[0] > 128 else "black"
             barrier.wait(timeout=5)
             if label == "white":
                 time.sleep(0.02)

@@ -42,6 +42,7 @@ from project_config import (
     STYLE_RULES,
     TONES,
     TRANSLATION_REASONING_EFFORT,
+    reasoning_options,
     tone_description,
 )
 from request_validation import interface_language, settings, text_value, translation_preferences
@@ -86,9 +87,8 @@ _speech_cache = ResultCache(max_entries=12, max_bytes=16 * 1024 * 1024, ttl=180)
 _source_info_cache = ResultCache(max_entries=64, ttl=300)
 _document_pool = ThreadPoolExecutor(max_workers=3, thread_name_prefix="document-translate")
 _speech_pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="speech-check")
-_reasoning = (
-    {"reasoning_effort": TRANSLATION_REASONING_EFFORT} if TRANSLATION_REASONING_EFFORT else {}
-)
+_reasoning = reasoning_options(TRANSLATION_REASONING_EFFORT)
+_chat_reasoning = reasoning_options(CHAT_REASONING_EFFORT)
 
 
 @app.before_request
@@ -128,6 +128,12 @@ def cached_json(cache, key, producer, *, cacheable=lambda value: True, bypass=Fa
 class TranscriptionOptions(TypedDict, total=False):
     language: str
     prompt: str
+
+
+class TranslationOptions(TypedDict, total=False):
+    glossary: list[dict[str, str]]
+    conversation: list[dict[str, str]]
+    chat: bool
 
 
 def get_client():
@@ -225,11 +231,7 @@ def translate_text(
             model=MODEL,
             temperature=0.2,
             max_completion_tokens=12000,
-            **(
-                {"reasoning_effort": CHAT_REASONING_EFFORT}
-                if chat and CHAT_REASONING_EFFORT
-                else _reasoning
-            ),
+            **(_chat_reasoning if chat and CHAT_REASONING_EFFORT else _reasoning),
             messages=[
                 {
                     "role": "system",
@@ -353,7 +355,7 @@ def additional_translations(
         try:
             if len(text) > MAX_TEXT:
                 raise ValueError("ข้อความยาวเกินขีดจำกัดสำหรับการแปลเพิ่มเติม")
-            options = {"glossary": glossary} if glossary else {}
+            options: TranslationOptions = {"glossary": glossary} if glossary else {}
             if conversation:
                 options["conversation"] = conversation
             translation = translate_text(text, source, target, tone, context, extra, **options)
@@ -492,7 +494,7 @@ def translate():
     context, extra, targets = translation_preferences(data)
     glossary = validate_glossary(data.get("glossary", []))
     conversation = validate_conversation(data.get("conversation", []))
-    options = {"glossary": glossary} if glossary else {}
+    options: TranslationOptions = {"glossary": glossary} if glossary else {}
     if conversation:
         options["conversation"] = conversation
     dialect = thai_mode(data.get("thai_mode", "standard"))

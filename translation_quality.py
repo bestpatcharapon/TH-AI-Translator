@@ -5,11 +5,25 @@ import re
 import secrets
 import unicodedata
 from collections import Counter
+from typing import Any, TypedDict
 
 from language_catalog import LANGUAGES
 
 MAX_GLOSSARY = 30
 ANALYSIS_LIMIT = 3000
+
+
+class AuditIssue(TypedDict):
+    kind: str
+    missing: list[str]
+    added: list[str]
+
+
+class AuditResult(TypedDict):
+    status: str
+    issues: list[AuditIssue]
+    terms_checked: int
+    terms_matched: int
 
 
 def validate_glossary(value):
@@ -80,7 +94,7 @@ def _numbers(text):
     ]
 
 
-_SMALL_CARDINALS = dict(
+_SMALL_CARDINALS: dict[str, str] = dict(
     zip(
         "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split(),
         map(str, range(21)),
@@ -122,7 +136,7 @@ def _small_number_words(text):
     )
 
 
-def audit_translation(text, translation, target, glossary):
+def audit_translation(text, translation, target, glossary) -> AuditResult:
     """These are review flags, not a semantic accuracy score or a guarantee."""
     extractors = {
         "numbers": _numbers,
@@ -133,7 +147,7 @@ def audit_translation(text, translation, target, glossary):
             r"\{\{[^{}]+\}\}|\$\{[^{}]+\}|\{[A-Za-z_][\w.-]*\}|%[sd]", value
         ),
     }
-    issues = []
+    issues: list[AuditIssue] = []
     for kind, extractor in extractors.items():
         original, output = Counter(extractor(text)), Counter(extractor(translation))
         missing_counts, added_counts = original - output, output - original
@@ -171,7 +185,7 @@ def audit_translation(text, translation, target, glossary):
     }
 
 
-def json_result(client, model, instruction, payload, limit=6500, *, timeout=60):
+def json_result(client, model, instruction, payload, limit=6500, *, timeout=60) -> dict[str, Any]:
     response = client.chat.completions.create(
         model=model,
         temperature=0.2,

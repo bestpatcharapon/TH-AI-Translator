@@ -1,10 +1,9 @@
 import io
 import json
 import unittest
-from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
-from openai import OpenAIError
+from openai import OpenAIError, RateLimitError
 from PIL import Image
 from test_app import completion
 
@@ -47,7 +46,7 @@ class PhotoTests(unittest.TestCase):
                 },
             )
             self.assertEqual(response.status_code, 200)
-            data = response.json
+            data = response.get_json()
             self.assertTrue(data["image"].startswith("data:image/png;base64,"))
             self.assertEqual((data["width"], data["height"]), (300, 180))
             self.assertEqual(
@@ -80,8 +79,11 @@ class PhotoTests(unittest.TestCase):
 
     def test_retry_reuses_validated_batches_after_a_later_rate_limit(self):
         regions = [{"text": f"รายการ {index}"} for index in range(25)]
-        error = OpenAIError("Rate limited")
-        error.status_code = 429
+        error = RateLimitError(
+            "Rate limited",
+            response=MagicMock(status_code=429, headers={}),
+            body={"message": "Too many requests"},
+        )
         sizes = []
         with patch.object(server, "get_client") as client:
 
@@ -138,7 +140,7 @@ class PhotoTests(unittest.TestCase):
                 data={**settings, "file": (io.BytesIO(b"not image"), "bad.png")},
             )
             self.assertEqual(response.status_code, 400)
-            self.assertIn("error", response.json)
+            self.assertIn("error", response.get_json())
         self.assertEqual(self.client.post("/api/photo-translate").status_code, 400)
 
     def test_auto_language_is_used_for_positioned_ocr_and_reverse_labels(self):
@@ -159,7 +161,7 @@ class PhotoTests(unittest.TestCase):
                 },
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json["source_language"], "ja")
+            self.assertEqual(response.get_json()["source_language"], "ja")
             self.assertEqual(detect.call_args.args[1], "ja")
 
     def test_successful_photo_is_cached_without_repeating_ai_calls(self):
@@ -183,9 +185,12 @@ class PhotoTests(unittest.TestCase):
             self.assertEqual(client.return_value.chat.completions.create.call_count, 1)
 
     def test_rate_limit_is_visible_and_failed_results_are_not_cached(self):
-        error = OpenAIError("Rate limited")
-        error.status_code = 429
-        error.response = SimpleNamespace(headers={"retry-after": "2.1"})
+        error = RateLimitError(
+            "Rate limited",
+            response=MagicMock(status_code=429, headers={}),
+            body={"message": "Too many requests"},
+        )
+        error.response.headers["retry-after"] = "2.1"
         error.body = {"message": "Too many requests"}
         with (
             patch("photo_translation.positioned_text", return_value=self.regions),
@@ -207,11 +212,11 @@ class PhotoTests(unittest.TestCase):
                 for _ in range(3)
             ]
             self.assertEqual([response.status_code for response in responses], [429, 200, 200])
-            self.assertEqual(responses[0].json["code"], "rate_limit_exceeded")
-            self.assertEqual(responses[0].json["retry_after"], 3)
+            self.assertEqual(responses[0].get_json()["code"], "rate_limit_exceeded")
+            self.assertEqual(responses[0].get_json()["retry_after"], 3)
             self.assertEqual(responses[0].headers["Retry-After"], "3")
             self.assertEqual(client.return_value.chat.completions.create.call_count, 2)
-        error.response = SimpleNamespace(headers={})
+        error.response.headers.clear()
         error.body = {"message": "Please try again in 1m2.5s."}
         self.assertEqual(server.retry_delay(error), 63)
 
