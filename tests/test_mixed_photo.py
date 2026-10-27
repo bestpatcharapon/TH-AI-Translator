@@ -144,3 +144,16 @@ class MixedPhotoTests(unittest.TestCase):
                 "content"
             ]
             self.assertIn("already in the target language unchanged", prompt)
+
+    def test_label_prompt_translates_meaning_instead_of_transliterating(self):
+        client = MagicMock()
+        client.chat.completions.create.return_value = completion(
+            '{"translations":[{"id":0,"text":"Thai National ID Card"}]}'
+        )
+        result = translate_regions(
+            [{"text": "บัตรประจําตัวประชาชน"}], "th", "en", "natural", client, "model"
+        )
+        self.assertEqual(result, ["Thai National ID Card"])
+        prompt = client.chat.completions.create.call_args.kwargs["messages"][0]["content"]
+        self.assertIn("never write their Thai pronunciation in Latin letters", prompt)
+        self.assertIn("Never add pronunciation, transliteration or phonetic guides", prompt)

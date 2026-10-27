@@ -12,7 +12,7 @@ restoring the removed completion notice or leaking status into another feature.
 
 `voice-quality.cjs` checks real browser recording with fake microphone input: audio
 capture settings, automatic send by default, optional transcript review, editing, uncertainty even with
-automatic send enabled, independent preferences, and rejection of a silent audio
+automatic send enabled, nonblocking verifier-only outages, clear dialect auto-send, independent preferences, and rejection of a silent audio
 stream before an API request. Speech/translation responses are mocked here; real
 provider examples are recorded separately in `reports/voice-quality-synthetic.json`.
 
@@ -48,8 +48,8 @@ six complete Live Chat messages, language-pair filtering, context clearing and i
 from other features. All checks default to port 5000; set TRANSLATOR_TEST_URL as needed.
 
 The cleanup regression check verifies auto-detected language swapping, refreshed audits
-when applying suggested revisions, ownership of delayed clipboard feedback and canceled
-photo exports after switching features.
+when applying suggested revisions, ownership of delayed clipboard feedback and absence
+of the removed photo download control.
 
 The Thai interpretation check covers ambiguity blocking, explicit clarification, the real
 local dictionary validator, persistence, independent Text/Live Chat settings, unsent
@@ -71,5 +71,5 @@ Image quality checks also cover the visible target-language picker, readable tra
 list, per-label dialog, partial-result warning, and disabled actions for unclear labels.
 
 The numeric preservation suite supplies original pixels spelling 50 with a deliberately
-wrong OCR value of 5. It compares every protected pixel on screen and in the downloaded
-PNG, while also verifying that translations outside those areas are still rendered.
+wrong OCR value of 5. It compares every protected pixel on screen, while also verifying that translations
+outside those areas are still rendered and that no photo download control is present.

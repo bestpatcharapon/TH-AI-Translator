@@ -167,6 +167,7 @@ window.addEventListener("resize", resizeSourceInput);
 function updateInput() {
   inputEl.maxLength = maxInput();
   const text = inputEl.value;
+  $("speak-source").hidden = !text.trim();
   $("clear").hidden = text.length === 0;
   let words = text.trim().split(/\s+/u).filter(Boolean).length;
   try {
@@ -1087,18 +1088,21 @@ $("microphone").addEventListener("click", async () => {
         invalidateTranslation();
         updateInput();
         voiceStatus();
-        if (data.review_required || (live && activeFeature().voiceReview === true)) {
-          const verificationOnly =
-            data.review_reasons?.length === 1 &&
-            data.review_reasons[0] === "verification_unavailable";
+        const verificationOnly =
+          data.review_reasons?.length === 1 &&
+          data.review_reasons[0] === "verification_unavailable";
+        // An unavailable optional verifier is not evidence of unclear primary audio.
+        // Live Chat follows the user's review preference in that case.
+        const needsTranscriptReview = data.review_required && !(live && verificationOnly);
+        if (needsTranscriptReview || (live && activeFeature().voiceReview === true)) {
           voiceStatus(
-            t(data.review_required && !verificationOnly ? "voiceUncertain" : "voiceReview")
+            t(needsTranscriptReview && !verificationOnly ? "voiceUncertain" : "voiceReview")
           );
           inputEl.focus();
           return;
         }
         if (
-          ["text", "live"].includes(mode) &&
+          mode === "text" &&
           ["th", "auto"].includes(language) &&
           activeFeature().thai.mode !== "standard"
         ) {

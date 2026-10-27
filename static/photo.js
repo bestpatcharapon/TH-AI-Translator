@@ -64,7 +64,6 @@ let photoFile = null,
   photoRequest = null,
   photoTimer = null;
 let photoEpoch = 0,
-  photoDownloadEpoch = 0,
   showingOriginal = false,
   photoZoom = 1,
   photoActiveLabel = null;
@@ -227,8 +226,6 @@ function renderPhotoReadings() {
   }
 }
 function cancelPhotoRequest() {
-  photoDownloadEpoch++;
-  $("photo-download").disabled = false;
   clearInterval(photoLoadingClock);
   photoLoadingClock = null;
   clearPhotoError();
@@ -247,7 +244,6 @@ function setPhotoBusy(busy) {
   $("photo-original").hidden = !photoData;
   document.querySelector(".photo-actions").classList.toggle("has-translation", !!photoData);
   $("photo-fullscreen").disabled = !photoFile;
-  $("photo-download").hidden = !photoData || busy;
   syncPhotoViewerStatus();
 }
 function labelRect(region, regions, width, height) {
@@ -437,7 +433,6 @@ function renderPhoto() {
   $("photo-original").disabled = !photoData;
   $("photo-original").hidden = !photoData;
   document.querySelector(".photo-actions").classList.toggle("has-translation", !!photoData);
-  $("photo-download").hidden = !photoData;
   syncPhotoViewerStatus();
 }
 async function importPhoto(file) {
@@ -662,90 +657,6 @@ $("photo-label-copy").addEventListener("click", async () => {
 $("photo-label-speak").addEventListener("click", () => {
   if (photoActiveLabel && photoData)
     speak(photoActiveLabel.translation, photoData.target_language, $("photo-label-speak"));
-});
-function wrapPhotoText(context, text, maxWidth) {
-  const lines = [];
-  let line = "";
-  for (const char of text) {
-    if (char === "\n" || (line && context.measureText(line + char).width > maxWidth)) {
-      lines.push(line.trim());
-      line = char === "\n" ? "" : char;
-    } else line += char;
-  }
-  if (line) lines.push(line.trim());
-  return lines;
-}
-$("photo-download").addEventListener("click", async () => {
-  if (!photoData) return;
-  const data = photoData,
-    epoch = modeEpoch,
-    token = ++photoDownloadEpoch;
-  const ownsDownload = () =>
-    mode === "image" && modeEpoch === epoch && photoData === data && photoDownloadEpoch === token;
-  const button = $("photo-download");
-  button.disabled = true;
-  try {
-    await document.fonts.ready;
-    if (!ownsDownload()) return;
-    const image = new Image();
-    image.src = data.image;
-    await image.decode();
-    if (!ownsDownload()) return;
-    const canvas = document.createElement("canvas");
-    canvas.width = data.width;
-    canvas.height = data.height;
-    const context = canvas.getContext("2d");
-    context.direction = LANGUAGE_CATALOG[data.target_language]?.rtl ? "rtl" : "ltr";
-    context.drawImage(image, 0, 0);
-    for (const region of data.regions) {
-      if (
-        region.preserve_original ||
-        region.reading_review ||
-        region.translation.trim() === region.text.trim()
-      )
-        continue;
-      const rect = labelRect(region, data.regions, data.width, data.height);
-      let size = Math.min(42, Math.max(8, region.height * 0.85)),
-        lines;
-      do {
-        context.font = `500 ${size}px "Noto Sans Thai", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", sans-serif`;
-        lines = wrapPhotoText(context, region.translation, rect.width - 4);
-        if (lines.length * size * 1.12 <= rect.height - 2 || size <= 6) break;
-        size -= 0.5;
-      } while (size >= 6);
-      context.fillStyle = region.background;
-      context.fillRect(rect.x, rect.y, rect.width, rect.height);
-      context.fillStyle = region.foreground;
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-      const lineHeight = size * 1.12,
-        top = rect.y + (rect.height - lines.length * lineHeight) / 2 + lineHeight / 2;
-      context.save();
-      context.beginPath();
-      context.rect(rect.x, rect.y, rect.width, rect.height);
-      context.clip();
-      lines.forEach((line, index) =>
-        context.fillText(line, rect.x + rect.width / 2, top + index * lineHeight)
-      );
-      context.restore();
-    }
-    drawProtectedPhotoAreas(context, image, data);
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-    if (!blob) throw new Error();
-    if (!ownsDownload()) return;
-    const url = URL.createObjectURL(blob),
-      link = document.createElement("a");
-    link.href = url;
-    link.download = `translated-${data.target_language}.png`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  } catch {
-    if (ownsDownload()) photoStatus(t("photoDownloadError"), true);
-  } finally {
-    if (photoDownloadEpoch === token) button.disabled = false;
-  }
 });
 function closePhotoCamera() {
   cameraEpoch++;

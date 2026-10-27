@@ -654,7 +654,7 @@ def assist():
     if action != "source_info" and not translation.strip():
         raise ValueError("กรุณาแปลข้อความก่อนใช้ผู้ช่วย")
     if action == "source_info" and len(text) > 1500:
-        raise ValueError("คำอ่านและตัวอย่างรองรับข้อความไม่เกิน 1,500 ตัวอักษร")
+        raise ValueError("ตัวอย่างประโยครองรับข้อความไม่เกิน 1,500 ตัวอักษร")
     context, extra, _ = translation_preferences(data)
     glossary = validate_glossary(data.get("glossary", []))
     actual_source = detect_language(text) if source == "auto" else source

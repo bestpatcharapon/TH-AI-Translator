@@ -22,8 +22,8 @@ Object.assign(COPY.en, {
   openSaved: "Open",
   deleteSaved: "Remove",
   working: "Thinking…",
-  sourceInfoLoading: "Preparing pronunciation and examples…",
-  sourceInfoFailed: "Could not load pronunciation and examples.",
+  sourceInfoLoading: "Preparing examples…",
+  sourceInfoFailed: "Could not load examples.",
   retry: "Retry",
   replyEmpty: "Type or choose a reply first.",
   saveLimit: "You can save up to 100 translations. Remove an older one first.",
@@ -51,8 +51,8 @@ Object.assign(COPY.th, {
   openSaved: "เปิด",
   deleteSaved: "นำออก",
   working: "กำลังประมวลผล…",
-  sourceInfoLoading: "กำลังเตรียมคำอ่านและตัวอย่าง…",
-  sourceInfoFailed: "โหลดคำอ่านและตัวอย่างไม่สำเร็จ",
+  sourceInfoLoading: "กำลังเตรียมตัวอย่าง…",
+  sourceInfoFailed: "โหลดตัวอย่างไม่สำเร็จ",
   retry: "ลองใหม่",
   replyEmpty: "กรุณาพิมพ์หรือเลือกคำตอบก่อน",
   saveLimit: "บันทึกได้สูงสุด 100 คำแปล กรุณานำรายการเก่าออกก่อน",
@@ -171,7 +171,6 @@ function resetFeatures() {
   $("explain").setAttribute("aria-expanded", "false");
   $("check-translation").setAttribute("aria-expanded", "false");
   $("check-revision").textContent = "";
-  $("pronunciation").textContent = "";
   resizeOutput();
 }
 function featureStatus(id, message = "", error = false) {
@@ -186,7 +185,7 @@ async function requestAssistant(action, statusId, button = null) {
     snapshot = currentTranslation;
   assistantRequests().set(action, controller);
   if (button) button.disabled = true;
-  featureStatus(statusId, t(action === "source_info" ? "sourceInfoLoading" : "working"));
+  featureStatus(statusId, t("working"));
   try {
     const data = await responseJson(
       await fetch("/api/assist", {
@@ -218,8 +217,6 @@ function renderSourceInfo(data) {
   if (!currentTranslation) return;
   if (LANGUAGES[data.source_language] && data.source_language !== "auto")
     currentTranslation.sourceLanguage = data.source_language;
-  $("pronunciation").textContent = data.pronunciation;
-  $("pronunciation").hidden = !data.pronunciation;
   $("source-alternatives").replaceChildren();
   for (const text of data.alternatives) {
     const button = document.createElement("button");
@@ -308,6 +305,8 @@ document.addEventListener("translation:complete", (event) => {
   for (const id of ["translation-tools", "output-language"]) $(id).hidden = false;
   refreshFeatureLabels();
   resizeOutput();
+  // Documents are translated as-is; clickable rewrite and reply suggestions are not offered.
+  if (mode === "document") return;
   activeFeature().sourceInfoTimer = setTimeout(() => {
     activeFeature().sourceInfoTimer = null;
     loadSourceInfo();
@@ -431,6 +430,7 @@ function renderReplySuggestions(data) {
   $("suggest-replies").setAttribute("aria-expanded", "true");
 }
 $("suggest-replies").addEventListener("click", async () => {
+  if (mode === "document") return;
   if (replySuggestions) {
     const expanded = $("reply-suggestions").hidden;
     $("reply-suggestions").hidden = !expanded;
@@ -697,10 +697,8 @@ const assistantHiddenIds = [
   "check-panel",
   "apply-revision",
   "check-revision",
-  "pronunciation",
 ];
 const assistantTextIds = [
-  "pronunciation",
   "explanation-text",
   "check-text",
   "check-heading",

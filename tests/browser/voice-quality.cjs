@@ -24,12 +24,15 @@ const audioFixture = require("./audio-fixture.cjs");
       speechUploads = [];
     page.on("pageerror", (error) => errors.push(error.message));
     let uncertain = false,
+      reviewReasons = [],
       transcriptions = 0,
       transcript = "ขอจองโต๊ะสองคนครับ";
     await page.route("**/api/transcribe", (route) => {
       transcriptions++;
       speechUploads.push(route.request().postData());
-      return route.fulfill({ json: { text: transcript, review_required: uncertain } });
+      return route.fulfill({
+        json: { text: transcript, review_required: uncertain, review_reasons: reviewReasons },
+      });
     });
     await page.route("**/api/translate", (route) => {
       translations.push(route.request().postDataJSON());
@@ -90,10 +93,44 @@ const audioFixture = require("./audio-fixture.cjs");
     await record();
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 4);
     assert.equal(translations.at(-1).text, "ขอบคุณครับ");
+    // A temporary verifier outage alone must not override automatic send.
+    uncertain = true;
+    reviewReasons = ["verification_unavailable"];
+    transcript = "ได้เลยครับ";
+    await record();
+    await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 5);
+    assert.equal(translations.at(-1).text, transcript);
+    await page.locator("#live-review-voice").check();
+    transcript = "ตรวจข้อความนี้ก่อน";
+    await record();
+    await page.waitForFunction(
+      () => document.querySelector("#input").value === "ตรวจข้อความนี้ก่อน"
+    );
+    assert.equal(translations.length, 5, "Explicit review still waits during verifier outage");
+    await page.locator("#input").fill("");
+    await page.locator("#live-review-voice").uncheck();
+    reviewReasons = ["verification_unavailable", "unclear_audio"];
+    transcript = "ข้อความเสียงไม่ชัด";
+    await record();
+    await page.waitForFunction(
+      () => document.querySelector("#input").value === "ข้อความเสียงไม่ชัด"
+    );
+    assert.equal(translations.length, 5, "Actual unclear audio must still require review");
+    assert.match(await page.locator("#voice-status").textContent(), /unclear/);
+    await page.locator("#input").fill("");
+    uncertain = false;
+    reviewReasons = [];
+    await page.locator("#thai-mode").selectOption("northern", { force: true });
+    transcript = "ฮาจะไปนอน";
+    await record();
+    await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 6);
+    assert.equal(translations.at(-1).thai_mode, "northern");
+    assert.equal(translations.at(-1).text, transcript);
     await page.locator("#live-back").click();
     await page.locator('[data-mode="live"]').click();
     assert.equal(await page.locator("#live-review-voice").isChecked(), false);
     const beforeSilence = transcriptions;
+    const beforeSilentTranslations = translations.length;
     await page.evaluate(() => {
       navigator.mediaDevices.getUserMedia = async () => {
         const context = new AudioContext();
@@ -113,11 +150,11 @@ const audioFixture = require("./audio-fixture.cjs");
       document.querySelector("#voice-status").textContent.includes("No speech detected")
     );
     assert.equal(transcriptions, beforeSilence);
-    assert.equal(translations.length, 4);
+    assert.equal(translations.length, beforeSilentTranslations);
     await page.evaluate(() => window.silentAudioContext.close());
     assert.deepEqual(errors, []);
     console.log(
-      "PASS microphone capture settings, automatic send by default, optional transcript review, edited source, uncertain-audio gate, feature-owned preference and digital-silence rejection."
+      "PASS automatic send including verifier outage and clear dialect speech, explicit review, unclear-audio gate, capture settings, feature-owned preference and silence rejection."
     );
   } finally {
     await browser.close();

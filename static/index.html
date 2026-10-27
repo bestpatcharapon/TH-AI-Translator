@@ -371,12 +371,6 @@
             <summary id="photo-audit-summary"></summary>
             <div id="photo-audit-content"></div>
           </details>
-          <div class="photo-result-footer">
-            <button id="photo-download" class="text-button" type="button" hidden>
-              <svg><use href="#icon-download" /></svg
-              ><span data-i18n="photoDownload">Download translated image</span>
-            </button>
-          </div>
         </div>
       </section>
 
@@ -459,7 +453,6 @@
               spellcheck="false"
             ></textarea>
             <div id="source-insights" class="source-insights" hidden>
-              <p id="pronunciation" lang="en" hidden></p>
               <div
                 id="source-alternatives"
                 class="suggestion-chips"
@@ -471,6 +464,7 @@
           <div class="panel-footer">
             <button
               id="speak-source"
+              hidden
               class="speaker-button"
               type="button"
               aria-label="Listen to source text"

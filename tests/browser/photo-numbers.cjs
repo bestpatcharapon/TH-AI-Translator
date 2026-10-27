@@ -1,6 +1,5 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
-const fs = require("node:fs/promises");
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -89,15 +88,6 @@ const fs = require("node:fs/promises");
     assert.equal(await page.locator("#photo-viewer-stage .photo-label").count(), 2);
     assert(!(await page.locator("#photo-viewer-status").isVisible()));
     await page.locator("#photo-viewer-close").click();
-    await page.evaluate(() => {
-      window.exportedPhotoWords = [];
-      const draw = CanvasRenderingContext2D.prototype.fillText;
-      CanvasRenderingContext2D.prototype.fillText = function (text, ...args) {
-        window.exportedPhotoWords.push(text);
-        return draw.call(this, text, ...args);
-      };
-    });
-
     assert.equal(
       await page
         .locator("#photo-readings-list small")
@@ -125,45 +115,10 @@ const fs = require("node:fs/promises");
       true,
       "Displayed amount must preserve every source pixel, including the zero"
     );
-    const event = page.waitForEvent("download");
-    await page.locator("#photo-download").click();
-    const download = await event;
-    assert((await page.evaluate(() => window.exportedPhotoWords.join(""))).includes("50 Baht"));
-    const exported = `data:image/png;base64,${(await fs.readFile(await download.path())).toString("base64")}`;
-    const result = await page.evaluate(
-      async ({ source, output }) => {
-        async function pixels(src) {
-          const img = new Image();
-          img.src = src;
-          await img.decode();
-          const c = document.createElement("canvas");
-          c.width = 240;
-          c.height = 120;
-          const ctx = c.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          return ctx.getImageData(0, 0, 240, 120).data;
-        }
-        const a = await pixels(source),
-          b = await pixels(output);
-        let preserved = true,
-          changed = false;
-        for (let y = 0; y < 120; y++)
-          for (let x = 0; x < 240; x++)
-            for (let ch = 0; ch < 4; ch++) {
-              const i = (y * 240 + x) * 4 + ch;
-              if (x >= 150 && y < 50) {
-                if (a[i] !== b[i]) preserved = false;
-              } else if (a[i] !== b[i]) changed = true;
-            }
-        return { preserved, changed };
-      },
-      { source: image, output: exported }
-    );
-    assert.equal(result.preserved, true, "Downloaded PNG must preserve original numeric pixels");
-    assert.equal(result.changed, true, "The download must also contain the translated overlay");
+    assert.equal(await page.locator("#photo-download").count(), 0);
     assert.deepEqual(errors, []);
     console.log(
-      "PASS: original 50 survives wrong OCR 5, overlapping labels, and PNG export pixel for pixel."
+      "PASS: original 50 survives wrong OCR 5, overlapping labels, and display pixel for pixel; no photo download control."
     );
   } finally {
     await browser.close();

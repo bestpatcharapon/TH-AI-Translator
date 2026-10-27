@@ -22,7 +22,6 @@ class AssistantTests(unittest.TestCase):
     def test_tools_return_validated_results_and_language_context(self):
         results = {
             "source_info": {
-                "pronunciation": "Sawatdi khrap khon Thai",
                 "alternatives": ["สวัสดีครับ", "สวัสดีครับทุกคน"],
             },
             "explain": {"explanation": "The greeting preserves the polite tone."},
@@ -99,6 +98,27 @@ class AssistantTests(unittest.TestCase):
                         "/api/assist", json={**self.context, "action": "replies"}
                     )
                     self.assertEqual(response.status_code, 503)
+
+    def test_source_examples_ignore_legacy_pronunciation(self):
+        with patch.object(server, "get_client") as client:
+            client.return_value.chat.completions.create.return_value = completion(
+                json.dumps(
+                    {
+                        "pronunciation": "Sawatdi khrap",
+                        "alternatives": ["สวัสดีครับ", "สวัสดีครับทุกคน"],
+                    }
+                )
+            )
+            response = self.client.post(
+                "/api/assist", json={**self.context, "action": "source_info"}
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn("pronunciation", response.get_json())
+            self.assertEqual(len(response.get_json()["alternatives"]), 2)
+            prompt = client.return_value.chat.completions.create.call_args.kwargs["messages"][0][
+                "content"
+            ]
+            self.assertIn("Do not generate pronunciation", prompt)
 
     def test_bad_inputs_do_not_call_model(self):
         with patch.object(server, "get_client") as client:

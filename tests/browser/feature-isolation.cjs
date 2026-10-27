@@ -145,6 +145,18 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await select("#target", "fr");
     await select("#tone", "casual");
     await waitOutput("fr:casual:DOCUMENT INPUT");
+    await page.waitForTimeout(500);
+    assert(
+      !calls.some(
+        ([kind, body]) =>
+          kind === "assist" &&
+          ["source_info", "replies"].includes(body.action) &&
+          body.text === "DOCUMENT INPUT"
+      ),
+      "Document mode must not request selectable suggestions"
+    );
+    assert(await page.locator("#source-insights").isHidden());
+    assert(await page.locator("#suggest-replies").isHidden());
     await page.locator("#save-translation").click();
     await page.evaluate(() => document.querySelector("#show-saved").click());
     await page.locator("#saved-dialog").waitFor();
@@ -185,13 +197,16 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
       assert.equal(await page.locator("#target").inputValue(), "ja");
       assert.equal(await page.locator("#tone").inputValue(), "formal");
       assert.equal(await page.locator("#explanation-text").textContent(), "why:TEXT INPUT");
-      assert.match(await page.locator("#pronunciation").textContent(), /TEXT INPUT/);
+      assert.equal(await page.locator("#pronunciation").count(), 0);
+      assert.match(await page.locator("#source-alternatives").textContent(), /TEXT INPUT/);
       await go("document");
       assert.equal(await page.locator("#input").inputValue(), "DOCUMENT INPUT");
       assert.equal(await page.locator("#output").inputValue(), "fr:casual:DOCUMENT INPUT");
       assert.equal(await page.locator("#target").inputValue(), "fr");
       assert.equal(await page.locator("#tone").inputValue(), "casual");
       assert.equal(await page.locator("#file-name").textContent(), "document.txt");
+      assert(await page.locator("#source-insights").isHidden());
+      assert(await page.locator("#suggest-replies").isHidden());
       await go("image");
       assert.equal(await page.locator("#target").inputValue(), "ko");
       assert.equal(await page.locator("#tone").inputValue(), "formal");

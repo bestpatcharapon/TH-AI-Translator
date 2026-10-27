@@ -73,38 +73,8 @@ const assert = require("node:assert/strict");
     await page.waitForTimeout(50);
     assert.equal(await page.locator("#photo-label-status").textContent(), "NEW STATUS");
 
-    // Switching feature during image decoding must cancel the pending export.
-    await page.evaluate(() => {
-      document.querySelector("#photo-label-dialog").close();
-      const canvas = document.createElement("canvas");
-      canvas.width = 20;
-      canvas.height = 20;
-      photoData = {
-        image: canvas.toDataURL(),
-        width: 20,
-        height: 20,
-        regions: [],
-        target_language: "en",
-      };
-      window.originalDecode = Image.prototype.decode;
-      Image.prototype.decode = () =>
-        new Promise((resolve) => {
-          window.resolveDecode = resolve;
-        });
-      document.querySelector("#photo-download").click();
-    });
-    await page.waitForFunction(() => !!window.resolveDecode);
-    await page.evaluate(() => {
-      window.downloadsStarted = 0;
-      HTMLCanvasElement.prototype.toBlob = () => {
-        window.downloadsStarted++;
-      };
-      switchFeature("text");
-      window.resolveDecode();
-      Image.prototype.decode = window.originalDecode;
-    });
-    await page.waitForTimeout(50);
-    assert.equal(await page.evaluate(() => window.downloadsStarted), 0);
+    await page.locator("#photo-label-dialog").evaluate((dialog) => dialog.close());
+    assert.equal(await page.locator("#photo-download").count(), 0);
 
     // A delayed copy from one expanded chat message cannot label the next message.
     await page.evaluate(() => {
@@ -129,7 +99,7 @@ const assert = require("node:assert/strict");
     assert.equal(await page.locator("#live-message-direction").textContent(), "NEW DIRECTION");
     assert.deepEqual(errors, []);
     console.log(
-      "PASS: detected-language swap, audited suggested revisions, stale clipboard ownership and canceled photo exports."
+      "PASS: detected-language swap, audited suggested revisions, stale clipboard ownership and absent photo download."
     );
   } finally {
     await browser.close();

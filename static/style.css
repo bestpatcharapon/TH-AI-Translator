@@ -977,13 +977,6 @@ p:lang(zh) {
 .source-insights {
   margin: 8px 0 20px;
 }
-#pronunciation {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-  margin: 4px 0 22px;
-}
 .suggestion-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1511,21 +1504,6 @@ p:lang(zh) {
     background: var(--raised);
     color: var(--text);
   }
-}
-.photo-result-footer {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-#photo-download {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-#photo-download svg {
-  width: 16px;
-  height: 16px;
 }
 .photo-viewer {
   width: 100vw;
@@ -4263,9 +4241,6 @@ textarea[dir="auto"],
     padding: 7px 10px;
     line-height: 1.5;
   }
-  :is(.text-mode, .document-mode) #pronunciation {
-    margin-bottom: 8px;
-  }
   :is(.text-mode, .document-mode) .bottom-bar {
     position: relative;
     order: 10;
@@ -4539,6 +4514,9 @@ textarea[dir="auto"],
   flex-basis: 100%;
   margin: 0;
 }
+.document-mode :is(#suggest-replies, #reply-suggestions, #source-insights) {
+  display: none;
+}
 .reply-suggestions {
   display: grid;
   gap: 8px;
@@ -4734,10 +4712,6 @@ textarea[dir="auto"],
   }
   .text-mode.thai-interpreting .source-insights {
     margin: 0 0 4px;
-  }
-  .text-mode.thai-interpreting #pronunciation {
-    margin: 0 0 6px;
-    line-height: 1.6;
   }
   .text-mode.thai-interpreting .source-insights .suggestion-chip {
     min-height: 30px;

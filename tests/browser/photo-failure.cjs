@@ -53,7 +53,7 @@ const assert = require("node:assert/strict");
       buffer: Buffer.from(image.split(",")[1], "base64"),
     });
     await page.locator("#photo-error").waitFor({ state: "visible" });
-    assert(await page.locator("#photo-download").isHidden());
+    assert.equal(await page.locator("#photo-download").count(), 0);
     await page.locator("#photo-fullscreen").click();
     const status = page.locator("#photo-viewer-status");
     assert(await status.isVisible());
