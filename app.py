@@ -22,7 +22,7 @@ from linguistic_guidance import linguistic_guidance
 from model_routing import review_route, routing_identity
 from paddle_ocr_backend import status as paddle_ocr_status
 from performance import ResultCache, digest_key, ordered_map
-from photo_translation import normalized_photo, translate_photo
+from photo_translation import normalized_photo, photo_ocr_backend, translate_photo
 from practical_translation import (
     CONTEXTS,
     conversation_guidance,
@@ -784,7 +784,7 @@ def upload():
 
 @app.get("/api/ocr-status")
 def ocr_status():
-    return jsonify(paddle_ocr_status())
+    return jsonify(**paddle_ocr_status(), photo_backend=photo_ocr_backend())
 
 
 @app.post("/api/photo-preview")

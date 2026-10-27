@@ -4,12 +4,14 @@ import base64
 import hashlib
 import io
 import json
+import os
 import re
 import unicodedata
 from difflib import SequenceMatcher
 
 from PIL import Image, ImageDraw
 
+from model_routing import DEFAULT_REVIEW_MODEL, _gemini_client
 from performance import ResultCache, digest_key
 from photo_detection import preserve_numeric_pixels
 from project_config import VISION_MODEL
@@ -18,6 +20,21 @@ from translation_quality import audit_translation
 _reading_cache = ResultCache(max_entries=8, max_bytes=8 * 1024 * 1024, ttl=300)
 _reading_batch_cache = ResultCache(max_entries=64, max_bytes=4 * 1024 * 1024, ttl=300)
 MAX_VERIFIED_REGIONS = 30
+MAX_VISION_REGIONS = 160
+
+
+def reading_provider(client):
+    """Gemini image reading is opt-in; ordinary local OCR keeps its provider."""
+    provider = os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower()
+    if provider == "groq":
+        return client, VISION_MODEL, {"reasoning_effort": "none"}
+    if provider != "gemini":
+        raise RuntimeError("PHOTO_READING_PROVIDER ต้องเป็น groq หรือ gemini")
+    key = os.getenv("GEMINI_API_KEY")
+    if not key:
+        raise RuntimeError("กรุณาตั้ง GEMINI_API_KEY เพื่อใช้ Gemini อ่านรูปภาพ")
+    model = os.getenv("GEMINI_PHOTO_MODEL", DEFAULT_REVIEW_MODEL)
+    return _gemini_client(key), model, {}
 
 
 def reading_bounds(image, region, regions=()):
@@ -34,15 +51,20 @@ def reading_bounds(image, region, regions=()):
     return (int(left), max(0, int(y - 3)), round(right), min(image.height, round(y + h + 3)))
 
 
-def reading_sheet(image, indexed_regions, regions=()):
+def reading_sheet(image, indexed_regions, regions=(), *, high_resolution=False):
     """Put enlarged, numbered crops on one image; row ids map to measured OCR boxes."""
     rows = []
-    columns = 2 if len(indexed_regions) > 8 else 1
-    column_width = 1020 // columns
+    columns = 2 if len(indexed_regions) > 8 and not high_resolution else 1
+    width = 1536 if high_resolution else 1020
+    column_width = width // columns
     for index, region in indexed_regions:
         box = reading_bounds(image, region, regions)
         crop = image.crop(box).convert("RGB")
-        scale = min(6, (column_width - 20) / max(1, crop.width), 72 / max(1, crop.height))
+        scale = min(
+            6,
+            (column_width - 20) / max(1, crop.width),
+            (192 if high_resolution else 72) / max(1, crop.height),
+        )
         crop = crop.resize(
             (max(1, round(crop.width * scale)), max(1, round(crop.height * scale))),
             Image.Resampling.LANCZOS,
@@ -50,7 +72,7 @@ def reading_sheet(image, indexed_regions, regions=()):
         rows.append((index, crop))
     bands = [rows[start : start + columns] for start in range(0, len(rows), columns)]
     sheet = Image.new(
-        "RGB", (1020, sum(max(crop.height for _, crop in band) + 28 for band in bands)), "#dddddd"
+        "RGB", (width, sum(max(crop.height for _, crop in band) + 28 for band in bands)), "#dddddd"
     )
     draw, top = ImageDraw.Draw(sheet), 0
     for band in bands:
@@ -67,7 +89,8 @@ def reading_sheet(image, indexed_regions, regions=()):
 def verify_photo_readings(normalized, regions, client):
     with Image.open(io.BytesIO(normalized)) as image:
         # Small thumbnails are covered by ordinary OCR. Never upscale imagined detail.
-        if max(image.size) < 600:
+        vision_only = any(region.get("vision_only") for region in regions)
+        if max(image.size) < 600 and not vision_only:
             return regions
         candidates = [
             (index, region)
@@ -81,15 +104,27 @@ def verify_photo_readings(normalized, regions, client):
                 or region.get("confidence", 100) < 80
                 or region.get("needs_visual_check")
             )
-        ][:MAX_VERIFIED_REGIONS]
+        ][: MAX_VISION_REGIONS if vision_only else MAX_VERIFIED_REGIONS]
         if not candidates:
             return regions
+        client, reading_model, reading_options = (
+            reading_provider(client)
+            if vision_only
+            else (client, VISION_MODEL, {"reasoning_effort": "none"})
+        )
         image = image.convert("RGB")
         # Bound each vision request; one tall sheet of 30 labels can exceed the
         # provider token budget or time out before returning complete readings.
-        batches = [candidates[start : start + 10] for start in range(0, len(candidates), 10)]
+        batch_size = 5 if vision_only else 10
+        batches = [
+            candidates[start : start + batch_size]
+            for start in range(0, len(candidates), batch_size)
+        ]
         # Build sheets on this thread; network workers receive only immutable encoded bytes.
-        sheets = [(batch, reading_sheet(image, batch, regions)) for batch in batches]
+        sheets = [
+            (batch, reading_sheet(image, batch, regions, high_resolution=vision_only))
+            for batch in batches
+        ]
         bounds = {index: reading_bounds(image, region, regions) for index, region in candidates}
 
     def verify_batch(item):
@@ -97,12 +132,12 @@ def verify_photo_readings(normalized, regions, client):
         ids = {index for index, _ in batch}
         try:
             response = client.chat.completions.create(
-                model=VISION_MODEL,
+                model=reading_model,
                 temperature=0,
                 max_completion_tokens=min(
                     2048, max(1536, 128 + sum(32 + len(region["text"]) * 3 for _, region in batch))
                 ),
-                reasoning_effort="none",
+                **reading_options,
                 timeout=18,
                 messages=[
                     {
@@ -170,7 +205,7 @@ def verify_photo_readings(normalized, regions, client):
         for batch, sheet in sheets:
             originals = dict(batch)
             readings, _ = _reading_batch_cache.run(
-                (hashlib.sha256(sheet).digest(), digest_key(batch), client, VISION_MODEL),
+                (hashlib.sha256(sheet).digest(), digest_key(batch), client, reading_model),
                 lambda batch=batch, sheet=sheet: verify_batch((batch, sheet)),
                 cacheable=lambda readings, originals=originals: all(
                     readable
@@ -179,6 +214,7 @@ def verify_photo_readings(normalized, regions, client):
                         for issue in audit_translation(originals[index]["text"], text, "en", [])[
                             "issues"
                         ]
+                        if originals[index]["text"].strip()
                     )
                     for index, (text, readable) in readings.items()
                 ),
@@ -189,7 +225,7 @@ def verify_photo_readings(normalized, regions, client):
                 region["reading_review"] = not readable
                 region["ocr_text"] = region["text"]
                 if readable:
-                    if any(
+                    if region["text"].strip() and any(
                         issue["kind"] == "numbers"
                         for issue in audit_translation(region["text"], text, "en", [])["issues"]
                     ):
@@ -224,12 +260,12 @@ def verify_photo_readings(normalized, regions, client):
                     region["ocr_variants"] = list(dict.fromkeys([text, region["ocr_text"]]))
                     # Restore clipped prefixes only inside the deterministic crop,
                     # bounded by neighboring captions/prices; vision never supplies coordinates.
-                    if len(text) > len(region["ocr_text"]) * 1.25:
+                    if region["ocr_text"] and len(text) > len(region["ocr_text"]) * 1.25:
                         left, _, right, _ = bounds[index]
                         region["x"], region["width"] = left, right - left
         return result
 
-    key = (hashlib.sha256(normalized).digest(), digest_key(regions), client, VISION_MODEL)
+    key = (hashlib.sha256(normalized).digest(), digest_key(regions), client, reading_model)
     return _reading_cache.run(
         key, produce, cacheable=lambda result: not any(r.get("reading_review") for r in result)
     )[0]

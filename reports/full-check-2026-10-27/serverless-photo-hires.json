@@ -1,0 +1,89 @@
+{
+  "scope": "Local simulated Vercel with high-resolution detection crops, real RapidOCR and Groq; native OCR blocked. Not a deployment test.",
+  "status": 200,
+  "seconds": 3.45,
+  "result": {
+    "additional_translations": [],
+    "audit": {
+      "issues": [],
+      "status": "clear",
+      "terms_checked": 0,
+      "terms_matched": 0
+    },
+    "cache_status": "miss",
+    "height": 480,
+    "ocr_engine": "rapidocr-vision",
+    "protected_boxes": [],
+    "regions": [
+      {
+        "background": "#faf7ef",
+        "foreground": "#111111",
+        "height": 54,
+        "id": 0,
+        "ocr_text": "",
+        "preserve_original": false,
+        "reading_review": false,
+        "reading_verified": true,
+        "recognition_model": null,
+        "text": "เพื่อนบ้านอยุธยาทั้งจังหวัดฉือ",
+        "translation": "Neighbors of Ayutthaya province, Cheua",
+        "width": 373,
+        "x": 36,
+        "y": 33
+      },
+      {
+        "background": "#faf7ef",
+        "foreground": "#111111",
+        "height": 51,
+        "id": 1,
+        "ocr_text": "",
+        "preserve_original": false,
+        "reading_review": false,
+        "reading_verified": true,
+        "recognition_model": null,
+        "text": "รุ่นนี้แบบต้อด กินขาดจริง",
+        "translation": "This model is truly unbeatable",
+        "width": 350,
+        "x": 33,
+        "y": 136
+      },
+      {
+        "background": "#faf7ef",
+        "foreground": "#111111",
+        "height": 44,
+        "id": 2,
+        "ocr_text": "",
+        "preserve_original": false,
+        "reading_review": false,
+        "reading_verified": true,
+        "recognition_model": null,
+        "text": "ราคา 1,250 บาท",
+        "translation": "Price: 1,250 Baht",
+        "width": 243,
+        "x": 33,
+        "y": 240
+      },
+      {
+        "background": "#faf7ef",
+        "foreground": "#111111",
+        "height": 42,
+        "id": 3,
+        "ocr_text": "",
+        "preserve_original": false,
+        "reading_review": false,
+        "reading_verified": true,
+        "recognition_model": null,
+        "text": "รับประกัน 2 ปี",
+        "translation": "2-year warranty",
+        "width": 206,
+        "x": 32,
+        "y": 340
+      }
+    ],
+    "review_required": 0,
+    "source_language": "th",
+    "target_language": "en",
+    "translated_regions": 4,
+    "width": 1000
+  }
+}

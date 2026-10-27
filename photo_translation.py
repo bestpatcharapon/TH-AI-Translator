@@ -713,7 +713,31 @@ def _legacy_positioned_text(normalized, source):
         return {"regions": refined_regions, "protected_boxes": protected}
 
 
+def photo_ocr_backend():
+    """Serverless deployments do not ship the optional native OCR installation."""
+    backend = os.getenv("PHOTO_OCR_BACKEND", "auto").strip().lower()
+    if backend not in {"auto", "local", "vision"}:
+        raise RuntimeError("PHOTO_OCR_BACKEND ต้องเป็น auto, local หรือ vision")
+    if backend == "auto":
+        return "vision" if os.getenv("VERCEL") == "1" else "local"
+    return backend
+
+
 def _positioned_text(normalized, source):
+    if photo_ocr_backend() == "vision":
+        # The detector's ONNX model ships with RapidOCR. Coordinates are measured
+        # locally; the existing crop reader supplies text, never guessed boxes.
+        with Image.open(io.BytesIO(normalized)) as image:
+            regions = text_boxes(image)
+        if len(regions) > MAX_REGIONS:
+            raise ValueError(f"รูปมีข้อความเกิน {MAX_REGIONS} ส่วน กรุณาแบ่งรูปก่อนแปล")
+        if not regions:
+            raise ValueError("ไม่พบข้อความที่อ่านได้ กรุณาใช้ภาพที่ชัดขึ้น")
+        return {
+            "regions": [{**region, "vision_only": True} for region in regions],
+            "protected_boxes": [],
+            "engine": "rapidocr-vision",
+        }
     native = recognize_image(normalized, source)
     return native if native is not None else _legacy_positioned_text(normalized, source)
 
@@ -732,6 +756,7 @@ def positioned_text(normalized, source):
         (
             hashlib.sha256(normalized).digest(),
             source,
+            photo_ocr_backend(),
             recognition_model(source) if models_ready(source) else "legacy",
         ),
         lambda: _positioned_text(normalized, source),
@@ -940,6 +965,9 @@ def translate_photo(data, source, target, tone, client, model, glossary_json="[]
         model,
         glossary_json,
         reference_identity()[0],
+        photo_ocr_backend(),
+        os.getenv("PHOTO_READING_PROVIDER", "groq"),
+        os.getenv("GEMINI_PHOTO_MODEL", ""),
     )
     result, status = _photo_result_cache.run(
         key,

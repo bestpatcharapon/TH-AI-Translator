@@ -1,0 +1,10 @@
+{
+  "scope": "Local simulation of Vercel backend selection, packaged RapidOCR detector and real Groq calls. Native OCR is blocked. This is not a production deployment test.",
+  "status": 429,
+  "seconds": 1.16,
+  "result": {
+    "code": "rate_limit_exceeded",
+    "error": "บริการ AI ถึงขีดจำกัดการใช้งาน กรุณารอสักครู่แล้วลองอีกครั้ง",
+    "retry_after": 60
+  }
+}

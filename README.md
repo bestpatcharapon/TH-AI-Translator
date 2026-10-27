@@ -22,6 +22,10 @@ python app.py
 
 ถ้าพบ `ModuleNotFoundError: No module named 'flask'` ให้ตรวจ Build Logs ว่าอ่าน `pyproject.toml` ฉบับที่มี dependencies แล้ว และ Redeploy โดยไม่ใช้ build cache เดิม การมีแค่ `[tool.ruff]` ในไฟล์นี้อาจทำให้ตัวติดตั้งเลือก manifest ที่ไม่มีแพ็กเกจ แม้ `requirements.txt` จะมี Flask อยู่
 
+การแปลรูปบน Vercel ใช้ `PHOTO_OCR_BACKEND=auto` เป็นค่าเริ่มต้น เมื่อ runtime มี `VERCEL=1` จะใช้ตัวตรวจจับตำแหน่งข้อความ ONNX ที่มากับ RapidOCR แล้วส่งภาพตัดให้ Groq Vision อ่าน ก่อนแปลและวางข้อความตามพิกัดจริง จึงไม่ต้องติดตั้ง Tesseract หรือส่งโฟลเดอร์ `.ocr` ขึ้นไป ภาพที่อ่านไม่ชัดยังแสดงให้ตรวจ ไม่เดาคำแทน การอ่านภาพใช้โควตา AI เพิ่มตามจำนวนข้อความและยังติด 429 ได้ ตรวจเส้นทางที่เลือกได้จาก `photo_backend` ใน `/api/ocr-status` ซึ่งควรเป็น `vision` บน Vercel ตั้ง `PHOTO_OCR_BACKEND=vision` เพื่อเลือกเส้นทางนี้เอง หรือ `local` เฉพาะเซิร์ฟเวอร์ที่ติดตั้ง OCR native พร้อมแล้ว หลังแก้โค้ดต้อง deploy ใหม่จึงมีผลกับเว็บออนไลน์
+
+ตัวอ่าน Groq Vision ยังอ่านไทยผิดได้แม้ตอบสำเร็จ หากต้องการใช้ Gemini อ่านภาพตัดแทน ให้ตั้ง `PHOTO_READING_PROVIDER=gemini` และ `GEMINI_API_KEY` บน Vercel (เลือกโมเดลด้วย `GEMINI_PHOTO_MODEL` ค่าเริ่มต้น `gemini-3.5-flash-lite`) การเลือกนี้ส่งภาพตัดไป Google Gemini และใช้โควตา Gemini เพิ่ม ส่วนการแปลข้อความยังใช้ Groq เดิม ไม่มีการเลือก Gemini อัตโนมัติเพียงเพราะมีคีย์อยู่ รูปสังเคราะห์หนึ่งรูปไม่ใช่หลักประกันความแม่นยำของรูปอื่น
+
 ชุด deploy ปกติใช้ dependency metadata ของ uv ให้ RapidOCR ใช้ `opencv-python-headless` แทน OpenCV รุ่น GUI เพื่อลดขนาดและไม่พึ่ง Qt/X11 พร้อม lock dependencies ด้วย `uv.lock` ชุดนี้ไม่ติดตั้ง PaddleOCR/PaddlePaddle ที่ต้องมีโมเดลในเครื่อง การติดตั้ง local ด้วย `pip install -r requirements.txt` ยังรวมชุดนี้เหมือนเดิม หรือใช้ `uv sync --extra paddle` แล้วติดตั้งโมเดลตามหัวข้อ OCR ด้านล่าง เมื่อไม่มีโมเดล local ระบบจะใช้เส้นทาง OCR สำรองเดิม; ความสามารถที่ต้องพึ่ง Tesseract/โมเดลใน `.ocr` ยังต้องทดสอบแยกบนโฮสต์นั้น
 
 ## การใช้งาน
@@ -134,6 +138,9 @@ OCR ของรูปทำในเครื่องเซิร์ฟเว�
 | `PADDLE_OCR_ENABLED` | `1` เปิด Paddle เมื่อมีโมเดลครบ ตั้ง `0` เพื่อใช้เส้นทางเดิม |
 | `PADDLE_OCR_THREADS` | `2` เธรด CPU สำหรับ Paddle จำกัด 1–8 |
 | `TESSERACT_CMD` | ไม่จำเป็นถ้ามี `tesseract` ใน PATH หรือใช้ `.ocr/` จากสคริปต์ |
+| `PHOTO_OCR_BACKEND` | `auto` เลือก `vision` บน Vercel และ `local` บนเครื่องทั่วไป; กำหนด `vision` หรือ `local` เองได้ |
+| `PHOTO_READING_PROVIDER` | `groq` เป็นค่าเริ่มต้น; ตั้ง `gemini` พร้อม `GEMINI_API_KEY` เพื่อใช้ Gemini อ่านภาพในโหมด `vision` |
+| `GEMINI_PHOTO_MODEL` | `gemini-3.5-flash-lite` โมเดลสำหรับอ่านภาพเมื่อเลือก Gemini |
 | `TESSDATA_PREFIX` | กำหนดเมื่อใช้ชุดภาษา OCR ในพาธอื่น |
 | `PORT` | `5000` |
 | `FLASK_DEBUG` | `0` ตั้ง `1` เมื่อต้องการ debugger ระหว่างพัฒนา |
