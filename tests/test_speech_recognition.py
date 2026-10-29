@@ -2,12 +2,13 @@ import io
 import unittest
 import wave
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from openai.types.audio.transcription_segment import TranscriptionSegment
 from test_app import completion
 
 import app as server
+from scripts.benchmark_feature_quality import speech_translation_result
 from speech_recognition import transcript_result
 
 
@@ -16,6 +17,38 @@ def result(text="สวัสดีครับ", **values):
         text=text,
         segments=[dict(no_speech_prob=0.01, avg_logprob=-0.2, compression_ratio=1.2, **values)],
     )
+
+
+class SpeechBenchmarkTests(unittest.TestCase):
+    def test_uncertain_transcript_stays_pending_without_translation(self):
+        observed = "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+        for reasons in (["possible_word_confusion"], ["verification_unavailable"]):
+            with self.subTest(reasons=reasons):
+                reading = {"text": observed, "review_required": True, "review_reasons": reasons}
+                translate = Mock()
+                outcome = speech_translation_result(200, reading, translate, "th", "en")
+                self.assertEqual(outcome["status"], "pending_review")
+                self.assertEqual(outcome["reading"], reading)
+                self.assertIsNone(outcome["translation"])
+                translate.assert_not_called()
+
+    def test_failed_transcription_does_not_attempt_translation(self):
+        translate = Mock()
+        outcome = speech_translation_result(429, {"error": "retry later"}, translate, "th", "en")
+        self.assertEqual(outcome["status"], "transcription_failed")
+        self.assertIsNone(outcome["translation"])
+        translate.assert_not_called()
+
+    def test_clear_transcript_preserves_translation_failure_status(self):
+        reading = {"text": "ขอบคุณครับ", "review_required": False, "review_reasons": []}
+        for code, expected in ((200, "translated"), (429, "translation_failed")):
+            with self.subTest(code=code):
+                translation = {"http": code}
+                translate = Mock(return_value=translation)
+                outcome = speech_translation_result(200, reading, translate, "th", "en")
+                self.assertEqual(outcome["status"], expected)
+                self.assertEqual(outcome["translation"], translation)
+                translate.assert_called_once_with("ขอบคุณครับ", "th", "en", "live")
 
 
 class SpeechQualityTests(unittest.TestCase):

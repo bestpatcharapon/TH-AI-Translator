@@ -272,6 +272,39 @@ async function responseJson(response) {
   }
   return data;
 }
+async function fetchWithRetry(url, options) {
+  const response = await fetch(url, options);
+  // Only short, explicit rate limits get one retry, owned by the original operation.
+  // Never replay an unowned request, a network failure, or an ambiguous server error.
+  const signal = options?.signal;
+  if (response.status !== 429 || !signal) return response;
+  let data;
+  try {
+    data = await response.clone().json();
+  } catch {
+    data = {};
+  }
+  const seconds = Number(data?.retry_after || response.headers.get("Retry-After"));
+  if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 5) return response;
+  await new Promise((resolve, reject) => {
+    const canceled = () => {
+      clearTimeout(timer);
+      signal.removeEventListener("abort", canceled);
+      reject(new DOMException("Request canceled", "AbortError"));
+    };
+    const timer = setTimeout(
+      () => {
+        signal.removeEventListener("abort", canceled);
+        resolve();
+      },
+      Math.ceil(seconds * 1000)
+    );
+    signal.addEventListener("abort", canceled, { once: true });
+    if (signal.aborted) canceled();
+  });
+  if (signal.aborted) throw new DOMException("Request canceled", "AbortError");
+  return fetch(url, options);
+}
 function translationOptions() {
   const preferences = activeFeature().preferences;
   return {
@@ -394,7 +427,7 @@ async function translate({ refresh = false } = {}) {
   if (!isChat) document.dispatchEvent(new CustomEvent("translation:invalidated"));
   try {
     const data = await responseJson(
-      await fetch("/api/translate", {
+      await fetchWithRetry("/api/translate", {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
@@ -560,8 +593,11 @@ function refreshMode() {
   $("photo-mode").hidden = mode !== "image";
   $("file-tools").hidden = mode !== "document";
   $("chat-area").hidden = mode !== "live";
-  $("upload-title").textContent = t("chooseDocument");
+  $("upload-title").textContent =
+    { en: "Choose file", th: "เลือกไฟล์" }[locale] || t("chooseDocument");
+  $("choose-file").setAttribute("aria-label", t("chooseDocument"));
   $("upload-hint").textContent = t("documentHint");
+  $("choose-file").title = t("documentHint");
   $("microphone").disabled = mode === "image" || mode === "document";
   $("microphone").hidden = mode === "image" || mode === "document";
   $("show-saved").hidden = true;

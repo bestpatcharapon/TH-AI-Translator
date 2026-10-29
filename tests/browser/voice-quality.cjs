@@ -45,8 +45,14 @@ const audioFixture = require("./audio-fixture.cjs");
       featureWorkspaces.get("text").glossary = [
         { source: "TextOnlyName", target: "Text name", language: "en" },
       ];
+      featureWorkspaces.get("text").thai.lexicon = [
+        { term: "คำเฉพาะข้อความ", meaning: "คำของโหมดข้อความ", dialect: "slang", example: "" },
+      ];
       switchFeature("live");
       activeFeature().glossary = [{ source: "NECTEC", target: "NECTEC", language: "en" }];
+      activeFeature().thai.lexicon = [
+        { term: "ด้อม", meaning: "กลุ่มแฟนคลับ", dialect: "slang", example: "" },
+      ];
       document.querySelector("#auto-speak").checked = false;
     });
     async function record() {
@@ -62,7 +68,9 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 1);
     assert.equal(translations[0].text, transcript);
     assert.match(speechUploads[0], /NECTEC/);
+    assert.match(speechUploads[0], /ด้อม/);
     assert.doesNotMatch(speechUploads[0], /TextOnlyName/);
+    assert.doesNotMatch(speechUploads[0], /คำเฉพาะข้อความ/);
     assert.match(speechUploads[0], /name="verify"\r\n\r\n1/);
     await page.locator("#live-review-voice").check();
     await record();
@@ -81,14 +89,32 @@ const audioFixture = require("./audio-fixture.cjs");
     assert.equal(translations[1].text, "ขอจองโต๊ะสามคนครับ");
     await page.locator("#live-review-voice").uncheck();
     uncertain = true;
-    transcript = "คำที่ยังไม่แน่ใจ";
+    reviewReasons = ["possible_word_confusion"];
+    transcript = "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง";
+    const savedBeforeReview = await page.evaluate(() => savedTranslations.length);
     await record();
-    await page.waitForFunction(() => document.querySelector("#input").value === "คำที่ยังไม่แน่ใจ");
+    await page.waitForFunction(
+      () => document.querySelector("#input").value === "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+    );
+    await page.waitForTimeout(700);
     assert.equal(translations.length, 2);
+    assert.equal(await page.locator(".chat-turn").count(), 2);
+    assert.equal(await page.evaluate(() => savedTranslations.length), savedBeforeReview);
+    assert.equal(await page.evaluate(() => conversation.length), 2);
     assert.match(await page.locator("#voice-status").textContent(), /unclear/);
+    await page.locator("#input").fill("ฉันอยู่สองด้อม เมนของฉันคือมือกลอง");
+    await page.waitForTimeout(700);
+    assert.equal(translations.length, 2, "Editing the flagged transcript must wait for Send");
     await page.locator("#live-send").click();
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 3);
+    assert.equal(translations[2].text, "ฉันอยู่สองด้อม เมนของฉันคือมือกลอง");
+    assert(
+      await page.evaluate(() =>
+        savedTranslations.every((item) => item.text !== "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง")
+      )
+    );
     uncertain = false;
+    reviewReasons = [];
     transcript = "ขอบคุณครับ";
     await record();
     await page.waitForFunction(() => document.querySelectorAll(".chat-turn").length === 4);
@@ -154,7 +180,7 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.evaluate(() => window.silentAudioContext.close());
     assert.deepEqual(errors, []);
     console.log(
-      "PASS automatic send including verifier outage and clear dialect speech, explicit review, unclear-audio gate, capture settings, feature-owned preference and silence rejection."
+      "PASS automatic send including verifier outage and clear dialect speech, reviewed slang corrections before send/history, feature-owned ASR vocabulary, capture settings and silence rejection."
     );
   } finally {
     await browser.close();

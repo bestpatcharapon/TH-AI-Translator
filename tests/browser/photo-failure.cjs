@@ -13,15 +13,36 @@ const assert = require("node:assert/strict");
       canvas.height = 180;
       return canvas.toDataURL();
     });
-    let requests = 0;
-    await page.route("**/api/photo-translate", (route) => {
-      requests++;
-      if (requests === 1)
-        return route.fulfill({
+    const requests = new Map();
+    const firstResponse = (name) =>
+      page.waitForResponse(
+        (response) =>
+          response.url().endsWith("/api/photo-translate") &&
+          response.status() === 429 &&
+          response.request().postData().includes(`filename="${name}.png"`)
+      );
+    await page.route("**/api/photo-translate", async (route) => {
+      const body = route.request().postData(),
+        name = ["persistent", "automatic", "cancel", "long-wait"].find((value) =>
+          body.includes(`filename="${value}.png"`)
+        );
+      assert(name, "Each photo request must retain its original file");
+      const attempt = (requests.get(name) || 0) + 1;
+      requests.set(name, attempt);
+      if (
+        (name === "persistent" && attempt <= 2) ||
+        (name === "automatic" && attempt === 1) ||
+        name === "cancel" ||
+        name === "long-wait"
+      ) {
+        const seconds = name === "long-wait" ? 60 : 1;
+        await route.fulfill({
           status: 429,
-          headers: { "Retry-After": "1" },
-          json: { error: "Rate limited", code: "rate_limit_exceeded", retry_after: 1 },
+          headers: { "Retry-After": String(seconds) },
+          json: { error: "Rate limited", code: "rate_limit_exceeded", retry_after: seconds },
         });
+        return;
+      }
       return route.fulfill({
         json: {
           image,
@@ -46,13 +67,16 @@ const assert = require("node:assert/strict");
         },
       });
     });
+    const upload = (name) =>
+      page.locator("#photo-file-input").setInputFiles({
+        name: `${name}.png`,
+        mimeType: "image/png",
+        buffer: Buffer.from(image.split(",")[1], "base64"),
+      });
     await page.evaluate(() => switchFeature("image"));
-    await page.locator("#photo-file-input").setInputFiles({
-      name: "menu.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(image.split(",")[1], "base64"),
-    });
+    await upload("persistent");
     await page.locator("#photo-error").waitFor({ state: "visible" });
+    assert.equal(requests.get("persistent"), 2, "Persistent 429 stops after one automatic retry");
     assert.equal(await page.locator("#photo-download").count(), 0);
     await page.locator("#photo-fullscreen").click();
     const status = page.locator("#photo-viewer-status");
@@ -69,10 +93,43 @@ const assert = require("node:assert/strict");
     assert(await status.isHidden());
     assert(await page.locator("#photo-viewer-original").isEnabled());
     assert.equal(await page.locator("#photo-viewer-stage .photo-label").count(), 1);
-    assert.equal(requests, 2);
+    assert.equal(requests.get("persistent"), 3);
+    await page.locator("#photo-viewer-close").click();
+
+    // A brief quota wait recovers without presenting an intermediate failed result.
+    const automaticResponse = firstResponse("automatic");
+    await upload("automatic");
+    await automaticResponse;
+    assert(await page.locator("#photo-loading").isVisible());
+    assert(await page.locator("#photo-error").isHidden());
+    assert.equal(await page.locator("#photo-main-stage .photo-label").count(), 0);
+    await page.waitForFunction(() => photoData?.translated_regions === 1);
+    assert.equal(requests.get("automatic"), 2);
+    assert(await page.locator("#photo-error").isHidden());
+    assert.equal(await page.locator("#photo-main-stage .photo-label").count(), 1);
+
+    // Leaving Image during the cooldown must not restart work in another feature.
+    const canceledResponse = firstResponse("cancel");
+    await upload("cancel");
+    await canceledResponse;
+    await page.evaluate(() => switchFeature("text"));
+    await page.waitForTimeout(1200);
+    assert.equal(requests.get("cancel"), 1);
+    assert.equal(await page.locator("#output").inputValue(), "");
+
+    // Longer limits preserve the explicit countdown and never silently replay the upload.
+    await page.evaluate(() => switchFeature("image"));
+    await upload("long-wait");
+    await page.locator("#photo-error").waitFor({ state: "visible" });
+    assert.equal(requests.get("long-wait"), 1);
+    assert(await page.locator("#photo-retry").isDisabled());
+    assert.match(await page.locator("#photo-retry-wait").textContent(), /\d+ seconds/);
+    await page.waitForTimeout(1200);
+    assert.equal(requests.get("long-wait"), 1);
+    assert.equal(await page.locator("#photo-main-stage .photo-label").count(), 0);
     assert.deepEqual(errors, []);
     console.log(
-      "PASS photo 429 shows original/failure in fullscreen, retry recovers without stale warning."
+      "PASS bounded photo 429 recovery, cancellation, long-wait countdown and original-only failure views."
     );
   } finally {
     await browser.close();

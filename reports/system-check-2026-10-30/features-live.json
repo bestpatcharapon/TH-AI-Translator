@@ -1,0 +1,254 @@
+{
+  "scope": "Synthetic clean images, TXT and TTS clips, real app/provider calls. Not original user photos, live microphone input, accented/noisy speech, blind evaluation or a Google comparison. No ASR/OCR model change is claimed.",
+  "results": [
+    {
+      "kind": "photo",
+      "expected": "A friend recommended headphones and speaker bought them; impressive battery performance; price 1,250 baht and two-year warranty stay unchanged.",
+      "result": {
+        "http": 200,
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "cache_status": "miss",
+        "height": 480,
+        "ocr_engine": "paddle",
+        "protected_boxes": [],
+        "regions": [
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 50,
+            "id": 0,
+            "ocr_text": "เพื่อนป้ายยาหูฟังจนฉันซื้อ",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "เพื่อนป้ายยาหูฟังจนฉันซื้อ",
+            "translation": "My friend kept hyping the headphones until I bought them.",
+            "width": 384,
+            "x": 28,
+            "y": 33
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 41,
+            "id": 1,
+            "ocr_text": "รุ่นนี้แบตอึด กินขาดจริง",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "รุ่นนี้แบตอึด กินขาดจริง",
+            "translation": "This model’s battery is long‑lasting and truly outperforms everything else.",
+            "width": 351,
+            "x": 30,
+            "y": 139
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 42,
+            "id": 2,
+            "ocr_text": "ราคา 1,250 บาท",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "ราคา 1,250 บาท",
+            "translation": "Price: 1,250 Baht",
+            "width": 249,
+            "x": 29,
+            "y": 239
+          },
+          {
+            "background": "#faf7ef",
+            "foreground": "#111111",
+            "height": 39,
+            "id": 3,
+            "ocr_text": "รับประกัน 2 ปี",
+            "preserve_original": false,
+            "reading_review": false,
+            "reading_verified": false,
+            "recognition_model": "th_PP-OCRv5_mobile_rec",
+            "text": "รับประกัน 2 ปี",
+            "translation": "2‑year warranty",
+            "width": 207,
+            "x": 30,
+            "y": 339
+          }
+        ],
+        "review_required": 0,
+        "source_language": "th",
+        "target_language": "en",
+        "translated_regions": 4,
+        "width": 1000
+      },
+      "seconds": 6.751
+    },
+    {
+      "kind": "document",
+      "expected": "Extract all three lines unchanged; no headphone purchase yet, 50 not 5 members, and medication applied to a wound, not a label.",
+      "result": {
+        "extraction_http": 200,
+        "extracted": {
+          "filename": "document-fixture.txt",
+          "text": "เพื่อนป้ายยาหูฟัง แต่ฉันยังไม่ได้ซื้อ\nส่งเอกสารให้สมาชิก 50 คน ไม่ใช่ 5 คน\nพยาบาลป้ายยาบนแผลแล้วปิดผ้าก๊อซ"
+        },
+        "translation": {
+          "http": 200,
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "source_language": "th",
+          "translation": "My friend is hyping the headphones, but I haven’t bought them yet.  \nSend the documents to 50 members, not 5.  \nThe nurse applied the medication to the wound and then covered it with gauze."
+        }
+      },
+      "seconds": 2.532
+    },
+    {
+      "kind": "synthetic_speech",
+      "expected": "ฉันอยู่สองด้อม เมนของฉันคือมือกลอง",
+      "result": {
+        "transcription_http": 200,
+        "reading": {
+          "model": "whisper-large-v3",
+          "review_reasons": [
+            "possible_word_confusion"
+          ],
+          "review_required": true,
+          "text": "ฉันอยู่ 2 ดอมเมนของฉันคือมือกล่อง"
+        },
+        "translation": {
+          "http": 200,
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": true,
+            "issues": [
+              {
+                "draft_quote": "domain",
+                "explanation": "The term 'ดอมเมน' combines 'ดอม' (dom, from fandom) and 'เมน' (main, favorite/bias/main role), referring to a fandom bias or main role. Translating it literally as 'domain' changes the meaning.",
+                "kind": "terminology",
+                "source_quote": "ดอมเมน"
+              },
+              {
+                "draft_quote": "box hand",
+                "explanation": "'มือกล่อง' is likely a typo or slang for 'มือกลอง' (drummer). Translating it as 'box hand' is a literal error.",
+                "kind": "terminology",
+                "source_quote": "มือกล่อง"
+              }
+            ],
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "revised",
+            "triggers": [
+              "conversation",
+              "idiom_or_regional_usage"
+            ]
+          },
+          "source_language": "th",
+          "translation": "I'm in 2. My main is drummer."
+        }
+      },
+      "seconds": 4.796
+    },
+    {
+      "kind": "synthetic_speech",
+      "expected": "อย่าใส่ถั่วลิสงนะ ฉันแพ้ถั่วลิสง",
+      "result": {
+        "transcription_http": 200,
+        "reading": {
+          "model": "whisper-large-v3",
+          "review_reasons": [],
+          "review_required": false,
+          "text": "อย่าใส่ถั่วลิสงนะฉันแพ้ถั่วลิสง"
+        },
+        "translation": {
+          "http": 200,
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "condition_or_health",
+              "conversation"
+            ]
+          },
+          "source_language": "th",
+          "translation": "Don't put peanuts—I’m allergic to them."
+        }
+      },
+      "seconds": 2.648
+    },
+    {
+      "kind": "synthetic_speech",
+      "expected": "The fare is one hundred and fifty baht, not fifty baht.",
+      "result": {
+        "transcription_http": 200,
+        "reading": {
+          "model": "whisper-large-v3",
+          "review_reasons": [],
+          "review_required": false,
+          "text": "The fare is 150 baht, not 50 baht."
+        },
+        "translation": {
+          "http": 200,
+          "additional_translations": [],
+          "audit": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "quality_review": {
+            "applied": false,
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "status": "checked",
+            "triggers": [
+              "negation_or_exception",
+              "conversation"
+            ]
+          },
+          "source_language": "en",
+          "translation": "ค่าโดยสาร 150 บาท ไม่ใช่ 50 บาท"
+        }
+      },
+      "seconds": 2.449
+    }
+  ]
+}

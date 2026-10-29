@@ -68,6 +68,7 @@ from translation_quality import (
     compare_translations,
     glossary_guidance,
     matching_terms,
+    tidy_punctuation,
     validate_glossary,
 )
 from translation_risks import risk_guidance
@@ -370,6 +371,7 @@ def additional_translations(
                 glossary or [],
                 conversation or [],
             )
+            translation = tidy_punctuation(translation, target)
             if quality_review["status"] == "needs_context":
                 return {
                     "target": target,
@@ -473,6 +475,15 @@ def index():
     return send_from_directory(STATIC_FOLDER, "index.html")
 
 
+@app.get("/sw.js")
+def service_worker():
+    # Served from the root so the worker can control the whole app; always revalidated.
+    response = send_from_directory(STATIC_FOLDER, "sw.js", max_age=0)
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["Service-Worker-Allowed"] = "/"
+    return response
+
+
 @app.get("/api/languages")
 def languages():
     return jsonify(LANGUAGES)
@@ -552,7 +563,7 @@ def translate():
                     quality_review=result.get("quality_review", {"status": "needs_context"}),
                     additional_translations=[],
                 )
-            primary = result["translation"]
+            primary = tidy_punctuation(result["translation"], target)
             # Additional targets see the same resolved intent, still translating the original message.
             resolved_context = (
                 extra
@@ -590,6 +601,7 @@ def translate():
             conversation,
             chat=scope == "live",
         )
+        primary = tidy_punctuation(primary, target)
         return dict(
             translation=primary,
             quality_review=quality_review,

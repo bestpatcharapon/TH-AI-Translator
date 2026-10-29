@@ -1,0 +1,57 @@
+name: Project checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install locked runtime and development checks
+        run: |
+          uv sync --frozen
+          uv pip install ruff==0.17.1
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Check Python
+        run: |
+          uv run --no-sync python -m unittest discover -s tests -v
+          uv run --no-sync ruff check .
+          uv run --no-sync ruff format --check .
+          uv pip check
+      - name: Check frontend and types
+        run: |
+          npm run check
+          npm run typecheck
+          npm run format:check
+      - name: Run browser regressions without cloud credentials
+        env:
+          PORT: "5001"
+          TRANSLATOR_TEST_URL: http://127.0.0.1:5001
+        run: |
+          uv run --no-sync python app.py > /tmp/translator-ci.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "$TRANSLATOR_TEST_URL/" > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent "$TRANSLATOR_TEST_URL/sw.js" > /dev/null
+          npm run test:browser
+      - name: Check Vercel asset build
+        run: uv run --no-sync python scripts/build_vercel.py

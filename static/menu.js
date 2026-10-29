@@ -344,6 +344,23 @@ function menuStatus(message = "", error = false) {
   $("menu-status").textContent = message;
   $("menu-status").classList.toggle("error", error);
 }
+function syncHistoryPreviews() {
+  for (const card of $("history-list").children) {
+    const toggle = card.querySelector(".history-toggle");
+    if (!toggle || card.classList.contains("is-expanded")) continue;
+    toggle.hidden = ![...card.querySelectorAll(".history-content p")].some(
+      (paragraph) => paragraph.scrollHeight > paragraph.clientHeight + 1
+    );
+  }
+}
+// History can be rendered while its tab is hidden; measure once it becomes visible,
+// and again when the menu width changes, without guessing from character counts.
+let historyPreviewFrame = null;
+const historyPreviewObserver = new ResizeObserver(() => {
+  cancelAnimationFrame(historyPreviewFrame);
+  historyPreviewFrame = requestAnimationFrame(syncHistoryPreviews);
+});
+historyPreviewObserver.observe($("history-list"));
 function renderHistory() {
   const preferences = activeFeature().preferences,
     query = preferences.historyQuery.toLocaleLowerCase().trim();
@@ -363,7 +380,7 @@ function renderHistory() {
     empty.textContent = t(own.length ? "noHistoryMatch" : "noHistory");
     $("history-list").append(empty);
   }
-  for (const item of records) {
+  for (const [index, item] of records.entries()) {
     const card = document.createElement("article");
     card.className = "history-entry";
     const header = document.createElement("header"),
@@ -397,6 +414,7 @@ function renderHistory() {
     original.textContent = item.text;
     original.lang = source;
     original.dir = "auto";
+    original.hidden = item.text.trim() === item.translation.trim();
     const result = document.createElement("p");
     result.className = "history-translation";
     result.textContent = item.translation;
@@ -408,7 +426,27 @@ function renderHistory() {
           updateSavedButton();
       })
     );
-    card.append(header, original, result);
+    const content = document.createElement("div");
+    content.className = "history-content";
+    content.id = `history-content-${mode}-${index}`;
+    content.append(original, result);
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "history-toggle";
+    toggle.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-controls", content.id);
+    const toggleLabel = document.createElement("span");
+    toggleLabel.textContent = t("expandMessage");
+    toggle.append(toggleLabel, preferenceIcon("chevron"));
+    toggle.addEventListener("click", () => {
+      const expanded = card.classList.toggle("is-expanded");
+      toggle.setAttribute("aria-expanded", String(expanded));
+      toggleLabel.textContent = t(expanded ? "close" : "expandMessage");
+      // Keep the current entry reachable when collapsing a long document.
+      if (!expanded) card.scrollIntoView({ block: "nearest" });
+    });
+    card.append(header, content, toggle);
     $("history-list").append(card);
   }
 }

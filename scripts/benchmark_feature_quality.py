@@ -14,6 +14,20 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 
+def speech_translation_result(status, reading, translate, source, target):
+    """Keep uncertain transcripts for human review instead of translating guessed wording."""
+    result = {"transcription_http": status, "reading": reading, "translation": None}
+    if status != 200:
+        result["status"] = "transcription_failed"
+    elif reading.get("review_required"):
+        result["status"] = "pending_review"
+    else:
+        translation = translate(reading["text"], source, target, "live")
+        result["translation"] = translation
+        result["status"] = "translated" if translation["http"] == 200 else "translation_failed"
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--live", action="store_true")
@@ -131,13 +145,9 @@ def main():
                     data={"language": source, "file": (io.BytesIO(audio), filename)},
                 )
                 reading = response.get_json()
-                return {
-                    "transcription_http": response.status_code,
-                    "reading": reading,
-                    "translation": translate(reading["text"], source, target, "live")
-                    if response.status_code == 200
-                    else None,
-                }
+                return speech_translation_result(
+                    response.status_code, reading, translate, source, target
+                )
 
             record("synthetic_speech", text, speech)
 

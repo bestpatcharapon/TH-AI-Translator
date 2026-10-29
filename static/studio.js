@@ -382,7 +382,7 @@ async function reviewAction(action) {
   renderStudio();
   try {
     const data = await responseJson(
-      await fetch(`/api/${action}`, {
+      await fetchWithRetry(`/api/${action}`, {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
@@ -712,17 +712,15 @@ renderStudio();
 
 function renderPhotoAudit() {
   const audit = mode === "image" ? photoData?.audit : null;
-  $("photo-audit-details").hidden = !audit;
-  if (!audit) return;
+  $("photo-audit-details").hidden = !audit || audit.status !== "review";
+  if (!audit || audit.status !== "review") return;
   $("photo-audit-summary").textContent =
     audit.status === "review"
       ? t("consistencyReview").replace("{count}", audit.issues.length)
       : t("consistencyClear");
   renderAudit($("photo-audit-content"), audit);
 }
-document.addEventListener("history:record", ({ detail }) => {
-  if (detail.feature === "image" && mode === "image") renderPhotoAudit();
-});
+document.addEventListener("photo:result", renderPhotoAudit);
 document.addEventListener("additional:clear", () => {
   if (mode === "image") $("photo-audit-details").hidden = true;
 });

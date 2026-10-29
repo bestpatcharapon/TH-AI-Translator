@@ -188,7 +188,7 @@ async function requestAssistant(action, statusId, button = null) {
   featureStatus(statusId, t("working"));
   try {
     const data = await responseJson(
-      await fetch("/api/assist", {
+      await fetchWithRetry("/api/assist", {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
@@ -510,7 +510,7 @@ $("reply-edit-form").addEventListener("submit", async (event) => {
     $("reply-edit-dialog").open;
   try {
     const data = await responseJson(
-      await fetch("/api/translate", {
+      await fetchWithRetry("/api/translate", {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },

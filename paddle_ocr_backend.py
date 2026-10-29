@@ -4,6 +4,7 @@ import io
 import math
 import os
 import threading
+from importlib import import_module
 from pathlib import Path
 
 from PIL import Image
@@ -58,9 +59,10 @@ def _model(name):
     # Local paths and disabled host probes keep inference independent of model hubs.
     os.environ.setdefault("PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK", "True")
     if name not in _models:
-        from paddleocr import TextDetection, TextRecognition
+        # Paddle is optional; load it only when configured local inference is requested.
+        paddleocr = import_module("paddleocr")
 
-        kind = TextDetection if name == DETECTION_MODEL else TextRecognition
+        kind = paddleocr.TextDetection if name == DETECTION_MODEL else paddleocr.TextRecognition
         _models[name] = kind(
             model_name=name,
             model_dir=str(MODEL_ROOT / name),

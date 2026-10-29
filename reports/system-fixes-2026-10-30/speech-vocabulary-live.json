@@ -1,0 +1,17 @@
+{
+  "scope": "Same synthetic TTS clip as audit, manually supplied relevant spelling hints; not a general accuracy benchmark.",
+  "expected": "ฉันอยู่สองด้อม เมนของฉันคือมือกลอง",
+  "vocabulary": [
+    "ด้อม",
+    "เมน",
+    "มือกลอง"
+  ],
+  "http": 200,
+  "result": {
+    "model": "whisper-large-v3",
+    "review_reasons": [],
+    "review_required": false,
+    "text": "ฉันอยู่ 2 ด้อมเมนของฉันคือมือกลอง"
+  },
+  "seconds": 0.469
+}

@@ -1,0 +1,39 @@
+[
+  {
+    "file": "menus/noodle-shop-01.jpg",
+    "kind": "image",
+    "language": "th",
+    "expected_text": "ก๋วยเตี๋ยวเรือ 50 บาท\nเย็นตาโฟ 60 บาท",
+    "target": "en",
+    "notes": "Handwritten menu board, indoor light"
+  },
+  {
+    "file": "signs/bus-stop-01.jpg",
+    "kind": "image",
+    "language": "th",
+    "expected_text": "ป้ายรถประจำทาง สาย 8 26 27",
+    "notes": "Faded sign, taken at an angle"
+  },
+  {
+    "file": "receipts/market-01.jpg",
+    "kind": "image",
+    "language": "th",
+    "expected_text": "ส้มตำ 1 50\nไก่ย่าง 1 120\nรวม 170",
+    "target": "en",
+    "notes": "Thermal receipt, slightly crumpled; crop out any card or phone numbers"
+  },
+  {
+    "file": "audio/isan-01.m4a",
+    "kind": "audio",
+    "language": "th",
+    "expected_text": "มื้อนี้ไปเบิ่งหนังนำกันบ่",
+    "notes": "Isan accent, phone mic, quiet room, speaker consented"
+  },
+  {
+    "file": "audio/northern-01.m4a",
+    "kind": "audio",
+    "language": "th",
+    "expected_text": "วันนี้กิ๋นข้าวแล้วกา",
+    "notes": "Northern accent, outdoors with traffic noise"
+  }
+]

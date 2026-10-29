@@ -75,6 +75,7 @@ let photoLoadingClock = null,
   photoRetryClock = null;
 let photoLastError = null,
   pausedPhotoError = null;
+let photoReadingsData = null;
 const PHOTO_TIMEOUT_MS = 90000;
 Object.assign(COPY.en, {
   photoCancel: "Cancel",
@@ -175,14 +176,7 @@ function photoCompletionStatus() {
     return;
   }
   const unchanged = photoData?.translated_regions === 0;
-  const message = unchanged
-    ? t("photoUnchanged")
-    : photoData?.translated_regions != null
-      ? t("photoDoneCount")
-          .replace("{count}", String(photoData.translated_regions))
-          .replace("{language}", languageName(photoData.target_language))
-      : t("photoDone");
-  photoStatus(message, unchanged);
+  photoStatus(unchanged ? t("photoUnchanged") : "", unchanged);
 }
 function openPhotoReading(region, data) {
   if (mode !== "image" || photoData !== data) return;
@@ -201,26 +195,41 @@ function renderPhotoReadings() {
   const readings = data?.regions?.filter((region) => !region.preserve_original) || [];
   $("photo-readings").hidden = !readings.length;
   list.replaceChildren();
-  if (!data) return;
+  if (!data) {
+    photoReadingsData = null;
+    $("photo-readings").open = false;
+    return;
+  }
   $("photo-readings-title").textContent = t("photoReadings").replace(
     "{count}",
     String(readings.length)
   );
-  if (data.review_required) $("photo-readings").open = true;
-  for (const region of readings) {
+  if (data !== photoReadingsData) {
+    $("photo-readings").open = true;
+    photoReadingsData = data;
+  }
+  for (const [index, region] of readings.entries()) {
     const row = document.createElement("button"),
+      number = document.createElement("span"),
+      copy = document.createElement("span"),
       source = document.createElement("small"),
       output = document.createElement("strong");
     row.type = "button";
     row.disabled = !!region.reading_review;
     row.className = "photo-reading";
+    number.className = "photo-reading-number";
+    number.textContent = String(index + 1).padStart(2, "0");
+    number.setAttribute("aria-hidden", "true");
+    copy.className = "photo-reading-copy";
     source.textContent = region.text;
+    source.lang = data.source_language;
     source.dir = "auto";
     output.textContent = region.reading_review ? t("photoReadingUnclear") : region.translation;
     output.lang = data.target_language;
     output.dir = "auto";
     row.classList.toggle("needs-review", !!region.reading_review);
-    row.append(source, output);
+    copy.append(output, source);
+    row.append(number, copy);
     row.addEventListener("click", () => openPhotoReading(region, data));
     list.append(row);
   }
@@ -414,6 +423,7 @@ function renderPhotoStage(id) {
   });
 }
 function renderPhoto() {
+  $("photo-remove").title = t("photoRemove");
   $("photo-number-note").hidden = !photoData || !photoProtectedBoxes(photoData).length;
   $("photo-number-note").textContent = t("photoNumbersKept");
   $("photo-target-language").textContent = t("photoTarget").replace(
@@ -527,13 +537,18 @@ async function translatePhoto() {
   document.dispatchEvent(new CustomEvent("additional:clear"));
   try {
     const data = await responseJson(
-      await fetch("/api/photo-translate", { method: "POST", body: form, signal: controller.signal })
+      await fetchWithRetry("/api/photo-translate", {
+        method: "POST",
+        body: form,
+        signal: controller.signal,
+      })
     );
     if (epoch !== photoEpoch || mode !== "image") return;
     photoData = data;
     completedPhotoSettings = signature;
     renderPhoto();
     photoCompletionStatus();
+    document.dispatchEvent(new CustomEvent("photo:result"));
     if (!data.review_required)
       document.dispatchEvent(
         new CustomEvent("history:record", {

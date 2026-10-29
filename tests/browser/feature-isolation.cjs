@@ -109,6 +109,10 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     };
     const select = (id, value) => page.locator(id).selectOption(value, { force: true });
     const go = (name) => page.evaluate((name) => switchFeature(name), name);
+    const documentPane = async (pane) => {
+      const tab = page.locator(`#document-tab-${pane}`);
+      if (await tab.isVisible()) await tab.click();
+    };
     const waitOutput = (value) =>
       page.waitForFunction((value) => document.querySelector("#output").value === value, value);
     const waitPending = async (key) => {
@@ -157,6 +161,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     );
     assert(await page.locator("#source-insights").isHidden());
     assert(await page.locator("#suggest-replies").isHidden());
+    await documentPane("translation");
     await page.locator("#save-translation").click();
     await page.evaluate(() => document.querySelector("#show-saved").click());
     await page.locator("#saved-dialog").waitFor();
@@ -232,6 +237,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await page.locator("#input").press("Control+Enter");
     await waitPending("LATE TEXT");
     await go("document");
+    await documentPane("source");
     await page.locator("#input").fill("LATE DOCUMENT");
     await page.locator("#input").press("Control+Enter");
     await waitPending("LATE DOCUMENT");
@@ -305,6 +311,7 @@ const baseURL = process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000";
     await page.locator("#microphone").click();
     await waitPending("voice");
     await go("document");
+    await documentPane("source");
     await page.locator("#input").fill("DOCUMENT VOICE SAFE");
     await waitOutput("fr:casual:DOCUMENT VOICE SAFE");
     await pending.get("voice").route.fulfill({ json: { text: "VOICE MUST NOT LEAK" } });

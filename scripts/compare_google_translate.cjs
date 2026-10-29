@@ -15,6 +15,9 @@ const output = path.join(directory, "results.json");
 const caseFile = path.resolve(root, option("--cases", path.join(directory, "cases.json")));
 const cases = JSON.parse(fs.readFileSync(caseFile));
 const scope = option("--scope", "text");
+// Catalog codes that Google Translate's URL spells differently.
+const googleCodes = { zh: "zh-CN", he: "iw", jv: "jw" };
+const googleCode = (code) => googleCodes[code] || code;
 
 (async () => {
   if (!process.argv.includes("--live"))
@@ -109,8 +112,8 @@ const scope = option("--scope", "text");
         const url =
           "https://translate.google.com/?" +
           new URLSearchParams({
-            sl: sample.source,
-            tl: sample.target,
+            sl: googleCode(sample.source),
+            tl: googleCode(sample.target),
             text: sample.text,
             op: "translate",
           });

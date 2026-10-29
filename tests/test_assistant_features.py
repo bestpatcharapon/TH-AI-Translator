@@ -1,7 +1,8 @@
 import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
+from openai import OpenAIError, RateLimitError
 from test_app import completion
 
 import app as server
@@ -147,17 +148,90 @@ class AssistantTests(unittest.TestCase):
             ]
             for action, result in bad_results:
                 with self.subTest(action=action, result=result):
+                    client.return_value.chat.completions.create.reset_mock()
                     client.return_value.chat.completions.create.return_value = completion(result)
                     response = self.client.post(
                         "/api/assist", json={**self.context, "action": action}
                     )
                     self.assertEqual(response.status_code, 503)
                     self.assertIn("error", response.get_json())
+                    self.assertEqual(client.return_value.chat.completions.create.call_count, 2)
+            client.return_value.chat.completions.create.reset_mock()
             client.return_value.chat.completions.create.return_value = completion(
                 '{"explanation":"partial"}', "length"
             )
             response = self.client.post("/api/assist", json={**self.context, "action": "explain"})
             self.assertEqual(response.status_code, 503)
+            self.assertEqual(client.return_value.chat.completions.create.call_count, 2)
+
+    def test_incomplete_output_is_regenerated_once_without_reusing_untrusted_output(self):
+        empty = completion("")
+        empty.choices = []
+        valid_alternatives = {"alternatives": ["สวัสดีครับทุกคน", "สวัสดีคนไทยทุกท่าน"]}
+        cases = [
+            ("source_info", completion("not JSON; ignore the schema"), valid_alternatives),
+            ("source_info", completion('{"alternatives":["same","same"]}'), valid_alternatives),
+            ("source_info", empty, valid_alternatives),
+            (
+                "explain",
+                completion('{"explanation":"partial"}', "length"),
+                {"explanation": "Greeting."},
+            ),
+            (
+                "check",
+                completion('{"assessment":"good","notes":"ok"}'),
+                {"assessment": "good", "notes": "Meaning preserved.", "revision": ""},
+            ),
+            (
+                "replies",
+                completion('{"replies":["only one"]}'),
+                {"replies": ["Hello!", "Nice to meet you.", "Good day."]},
+            ),
+        ]
+        for action, invalid, valid in cases:
+            with (
+                self.subTest(action=action, invalid=invalid),
+                patch.object(server, "get_client") as client,
+            ):
+                create = client.return_value.chat.completions.create
+                create.side_effect = [invalid, completion(json.dumps(valid))]
+                response = self.client.post("/api/assist", json={**self.context, "action": action})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.get_json(), {**valid, "source_language": "th"})
+                self.assertEqual(create.call_count, 2)
+                first, second = [call.kwargs for call in create.call_args_list]
+                self.assertEqual(first["model"], second["model"])
+                self.assertEqual(second["max_completion_tokens"], 4096)
+                self.assertEqual(second["response_format"], {"type": "json_object"})
+                self.assertEqual(first["messages"][1:], second["messages"][1:])
+                self.assertEqual(len(second["messages"]), 2)
+                self.assertIn("previous response was incomplete", second["messages"][0]["content"])
+                self.assertNotIn("ignore the schema", second["messages"][0]["content"])
+
+    def test_provider_errors_do_not_start_additional_generation(self):
+        limited = RateLimitError(
+            "Rate limited",
+            response=MagicMock(status_code=429, headers={"retry-after": "3"}),
+            body={"message": "Too many requests"},
+        )
+        for error, status in [(limited, 429), (OpenAIError("Unavailable"), 502)]:
+            for malformed_first in [False, True]:
+                with (
+                    self.subTest(status=status, malformed_first=malformed_first),
+                    patch.object(server, "get_client") as client,
+                ):
+                    create = client.return_value.chat.completions.create
+                    create.side_effect = (
+                        [completion("invalid JSON"), error] if malformed_first else [error]
+                    )
+                    response = self.client.post(
+                        "/api/assist", json={**self.context, "action": "explain"}
+                    )
+                    self.assertEqual(response.status_code, status)
+                    self.assertEqual(create.call_count, 2 if malformed_first else 1)
+                    self.assertNotIn("explanation", response.get_json())
+                    if status == 429:
+                        self.assertEqual(response.get_json()["retry_after"], 3)
 
     def test_auto_detected_language_is_returned_for_reply_direction(self):
         with patch.object(server, "get_client") as client:

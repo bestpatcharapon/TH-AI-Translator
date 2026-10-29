@@ -103,6 +103,8 @@ const assert = require("node:assert/strict");
     assert.equal(await page.locator("#multiple-languages").isChecked(), false);
     assert.equal(await page.locator(".history-entry").count(), 0);
     await page.locator("#menu-close").click();
+    if (await page.locator("#document-reader-tabs").isVisible())
+      await page.locator("#document-tab-source").click();
     await page.locator("#input").fill("DOCUMENT HISTORY");
     await page.waitForFunction(
       () => document.querySelector("#output").value === "en:DOCUMENT HISTORY"

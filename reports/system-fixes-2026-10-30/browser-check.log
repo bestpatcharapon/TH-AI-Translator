@@ -1,0 +1,76 @@
+Full browser verification after fixes
+
+tests/browser/runtime-contract.cjs
+PASS running backend accepts all six menu styles without AI calls.
+
+tests/browser/feature-isolation.cjs
+PASS independent text/results/languages/tone/files/assistant panels/saved items/chat history; repeated switching starts no requests.
+PASS late uncancellable translation/extraction/photo responses cannot leak or cancel another feature; removal and clearing affect only their owners.
+PASS late transcription, audio playback, clipboard feedback and old IME events cannot affect another feature; microphone resources close on exit.
+PASS late explanation responses remain isolated; no JavaScript errors.
+
+tests/browser/menu.cjs
+PASS: modal menu, real preference payloads, max 3 extra languages, partial failure/retry, automatic history, favorites/search/copy, feature-specific clear/preferences/history, persistence, Live Chat menu, responsive layout and Thai labels; no JS errors.
+
+tests/browser/studio.cjs
+PASS: persistent feature-scoped glossary, actual validation/audit endpoints, explicit review, evidence/alternatives/back-translation, audited apply/undo, blind comparison/export, feature state restoration, late-response isolation, long-text limit, deletion, Thai labels and responsive layout.
+
+tests/browser/practical.cjs
+PASS: everyday scenarios, localized help, latest six chat turns, clearing, language-pair filtering, feature isolation and responsive layout.
+
+tests/browser/cleanup.cjs
+PASS: detected-language swap, audited suggested revisions, stale clipboard ownership and absent photo download.
+
+tests/browser/thai.cjs
+PASS: ambiguity gate, explicit clarification, real dictionary validation/persistence, feature-owned modes, uncertain Live Chat, late response isolation, microphone review and responsive Thai UI.
+
+tests/browser/dialect-layout.cjs
+PASS compact dialect layout, readable details, clarification, focus, mode isolation, mobile and RTL.
+
+tests/browser/performance.cjs
+PASS: primary results before deferred languages, debounced typing, deferred assistant cancellation, pause/retry ownership, explicit refresh bypass and canceled chat additions.
+
+tests/browser/image-formats.cjs
+Image formats: HEIC preview, mode isolation, mixed menus, and unchanged-result feedback passed.
+
+tests/browser/photo-numbers.cjs
+PASS: original 50 survives wrong OCR 5, overlapping labels, and display pixel for pixel; no photo download control.
+
+tests/browser/photo-failure.cjs
+PASS photo 429 shows original/failure in fullscreen, retry recovers without stale warning.
+
+tests/browser/voice-quality.cjs
+PASS automatic send including verifier outage and clear dialect speech, reviewed slang corrections before send/history, feature-owned ASR vocabulary, capture settings and silence rejection.
+
+tests/browser/semantic-review.cjs
+PASS clarification does not send or save ambiguous chat; revised meaning is shown; unavailable review preserves the translation and review metadata without a completion notice.
+
+tests/browser/interface.cjs
+PASS all prepared menu languages, no AI calls even with zero quota, separate 113-language translation catalog, persistence, stale preference migration, failed/late/timeout loading and responsive layout.
+
+tests/browser/menu-navigation.cjs
+PASS settings tabs, visible controls, keyboard/RTL navigation, theme synchronization, mobile/desktop layout and no AI requests.
+
+tests/browser/preference-picker.cjs
+PASS custom tone/context choices, selected state, real translation payloads, cancellation/focus, feature-owned values, late close, keyboard/RTL and responsive dialogs.
+
+tests/browser/mobile-responsive.cjs
+PASS mobile/tablet/landscape in English/Thai/RTL: readable Context cards, scrolling, compact source sizing, settings, photo/document controls, Live Chat and reduced keyboard viewport.
+
+tests/browser/speech-playback.cjs
+PASS delayed device voices, locale matching, server/device fallback, and canceled playback isolation.
+
+tests/browser/text-viewport.cjs
+PASS Text fits phone viewports in English, Thai and RTL; long text remains reachable without page scrolling; other modes keep their layout.
+
+tests/browser/notices.cjs
+PASS 3-second notices across app/menu/photo/voice/studio; replacement timers, progress, review content and feature isolation.
+
+tests/browser/reply-suggestions.cjs
+PASS bilingual suggestion cards, edit/translate, failure recovery, cancel, late-response isolation, copy/listen, collapse and no automatic sending.
+
+tests/browser/usability.cjs
+PASS quick start, direct review tools, 12px Thai minimum, offline notice and installable app shell.
+
+tests/browser/rate-limit.cjs
+PASS short 429 recovery for translation/assistant/review, bounded attempts, long waits and cancellation.

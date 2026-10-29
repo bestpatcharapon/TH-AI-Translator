@@ -1,0 +1,254 @@
+{
+  "checked_at": "2026-10-29T21:28:44.529850+00:00",
+  "scope": "Real configured providers via fresh local Flask; short synthetic examples only; HTTP success does not certify accuracy.",
+  "results": [
+    {
+      "name": "text business",
+      "path": "/api/translate",
+      "http": 200,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "not_requested",
+          "triggers": []
+        },
+        "source_language": "th",
+        "translation": "We’ll meet at the station at nine tomorrow."
+      },
+      "seconds": 0.636
+    },
+    {
+      "name": "live chat",
+      "path": "/api/translate",
+      "http": 200,
+      "result": {
+        "additional_translations": [],
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "quality_review": {
+          "applied": false,
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "status": "checked",
+          "triggers": [
+            "conversation"
+          ]
+        },
+        "source_language": "th",
+        "translation": "Thanks, see you tomorrow."
+      },
+      "seconds": 1.558
+    },
+    {
+      "name": "assistant source_info",
+      "path": "/api/assist",
+      "http": 503,
+      "result": {
+        "error": "ข้อมูลจากผู้ช่วยไม่สมบูรณ์ กรุณาลองอีกครั้ง"
+      },
+      "seconds": 4.273
+    },
+    {
+      "name": "assistant explain",
+      "path": "/api/assist",
+      "http": 200,
+      "result": {
+        "explanation": "คำว่า “สวัสดี” เป็นการทักทายมาตรฐานในภาษาไทยที่แปลตรงเป็น “Hello” ในภาษาอังกฤษ ส่วน “ครับ” เป็นคำลงท้ายสุภาพของผู้ชายที่ไม่ได้มีความหมายเพิ่มเติมในประโยค จึงไม่มีอีดิอมหรือการเล่นคำใด ๆ ที่ต้องถ่ายทอด ความหมายจึงถูกถ่ายทอดอย่างตรงไปตรงมาและเป็นกลางตามโทนที่กำหนด ไม่มีความคลุมเครือหรือความหมายหลายแง่ที่ต้องพิจารณา",
+        "source_language": "th"
+      },
+      "seconds": 1.072
+    },
+    {
+      "name": "assistant check",
+      "path": "/api/assist",
+      "http": 200,
+      "result": {
+        "assessment": "good",
+        "notes": "การแปลตรงกับความหมายของข้อความต้นฉบับอย่างครบถ้วนและใช้โทนที่เป็นกลางตามที่กำหนด ไม่มีการละเลยหรือเพิ่มข้อมูลใด ๆ",
+        "revision": "",
+        "source_language": "th"
+      },
+      "seconds": 0.768
+    },
+    {
+      "name": "assistant replies",
+      "path": "/api/assist",
+      "http": 200,
+      "result": {
+        "replies": [
+          "Hey there! Nice to meet you.",
+          "Good day. I appreciate your greeting.",
+          "Hello!"
+        ],
+        "reply_details": [
+          {
+            "style": "friendly",
+            "text": "Hey there! Nice to meet you.",
+            "translation": "สวัสดีครับ! ยินดีที่ได้รู้จักคุณ."
+          },
+          {
+            "style": "professional",
+            "text": "Good day. I appreciate your greeting.",
+            "translation": "สวัสดีครับ ผมขอขอบคุณสำหรับการทักทายของคุณ."
+          },
+          {
+            "style": "short",
+            "text": "Hello!",
+            "translation": "สวัสดีครับ!"
+          }
+        ],
+        "source_language": "th"
+      },
+      "seconds": 1.662
+    },
+    {
+      "name": "deep review",
+      "path": "/api/analyze",
+      "http": 429,
+      "result": {
+        "code": "rate_limit_exceeded",
+        "error": "บริการ AI ถึงขีดจำกัดการใช้งาน กรุณารอสักครู่แล้วลองอีกครั้ง",
+        "retry_after": 3
+      },
+      "seconds": 0.772
+    },
+    {
+      "name": "compare",
+      "path": "/api/compare",
+      "http": 429,
+      "result": {
+        "code": "rate_limit_exceeded",
+        "error": "บริการ AI ถึงขีดจำกัดการใช้งาน กรุณารอสักครู่แล้วลองอีกครั้ง",
+        "retry_after": 1
+      },
+      "seconds": 0.214
+    },
+    {
+      "name": "assistant source_info retry",
+      "path": "/api/assist",
+      "http": 200,
+      "result": {
+        "alternatives": [
+          "สวัสดีครับ",
+          "สวัสดีค่ะ"
+        ],
+        "source_language": "th"
+      },
+      "seconds": 0.708
+    },
+    {
+      "name": "deep review retry",
+      "path": "/api/analyze",
+      "http": 200,
+      "result": {
+        "alternatives": [
+          {
+            "label": "ทางการ",
+            "reason": "เป็นการแปลที่เป็นกลาง แม้ไม่มีการแสดงความสุภาพโดยตรง",
+            "translation": "Hello."
+          },
+          {
+            "label": "เป็นกันเอง",
+            "reason": "สื่อความเป็นกันเองมากกว่า ตรงกับการละเลย “ครับ”",
+            "translation": "Hi."
+          },
+          {
+            "label": "สุภาพสูง",
+            "reason": "ให้ความรู้สึกสุภาพมากขึ้น เพื่อชดเชยการขาด “ครับ”",
+            "translation": "Good day."
+          }
+        ],
+        "assessment": "review",
+        "audit": {
+          "issues": [],
+          "status": "clear",
+          "terms_checked": 0,
+          "terms_matched": 0
+        },
+        "back_translation": "สวัสดี",
+        "issues": [
+          {
+            "explanation": "คำว่า “ครับ” เป็นคำลงท้ายสุภาพของผู้ชายในภาษาไทย การละเลยทำให้การแปลสูญเสียระดับความสุภาพที่ควรสื่อ",
+            "kind": "tone",
+            "source_quote": "ครับ",
+            "translation_quote": ""
+          }
+        ],
+        "questions": [],
+        "revision": "",
+        "source_language": "th",
+        "summary": "การแปลขาดการแสดงความสุภาพของคำว่า “ครับ” ทำให้โทนไม่ตรงกับต้นฉบับ"
+      },
+      "seconds": 3.362
+    },
+    {
+      "name": "compare retry",
+      "path": "/api/compare",
+      "http": 200,
+      "result": {
+        "audits": {
+          "current": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          },
+          "other": {
+            "issues": [],
+            "status": "clear",
+            "terms_checked": 0,
+            "terms_matched": 0
+          }
+        },
+        "blind_order": true,
+        "criteria": [
+          {
+            "criterion": "meaning",
+            "preferred": "current",
+            "reason": "แปล A ให้ความหมายเป็น 'Goodbye.' ซึ่งผิดจากต้นฉบับที่หมายถึงการทักทาย ส่วนแปล B ให้ 'Hello.' ตรงกับความหมายของ 'สวัสดีครับ'",
+            "source_quote": "สวัสดี"
+          },
+          {
+            "criterion": "fluency",
+            "preferred": "tie",
+            "reason": "ทั้งสองประโยคเป็นภาษาอังกฤษที่ไหลลื่นและไม่มีข้อผิดพลาดทางไวยากรณ์",
+            "source_quote": ""
+          },
+          {
+            "criterion": "tone",
+            "preferred": "tie",
+            "reason": "ทั้งสองการแปลใช้โทนที่เป็นกลางและตรงกับคำสั่งให้คงความเป็นกลางของต้นฉบับ",
+            "source_quote": ""
+          },
+          {
+            "criterion": "terminology",
+            "preferred": "tie",
+            "reason": "ไม่มีคำศัพท์เฉพาะหรือเทคนิคที่ต้องพิจารณาในกรณีนี้",
+            "source_quote": ""
+          }
+        ],
+        "display_order": {
+          "a": "other",
+          "b": "current"
+        },
+        "source_language": "th",
+        "summary": "การแปล B ดีกว่า เนื่องจากให้ความหมายที่ตรงกับข้อความต้นฉบับและรักษาน้ำเสียงที่เป็นกลางได้อย่างเหมาะสม",
+        "winner": "current"
+      },
+      "seconds": 1.3
+    }
+  ]
+}

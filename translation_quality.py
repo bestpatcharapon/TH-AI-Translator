@@ -185,6 +185,44 @@ def audit_translation(text, translation, target, glossary) -> AuditResult:
     }
 
 
+# Thai and Lao do not end sentences with a period; models often add "." or "。" anyway.
+_NO_PERIOD_TARGETS = {"th": "\u0e01-\u0e7f", "lo": "\u0e80-\u0eff"}
+_THAI_UNIT_ABBREVIATIONS = {"กม", "ซม", "มม", "กก", "ชม", "ตร", "ลบ"}
+
+
+def _is_abbreviation(word, before, letters):
+    consonants = "\u0e01-\u0e2e" if letters.startswith("\u0e01") else "\u0e81-\u0eae"
+    if not re.fullmatch(f"[{consonants}]{{1,2}}", word):
+        return False
+    # น. / พ.ศ. / ม.ค. / กม. are abbreviations, not sentence-final periods.
+    return len(word) == 1 or before.endswith(".") or word in _THAI_UNIT_ABBREVIATIONS
+
+
+def tidy_punctuation(translation, target):
+    """Remove foreign sentence-final periods from Thai/Lao output, keeping abbreviations."""
+    letters = _NO_PERIOD_TARGETS.get(target)
+    if not letters or not translation:
+        return translation
+    script = f"[{letters}]"
+    # A CJK full stop is never Thai/Lao punctuation: drop it at line ends, space it elsewhere.
+    text = re.sub(rf"(?<={script})[。．]+[ \t]*(?=\n|$)", "", translation)
+    text = re.sub(rf"(?<={script})[。．]+[ \t]*(?={script})", " ", text)
+
+    def strip_period(match):
+        word = match["word"]
+        before = text[: match.start("word")]
+        if _is_abbreviation(word, before, letters):
+            return match[0]
+        return word + match["tail"]
+
+    # Only a single period after script letters at a line end; "..." and "1.5" stay.
+    return re.sub(
+        rf"(?P<word>{script}+)(?<!\.)\.(?!\.)(?P<tail>[\"'”’)\]]*[ \t]*)(?=\n|$)",
+        strip_period,
+        text,
+    )
+
+
 def json_result(client, model, instruction, payload, limit=6500, *, timeout=60) -> dict[str, Any]:
     response = client.chat.completions.create(
         model=model,

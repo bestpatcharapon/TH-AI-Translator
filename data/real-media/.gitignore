@@ -1,0 +1,5 @@
+# Real user photos/recordings and the private manifest stay local.
+*
+!.gitignore
+!README.md
+!manifest.example.json

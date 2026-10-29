@@ -9,6 +9,8 @@
     <meta name="theme-color" content="#211f1b" />
     <title>TH AI Translator</title>
     <link rel="icon" type="image/png" href="/static/brand/logo-v1.png" />
+    <link rel="apple-touch-icon" href="/static/brand/logo-v1.png" />
+    <link rel="manifest" href="/static/manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -203,6 +205,12 @@
           <svg><use href="#icon-more" /></svg>
         </button>
       </header>
+      <p id="offline-banner" class="offline-banner" role="status" aria-live="polite" hidden></p>
+      <section id="onboarding" class="onboarding" aria-labelledby="onboarding-title" hidden>
+        <h2 id="onboarding-title">Quick start</h2>
+        <p id="onboarding-text"></p>
+        <button id="onboarding-dismiss" class="outline-button" type="button">Got it</button>
+      </section>
       <div class="language-controls">
         <div class="language-picker">
           <span id="source-flag" class="flag" aria-hidden="true">🇹🇭</span>
@@ -320,6 +328,16 @@
         </div>
         <div id="photo-result" class="photo-result" hidden>
           <div id="photo-preview" class="photo-preview">
+            <div class="photo-actions">
+              <button id="photo-original" type="button" aria-pressed="false">
+                <svg><use href="#icon-image" /></svg>
+                <span data-i18n="photoOriginal">Original photo</span>
+              </button>
+              <button id="photo-fullscreen" type="button">
+                <svg><use href="#icon-expand" /></svg>
+                <span data-i18n="photoFullscreen">Full screen</span>
+              </button>
+            </div>
             <div id="photo-main-stage" class="photo-stage"></div>
           </div>
           <div id="photo-loading" class="photo-loading" hidden>
@@ -348,42 +366,42 @@
               </button>
             </div>
           </div>
-          <details id="photo-readings" class="photo-readings" hidden>
-            <summary id="photo-readings-title"></summary>
-            <div id="photo-readings-list"></div>
-          </details>
-          <div class="photo-actions">
-            <button id="photo-original" type="button" aria-pressed="false">
-              <svg><use href="#icon-image" /></svg
-              ><span data-i18n="photoOriginal">Original photo</span></button
-            ><button id="photo-fullscreen" type="button">
-              <svg><use href="#icon-expand" /></svg
-              ><span data-i18n="photoFullscreen">Full screen</span></button
-            ><button id="photo-change" type="button">
-              <svg><use href="#icon-camera" /></svg
-              ><span data-i18n="photoChange">Change photo</span>
+          <div class="photo-file-actions">
+            <button id="photo-change" class="outline-button" type="button">
+              <svg><use href="#icon-image" /></svg>
+              <span data-i18n="photoChange">Change photo</span>
+            </button>
+            <button id="photo-remove" class="photo-remove" type="button">
+              <svg><use href="#icon-trash" /></svg>
+              <span class="sr-only" data-i18n="photoRemove">Remove photo</span>
             </button>
           </div>
-          <button id="photo-remove" class="photo-remove" type="button">
-            <svg><use href="#icon-trash" /></svg><span data-i18n="photoRemove">Remove photo</span>
-          </button>
           <details id="photo-audit-details" class="studio-back" hidden>
             <summary id="photo-audit-summary"></summary>
             <div id="photo-audit-content"></div>
+          </details>
+          <details id="photo-readings" class="photo-readings" hidden>
+            <summary id="photo-readings-title"></summary>
+            <div id="photo-readings-list"></div>
           </details>
         </div>
       </section>
 
       <section id="file-tools" class="file-tools" hidden aria-label="Upload a file">
         <input id="file-input" type="file" accept=".txt,.md,.csv,.pdf,.docx" hidden />
-        <button id="choose-file" class="upload-zone" type="button">
+        <button id="choose-file" class="upload-zone" type="button" aria-describedby="upload-hint">
           <svg><use href="#icon-document" /></svg>
           <strong id="upload-title">Choose or drop a document</strong>
+          <span class="upload-summary" aria-hidden="true">PDF, DOCX · 10 MB</span>
           <span id="upload-hint">TXT, MD, CSV, PDF, DOCX · 10 MB · PDF up to 20 pages</span>
         </button>
         <div id="file-preview" class="file-preview" hidden>
-          <span id="file-name"></span
-          ><button id="retry-file" type="button" class="text-button" data-i18n="retry" hidden>
+          <button id="replace-document" class="document-file-button" type="button">
+            <svg aria-hidden="true"><use href="#icon-document" /></svg>
+            <span id="file-name"></span>
+            <svg aria-hidden="true"><use href="#icon-chevron" /></svg>
+          </button>
+          <button id="retry-file" type="button" class="text-button" data-i18n="retry" hidden>
             Retry</button
           ><button id="remove-file" type="button" class="text-button" data-i18n="remove">
             Remove
@@ -435,8 +453,42 @@
         <input id="auto-speak" type="checkbox" checked hidden />
       </section>
 
+      <div id="document-reader-tabs" class="document-reader-tabs" role="tablist" hidden>
+        <button
+          id="document-tab-source"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="document-source-panel"
+          data-i18n="source"
+        >
+          Source
+        </button>
+        <button
+          id="document-tab-translation"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="document-translation-panel"
+          tabindex="-1"
+          data-i18n="translation"
+        >
+          Translation
+        </button>
+      </div>
+      <p
+        id="document-reader-status"
+        class="feature-status"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></p>
       <div class="panels">
-        <section class="panel source-panel" aria-labelledby="source-heading">
+        <section
+          id="document-source-panel"
+          class="panel source-panel"
+          aria-labelledby="source-heading"
+        >
           <div class="panel-heading">
             <h2 id="source-heading" data-i18n="source">Source</h2>
             <button id="clear" class="text-button" type="button" data-i18n="clear" hidden>
@@ -474,7 +526,12 @@
             <span id="count" class="count" hidden>0 / 5000</span>
           </div>
         </section>
-        <section class="panel output-panel" aria-labelledby="translation-heading" aria-busy="false">
+        <section
+          id="document-translation-panel"
+          class="panel output-panel"
+          aria-labelledby="translation-heading"
+          aria-busy="false"
+        >
           <div class="panel-heading">
             <h2 id="translation-heading" data-i18n="translation">Translation</h2>
           </div>
@@ -528,7 +585,7 @@
                   <svg><use href="#icon-star" /></svg>
                 </button>
               </div>
-              <div class="review-buttons">
+              <div id="review-buttons" class="review-buttons">
                 <button
                   id="explain"
                   class="outline-button"
@@ -1127,5 +1184,7 @@
     <script src="/static/interface-locales.js"></script>
     <script src="/static/interface.js"></script>
     <script src="/static/notices.js"></script>
+    <script src="/static/document.js"></script>
+    <script src="/static/offline.js"></script>
   </body>
 </html>

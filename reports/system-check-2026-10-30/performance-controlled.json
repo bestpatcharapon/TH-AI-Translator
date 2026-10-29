@@ -1,0 +1,10 @@
+{
+  "measured_at": "2026-10-29T21:27:31.352792+00:00",
+  "controlled": {
+    "kind": "controlled synthetic provider, fixed 50ms per chunk; not an AI accuracy benchmark",
+    "chunks": 3,
+    "serial_seconds": 0.1503,
+    "parallel_seconds": 0.1722,
+    "same_complete_ordered_content": true
+  }
+}

@@ -1,0 +1,103 @@
+
+{"test": "tests/browser/runtime-contract.cjs", "exit": 0, "seconds": 1.06}
+PASS running backend accepts all six menu styles without AI calls.
+
+
+{"test": "tests/browser/feature-isolation.cjs", "exit": 0, "seconds": 9.03}
+PASS independent text/results/languages/tone/files/assistant panels/saved items/chat history; repeated switching starts no requests.
+PASS late uncancellable translation/extraction/photo responses cannot leak or cancel another feature; removal and clearing affect only their owners.
+PASS late transcription, audio playback, clipboard feedback and old IME events cannot affect another feature; microphone resources close on exit.
+PASS late explanation responses remain isolated; no JavaScript errors.
+
+
+{"test": "tests/browser/menu.cjs", "exit": 0, "seconds": 5.23}
+PASS: modal menu, real preference payloads, max 3 extra languages, partial failure/retry, automatic history, favorites/search/copy, feature-specific clear/preferences/history, persistence, Live Chat menu, responsive layout and Thai labels; no JS errors.
+
+
+{"test": "tests/browser/studio.cjs", "exit": 0, "seconds": 3.5}
+PASS: persistent feature-scoped glossary, actual validation/audit endpoints, explicit review, evidence/alternatives/back-translation, audited apply/undo, blind comparison/export, feature state restoration, late-response isolation, long-text limit, deletion, Thai labels and responsive layout.
+
+
+{"test": "tests/browser/practical.cjs", "exit": 0, "seconds": 3.26}
+PASS: everyday scenarios, localized help, latest six chat turns, clearing, language-pair filtering, feature isolation and responsive layout.
+
+
+{"test": "tests/browser/cleanup.cjs", "exit": 0, "seconds": 1.4}
+PASS: detected-language swap, audited suggested revisions, stale clipboard ownership and absent photo download.
+
+
+{"test": "tests/browser/thai.cjs", "exit": 0, "seconds": 6.21}
+PASS: ambiguity gate, explicit clarification, real dictionary validation/persistence, feature-owned modes, uncertain Live Chat, late response isolation, microphone review and responsive Thai UI.
+
+
+{"test": "tests/browser/dialect-layout.cjs", "exit": 1, "seconds": 2.38}
+AssertionError [ERR_ASSERTION]: Short text with pronunciation and suggestions must fit: en .output-scroll
+    at /home/patcharapon/TH_AI_Translator/tests/browser/dialect-layout.cjs:97:15 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+
+{"test": "tests/browser/performance.cjs", "exit": 0, "seconds": 2.61}
+PASS: primary results before deferred languages, debounced typing, deferred assistant cancellation, pause/retry ownership, explicit refresh bypass and canceled chat additions.
+
+
+{"test": "tests/browser/image-formats.cjs", "exit": 0, "seconds": 1.58}
+Image formats: HEIC preview, mode isolation, mixed menus, and unchanged-result feedback passed.
+
+
+{"test": "tests/browser/photo-numbers.cjs", "exit": 0, "seconds": 1.29}
+PASS: original 50 survives wrong OCR 5, overlapping labels, and display pixel for pixel; no photo download control.
+
+
+{"test": "tests/browser/photo-failure.cjs", "exit": 0, "seconds": 2.22}
+PASS photo 429 shows original/failure in fullscreen, retry recovers without stale warning.
+
+
+{"test": "tests/browser/voice-quality.cjs", "exit": 0, "seconds": 3.98}
+PASS automatic send including verifier outage and clear dialect speech, explicit review, unclear-audio gate, capture settings, feature-owned preference and silence rejection.
+
+
+{"test": "tests/browser/semantic-review.cjs", "exit": 0, "seconds": 1.43}
+PASS clarification does not send or save ambiguous chat; revised meaning is shown; unavailable review preserves the translation and review metadata without a completion notice.
+
+
+{"test": "tests/browser/interface.cjs", "exit": 0, "seconds": 8.17}
+PASS all prepared menu languages, no AI calls even with zero quota, separate 113-language translation catalog, persistence, stale preference migration, failed/late/timeout loading and responsive layout.
+
+
+{"test": "tests/browser/menu-navigation.cjs", "exit": 0, "seconds": 6.74}
+PASS settings tabs, visible controls, keyboard/RTL navigation, theme synchronization, mobile/desktop layout and no AI requests.
+
+
+{"test": "tests/browser/preference-picker.cjs", "exit": 0, "seconds": 8.32}
+PASS custom tone/context choices, selected state, real translation payloads, cancellation/focus, feature-owned values, late close, keyboard/RTL and responsive dialogs.
+
+
+{"test": "tests/browser/mobile-responsive.cjs", "exit": 0, "seconds": 11.02}
+PASS mobile/tablet/landscape in English/Thai/RTL: readable Context cards, scrolling, compact source sizing, settings, photo/document controls, Live Chat and reduced keyboard viewport.
+
+
+{"test": "tests/browser/speech-playback.cjs", "exit": 0, "seconds": 1.58}
+PASS delayed device voices, locale matching, server/device fallback, and canceled playback isolation.
+
+
+{"test": "tests/browser/text-viewport.cjs", "exit": 0, "seconds": 8.41}
+PASS Text fits phone viewports in English, Thai and RTL; long text remains reachable without page scrolling; other modes keep their layout.
+
+
+{"test": "tests/browser/notices.cjs", "exit": 0, "seconds": 1.1}
+PASS 3-second notices across app/menu/photo/voice/studio; replacement timers, progress, review content and feature isolation.
+
+
+{"test": "tests/browser/reply-suggestions.cjs", "exit": 0, "seconds": 2.39}
+PASS bilingual suggestion cards, edit/translate, failure recovery, cancel, late-response isolation, copy/listen, collapse and no automatic sending.
+
+
+{"test": "tests/browser/usability.cjs", "exit": 0, "seconds": 2.77}
+PASS quick start, direct review tools, 12px Thai minimum, offline notice and installable app shell.
+

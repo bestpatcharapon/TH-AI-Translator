@@ -1,0 +1,117 @@
+[
+  {
+    "test": "tests/browser/runtime-contract.cjs",
+    "exit": 0,
+    "seconds": 1.06
+  },
+  {
+    "test": "tests/browser/feature-isolation.cjs",
+    "exit": 0,
+    "seconds": 9.03
+  },
+  {
+    "test": "tests/browser/menu.cjs",
+    "exit": 0,
+    "seconds": 5.23
+  },
+  {
+    "test": "tests/browser/studio.cjs",
+    "exit": 0,
+    "seconds": 3.5
+  },
+  {
+    "test": "tests/browser/practical.cjs",
+    "exit": 0,
+    "seconds": 3.26
+  },
+  {
+    "test": "tests/browser/cleanup.cjs",
+    "exit": 0,
+    "seconds": 1.4
+  },
+  {
+    "test": "tests/browser/thai.cjs",
+    "exit": 0,
+    "seconds": 6.21
+  },
+  {
+    "test": "tests/browser/dialect-layout.cjs",
+    "exit": 1,
+    "seconds": 2.38
+  },
+  {
+    "test": "tests/browser/performance.cjs",
+    "exit": 0,
+    "seconds": 2.61
+  },
+  {
+    "test": "tests/browser/image-formats.cjs",
+    "exit": 0,
+    "seconds": 1.58
+  },
+  {
+    "test": "tests/browser/photo-numbers.cjs",
+    "exit": 0,
+    "seconds": 1.29
+  },
+  {
+    "test": "tests/browser/photo-failure.cjs",
+    "exit": 0,
+    "seconds": 2.22
+  },
+  {
+    "test": "tests/browser/voice-quality.cjs",
+    "exit": 0,
+    "seconds": 3.98
+  },
+  {
+    "test": "tests/browser/semantic-review.cjs",
+    "exit": 0,
+    "seconds": 1.43
+  },
+  {
+    "test": "tests/browser/interface.cjs",
+    "exit": 0,
+    "seconds": 8.17
+  },
+  {
+    "test": "tests/browser/menu-navigation.cjs",
+    "exit": 0,
+    "seconds": 6.74
+  },
+  {
+    "test": "tests/browser/preference-picker.cjs",
+    "exit": 0,
+    "seconds": 8.32
+  },
+  {
+    "test": "tests/browser/mobile-responsive.cjs",
+    "exit": 0,
+    "seconds": 11.02
+  },
+  {
+    "test": "tests/browser/speech-playback.cjs",
+    "exit": 0,
+    "seconds": 1.58
+  },
+  {
+    "test": "tests/browser/text-viewport.cjs",
+    "exit": 0,
+    "seconds": 8.41
+  },
+  {
+    "test": "tests/browser/notices.cjs",
+    "exit": 0,
+    "seconds": 1.1
+  },
+  {
+    "test": "tests/browser/reply-suggestions.cjs",
+    "exit": 0,
+    "seconds": 2.39
+  },
+  {
+    "test": "tests/browser/usability.cjs",
+    "exit": 0,
+    "seconds": 2.77
+  }
+]
