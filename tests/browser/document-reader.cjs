@@ -227,6 +227,25 @@ const assert = require("node:assert/strict");
       ) <= 2,
       "Switching tabs keeps the translation reading position"
     );
+    // A delayed restore must not overwrite a scroll made after the tab was selected.
+    const scrollAfterSwitch = await page.evaluate(() => {
+      selectDocumentPane("source");
+      selectDocumentPane("translation");
+      outputEl.scrollTop += 120;
+      const expected = outputEl.scrollTop;
+      return new Promise((resolve) =>
+        requestAnimationFrame(() => {
+          resolve({ expected, actual: outputEl.scrollTop });
+        })
+      );
+    });
+    assert(
+      Math.abs(scrollAfterSwitch.actual - scrollAfterSwitch.expected) <= 2,
+      "A pending tab restore must not overwrite a newer reading position"
+    );
+    await page.locator("#output").evaluate((element, offset) => {
+      element.scrollTop = offset;
+    }, savedScroll);
     await page.evaluate(() => switchFeature("text"));
     assert(await page.locator("#document-reader-tabs").isHidden());
     await page.evaluate(() => switchFeature("document"));

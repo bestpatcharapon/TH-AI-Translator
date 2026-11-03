@@ -64,10 +64,9 @@ function selectDocumentPane(pane, manual = false, saveCurrent = true) {
   documentReader.pane = pane;
   if (manual) documentReader.autoOpenTranslation = false;
   syncDocumentReader();
-  requestAnimationFrame(() => {
-    if (mode === "document" && documentReader.pane === pane)
-      documentEditors[pane].scrollTop = offset;
-  });
+  // The pane is visible now. Restore before another scroll or tab switch can
+  // happen, rather than overwriting newer user input on a later frame.
+  documentEditors[pane].scrollTop = offset;
 }
 documentTabs.forEach((tab, index) => {
   tab.addEventListener("click", () => selectDocumentPane(index ? "translation" : "source", true));
