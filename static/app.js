@@ -418,9 +418,13 @@ async function translate({ refresh = false } = {}) {
         translation: turn.translation,
       }));
   }
+  const body = JSON.stringify({ text, source, target, tone, ...options, cache_bypass: refresh }),
+    pending = activeFeature().request;
+  if (pending && ownsOperation(pending) && pending.translationBody === body) return;
   stopRecording(true);
   stopAudio();
   const controller = startOperation();
+  controller.translationBody = body;
   if (isChat) $("live-send").disabled = true;
   document.querySelector(".output-panel").setAttribute("aria-busy", "true");
   setStatus(t("loading"));
@@ -431,7 +435,7 @@ async function translate({ refresh = false } = {}) {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, source, target, tone, ...options, cache_bypass: refresh }),
+        body,
       })
     );
     if (!ownsOperation(controller)) return;
@@ -486,7 +490,7 @@ async function translate({ refresh = false } = {}) {
 inputEl.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
     event.preventDefault();
-    translate();
+    if (!event.repeat && !event.isComposing) translate();
   }
 });
 inputEl.addEventListener("compositionstart", () => {

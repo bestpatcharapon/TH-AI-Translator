@@ -47,7 +47,7 @@ function syncDocumentReader() {
     if (mobile) {
       panel.setAttribute("role", "tabpanel");
       panel.setAttribute("aria-labelledby", tab.id);
-    } else {
+    } else if (!documentRoot.classList.contains("multilingual-reader")) {
       panel.removeAttribute("role");
       panel.setAttribute("aria-labelledby", index ? "translation-heading" : "source-heading");
     }

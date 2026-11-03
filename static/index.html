@@ -239,20 +239,6 @@
         </div>
       </div>
 
-      <section id="thai-tools" class="thai-tools" hidden aria-label="Thai slang and dialects">
-        <div class="thai-mode-label">
-          <span data-i18n="thaiMode">Thai interpretation</span>
-          <select id="thai-mode">
-            <option value="standard" data-i18n="thaiStandard">Standard translation</option>
-            <option value="auto" data-i18n="thaiAuto">Slang / dialect · unsure which</option>
-            <option value="slang" data-i18n="thaiSlang">Slang &amp; coined phrases</option>
-            <option value="northern" data-i18n="thaiNorthern">Northern Thai</option>
-            <option value="isan" data-i18n="thaiIsan">Isan</option>
-            <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
-          </select>
-        </div>
-        <button id="thai-result-preview" type="button" hidden aria-haspopup="dialog"></button>
-      </section>
       <dialog
         id="thai-details"
         class="preference-dialog thai-details"
@@ -483,6 +469,53 @@
         aria-live="polite"
         hidden
       ></p>
+      <div id="multilingual-reader-navigation" class="multilingual-reader-navigation" hidden>
+        <div
+          id="multilingual-reader-tabs"
+          class="document-reader-tabs multilingual-reader-tabs"
+          role="tablist"
+          hidden
+        >
+          <button id="reader-tab-source" type="button" role="tab" aria-selected="true">
+            Source
+          </button>
+          <button
+            id="reader-tab-primary"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            Translation
+          </button>
+        </div>
+        <div id="reader-language-field" class="reader-language-field" hidden>
+          <span id="reader-language-label">Language</span>
+          <select id="reader-language" aria-labelledby="reader-language-label" hidden></select>
+          <button
+            id="reader-language-trigger"
+            popovertarget="reader-language-menu"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="reader-language-menu"
+          ></button>
+          <div
+            id="reader-language-menu"
+            class="reader-language-menu"
+            popover="auto"
+            role="listbox"
+            aria-labelledby="reader-language-label"
+          ></div>
+        </div>
+      </div>
+      <p
+        id="multilingual-reader-status"
+        class="feature-status"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></p>
       <div class="panels">
         <section
           id="document-source-panel"
@@ -491,6 +524,22 @@
         >
           <div class="panel-heading">
             <h2 id="source-heading" data-i18n="source">Source</h2>
+            <button
+              id="thai-mode-chip"
+              class="thai-mode-chip"
+              type="button"
+              hidden
+              aria-haspopup="listbox"
+              aria-controls="thai-mode-options"
+            ></button>
+            <select id="thai-mode" hidden>
+              <option value="standard" data-i18n="thaiStandard">Standard translation</option>
+              <option value="auto" data-i18n="thaiAuto">Slang / dialect · unsure which</option>
+              <option value="slang" data-i18n="thaiSlang">Slang &amp; coined phrases</option>
+              <option value="northern" data-i18n="thaiNorthern">Northern Thai</option>
+              <option value="isan" data-i18n="thaiIsan">Isan</option>
+              <option value="southern" data-i18n="thaiSouthern">Southern Thai</option>
+            </select>
             <button id="clear" class="text-button" type="button" data-i18n="clear" hidden>
               Clear
             </button>
@@ -504,6 +553,9 @@
               maxlength="30000"
               spellcheck="false"
             ></textarea>
+            <section id="thai-tools" class="thai-tools" hidden aria-label="Thai slang and dialects">
+              <button id="thai-result-preview" type="button" hidden aria-haspopup="dialog"></button>
+            </section>
             <div id="source-insights" class="source-insights" hidden>
               <div
                 id="source-alternatives"
@@ -1185,6 +1237,7 @@
     <script src="/static/interface.js"></script>
     <script src="/static/notices.js"></script>
     <script src="/static/document.js"></script>
+    <script src="/static/multilingual.js"></script>
     <script src="/static/offline.js"></script>
   </body>
 </html>

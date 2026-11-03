@@ -35,6 +35,8 @@ function createWorkspace(name) {
     conversation: [],
     additional: [],
     additionalContext: null,
+    readerPane: "source",
+    readerTarget: "primary",
     additionalRequests: new Map(),
     chatRequests: new Map(),
     preferences: {

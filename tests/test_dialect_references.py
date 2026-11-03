@@ -9,7 +9,7 @@ from openai import OpenAIError
 from test_app import completion
 
 import app as server
-from dialect_references import corpus_references, lexical_references, normalize
+from dialect_references import corpus_references, introduces_laughter, lexical_references, normalize
 from scripts.setup_dialect_references import build_index
 
 
@@ -40,6 +40,188 @@ class ReferenceRetrievalTests(unittest.TestCase):
         for ordinary in ("ป้องกัน", "ป้อนข้าว", "ป้อมปราการ", "ป้อยอ", "อ่อนป้อแป้"):
             self.assertEqual(lexical_references(ordinary, "auto"), [])
         self.assertNotEqual(normalize("กอ"), normalize("ก่อ"))
+
+    def test_southern_check_in_retrieves_construction_instead_of_only_component(self):
+        for text in ("พันพรือมั่ง", "พันพรื่อมั่ง", "พันพรือบ้าง", "พัน พรือ มั่ง", "งานพันพรือมั่ง"):
+            with self.subTest(text=text):
+                refs = lexical_references(text, "southern")
+                ids = {item["id"] for item in refs}
+                self.assertIn("southern-phan-phrue", ids)
+                self.assertNotIn("southern-how-phrue", ids)
+                self.assertIn("unapproved", refs[0]["sources"][0]["title"])
+        for text in ("พันเชือก", "หนึ่งพันบาท", "พันพรุ่งนี้"):
+            self.assertNotIn(
+                "southern-phan-phrue", {item["id"] for item in lexical_references(text, "southern")}
+            )
+        self.assertEqual(lexical_references("พันพรือมั่ง", "isan"), [])
+
+    def test_researched_regional_notes_keep_modes_and_contextual_contrasts(self):
+        cases = [
+            ("northern", "บ่อู้", "northern-speak-uu", "slacking"),
+            ("northern", "กึ๊ดเติงหาบ้าน", "northern-miss-kuet-tueng", "romance"),
+            ("northern", "ไปแอ่วกาด", "northern-visit-aeo", "destination"),
+            ("northern", "ลําขนาด", "northern-intensity-khanat", "measurements"),
+            ("isan", "เมื่อยบ่", "isan-fatigue-mueai", "aching"),
+            ("isan", "ได้บ่", "isan-negation-question-bo", "question"),
+            ("isan", "ฮักแม่", "isan-love-hak", "plant"),
+            ("isan", "คิดฮอดบ้าน", "isan-miss-khit-hot", "romance"),
+            ("isan", "มื้ออื่น", "isan-day-mue", "meal"),
+            ("southern", "หลบบ้าน", "southern-return-lop", "hiding"),
+            ("southern", "เที่ยวหรอย", "southern-delicious-roi", "activity"),
+        ]
+        for mode, text, expected, contrast in cases:
+            with self.subTest(text=text):
+                refs = lexical_references(text, mode)
+                ref = next(item for item in refs if item["id"] == expected)
+                self.assertEqual(ref["provenance"], "editorial_context_note")
+                self.assertIn(contrast, ref["usage"].lower())
+                self.assertTrue(
+                    all(
+                        source["url"].startswith("https://") and source["supports"]
+                        for source in ref["sources"]
+                    )
+                )
+                self.assertIn(expected, {item["id"] for item in lexical_references(text, "auto")})
+                for other in {"northern", "isan", "southern"} - {mode}:
+                    self.assertNotIn(
+                        expected, {item["id"] for item in lexical_references(text, other)}
+                    )
+
+    def test_research_notes_do_not_erase_literal_homograph_context(self):
+        cases = [
+            ("northern", "อย่าอู้งาน", "northern-speak-uu", "อู้งาน"),
+            ("northern", "ซออู้", "northern-speak-uu", "ซออู้"),
+            ("northern", "ขนาด 2 เมตร", "northern-intensity-khanat", "measurements"),
+            ("isan", "กินข้าวสามมื้อ", "isan-day-mue", "meal"),
+            ("isan", "เสื้อแขนเว้า", "isan-speak-wao", "clothing"),
+            ("southern", "หลบฝน", "southern-return-lop", "shelter"),
+        ]
+        for mode, text, expected, guard in cases:
+            with self.subTest(text=text):
+                ref = next(
+                    item for item in lexical_references(text, mode) if item["id"] == expected
+                )
+                self.assertIn(guard, ref["usage"])
+        for text in ("แลกเงิน", "และ", "แหล่งน้ํา", "ขนมปัง"):
+            self.assertFalse(
+                any(
+                    ref["id"].startswith("southern-")
+                    for ref in lexical_references(text, "southern")
+                )
+            )
+
+    def test_sara_am_spellings_share_exact_normalization_without_fuzzy_matching(self):
+        for composed, decomposed in (("ทำถึง", "ทําถึง"), ("ขำ", "ขํา"), ("น้ำ", "น้ํา")):
+            with self.subTest(composed=composed):
+                self.assertEqual(normalize(composed), normalize(decomposed))
+        self.assertNotEqual(normalize("น้ำ"), normalize("นำ"))
+        self.assertNotEqual(normalize("①"), normalize("1"))
+        self.assertNotEqual(normalize("ทําไม่ถึง"), normalize("ทําถึง"))
+
+    def test_sara_am_curated_terms_and_context_patterns_across_modes(self):
+        cases = (
+            ("ทำถึง", "contextual-slang-28", {"auto", "slang"}),
+            ("ทําถึง", "contextual-slang-28", {"auto", "slang"}),
+            ("ทำแกงให้เพื่อน", "contextual-slang-14", {"auto", "slang"}),
+            ("ทําแกงให้เพื่อน", "contextual-slang-14", {"auto", "slang"}),
+            ("ฮากำลังไปกาด", "northern-first-person-ha", {"northern"}),
+            ("ฮากําลังไปกาด", "northern-first-person-ha", {"northern"}),
+            ("ฮาไปทำงาน", "northern-first-person-ha", {"northern"}),
+            ("ฮาไปทํางาน", "northern-first-person-ha", {"northern"}),
+        )
+        for text, expected, allowed in cases:
+            for mode in ("auto", "slang", "northern", "isan", "southern", "standard"):
+                with self.subTest(text=text, mode=mode):
+                    ids = [item["id"] for item in lexical_references(text, mode)]
+                    self.assertEqual(expected in ids, mode in allowed)
+
+    def test_syllable_suffixes_do_not_trigger_partial_terms(self):
+        for text in ("ปังก์", "เพลงปังก์", "แบกะดิน"):
+            for mode in ("auto", "slang"):
+                with self.subTest(text=text, mode=mode):
+                    self.assertEqual(lexical_references(text, mode), [])
+        for text, expected in (("ร้านนี้ปังมาก", "ปัง"), ("เพื่อนขิงคอมใหม่", "ขิง")):
+            self.assertIn(expected, [item["term"] for item in lexical_references(text, "auto")])
+
+    def test_context_pattern_must_cover_the_actual_term_occurrence(self):
+        for text in ("ลิขิต ขิ ต", "ขิ ต ลิขิต", "สั บ สับสน", "ขนมปัง ปั ง"):
+            for mode in ("auto", "slang"):
+                with self.subTest(text=text, mode=mode):
+                    self.assertEqual(lexical_references(text, mode), [])
+
+    def test_overlap_selection_uses_actual_alias_spans_across_modes(self):
+        entries = [
+            {"id": "long", "dialect": "slang", "term": "สั้น", "aliases": ["คำเต็มยาว"]},
+            {"id": "short", "dialect": "slang", "term": "คำเต็ม", "aliases": []},
+        ]
+        with patch("dialect_references._curated", return_value=entries):
+            for mode in ("auto", "slang"):
+                for text in ("คำเต็มยาว", "คํ าเต็มยาว", "คำ เต็ม ยาว"):
+                    with self.subTest(text=text, mode=mode):
+                        self.assertEqual(
+                            [item["id"] for item in lexical_references(text, mode)], ["long"]
+                        )
+            for mode in ("northern", "isan", "southern", "standard"):
+                self.assertEqual(lexical_references("คำเต็มยาว", mode), [])
+
+    def test_separate_short_occurrence_survives_compound_overlap(self):
+        for mode in ("auto", "slang"):
+            for text in ("โดนแกง แต่ทำแกงให้เพื่อน", "ทำแกงให้เพื่อน แต่โดนแกง"):
+                with self.subTest(text=text, mode=mode):
+                    ids = [item["id"] for item in lexical_references(text, mode)]
+                    self.assertEqual(ids, ["contextual-slang-13", "contextual-slang-14"])
+        for text in ("ป้อคิงหยัง ป้อเปิ้นไปกาด", "ป่อคิงหยัง ป้อเปิ้นไปกาด"):
+            with self.subTest(text=text):
+                self.assertEqual(
+                    [item["id"] for item in lexical_references(text, "northern")],
+                    ["northern-retort-parent", "northern-father-noun"],
+                )
+
+    def test_repeated_aliases_are_deduplicated_and_selection_is_bounded(self):
+        for text in ("วัดปะล่ะ วัดป่ะล่ะ วัดป่ะละ", "วัด ป่ะ ล่ะ วัดป่ะละ"):
+            for mode in ("auto", "slang"):
+                with self.subTest(text=text, mode=mode):
+                    self.assertEqual(
+                        [item["id"] for item in lexical_references(text, mode)],
+                        ["contextual-challenge-wat-pa-la"],
+                    )
+        text = "ไหวไหม ตัวตึง มงลง ได้หมด ของแทร่ เมพ ช็อตฟีล กินขาด ใจบาง ตุย"
+        for mode in ("auto", "slang"):
+            refs = lexical_references(text, mode)
+            self.assertEqual(len(refs), 8)
+            self.assertEqual(len({item["id"] for item in refs}), 8)
+            self.assertEqual(refs, lexical_references(text, mode))
+
+    def test_unknown_spellings_and_negation_are_not_guessed(self):
+        for text in ("ทำไม่ถึง", "ทําไม่ถึง", "ชอตฟีล", "ป่อคิงหญัง", "วัดปะละ", "เอาไม่อยู่"):
+            for mode in ("auto", "slang", "northern", "isan", "southern", "standard"):
+                with self.subTest(text=text, mode=mode):
+                    self.assertEqual(lexical_references(text, mode), [])
+
+    def test_explicit_laughter_accepts_both_sara_am_spellings(self):
+        for source in ("ขำมาก", "ขํามาก"):
+            self.assertFalse(introduces_laughter(source, "Haha, that was funny."))
+        self.assertTrue(introduces_laughter("ฮาจะไปกินข้าว", "Haha, I'm going to eat."))
+
+    def test_corpus_sara_am_spellings_are_exact_across_supported_modes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            index = Path(directory) / "refs.sqlite"
+            with sqlite3.connect(index) as db:
+                db.execute(
+                    "CREATE TABLE examples(id INTEGER PRIMARY KEY,variety TEXT,source TEXT,central TEXT,normalized TEXT)"
+                )
+                db.execute(
+                    "INSERT INTO examples VALUES(?,?,?,?,?)",
+                    (1, "khummuang", "กำเมือง", "คำเมือง", normalize("กำเมือง")),
+                )
+            for source in ("กำเมือง", "กําเมือง", "กำ เมือง"):
+                for mode in ("auto", "northern", "slang", "isan", "southern", "standard"):
+                    with self.subTest(source=source, mode=mode):
+                        refs = corpus_references(source, mode, index=index)
+                        if mode in ("auto", "northern"):
+                            self.assertEqual([item["match"] for item in refs], ["exact_sentence"])
+                        else:
+                            self.assertEqual(refs, [])
 
     def test_optional_index_exact_retrieval_keeps_varieties_separate(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -80,18 +80,81 @@ const audioFixture = require("./audio-fixture.cjs");
     );
     await page.route("**/api/transcribe", (route) => route.fulfill({ json: { text: "ลำแต้ๆ" } }));
     await page.goto(process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000");
-    assert(await page.locator("#thai-tools").isVisible());
-    await page.locator("#thai-mode").selectOption("slang", { force: true });
+    assert(await page.locator("#thai-tools").isHidden());
+    await page.locator("#thai-mode-chip").click();
+    await page.locator('#thai-mode-options [data-value="slang"]').click();
     await page.locator("#input").fill("คำที่เพิ่งสร้าง");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(await page.locator("#output").inputValue(), "");
     assert.equal(await page.evaluate(() => savedTranslations.length), 0);
+    const assertPending = async (label, status) => {
+      assert.equal(await page.locator("#thai-result-preview").textContent(), label);
+      assert.equal(await page.locator("#thai-result-preview").getAttribute("title"), label);
+      assert(
+        await page
+          .locator("#thai-result-preview")
+          .evaluate((el) => el.classList.contains("needs-context"))
+      );
+      assert.equal(await page.locator("#status").textContent(), status);
+      assert.equal(await page.locator("#output").inputValue(), "");
+    };
+    const englishPending = "More context is needed before translating this phrase.";
+    const thaiPending = "ต้องการบริบทเพิ่มก่อนแปลคำนี้";
+    const pendingCount = requests.length;
+    await assertPending("Confirm meaning", englishPending);
+    await page.locator("#thai-details-close").click();
+    await page.waitForFunction(() => !document.querySelector("#thai-details").open);
+    await assertPending("Confirm meaning", englishPending);
+    await page.evaluate(() => changeInterfaceLanguage("th"));
+    await assertPending("ยืนยันความหมาย", thaiPending);
+    assert.equal(await page.locator("#thai-details").evaluate((el) => el.open), false);
+    await page.locator("#thai-result-preview").click();
+    await page.locator("#thai-clarification-form").waitFor();
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => !document.querySelector("#thai-details").open);
+    await assertPending("ยืนยันความหมาย", thaiPending);
+
+    // A queued dialog close must not put pending status into another feature.
+    await page.locator("#thai-result-preview").click();
+    await page.evaluate(() => switchFeature("document"));
+    await page.evaluate(() => changeInterfaceLanguage("en"));
+    await page.waitForTimeout(80);
+    assert.equal(await page.locator("#thai-tools").isVisible(), false);
+    assert.equal(await page.locator("#thai-details").evaluate((el) => el.open), false);
+    assert.equal(await page.locator("#status").textContent(), "");
+    await page.evaluate(() => switchFeature("text"));
+    await assertPending("Confirm meaning", englishPending);
+    await page.locator("#thai-clarification-form").waitFor();
+    await page.locator("#thai-details-close").click();
+    await page.evaluate(() => changeInterfaceLanguage("th"));
+    await page.evaluate(() => changeInterfaceLanguage("en"));
+    await page.waitForTimeout(600);
+    assert.equal(requests.length, pendingCount, "revisiting pending meaning must not translate");
+    assert.equal(await page.evaluate(() => savedTranslations.length), 0);
+    await page.locator("#thai-result-preview").click();
     await page.locator("#thai-clarification").fill("ไปกันเลยเพื่อนๆ");
     await page.locator("#thai-clarify").click();
     await page.waitForFunction(
       () => document.querySelector("#output").value === "Let's go, everyone."
     );
+    assert.equal(requests.length, pendingCount + 1, "confirmation translates exactly once");
     assert.match(await page.locator(".thai-central").textContent(), /ไปกันเลย/);
+    assert.equal(
+      await page.locator("#thai-result-preview").textContent(),
+      "View meaning in Central Thai"
+    );
+    assert.equal(await page.locator("#status").textContent(), "");
+    assert.equal(
+      await page
+        .locator("#thai-result-preview")
+        .evaluate((el) => el.classList.contains("needs-context")),
+      false
+    );
+    await page.evaluate(() => changeInterfaceLanguage("th"));
+    assert.equal(await page.locator("#thai-result-preview").textContent(), "ดูความหมายไทยกลาง");
+    await page.evaluate(() => changeInterfaceLanguage("en"));
+    await page.waitForTimeout(600);
+    assert.equal(requests.length, pendingCount + 1);
     await page.locator("#thai-result-preview").click();
     await page.locator(".thai-references summary").click();
     assert.equal(await page.locator(".thai-reference a").count(), 1);
@@ -111,6 +174,20 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(requests.at(-1).thai_clarification, "");
     await page.locator("#thai-details-close").click();
+    const modeCount = requests.length;
+    await page.locator("#thai-mode").selectOption("standard", { force: true });
+    await page.waitForFunction(
+      () => document.querySelector("#output").value === "Let's go, everyone."
+    );
+    assert.equal(await page.locator("#thai-result-preview").isVisible(), false);
+    assert.equal(await page.locator("#thai-details").evaluate((el) => el.open), false);
+    assert.equal(await page.locator("#status").textContent(), "");
+    await page.locator("#thai-mode").selectOption("slang", { force: true });
+    await page.locator("#thai-clarification-form").waitFor();
+    await assertPending("Confirm meaning", englishPending);
+    await page.locator("#thai-details-close").click();
+    await page.waitForTimeout(600);
+    assert.equal(requests.length, modeCount + 2, "each dialect mode change translates once");
 
     // Retained personal definitions still validate; their editor is absent from the menu.
     await page.locator("#settings-toggle").click();
@@ -143,6 +220,16 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.locator("#thai-clarification-form").waitFor();
     assert.equal(await page.locator(".chat-turn").count(), 0);
     assert.equal(await page.locator("#input").inputValue(), "แชตที่ไม่รู้ความหมาย");
+    const chatPendingCount = requests.length;
+    await page.locator("#thai-details-close").click();
+    await page.evaluate(() => changeInterfaceLanguage("th"));
+    await assertPending("ยืนยันความหมาย", thaiPending);
+    assert.equal(await page.locator("#live-status").textContent(), thaiPending);
+    await page.evaluate(() => changeInterfaceLanguage("en"));
+    await page.locator("#thai-result-preview").click();
+    await page.waitForTimeout(600);
+    assert.equal(requests.length, chatPendingCount);
+    assert.equal(await page.locator(".chat-turn").count(), 0);
     await page.locator("#thai-clarification").fill("ไปกันเลยเพื่อนๆ");
     await page.locator("#thai-clarify").click();
     await page.locator(".chat-turn").waitFor();
@@ -161,6 +248,9 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.waitForTimeout(80);
     assert.equal(await page.evaluate(() => activeFeature().thai.result), null);
     assert.equal(await page.locator("#output").inputValue(), "");
+    assert.equal(await page.locator("#thai-result-preview").isVisible(), false);
+    assert.equal(await page.locator("#thai-details").evaluate((el) => el.open), false);
+    assert.equal(await page.locator("#status").textContent(), "");
 
     await page.reload();
     assert.equal(await page.evaluate(() => activeFeature().thai.lexicon.length), 1);
@@ -191,7 +281,7 @@ const audioFixture = require("./audio-fixture.cjs");
     await page.screenshot({ path: "/tmp/translator-thai-mode.png", fullPage: true });
     assert.deepEqual(errors, []);
     console.log(
-      "PASS: ambiguity gate, explicit clarification, real dictionary validation/persistence, feature-owned modes, uncertain Live Chat, late response isolation, microphone review and responsive Thai UI."
+      "PASS: ambiguity gate, localized pending confirmation/status, request-free revisits, explicit clarification, real dictionary validation/persistence, feature-owned modes, uncertain Live Chat, late response isolation, microphone review and responsive Thai UI."
     );
   } finally {
     await browser.close();

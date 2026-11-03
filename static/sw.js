@@ -19,6 +19,7 @@ const SHELL = [
   "/static/interface.js",
   "/static/notices.js",
   "/static/document.js",
+  "/static/multilingual.js",
   "/static/offline.js",
   "/static/brand/logo-v1.png",
   "/static/fonts/NotoSansThai-Regular.ttf",

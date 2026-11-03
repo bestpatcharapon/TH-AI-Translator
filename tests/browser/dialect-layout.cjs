@@ -36,27 +36,40 @@ const assert = require("node:assert/strict");
     await page.goto(process.env.TRANSLATOR_TEST_URL || "http://127.0.0.1:5000");
     assert.equal(await page.locator("#translate").count(), 0);
     assert.equal(await page.locator("#thai-help").count(), 0);
-    const standardLeft = await page
-      .locator("#thai-mode-trigger")
-      .evaluate((el) => el.getBoundingClientRect().left);
-    await page.locator("#thai-mode").selectOption("northern", { force: true });
-    assert.equal(
-      await page.locator("#thai-mode-trigger").evaluate((el) => el.getBoundingClientRect().left),
-      standardLeft,
-      "Standard and dialect choices must stay in the same left-aligned position"
-    );
-    assert(!(await page.locator("#thai-result-preview").isVisible()));
+    assert(await page.locator("#thai-tools").isHidden());
+    assert(await page.locator("#thai-mode-chip").isVisible());
+    assert.match(await page.locator("#thai-mode-chip").textContent(), /Standard/);
+    await page.locator("#settings-toggle").click();
+    assert.equal(await page.locator("#settings #thai-mode").count(), 0);
+    assert.equal(await page.locator("#thai-mode-setting").count(), 0);
+    await page.locator("#menu-close").click();
+    await page.locator("#thai-mode-chip").click();
+    await page.locator('#thai-mode-options [data-value="northern"]').click();
+    assert.equal(await page.locator("#thai-mode").inputValue(), "northern");
+    assert(await page.locator("#settings").isHidden());
+    assert(await page.locator("#thai-mode-chip").isVisible());
     assert(
-      await page.locator("#thai-mode-trigger").evaluate((el) => {
-        const range = document.createRange();
-        range.selectNodeContents(el.querySelector("span"));
-        return el.getBoundingClientRect().width <= range.getBoundingClientRect().width + 64;
-      }),
-      "Dialect selector should fit its text and icon instead of stretching across the row"
+      await page.locator("#thai-tools").isHidden(),
+      "No extra row before an interpretation result"
     );
+    assert.match(await page.locator("#thai-mode-chip").textContent(), /Northern/);
+    if (process.env.TRANSLATOR_SHOTS)
+      await page.screenshot({ path: `${process.env.TRANSLATOR_SHOTS}/active.png` });
     await page.locator("#input").fill("ฮาจะไปกินข้าว");
     await page.waitForFunction(() => document.querySelector("#output").value !== "");
     await page.locator("#source-alternatives .suggestion-chip").first().waitFor();
+    assert(await page.locator(".source-scroll #thai-result-preview").isVisible());
+    assert.equal(await page.locator(".translator > #thai-tools").count(), 0);
+    assert(
+      await page
+        .locator("#thai-tools")
+        .evaluate(
+          (el) =>
+            el.previousElementSibling.id === "input" &&
+            el.nextElementSibling.id === "source-insights"
+        ),
+      "Meaning follows the source text and precedes alternatives"
+    );
     for (const language of ["en", "th", "ar"]) {
       await page.evaluate((code) => changeInterfaceLanguage(code), language);
       for (const size of [
@@ -136,7 +149,11 @@ const assert = require("node:assert/strict");
     await page.evaluate(() => switchFeature("document"));
     assert(!(await page.locator("#thai-details").isVisible()));
     await page.evaluate(() => switchFeature("text"));
-    await page.locator("#thai-mode").selectOption("standard", { force: true });
+    await page.locator("#thai-mode-chip").click();
+    assert(await page.locator("#settings").isHidden());
+    await page.locator('#thai-mode-options [data-value="standard"]').click();
+    assert(await page.locator("#thai-mode-chip").isVisible());
+    assert.match(await page.locator("#thai-mode-chip").textContent(), /Standard|แปลปกติ/);
     assert(!(await page.locator("#thai-result-preview").isVisible()));
     assert.equal(await page.locator("#thai-help").count(), 0);
     assert.deepEqual(errors, []);

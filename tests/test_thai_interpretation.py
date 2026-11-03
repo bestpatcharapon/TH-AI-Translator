@@ -173,6 +173,101 @@ class ThaiInterpretationTests(unittest.TestCase):
                 response = self.client.post("/api/translate", json=self.body)
                 self.assertEqual(response.status_code, 503)
 
+    def test_equivalent_thai_quote_encoding_is_accepted_without_retry(self):
+        result = ready()
+        result["evidence"][0]["quote"] = "ล\u0e33แต้ๆ"
+        with patch.object(server, "get_client") as provider:
+            provider.return_value.chat.completions.create.return_value = completion(
+                json.dumps(result)
+            )
+            response = self.client.post("/api/translate", json=self.body)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.get_json()["translation"], result["translation"])
+            self.assertEqual(provider.return_value.chat.completions.create.call_count, 1)
+
+    def test_bad_schema_is_repaired_once_with_original_source_and_references(self):
+        bad = ready()
+        bad["evidence"][0]["quote"] = "corrected wording absent from source"
+        with patch.object(server, "get_client") as provider:
+            calls = provider.return_value.chat.completions.create
+            calls.side_effect = [completion(json.dumps(bad)), completion(json.dumps(ready()))]
+            response = self.client.post("/api/translate", json=self.body)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(calls.call_count, 2)
+            repair = calls.call_args.kwargs["messages"]
+            self.assertIn("source-quote validation", repair[0]["content"])
+            payload = json.loads(repair[1]["content"])
+            self.assertEqual(payload["source_text"], self.body["text"])
+            self.assertIn("rejected_interpretation", payload)
+
+    def test_schema_repair_does_not_force_an_uncertain_meaning_to_ready(self):
+        with patch.object(server, "get_client") as provider:
+            calls = provider.return_value.chat.completions.create
+            calls.side_effect = [
+                completion(json.dumps({"status": "ready"})),
+                completion(json.dumps(uncertain())),
+            ]
+            response = self.client.post("/api/translate", json=self.body)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.get_json()["translation"], "")
+            self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
+            self.assertEqual(calls.call_count, 2)
+
+    def test_sourced_regional_words_reach_model_without_forcing_a_full_sentence(self):
+        cases = [
+            ("southern", "แหลงพรือ", {"southern-speak-laeng", "southern-how-phrue"}),
+            ("southern", "แกงนี้ไม่หรอย", {"southern-delicious-roi"}),
+            ("isan", "อย่าเว่าแบบนั้น", {"isan-speak-wao"}),
+        ]
+        for mode, text, ids in cases:
+            with self.subTest(text=text), patch.object(server, "get_client") as provider:
+                result = ready()
+                result["evidence"] = []
+                provider.return_value.chat.completions.create.return_value = completion(
+                    json.dumps(result)
+                )
+                response = self.client.post(
+                    "/api/translate", json={**self.body, "text": text, "thai_mode": mode}
+                )
+                self.assertEqual(response.status_code, 200)
+                messages = provider.return_value.chat.completions.create.call_args.kwargs[
+                    "messages"
+                ]
+                payload = json.loads(messages[1]["content"])
+                self.assertTrue(ids <= {item["id"] for item in payload["published_references"]})
+                self.assertEqual(payload["source_text"], text)
+                self.assertIn("Missing subjects", messages[0]["content"])
+                self.assertIn("one focused question", messages[0]["content"])
+
+    def test_reported_southern_check_in_receives_whole_construction_context(self):
+        result = {
+            **ready(),
+            "standard_thai": "เป็นอย่างไรบ้าง",
+            "translation": "How are things?",
+            "note": "คําถามโดยไม่เพิ่มว่ามีปัญหาหรือเจ็บป่วย",
+            "evidence": [{"quote": "พันพรือมั่ง", "meaning": "เป็นอย่างไรบ้าง"}],
+        }
+        with patch.object(server, "get_client") as provider:
+            calls = provider.return_value.chat.completions.create
+            calls.return_value = completion(json.dumps(result))
+            response = self.client.post(
+                "/api/translate", json={**self.body, "text": "พันพรือมั่ง", "thai_mode": "southern"}
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.get_json()["translation"], "How are things?")
+            self.assertEqual(response.get_json()["interpretation"]["status"], "ready")
+            self.assertEqual(calls.call_count, 1)
+            messages = calls.call_args.kwargs["messages"]
+            payload = json.loads(messages[1]["content"])
+            self.assertEqual(payload["source_text"], "พันพรือมั่ง")
+            reference = next(
+                ref for ref in payload["published_references"] if ref["id"] == "southern-phan-phrue"
+            )
+            self.assertIn("มั่ง", reference["usage"])
+            self.assertIn("explicit topic", reference["usage"])
+            self.assertIn("not an exhaustive list", messages[0]["content"])
+            self.assertIn("multiword construction", messages[0]["content"])
+
     def test_personal_dictionary_validation_needs_no_ai_and_returns_no_stored_history(self):
         good = {"term": "คำใหม่", "meaning": "ความหมายที่ผู้ใช้บอก", "dialect": "slang", "example": ""}
         with patch.object(server, "get_client") as provider:
@@ -210,7 +305,7 @@ class ThaiInterpretationTests(unittest.TestCase):
     def test_fatigue_is_not_silently_translated_into_pain(self):
         with patch.object(server, "get_client") as provider:
             response = self.client.post(
-                "/api/translate", json={**self.body, "text": "มื้อนี้เมื่อยหลาย", "thai_mode": "isan"}
+                "/api/translate", json={**self.body, "text": "มื้อนี้เมื่อยหลาย", "thai_mode": "auto"}
             )
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.get_json()["translation"], "")
@@ -234,6 +329,46 @@ class ThaiInterpretationTests(unittest.TestCase):
                 },
             )
             self.assertEqual(confirmed.get_json()["translation"], "I'm very tired today.")
+
+    def test_explicit_isan_fatigue_uses_references_instead_of_unconditional_block(self):
+        for text, meaning, translation in (
+            ("มื้อนี้เมื่อยหลาย", "วันนี้เหนื่อยมาก", "Very tired today."),
+            ("เมื่อยบ่", "เหนื่อยไหม", "Are you tired?"),
+            ("ปวดขาเมื่อยหลัง", "ปวดขาและเมื่อยหลัง", "My legs hurt and my back is sore."),
+        ):
+            with self.subTest(text=text), patch.object(server, "get_client") as provider:
+                result = {
+                    **ready(),
+                    "standard_thai": meaning,
+                    "translation": translation,
+                    "evidence": [],
+                }
+                calls = provider.return_value.chat.completions.create
+                calls.return_value = completion(json.dumps(result))
+                response = self.client.post(
+                    "/api/translate", json={**self.body, "text": text, "thai_mode": "isan"}
+                )
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.get_json()["translation"], translation)
+                payload = json.loads(calls.call_args.kwargs["messages"][1]["content"])
+                ref = next(
+                    ref
+                    for ref in payload["published_references"]
+                    if ref["id"] == "isan-fatigue-mueai"
+                )
+                self.assertIn("Preserve explicit aching", ref["usage"])
+                self.assertEqual(payload["source_text"], text)
+
+    def test_missing_isan_fatigue_reference_keeps_safe_fallback(self):
+        with (
+            patch("thai_interpretation.retrieve_references", return_value=[]),
+            patch.object(server, "get_client") as provider,
+        ):
+            response = self.client.post(
+                "/api/translate", json={**self.body, "text": "เมื่อยหลาย", "thai_mode": "isan"}
+            )
+            self.assertEqual(response.get_json()["interpretation"]["status"], "needs_context")
+            provider.return_value.chat.completions.create.assert_not_called()
 
     def test_reported_phrase_still_requires_meaning_when_reference_is_unavailable(self):
         with (

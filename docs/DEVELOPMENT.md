@@ -16,6 +16,12 @@ python app.py
 
 เปิด http://127.0.0.1:5000 หากมี `.env` อยู่แล้ว ให้เก็บค่าของคุณไว้และเพิ่มเฉพาะตัวแปรที่ต้องการเปลี่ยน ค่าโมเดลภาพและเสียงมีค่าเริ่มต้นให้แล้ว
 
+## Request scheduling and cache regression checks
+
+- Repeated submissions with the same complete payload reuse the pending browser request instead of cancelling and restarting it. Changed inputs/options and explicit refreshes still replace it. Held shortcuts and IME confirmation do not trigger extra submissions.
+- Cache hits copy results outside the shared lock. Clearing a cache detaches pending work: existing callers can finish, but old results cannot repopulate the cleared cache or remove newer requests. Producer timeouts remain distinct from shared-wait timeouts.
+- Run `.venv/bin/python -m pytest -q tests/test_performance.py` for cache/concurrency regressions and `npm run test:requests` for browser scheduling regressions. The latter mocks API calls, needs no Flask server or credentials, and requires Playwright Chromium with its system libraries installed.
+
 ## Deploy บน Vercel
 
 ใช้ Root Directory เป็นรากโปรเจกต์ที่มี `app.py` และตั้ง Install Command / Output Directory เป็นค่าเริ่มต้น ไฟล์ `vercel.json` เลือก Flask และเรียก `scripts/build_vercel.py` เพื่อคัดลอก UI ไป `public/static` ให้ CDN เสิร์ฟที่ URL เดิม รายการแพ็กเกจสำหรับเริ่มเว็บอยู่ใน `[project].dependencies` ของ `pyproject.toml` และระบุ Python 3.12 ไว้แล้ว เพิ่ม `GROQ_API_KEY` และค่าที่ต้องการใน Environment Variables ของ Vercel แล้ว deploy จาก commit ใหม่

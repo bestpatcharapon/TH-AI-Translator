@@ -4,7 +4,7 @@ import json
 import threading
 import time
 import unittest
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -38,24 +38,240 @@ class PerformanceTests(unittest.TestCase):
 
     def test_concurrent_identical_requests_share_one_success(self):
         cache = ResultCache()
-        barrier = threading.Barrier(5)
+        started = threading.Event()
+        release = threading.Event()
+        joined = threading.Barrier(5)
         calls = []
+
+        class WaitingFuture(Future):
+            def exception(self, timeout=None):
+                joined.wait(timeout=5)
+                return super().exception(timeout)
 
         def produce():
             calls.append(1)
-            time.sleep(0.06)
+            started.set()
+            if not release.wait(5):
+                raise AssertionError("Producer was not released")
             return {"text": "same"}
 
-        def worker(_):
-            barrier.wait()
-            return cache.run("same", produce)
-
-        with ThreadPoolExecutor(max_workers=5) as pool:
-            results = list(pool.map(worker, range(5)))
+        with patch("performance.Future", WaitingFuture), ThreadPoolExecutor(max_workers=5) as pool:
+            owner = pool.submit(cache.run, "same", produce)
+            try:
+                self.assertTrue(started.wait(5))
+                waiters = [pool.submit(cache.run, "same", produce) for _ in range(4)]
+                joined.wait(timeout=5)
+            finally:
+                release.set()
+            results = [owner.result(timeout=5)] + [item.result(timeout=5) for item in waiters]
         self.assertEqual(len(calls), 1)
-        self.assertEqual(sorted(status for _, status in results), ["miss"] + ["shared"] * 4)
+        self.assertEqual([status for _, status in results], ["miss"] + ["shared"] * 4)
         results[0][0]["text"] = "changed"
+        results[1][0]["text"] = "also changed"
+        self.assertEqual(results[2][0]["text"], "same")
         self.assertEqual(cache.run("same", produce)[0]["text"], "same")
+
+    def test_clear_detaches_old_work_without_removing_new_work(self):
+        for old_fails in (False, True):
+            with self.subTest(old_fails=old_fails):
+                cache = ResultCache()
+                started = [threading.Event(), threading.Event()]
+                release = [threading.Event(), threading.Event()]
+                joined = threading.Event()
+
+                class WaitingFuture(Future):
+                    def exception(self, timeout=None):
+                        joined.set()
+                        return super().exception(timeout)
+
+                def produce(index):
+                    started[index].set()
+                    if not release[index].wait(5):
+                        raise AssertionError("Producer was not released")
+                    if index == 0 and old_fails:
+                        raise ValueError("old failure")
+                    return ["old" if index == 0 else "new"]
+
+                with patch("performance.Future", WaitingFuture), ThreadPoolExecutor(
+                    max_workers=4
+                ) as pool:
+                    old = pool.submit(cache.run, "key", lambda: produce(0))
+                    try:
+                        self.assertTrue(started[0].wait(5))
+                        old_waiter = pool.submit(cache.run, "key", lambda: self.fail("duplicate"))
+                        self.assertTrue(joined.wait(5))
+                        cache.clear()
+                        new = pool.submit(cache.run, "key", lambda: produce(1))
+                        self.assertTrue(started[1].wait(5))
+                        release[0].set()
+                        if old_fails:
+                            for item in (old, old_waiter):
+                                with self.assertRaisesRegex(ValueError, "old failure"):
+                                    item.result(timeout=5)
+                        else:
+                            self.assertEqual(old.result(timeout=5), (["old"], "miss"))
+                            self.assertEqual(old_waiter.result(timeout=5), (["old"], "shared"))
+                        self.assertNotIn("key", cache._entries)
+                        joined.clear()
+                        new_waiter = pool.submit(cache.run, "key", lambda: self.fail("duplicate"))
+                        self.assertTrue(joined.wait(5))
+                    finally:
+                        for event in release:
+                            event.set()
+                    self.assertEqual(new.result(timeout=5), (["new"], "miss"))
+                    self.assertEqual(new_waiter.result(timeout=5), (["new"], "shared"))
+                self.assertEqual(cache.run("key", lambda: None), (["new"], "hit"))
+                self.assertEqual(cache._bytes, len(json.dumps(["new"]).encode()))
+                self.assertFalse(cache._inflight)
+                cache.clear()
+                self.assertEqual(cache._bytes, 0)
+                self.assertFalse(cache._entries)
+
+    def test_cleared_producer_cannot_overwrite_completed_replacement(self):
+        cache = ResultCache()
+        started = threading.Event()
+        release = threading.Event()
+
+        def produce():
+            started.set()
+            if not release.wait(5):
+                raise AssertionError("Producer was not released")
+            return "old"
+
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            old = pool.submit(cache.run, "key", produce)
+            try:
+                self.assertTrue(started.wait(5))
+                cache.clear()
+                self.assertEqual(cache.run("key", lambda: "replacement"), ("replacement", "miss"))
+            finally:
+                release.set()
+            self.assertEqual(old.result(timeout=5), ("old", "miss"))
+        self.assertEqual(cache.run("key", lambda: None), ("replacement", "hit"))
+        self.assertEqual(cache._bytes, len(json.dumps("replacement").encode()))
+        self.assertFalse(cache._inflight)
+
+    def test_shared_producer_timeout_is_not_a_wait_timeout(self):
+        cache = ResultCache()
+        started = threading.Event()
+        release = threading.Event()
+        joined = threading.Event()
+        failure = TimeoutError("provider timed out")
+
+        class WaitingFuture(Future):
+            def exception(self, timeout=None):
+                joined.set()
+                return super().exception(timeout)
+
+        def produce():
+            started.set()
+            if not release.wait(5):
+                raise AssertionError("Producer was not released")
+            raise failure
+
+        with patch("performance.Future", WaitingFuture), ThreadPoolExecutor(max_workers=2) as pool:
+            owner = pool.submit(cache.run, "key", produce)
+            try:
+                self.assertTrue(started.wait(5))
+                waiter = pool.submit(cache.run, "key", lambda: self.fail("duplicate"))
+                self.assertTrue(joined.wait(5))
+            finally:
+                release.set()
+            for item in (owner, waiter):
+                with self.assertRaises(TimeoutError) as raised:
+                    item.result(timeout=5)
+                self.assertIs(raised.exception, failure)
+        self.assertFalse(cache._inflight)
+        self.assertEqual(cache.run("key", lambda: "retry"), ("retry", "miss"))
+
+    def test_wait_timeout_and_bypass_do_not_disturb_active_producer(self):
+        cache = ResultCache(wait_timeout=0)
+        started = threading.Event()
+        release = threading.Event()
+
+        def produce():
+            started.set()
+            if not release.wait(5):
+                raise AssertionError("Producer was not released")
+            return "original"
+
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            owner = pool.submit(cache.run, "key", produce)
+            try:
+                self.assertTrue(started.wait(5))
+                with self.assertRaises(RuntimeError):
+                    cache.run("key", lambda: self.fail("duplicate"))
+                self.assertEqual(
+                    cache.run("key", lambda: "fresh", bypass=True), ("fresh", "bypass")
+                )
+                with self.assertRaisesRegex(ValueError, "bypass failure"):
+                    cache.run(
+                        "key",
+                        lambda: (_ for _ in ()).throw(ValueError("bypass failure")),
+                        bypass=True,
+                    )
+                self.assertEqual(len(cache._inflight), 1)
+                self.assertFalse(cache._entries)
+            finally:
+                release.set()
+            self.assertEqual(owner.result(timeout=5), ("original", "miss"))
+        self.assertEqual(cache.run("key", lambda: None), ("original", "hit"))
+        self.assertEqual(cache.run("key", lambda: "fresh", bypass=True), ("fresh", "bypass"))
+        self.assertEqual(cache.run("key", lambda: None), ("original", "hit"))
+        self.assertFalse(cache._inflight)
+
+    def test_expiry_uses_time_after_acquiring_lock(self):
+        cache = ResultCache(ttl=1)
+        waiting = threading.Event()
+        lock = cache._lock
+
+        class ObservedLock:
+            def __enter__(self):
+                waiting.set()
+                lock.acquire()
+
+            def __exit__(self, *args):
+                lock.release()
+
+        with patch("performance.time.monotonic", return_value=0) as clock:
+            cache.run("key", lambda: "old")
+            cache._lock = ObservedLock()
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                with lock:
+                    pending = pool.submit(cache.run, "key", lambda: "fresh")
+                    self.assertTrue(waiting.wait(5))
+                    clock.return_value = 2
+                self.assertEqual(pending.result(timeout=5), ("fresh", "miss"))
+
+    def test_hit_copy_does_not_hold_cache_lock(self):
+        cache = ResultCache()
+        value = {"text": ["cached"]}
+        cache.run("key", lambda: value)
+        copying = threading.Event()
+        release = threading.Event()
+        from copy import deepcopy
+
+        def slow_copy(item):
+            copying.set()
+            if not release.wait(5):
+                raise AssertionError("Copy was not released")
+            return deepcopy(item)
+
+        with patch("performance.copy.deepcopy", side_effect=slow_copy), ThreadPoolExecutor(
+            max_workers=1
+        ) as pool:
+            hit = pool.submit(cache.run, "key", lambda: self.fail("unexpected miss"))
+            try:
+                self.assertTrue(copying.wait(5))
+                acquired = cache._lock.acquire(blocking=False)
+                if acquired:
+                    cache._lock.release()
+                self.assertTrue(acquired, "A cache hit holds the global lock while copying")
+                cache.clear()
+            finally:
+                release.set()
+            self.assertEqual(hit.result(timeout=5), (value, "hit"))
+        self.assertFalse(cache._entries)
 
     def test_errors_and_partial_failures_are_not_cached(self):
         cache = ResultCache()

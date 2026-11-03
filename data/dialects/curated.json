@@ -1,5 +1,221 @@
 [
   {
+    "id": "southern-phan-phrue",
+    "dialect": "southern",
+    "term": "พันพรือ",
+    "aliases": ["พันพรื่อ", "พันผรื่อ"],
+    "alias_note": "พรื่อ/ผรื่อ compound variants are application spelling choices based on the documented variants of ผรื่อ, not independent attestations of each compound.",
+    "central_thai": "เป็นอย่างไร / อย่างไร ตามบริบท",
+    "register": "regional everyday question",
+    "provenance": "editorial_context_note",
+    "usage": "Treat พันพรือ as a question construction, not unrelated พัน (a thousand/wrap) plus พรือ. In a standalone conversational check-in followed by มั่ง or บ้าง, interpret the whole as เป็นอย่างไรบ้าง; a broad English equivalent is 'How are things?' or 'How is it going?'. มั่ง here is a colloquial form of บ้าง, not a new unknown object or a yes/no ไหม particle. These construction and English suggestions are editorial, not dictionary-certified whole-sentence translations. Preserve an explicit topic: งาน... asks about work, อาการ... about symptoms, and ทํา... can ask about manner. Do not add illness, a problem or a named listener to a neutral check-in. Explicit discussion about the phrase, negation and private definitions take precedence. Do not infer a greeting from every occurrence of พัน or พรือ.",
+    "sources": [
+      {"title": "พันพรือ — Longdo, Southern Thai user-contributed entry (unapproved)", "url": "https://dict.longdo.com/search/พันพรือ", "supports": "Southern Thai entry gives อย่างไร/how. The source explicitly marks this user-contributed entry unapproved; it is supporting context, not verified authority."},
+      {"title": "ผรื่อ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ผรื่อ", "license": "CC-BY-SA-4.0", "supports": "Component word senses and variants only; not the full check-in or English examples."}
+    ]
+  },
+  {
+    "id": "southern-how-phrue",
+    "dialect": "southern",
+    "term": "ผรื่อ",
+    "aliases": ["พรื่อ", "พรือ"],
+    "central_thai": "อย่างไร หรือเป็นอะไร/เป็นไร ตามโครงสร้างประโยค",
+    "register": "regional everyday speech",
+    "usage": "Interpret the whole construction: a manner question asks how; a เป็น... construction can ask what is wrong, and negated ไม่เป็น... can mean it is okay. Do not infer injury or illness merely from a general question. Preserve the question versus reassurance and all negation. The lexical source supports the word and its spelling variants, not every compound or a fixed full-sentence English translation.",
+    "sources": [{"title": "ผรื่อ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ผรื่อ", "license": "CC-BY-SA-4.0", "supports": "Southern Thai manner/interrogative senses and the variants พรื่อ/พรือ; contextual guidance is editorial."}]
+  },
+  {
+    "id": "southern-speak-laeng",
+    "dialect": "southern",
+    "term": "แหลง",
+    "aliases": [],
+    "central_thai": "พูด",
+    "register": "regional everyday speech",
+    "usage": "Speech verb: preserve who is speaking, negation and the surrounding message. Do not add a topic, listener or command absent from the source. Distinguish แหล่ง (source/place), which has a different tone mark.",
+    "sources": [{"title": "แหลง — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/แหลง", "license": "CC-BY-SA-4.0", "supports": "Southern Thai verb meaning speak; contextual guidance is editorial."}]
+  },
+  {
+    "id": "southern-delicious-roi",
+    "dialect": "southern",
+    "term": "หรอย",
+    "aliases": [],
+    "central_thai": "อร่อย หรือสนุกตามบริบท",
+    "register": "regional everyday speech",
+    "provenance": "editorial_context_note",
+    "usage": "For food/taste use delicious; for an explicitly enjoyable activity, fun/enjoyable can fit. Preserve negation and degree. Do not invent food in an activity description or force enjoyment into a taste judgement. Longdo's Southern Thai section supplies the fun sense; Wiktionary corroborates only the delicious sense. Preserve explicit personal clarification.",
+    "sources": [
+      {"title": "หรอย — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/หรอย", "license": "CC-BY-SA-4.0", "supports": "Southern Thai delicious sense only; not the fun sense."},
+      {"title": "หรอย — Longdo, Southern Thai–Thai section", "url": "https://dict.longdo.com/search/หรอย", "supports": "Southern Thai section lists taste and enjoyment senses; do not use unrelated subtitle substring matches as examples."}
+    ]
+  },
+  {
+    "id": "southern-return-lop",
+    "dialect": "southern",
+    "only_modes": ["southern", "auto"],
+    "term": "หลบ",
+    "aliases": [],
+    "central_thai": "กลับ ในบริบทการกลับไป/กลับบ้านแบบภาษาใต้; หลีกหรือซ่อนยังคงตามบริบท",
+    "register": "regional motion verb with standard Thai homograph",
+    "provenance": "editorial_context_note",
+    "usage": "In a Southern return-home construction, consider return/go back instead of automatically hide. Preserve explicit dodge, avoidance, shelter or hiding contexts such as หลบฝน and หลบลูกปืน. Do not add a journey or return destination absent from the source. The return sense is supported only by Longdo's explicitly unapproved user entry, so it is a contextual clue, not certified authority. Explicit clarification takes precedence.",
+    "sources": [
+      {"title": "หลบ — Longdo, Southern Thai user entry (unapproved) and Royal Institute sections", "url": "https://dict.longdo.com/search/หลบ", "supports": "Unapproved Southern entry supplies return; Royal Institute section supplies contrasting avoid/hide senses, not certification of the regional entry."},
+      {"title": "หลบ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/หลบ", "license": "CC-BY-SA-4.0", "supports": "Standard Thai avoid/hide senses only, not independent support for Southern return home."}
+    ]
+  },
+  {
+    "id": "isan-speak-wao",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "เว้า",
+    "aliases": ["เว่า", "เหว้า"],
+    "central_thai": "พูด ในบริบทภาษาอีสาน; เว้าแบบเสื้อหรือพื้นผิวยังเป็นความหมายตามรูปทรง",
+    "register": "regional everyday speech",
+    "usage": "In a speaking construction, use speak/say/talk and preserve negation, participants and tone. Explicit clothing, shape or surface context retains the literal concave/cut-out sense. A dialect hint alone must not override that literal context.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "เว้า — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/เว้า", "license": "CC-BY-SA-4.0", "supports": "Isan speak sense, spelling variants and contrasting standard Thai shape sense; contextual guidance is editorial."},
+      {"title": "เว้า — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/เว้า", "supports": "Corroborates the Isan speech-verb sense; not evidence for all aliases or the standard Thai shape contrast."}
+    ]
+  },
+  {
+    "id": "northern-speak-uu",
+    "dialect": "northern",
+    "only_modes": ["northern", "auto"],
+    "term": "อู้",
+    "aliases": [],
+    "central_thai": "พูด / คุย ในบริบทภาษาเหนือ; อู้งานและซออู้คงความหมายตามบริบท",
+    "register": "regional everyday speech",
+    "usage": "In Northern speech, อู้ can mean speak/talk; preserve participants, negation and tone without inventing a topic. Explicit slacking-off context such as อู้งาน and the instrument ซออู้ retain their own meanings. A dialect selection is not an unconditional replacement rule. Explicit personal meanings and clarification take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "อู้ — มรดกล้านนา พจนานุกรมล้านนา", "url": "https://moradoklanna.com/dict/?s=อู้", "supports": "Northern speech-verb sense; contextual restrictions are editorial."},
+      {"title": "ᩋᩪ᩶ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ᩋᩪ᩶", "license": "CC-BY-SA-4.0", "supports": "Northern speech-verb corroboration under the Tai Tham headword, not a Thai-script headword."},
+      {"title": "อู้ — Longdo, Royal Institute dictionary entries", "url": "https://dict.longdo.com/search/อู้", "supports": "Standard Thai contrasts involving slacking off and ซออู้; not authority for the Northern speech sense."}
+    ]
+  },
+  {
+    "id": "northern-miss-kuet-tueng",
+    "dialect": "northern",
+    "only_modes": ["northern", "auto"],
+    "term": "กึ๊ดเติง",
+    "aliases": [],
+    "central_thai": "คิดถึง / นึกถึง ตามบริบทภาษาเหนือ",
+    "register": "regional everyday speech",
+    "usage": "Read as miss/think of according to context, including when followed by หา; do not invent romance, a recipient or separation. The bare กึ๊ดเติงหา is not independently attested as a headword in the supplied evidence: the supporting search returns a longer expression. Preserve negation, quoted discussion, literal surrounding content and explicit personal meanings or clarification. This is lexical guidance, not a fixed sentence translation.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "กึ๊ดเติง — มรดกล้านนา พจนานุกรมล้านนา", "url": "https://moradoklanna.com/dict/?s=กึ๊ดเติง&l=thai", "supports": "Lexical miss/think-of sense; no independent second-source corroboration supplied."},
+      {"title": "กึ๊ดเติงหา search: กึ๊ดเติงหาหน๋อกๆ — มรดกล้านนา", "url": "https://moradoklanna.com/dict/?s=กึ๊ดเติงหา", "supports": "Longer expression containing กึ๊ดเติงหา, not an independent headword for the bare form or a required full-sentence translation."}
+    ]
+  },
+  {
+    "id": "northern-visit-aeo",
+    "dialect": "northern",
+    "only_modes": ["northern", "auto"],
+    "term": "แอ่ว",
+    "aliases": [],
+    "central_thai": "เที่ยว / ไปเยี่ยม ในบริบทภาษาเหนือ; บริบทอีสานอาจหมายถึงอ้อนวอน",
+    "register": "regional everyday speech",
+    "usage": "In Northern travel or visiting context, use go out/travel/visit as appropriate; do not add a destination or tourism. Explicit Isan coaxing/pleading context must not become a trip merely because the spelling matches. Preserve negation, literal surrounding content and explicit personal meanings or clarification; a dialect hint alone does not decide the sense.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "แอ่ว — มรดกล้านนา พจนานุกรมล้านนา", "url": "https://moradoklanna.com/dict/?s=แอ่ว", "supports": "Northern travel/visit sense."},
+      {"title": "ᩋᩯ᩠᩵ᩅ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ᩋᩯ᩠᩵ᩅ", "license": "CC-BY-SA-4.0", "supports": "Corroborates the Northern travel/visit sense under the Tai Tham headword."},
+      {"title": "แอ่ว — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/แอ่ว", "license": "CC-BY-SA-4.0", "supports": "Contrasting Isan coax/plead sense; not evidence that every Thai-script occurrence is Northern."}
+    ]
+  },
+  {
+    "id": "northern-intensity-khanat",
+    "dialect": "northern",
+    "only_modes": ["northern", "auto"],
+    "term": "ขนาด",
+    "aliases": [],
+    "central_thai": "มาก ในโครงสร้างเน้นระดับแบบภาษาเหนือ; ขนาดหรือมิติยังคงความหมายตรงตัว",
+    "register": "regional degree expression; also a standard Thai noun",
+    "usage": "In a Northern degree construction such as ลําขนาด, ขนาด can intensify the adjective rather than name a physical size. Do not reinterpret measurements, dimensions, product sizes or other literal size contexts as very. Preserve the degree construction, negation and explicit personal meanings or clarification. The attested phrase supports contextual interpretation, not replacement of every ขนาด or a hardcoded sentence translation.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "ขนาด — มรดกล้านนา พจนานุกรมล้านนา", "url": "https://moradoklanna.com/dict/?s=ขนาด", "supports": "Northern degree/intensifying use; contextual application is editorial."},
+      {"title": "ลําขนาด — มรดกล้านนา พจนานุกรมล้านนา", "url": "https://moradoklanna.com/dict/?s=ลําขนาด", "supports": "Phrase-level evidence for the intensifier; same dictionary, not independent corroboration."},
+      {"title": "ขนาด — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ขนาด", "license": "CC-BY-SA-4.0", "supports": "Standard Thai size contrast, not independent corroboration of the Northern intensifier."}
+    ]
+  },
+  {
+    "id": "isan-fatigue-mueai",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "เมื่อย",
+    "aliases": [],
+    "central_thai": "เหนื่อย / อ่อนเพลีย ในบริบทอีสาน; อาการปวดเมื่อยคงตามบริบท",
+    "register": "regional everyday speech; overlaps standard Thai bodily discomfort",
+    "usage": "In Isan fatigue context, เมื่อย can mean tired rather than specifically muscle soreness. Preserve explicit aching or bodily discomfort where stated; do not infer illness or a cause. Final บ่ can ask whether someone is tired, not automatically negate fatigue. Preserve questions, negation and explicit participants without inventing a subject; explicit personal meanings and clarification take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "เมื่อย — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/เมื่อย", "license": "CC-BY-SA-4.0", "supports": "Isan fatigue sense and contrasting standard Thai bodily discomfort."},
+      {"title": "บ่ — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/บ่", "supports": "The example เมื่อยบ่ corroborates a fatigue question; evidence is an example under บ่, not a separate เมื่อย headword."}
+    ]
+  },
+  {
+    "id": "isan-negation-question-bo",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "บ่",
+    "aliases": [],
+    "central_thai": "ไม่ เมื่อปฏิเสธ / ไหมหรือหรือไม่ เมื่อเป็นคําถามท้ายประโยค",
+    "register": "regional everyday grammatical particle",
+    "usage": "Resolve บ่ from its construction: before a predicate it can negate, while sentence-final บ่ can form a yes/no question. Do not turn a question about fatigue into a statement of not being tired or discard genuine negation; position is a cue, not an unconditional substitution rule. Preserve the full clause, explicit participants, quoted discussion and literal surrounding content. Explicit personal meanings and clarification take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "บ่ — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/บ่", "supports": "Negation versus final question use, including the example เมื่อยบ่; contextual guidance is editorial."},
+      {"title": "บ่ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/บ่", "license": "CC-BY-SA-4.0", "supports": "Corroborates the Isan negative particle; the final-question example is attributed to Esan108."}
+    ]
+  },
+  {
+    "id": "isan-love-hak",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "ฮัก",
+    "aliases": [],
+    "central_thai": "รัก ตามความสัมพันธ์ที่ระบุ; ดอกฮักในบริบทพืชไม่ใช่คําบอกรัก",
+    "register": "regional everyday speech",
+    "usage": "As an affection verb, ฮัก means love, including familial or general love, not necessarily romance. Preserve the stated relationship, participants and negation without adding dating, sex or commitment. Plant/flower context such as ดอกฮัก retains its botanical meaning rather than becoming a declaration of love. Explicit personal meanings and clarification take precedence.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "ฮัก — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/ฮัก", "supports": "Affection and plant senses support the contextual distinction; relationship-specific translation guidance is editorial."},
+      {"title": "ฮัก — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/ฮัก", "license": "CC-BY-SA-4.0", "supports": "Corroborates the love sense and plant-related contrast, not a compulsory romantic reading."}
+    ]
+  },
+  {
+    "id": "isan-miss-khit-hot",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "คิดฮอด",
+    "aliases": [],
+    "central_thai": "คิดถึง / นึกถึง ตามบริบท",
+    "register": "regional everyday speech",
+    "usage": "Interpret as miss/think of according to context; the object may be a person, home or something else actually stated. Do not add romance, separation or an unstated recipient. Preserve negation, quoted discussion, literal surrounding content and explicit personal meanings or clarification. This lexical note is not a fixed sentence translation.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "คิดฮอด — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/คิดฮอด", "supports": "Isan miss/think-of sense; no independent second-source corroboration supplied."}
+    ]
+  },
+  {
+    "id": "isan-day-mue",
+    "dialect": "isan",
+    "only_modes": ["isan", "auto"],
+    "term": "มื้อ",
+    "aliases": [],
+    "central_thai": "วัน ในบริบทเวลาแบบอีสาน; มื้ออาหารคงความหมายเรื่องอาหาร",
+    "register": "regional everyday time expression; also a standard Thai meal noun",
+    "usage": "In Isan time expressions, มื้อ can mean day; resolve the complete time phrase without inventing a date or tense. Explicit meals, eating occasions and meal counts retain the meal sense. A dialect hint alone must not override food context. Preserve negation, literal content and explicit personal meanings or clarification; do not replace every occurrence unconditionally.",
+    "provenance": "editorial_context_note",
+    "sources": [
+      {"title": "มื้อ — Esan108 พจนานุกรมภาษาอีสาน", "url": "https://esan108.com/dict/view/มื้อ", "supports": "Isan day sense in time expressions."},
+      {"title": "มื้อ — วิกิพจนานุกรม", "url": "https://th.wiktionary.org/wiki/มื้อ", "license": "CC-BY-SA-4.0", "supports": "Isan day sense and contrasting standard Thai meal sense; contextual choice is editorial."}
+    ]
+  },
+  {
     "id": "northern-first-person-ha",
     "dialect": "northern",
     "only_modes": [

@@ -73,3 +73,14 @@ list, per-label dialog, partial-result warning, and disabled actions for unclear
 The numeric preservation suite supplies original pixels spelling 50 with a deliberately
 wrong OCR value of 5. It compares every protected pixel on screen, while also verifying that translations
 outside those areas are still rendered and that no photo download control is present.
+
+`multilanguage-reader.cjs` exercises mobile Text with three additional languages
+through the actual settings menu. It covers one-pane reading, independent loading,
+failed-language retry and copy, scroll positions, keyboard/RTL tabs, viewport fit,
+feature restoration, desktop layout, and visible primary errors on the Source tab.
+The compact reader has two tabs and a themed target-language selector that remembers
+the last language when returning from Source.
+All AI responses are mocked; no provider quota is used.
+
+The reader picker also checks keyboard selection/cancel, outside dismissal, feature
+changes, popup bounds and focus stability while background translations finish.

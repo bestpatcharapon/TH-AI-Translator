@@ -55,6 +55,8 @@ class ResultCache:
         with self._lock:
             self._entries.clear()
             self._bytes = 0
+            # Existing callers keep their futures; new calls must start fresh work.
+            self._inflight.clear()
 
     def run(
         self,
@@ -66,25 +68,30 @@ class ResultCache:
     ) -> tuple[T, str]:
         if bypass:
             return producer(), "bypass"
-        now = time.monotonic()
         with self._lock:
+            now = time.monotonic()
             # Remove all expired values, including entries not requested again.
             for expired in [item for item, record in self._entries.items() if record[0] <= now]:
                 self._bytes -= self._entries.pop(expired)[2]
-            if key in self._entries:
+            record = self._entries.get(key)
+            if record is not None:
                 self._entries.move_to_end(key)
-                return copy.deepcopy(self._entries[key][1]), "hit"
-            future = self._inflight.get(key)
-            owner = future is None
-            if owner:
-                future = Future()
-                self._inflight[key] = future
+            else:
+                future = self._inflight.get(key)
+                owner = future is None
+                if owner:
+                    future = Future()
+                    self._inflight[key] = future
+        if record is not None:
+            return copy.deepcopy(record[1]), "hit"
         assert future is not None
         if not owner:
             try:
-                return copy.deepcopy(future.result(timeout=self.wait_timeout)), "shared"
+                # exception() waits without raising a producer's own TimeoutError.
+                future.exception(timeout=self.wait_timeout)
             except FutureTimeoutError as error:
-                raise RuntimeError("คำขอนี้ใช้เวลานานเกินไป กรุณาลองใหม่") from error
+                raise RuntimeError("คําขอนี้ใช้เวลานานเกินไป กรุณาลองใหม่") from error
+            return copy.deepcopy(future.result()), "shared"
         try:
             value = producer()
             if cacheable(value):
@@ -96,14 +103,15 @@ class ResultCache:
                 if size <= self.max_bytes and self.max_entries > 0:
                     snapshot = copy.deepcopy(value)
                     with self._lock:
-                        while self._entries and (
-                            len(self._entries) >= self.max_entries
-                            or self._bytes + size > self.max_bytes
-                        ):
-                            _, record = self._entries.popitem(last=False)
-                            self._bytes -= record[2]
-                        self._entries[key] = (time.monotonic() + self.ttl, snapshot, size)
-                        self._bytes += size
+                        if self._inflight.get(key) is future:
+                            while self._entries and (
+                                len(self._entries) >= self.max_entries
+                                or self._bytes + size > self.max_bytes
+                            ):
+                                _, record = self._entries.popitem(last=False)
+                                self._bytes -= record[2]
+                            self._entries[key] = (time.monotonic() + self.ttl, snapshot, size)
+                            self._bytes += size
             future.set_result(copy.deepcopy(value))
             return value, "miss"
         except BaseException as error:
@@ -111,4 +119,5 @@ class ResultCache:
             raise
         finally:
             with self._lock:
-                self._inflight.pop(key, None)
+                if self._inflight.get(key) is future:
+                    self._inflight.pop(key)

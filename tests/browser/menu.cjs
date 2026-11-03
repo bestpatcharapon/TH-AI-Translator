@@ -7,6 +7,10 @@ const assert = require("node:assert/strict");
       viewport: { width: 390, height: 844 },
       permissions: ["clipboard-read", "clipboard-write"],
     });
+    const chooseReaderLanguage = async (value) => {
+      await page.locator("#reader-language-trigger").click();
+      await page.locator(`#reader-language-menu [data-value="${value}"]`).click();
+    };
     const errors = [],
       requests = [],
       photoRequests = [];
@@ -68,6 +72,7 @@ const assert = require("node:assert/strict");
     await page.locator("#menu-close").click();
     await page.locator("#input").fill("สวัสดีครับ");
     await page.waitForFunction(() => document.querySelector("#output").value === "en:สวัสดีครับ");
+    await chooseReaderLanguage("ja");
     await page.locator(".additional-result").first().waitFor();
     assert.equal(requests[0].tone, "friendly");
     assert.equal(requests[0].context, "travel");
@@ -80,6 +85,7 @@ const assert = require("node:assert/strict");
     );
     assert.equal(requests.at(-1).target, "ja");
     assert.equal(requests.at(-1).additional_targets, undefined);
+    await chooseReaderLanguage("primary");
     await page.locator("#save-translation").click();
     await page.locator("#settings-toggle").click();
     assert.equal(await page.locator(".history-entry").count(), 4);

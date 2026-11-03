@@ -641,6 +641,8 @@ function renderAdditionalResults() {
   for (const result of results) {
     const card = document.createElement("article");
     card.className = "additional-result";
+    card.id = `translation-result-${result.target}`;
+    card.dataset.target = result.target;
     const header = document.createElement("header"),
       title = document.createElement("h3"),
       actions = document.createElement("div");
@@ -672,7 +674,7 @@ function renderAdditionalResults() {
         retry.disabled = true;
         try {
           const data = await responseJson(
-            await fetch("/api/translate", {
+            await fetchWithRetry("/api/translate", {
               method: "POST",
               signal: controller.signal,
               headers: { "Content-Type": "application/json" },
@@ -725,6 +727,7 @@ function renderAdditionalResults() {
     }
     $("additional-results").append(card);
   }
+  document.dispatchEvent(new CustomEvent("additional:rendered"));
 }
 function recordTranslationGroup(detail) {
   rememberTranslation(detail);
@@ -786,7 +789,7 @@ document.addEventListener(
     };
     try {
       const data = await responseJson(
-        await fetch("/api/translate", {
+        await fetchWithRetry("/api/translate", {
           method: "POST",
           signal: controller.signal,
           headers: { "Content-Type": "application/json" },

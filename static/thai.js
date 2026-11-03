@@ -11,6 +11,8 @@ Object.assign(COPY.en, {
   thaiModeNote:
     "Up to 3,000 characters. AI interpretation can be wrong. Check microphone transcripts; this does not add a dialect-trained speech model.",
   thaiNeedContext: "More context is needed before translating this phrase.",
+  thaiConfirmMeaning: "Confirm meaning",
+  thaiViewMeaning: "View meaning in Central Thai",
   thaiReviewTranscript:
     "Check or edit the heard text. Editing starts automatic translation; use Send in Live Chat.",
   thaiClarification: "What does the speaker mean here?",
@@ -54,6 +56,8 @@ Object.assign(COPY.th, {
   thaiModeNote:
     "รองรับ 3,000 ตัวอักษร AI อาจตีความผิด ควรตรวจข้อความจากไมค์ก่อน ระบบนี้ยังไม่ได้เพิ่มโมเดลเสียงที่ฝึกเฉพาะภาษาถิ่น",
   thaiNeedContext: "ต้องการบริบทเพิ่มก่อนแปลคำนี้",
+  thaiConfirmMeaning: "ยืนยันความหมาย",
+  thaiViewMeaning: "ดูความหมายไทยกลาง",
   thaiReviewTranscript: "ตรวจหรือแก้ข้อความจากไมค์ เมื่อแก้ไขจะแปลอัตโนมัติ ส่วนแชทสดให้กดส่ง",
   thaiClarification: "ผู้พูดต้องการสื่อความหมายว่าอะไรในประโยคนี้?",
   thaiClarify: "อธิบายแล้วแปลใหม่",
@@ -99,7 +103,7 @@ const thaiNode = (tag, text, className = "") => {
   return node;
 };
 const thaiModeSelect = $("thai-mode"),
-  thaiModeTrigger = document.createElement("button"),
+  thaiModeTrigger = $("thai-mode-chip"),
   thaiModeDropdown = document.createElement("div");
 let displayedThaiResult = null;
 function openThaiDetails() {
@@ -107,13 +111,12 @@ function openThaiDetails() {
 }
 $("thai-result-preview").addEventListener("click", openThaiDetails);
 $("thai-details-close").addEventListener("click", () => $("thai-details").close());
+$("thai-details").addEventListener("close", showThaiPendingStatus);
 thaiModeSelect.hidden = true;
-thaiModeTrigger.id = "thai-mode-trigger";
 thaiModeTrigger.type = "button";
 thaiModeTrigger.setAttribute("aria-haspopup", "listbox");
 thaiModeTrigger.setAttribute("aria-expanded", "false");
 thaiModeTrigger.setAttribute("aria-controls", "thai-mode-options");
-thaiModeSelect.parentElement.append(thaiModeTrigger);
 thaiModeDropdown.id = "thai-mode-options";
 thaiModeDropdown.className = "thai-mode-dropdown";
 thaiModeDropdown.popover = "auto";
@@ -136,11 +139,20 @@ function positionThaiModeDropdown() {
 }
 function refreshThaiModeChoice() {
   const name = t(thaiModeSelect.selectedOptions[0].dataset.i18n);
-  thaiModeTrigger.replaceChildren(thaiNode("span", name), preferenceIcon("chevron"));
+  const compactName =
+    {
+      standard: locale === "th" ? "แปลปกติ" : "Standard",
+      auto: locale === "th" ? "ภาษาถิ่น / สแลง" : "Dialect / slang",
+      slang: locale === "th" ? "สแลง" : "Slang",
+    }[thaiModeSelect.value] || name;
+  thaiModeTrigger.replaceChildren(thaiNode("span", compactName), preferenceIcon("chevron"));
   thaiModeTrigger.setAttribute("aria-label", t("thaiMode") + " · " + name);
   thaiModeTrigger.title = name;
   thaiModeDropdown.setAttribute("aria-label", t("thaiMode"));
-  if ($("thai-tools").hidden) thaiModeDropdown.hidePopover();
+  if (thaiModeTrigger.hidden) thaiModeDropdown.hidePopover();
+  const focusedValue = thaiModeDropdown.contains(document.activeElement)
+    ? document.activeElement.dataset.value
+    : null;
   thaiModeDropdown.replaceChildren();
   for (const option of thaiModeSelect.options) {
     const button = thaiNode("button", t(option.dataset.i18n));
@@ -173,6 +185,7 @@ function refreshThaiModeChoice() {
       options[next].focus();
     });
     thaiModeDropdown.append(button);
+    if (focusedValue === option.value) button.focus({ preventScroll: true });
   }
 }
 function openThaiModeDropdown() {
@@ -266,11 +279,30 @@ function thaiTranslationOptions() {
     interface_language: locale,
   };
 }
+function showThaiPendingStatus() {
+  if (
+    ["text", "live"].includes(mode) &&
+    ["th", "auto"].includes(activeLanguages()[0]) &&
+    thaiState().mode !== "standard" &&
+    thaiState().result?.status === "needs_context" &&
+    !activeFeature().request &&
+    !activeFeature().timer
+  )
+    setStatus(t("thaiNeedContext"));
+}
 function renderThai() {
+  // Live Chat hides the shared source panel, so keep its confirmation link reachable.
+  const tools = $("thai-tools");
+  if (mode === "live") {
+    if (tools.parentElement !== document.querySelector(".translator"))
+      document.querySelector(".language-controls").after(tools);
+  } else if (tools.parentElement !== $("source-insights").parentElement) {
+    $("source-insights").before(tools);
+  }
   const state = thaiState(),
     available = ["text", "live"].includes(mode),
     eligible = available && ["th", "auto"].includes(activeLanguages()[0]);
-  $("thai-tools").hidden = !eligible;
+  thaiModeTrigger.hidden = !eligible;
   document
     .querySelector(".translator")
     .classList.toggle("thai-interpreting", eligible && state.mode !== "standard");
@@ -280,6 +312,7 @@ function renderThai() {
   $("thai-details-close").setAttribute("aria-label", t("close"));
   const result = state.result,
     visible = eligible && state.mode !== "standard" && !!result;
+  $("thai-tools").hidden = !visible;
   $("thai-result").hidden = !visible;
   $("thai-result-content").replaceChildren();
   $("thai-clarification-form").hidden = !visible || result.status !== "needs_context";
@@ -292,10 +325,14 @@ function renderThai() {
     return;
   }
   const needsContext = result.status === "needs_context";
-  const label = locale === "th" ? "หมายความว่าอะไร?" : "Meaning?";
-  preview.replaceChildren(preferenceIcon("question"), thaiNode("span", label));
+  const label = t(needsContext ? "thaiConfirmMeaning" : "thaiViewMeaning");
+  preview.replaceChildren(
+    preferenceIcon(needsContext ? "question" : "info"),
+    thaiNode("span", label)
+  );
   preview.title = label;
   preview.classList.toggle("needs-context", needsContext);
+  showThaiPendingStatus();
   if (result !== displayedThaiResult) {
     if (needsContext) openThaiDetails();
     else if ($("thai-details").open) $("thai-details").close();

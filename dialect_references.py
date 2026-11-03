@@ -15,8 +15,14 @@ INDEX = PROJECT_ROOT / ".data/dialects/reference.sqlite"
 SOURCE_URL = "https://zenodo.org/records/13283454"
 
 
+def _normalize_thai(text):
+    # Sara am has a compatibility decomposition, which NFC deliberately leaves alone.
+    # Keep other compatibility characters and all Thai tone marks distinct.
+    return unicodedata.normalize("NFC", text).replace("\u0e33", "\u0e4d\u0e32")
+
+
 def normalize(text):
-    return re.sub(r"\s+", "", unicodedata.normalize("NFC", text))
+    return re.sub(r"\s+", "", _normalize_thai(text))
 
 
 def reference_identity():
@@ -32,33 +38,59 @@ def _curated(version):
 
 
 def lexical_references(text, mode):
-    query = normalize(text)
-    result = []
-    for entry in _curated(reference_identity()[0]):
+    source = _normalize_thai(text)
+    positions = [index for index, char in enumerate(source) if not char.isspace()]
+    query = "".join(source[index] for index in positions)
+    matches = []
+    for order, entry in enumerate(_curated(reference_identity()[0])):
         if entry.get("only_modes") and mode not in entry["only_modes"]:
             continue
         if mode not in ("auto", "slang", entry["dialect"]):
             continue
         aliases = [entry["term"], *entry.get("aliases", [])]
         pattern = entry.get("match_pattern")
-        if pattern and not re.search(pattern, unicodedata.normalize("NFC", text)):
+        contexts = list(re.finditer(_normalize_thai(pattern), source)) if pattern else None
+        for alias in dict.fromkeys(normalize(alias) for alias in aliases):
+            if not alias:
+                continue
+            for found in re.finditer(f"(?={re.escape(alias)})", query):
+                start, end = found.start(), found.start() + len(alias)
+                # Reject attached vowels/marks and silent codas, not arbitrary Thai neighbours.
+                if (
+                    end < len(query)
+                    and "\u0e01" <= alias[-1] <= "\u0e4e"
+                    and (
+                        unicodedata.category(query[end]).startswith("M")
+                        or query[end] in "ะาำๅ"
+                        or ("ก" <= query[end] <= "ฮ" and query[end + 1 : end + 2] == "์")
+                    )
+                    and positions[end] == positions[end - 1] + 1
+                ):
+                    continue
+                if contexts is not None and not any(
+                    context.start() <= positions[start] and positions[end - 1] < context.end()
+                    for context in contexts
+                ):
+                    continue
+                matches.append((start, end, order, entry))
+    # Prefer the longest actual alias, not the length/spelling of its canonical term.
+    matches.sort(key=lambda match: (match[0] - match[1], match[0], match[2]))
+    selected, occupied, seen = [], [], set()
+    for start, end, order, entry in matches:
+        if any(start < other_end and other_start < end for other_start, other_end in occupied):
             continue
-        if any(normalize(alias) in query for alias in aliases):
-            result.append({**entry, "kind": "lexical", "match": "exact_term"})
+        occupied.append((start, end))
+        if order not in seen:
+            selected.append({**entry, "kind": "lexical", "match": "exact_term"})
+            seen.add(order)
     # Bounded context for messages containing several distinct expressions.
-    result.sort(key=lambda item: len(normalize(item["term"])), reverse=True)
-    selected = []
-    for item in result:
-        if any(normalize(item["term"]) in normalize(other["term"]) for other in selected):
-            continue
-        selected.append(item)
     return selected[:8]
 
 
 def introduces_laughter(source, candidate):
     """Reject an added laugh interjection, while retaining explicit source laughter."""
     explicit = r"ฮ่า|ฮาฮา|ฮาๆ|555|หัวเราะ|ตลก|ขำ|\b(?:haha|lol)\b"
-    if re.search(explicit, source, re.I):
+    if re.search(_normalize_thai(explicit), _normalize_thai(source), re.I):
         return False
     return bool(re.search(r"ฮ่า|ฮาฮา|ฮาๆ|^\s*(?:ha(?:ha)*|lol)[\s,.!—-]", candidate, re.I))
 
