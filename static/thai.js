@@ -11,8 +11,6 @@ Object.assign(COPY.en, {
   thaiModeNote:
     "Up to 3,000 characters. AI interpretation can be wrong. Check microphone transcripts; this does not add a dialect-trained speech model.",
   thaiNeedContext: "More context is needed before translating this phrase.",
-  thaiConfirmMeaning: "Confirm meaning",
-  thaiViewMeaning: "View meaning in Central Thai",
   thaiReviewTranscript:
     "Check or edit the heard text. Editing starts automatic translation; use Send in Live Chat.",
   thaiClarification: "What does the speaker mean here?",
@@ -56,8 +54,6 @@ Object.assign(COPY.th, {
   thaiModeNote:
     "รองรับ 3,000 ตัวอักษร AI อาจตีความผิด ควรตรวจข้อความจากไมค์ก่อน ระบบนี้ยังไม่ได้เพิ่มโมเดลเสียงที่ฝึกเฉพาะภาษาถิ่น",
   thaiNeedContext: "ต้องการบริบทเพิ่มก่อนแปลคำนี้",
-  thaiConfirmMeaning: "ยืนยันความหมาย",
-  thaiViewMeaning: "ดูความหมายไทยกลาง",
   thaiReviewTranscript: "ตรวจหรือแก้ข้อความจากไมค์ เมื่อแก้ไขจะแปลอัตโนมัติ ส่วนแชทสดให้กดส่ง",
   thaiClarification: "ผู้พูดต้องการสื่อความหมายว่าอะไรในประโยคนี้?",
   thaiClarify: "อธิบายแล้วแปลใหม่",
@@ -88,6 +84,11 @@ Object.assign(COPY.th, {
   thaiExactReference: "คำหรือประโยคที่ตรงกัน",
   thaiReferenceCaution: "ตัวอย่างอาจมีข้อผิดพลาด ควรตรวจบริบทและถิ่นที่ใช้",
 });
+// Feature-only labels must not change the schema of the prepared menu dictionaries.
+const thaiMeaningLabels = {
+  en: { pending: "Confirm meaning", ready: "View meaning in Central Thai" },
+  th: { pending: "ยืนยันความหมาย", ready: "ดูความหมายไทยกลาง" },
+};
 const thaiState = () => activeFeature().thai;
 const thaiModeKeys = {
   auto: "thaiAuto",
@@ -325,7 +326,9 @@ function renderThai() {
     return;
   }
   const needsContext = result.status === "needs_context";
-  const label = t(needsContext ? "thaiConfirmMeaning" : "thaiViewMeaning");
+  const label = (thaiMeaningLabels[locale] || thaiMeaningLabels.en)[
+    needsContext ? "pending" : "ready"
+  ];
   preview.replaceChildren(
     preferenceIcon(needsContext ? "question" : "info"),
     thaiNode("span", label)

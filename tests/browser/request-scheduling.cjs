@@ -49,7 +49,10 @@ const { readFileSync } = require("node:fs");
         });
       };
     });
-    await page.clock.install();
+    // Freeze wall-clock advancement before loading the app. Only runFor() should
+    // move the debounce timer, regardless of how fast the CI runner executes commands.
+    await page.clock.install({ time: new Date("2026-01-01T00:00:00Z") });
+    await page.clock.pauseAt(new Date("2026-01-01T00:01:00Z"));
     await page.goto("http://translator.test");
     const count = () => page.evaluate(() => window.translationCalls.length);
     const submit = () => page.locator("#input").press("Control+Enter");

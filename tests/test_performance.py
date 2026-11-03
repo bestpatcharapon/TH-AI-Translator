@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from PIL import Image
 from test_app import completion, pdf_bytes
+from test_photo_translation import image_file
 
 import app as server
 from performance import ResultCache
@@ -92,9 +93,10 @@ class PerformanceTests(unittest.TestCase):
                         raise ValueError("old failure")
                     return ["old" if index == 0 else "new"]
 
-                with patch("performance.Future", WaitingFuture), ThreadPoolExecutor(
-                    max_workers=4
-                ) as pool:
+                with (
+                    patch("performance.Future", WaitingFuture),
+                    ThreadPoolExecutor(max_workers=4) as pool,
+                ):
                     old = pool.submit(cache.run, "key", lambda: produce(0))
                     try:
                         self.assertTrue(started[0].wait(5))
@@ -235,7 +237,9 @@ class PerformanceTests(unittest.TestCase):
 
         with patch("performance.time.monotonic", return_value=0) as clock:
             cache.run("key", lambda: "old")
-            cache._lock = ObservedLock()
+            observed_lock = patch.object(cache, "_lock", ObservedLock())
+            observed_lock.start()
+            self.addCleanup(observed_lock.stop)
             with ThreadPoolExecutor(max_workers=1) as pool:
                 with lock:
                     pending = pool.submit(cache.run, "key", lambda: "fresh")
@@ -257,9 +261,10 @@ class PerformanceTests(unittest.TestCase):
                 raise AssertionError("Copy was not released")
             return deepcopy(item)
 
-        with patch("performance.copy.deepcopy", side_effect=slow_copy), ThreadPoolExecutor(
-            max_workers=1
-        ) as pool:
+        with (
+            patch("performance.copy.deepcopy", side_effect=slow_copy),
+            ThreadPoolExecutor(max_workers=1) as pool,
+        ):
             hit = pool.submit(cache.run, "key", lambda: self.fail("unexpected miss"))
             try:
                 self.assertTrue(copying.wait(5))
@@ -313,9 +318,12 @@ class PerformanceTests(unittest.TestCase):
                 "bypass",
             )
             self.assertEqual(provider.call_count, 3)
-        with patch.object(
-            server, "translate_text", side_effect=[RuntimeError("temporary"), "สวัสดี"]
-        ) as provider:
+        with (
+            patch.object(
+                server, "translate_text", side_effect=[RuntimeError("temporary"), "สวัสดี"]
+            ) as provider,
+            patch.object(server, "get_client"),
+        ):
             self.assertEqual(client.post("/api/translate", json=body).status_code, 503)
             self.assertEqual(client.post("/api/translate", json=body).status_code, 200)
             self.assertEqual(
@@ -376,6 +384,7 @@ class PerformanceTests(unittest.TestCase):
         with (
             patch.object(server, "translate_text", return_value="สวัสดี") as primary,
             patch.object(server, "additional_translations") as extras,
+            patch.object(server, "get_client"),
         ):
             response = client.post(
                 "/api/translate",
@@ -425,7 +434,7 @@ class PerformanceTests(unittest.TestCase):
                     "target": "th",
                     "defer_additional": "true",
                     "additional_targets": '["ja"]',
-                    "file": (io.BytesIO(b"photo"), "photo.png"),
+                    "file": (io.BytesIO(image_file()), "photo.png"),
                 },
             )
             self.assertEqual(response.status_code, 200)

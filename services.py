@@ -107,6 +107,8 @@ def extract_file(data, filename, kind, client=None, *, client_factory=None):
 
     suffix = Path(filename).suffix.lower()
     if kind == "image":
+        # Reject malformed uploads before the lazy OCR client needs credentials.
+        image_bytes(data)
         return check_text(ocr(data))
     if kind != "document":
         raise ValueError("ประเภทไฟล์ไม่ถูกต้อง")

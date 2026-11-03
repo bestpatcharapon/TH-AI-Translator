@@ -68,6 +68,8 @@ class ResultCache:
     ) -> tuple[T, str]:
         if bypass:
             return producer(), "bypass"
+        future: Future[Any] | None = None
+        owner = False
         with self._lock:
             now = time.monotonic()
             # Remove all expired values, including entries not requested again.

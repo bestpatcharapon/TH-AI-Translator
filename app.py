@@ -835,6 +835,8 @@ def photo_translate():
         if glossary
         else {}
     )
+    # Validate the upload before resolving credentials; normalization is reused by translation.
+    normalized_photo(data)
     result = translate_photo(data, source, target, style, get_client(), MODEL, **options)
     source_text = "\n".join(region["text"] for region in result["regions"])
     output_text = "\n".join(region["translation"] for region in result["regions"])

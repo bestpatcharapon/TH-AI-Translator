@@ -133,7 +133,8 @@ class PhotoTests(unittest.TestCase):
             self.assertEqual(client.return_value.chat.completions.create.call_count, 3)
         self.assertEqual(result, ["translated " + r["text"] for r in regions])
 
-    def test_bad_photo_and_invalid_settings_are_json_errors(self):
+    @patch.object(server, "get_client")
+    def test_bad_photo_and_invalid_settings_are_json_errors(self, provider):
         for settings in [{"source": "bad"}, {"target": "bad"}, {"tone": "bad"}, {}]:
             response = self.client.post(
                 "/api/photo-translate",
@@ -142,6 +143,7 @@ class PhotoTests(unittest.TestCase):
             self.assertEqual(response.status_code, 400)
             self.assertIn("error", response.get_json())
         self.assertEqual(self.client.post("/api/photo-translate").status_code, 400)
+        provider.assert_not_called()
 
     def test_auto_language_is_used_for_positioned_ocr_and_reverse_labels(self):
         with (

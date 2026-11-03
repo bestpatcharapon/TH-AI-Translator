@@ -56,6 +56,7 @@ const assert = require("node:assert/strict");
     });
     await page.locator("#input").fill("PERF FIRST");
     await page.waitForFunction(() => document.querySelector("#output").value === "en:PERF FIRST");
+    await page.locator("#reader-tab-source").click();
     await page.locator("#input").fill("PERF INTERMEDIATE");
     await page.locator("#input").fill("PERF FINAL");
     await page.waitForFunction(() => document.querySelector("#output").value === "en:PERF FINAL");
@@ -86,6 +87,8 @@ const assert = require("node:assert/strict");
         .textContent()
         .then((text) => text.includes("STALE EXTRA")))
     );
+    await page.locator("#reader-language-trigger").click();
+    await page.locator('#reader-language-menu [data-value="ja"]').click();
     await page
       .locator(".additional-result")
       .filter({ has: page.locator(".error") })
@@ -96,6 +99,8 @@ const assert = require("node:assert/strict");
         activeFeature().additional.find((item) => item.target === "ja").translation ===
         "ja:PERF FINAL"
     );
+    await page.locator("#reader-language-trigger").click();
+    await page.locator('#reader-language-menu [data-value="primary"]').click();
     await page.locator("#regenerate").click();
     await page.waitForFunction(() => !activeFeature().request);
     assert(

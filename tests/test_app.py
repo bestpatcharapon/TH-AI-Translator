@@ -112,7 +112,8 @@ class AppTests(unittest.TestCase):
             )
             ocr.assert_called_once()
 
-    def test_bad_files_are_json_errors(self):
+    @patch.object(server, "get_client")
+    def test_bad_files_are_json_errors(self, provider):
         for kind, name, data in [
             ("image", "bad.png", b"not an image"),
             ("document", "bad.pdf", b"bad"),
@@ -129,6 +130,7 @@ class AppTests(unittest.TestCase):
                 )
                 self.assertEqual(result.status_code, 400)
                 self.assertIn("error", result.get_json())
+                provider.assert_not_called()
         result = self.client.post(
             "/api/extract", data={"file": (io.BytesIO(b"x" * (MAX_UPLOAD + 1)), "huge.txt")}
         )

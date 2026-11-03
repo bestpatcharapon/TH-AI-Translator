@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from openai import OpenAIError
 from test_app import completion
+from test_photo_translation import image_file
 
 import app as server
 from project_config import STYLE_RULES, TONES, tone_description
@@ -100,7 +101,7 @@ class TranslationPreferencesTests(unittest.TestCase):
                     "source": "en",
                     "target": "th",
                     "tone": "business",
-                    "file": (io.BytesIO(b"photo"), "photo.png"),
+                    "file": (io.BytesIO(image_file()), "photo.png"),
                 },
             )
             self.assertEqual(response.status_code, 200)
@@ -131,7 +132,10 @@ class TranslationPreferencesTests(unittest.TestCase):
                 raise OpenAIError("unavailable")
             return f"{target}:{text}"
 
-        with patch.object(server, "translate_text", side_effect=translate) as provider:
+        with (
+            patch.object(server, "translate_text", side_effect=translate) as provider,
+            patch.object(server, "get_client"),
+        ):
             result = self.client.post(
                 "/api/translate",
                 json={
@@ -182,7 +186,7 @@ class TranslationPreferencesTests(unittest.TestCase):
                     "context": "travel",
                     "extra_context": "Restaurant menu",
                     "additional_targets": '["ja"]',
-                    "file": (io.BytesIO(b"photo"), "photo.png"),
+                    "file": (io.BytesIO(image_file()), "photo.png"),
                 },
             )
             self.assertEqual(response.status_code, 200)
@@ -195,6 +199,9 @@ class TranslationPreferencesTests(unittest.TestCase):
             )
         response = self.client.post(
             "/api/photo-translate",
-            data={"additional_targets": "not json", "file": (io.BytesIO(b"photo"), "photo.png")},
+            data={
+                "additional_targets": "not json",
+                "file": (io.BytesIO(image_file()), "photo.png"),
+            },
         )
         self.assertEqual(response.status_code, 400)
