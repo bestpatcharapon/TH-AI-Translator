@@ -1013,8 +1013,23 @@ def translate_photo(data, source, target, tone, client, model, glossary_json="[]
         photo_ocr_backend(),
         os.getenv("PHOTO_READING_PROVIDER", "groq"),
         os.getenv("GEMINI_PHOTO_MODEL", ""),
-        hashlib.sha256((os.getenv("TYPHOON_OCR_API_KEY", "").strip() or os.getenv("TYPHOON_API_KEY", "").strip()).encode()).digest() if os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower() == "typhoon" else None,
-        tuple(os.getenv(name, "") for name in ("TYPHOON_OCR_MODEL", "TYPHOON_BASE_URL", "TYPHOON_OCR_TIMEOUT_SECONDS", "TYPHOON_OCR_MAX_TOKENS")),
+        hashlib.sha256(
+            (
+                os.getenv("TYPHOON_OCR_API_KEY", "").strip()
+                or os.getenv("TYPHOON_API_KEY", "").strip()
+            ).encode()
+        ).digest()
+        if os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower() == "typhoon"
+        else None,
+        tuple(
+            os.getenv(name, "")
+            for name in (
+                "TYPHOON_OCR_MODEL",
+                "TYPHOON_BASE_URL",
+                "TYPHOON_OCR_TIMEOUT_SECONDS",
+                "TYPHOON_OCR_MAX_TOKENS",
+            )
+        ),
     )
     result, status = photo_cache_run(
         _photo_result_cache,

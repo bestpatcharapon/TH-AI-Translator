@@ -7,10 +7,10 @@ import threading
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
-from typing import cast
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
-import httpx2
+import httpx
 import pymupdf
 from openai import APIStatusError, OpenAIError
 from test_app import completion, docx_bytes, pdf_bytes
@@ -353,8 +353,13 @@ class DocumentOCRTests(unittest.TestCase):
                     if status is None
                     else APIStatusError(
                         message,
-                        response=httpx2.Response(
-                            status, request=httpx2.Request("POST", "https://private.example")
+                        # SDK versions use different HTTP transports; this test
+                        # exercises status/header handling rather than transport types.
+                        response=cast(
+                            Any,
+                            httpx.Response(
+                                status, request=httpx.Request("POST", "https://private.example")
+                            ),
                         ),
                         body=None,
                     )
