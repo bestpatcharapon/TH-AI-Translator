@@ -4,15 +4,19 @@ import base64
 import hashlib
 import io
 import json
+import math
 import os
 import re
 import unicodedata
 from difflib import SequenceMatcher
+from time import monotonic
 
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from PIL import Image, ImageDraw
 
+from document_ocr import _transcribe_page, _typhoon_client, _typhoon_settings, NoReadableTextError
 from model_routing import DEFAULT_REVIEW_MODEL, _gemini_client
+from operation_budget import check_photo_budget, checked, photo_cache_run, photo_completion, photo_timeout
 from performance import ResultCache, digest_key
 from photo_detection import preserve_numeric_pixels
 from project_config import VISION_MODEL, ReasoningOptions, reasoning_options
@@ -52,6 +56,19 @@ def reading_bounds(image, region, regions=()):
     return (int(left), max(0, int(y - 3)), round(right), min(image.height, round(y + h + 3)))
 
 
+def crop_bytes(image, region, regions):
+    crop = image.crop(reading_bounds(image, region, regions)).convert("RGB")
+    # Thai vowels/tones become hard to distinguish in tiny menu captions.
+    # Send a lossless enlarged crop rather than a low-resolution contact sheet.
+    scale = min(4, max(1, 64 / max(1, crop.height)), 2048 / max(1, crop.width))
+    if scale > 1:
+        crop = crop.resize((round(crop.width * scale), round(crop.height * scale)), Image.Resampling.LANCZOS)
+    output = io.BytesIO()
+    crop.save(output, format="PNG")
+    return output.getvalue()
+
+
+@checked
 def reading_sheet(image, indexed_regions, regions=(), *, high_resolution=False):
     """Put enlarged, numbered crops on one image; row ids map to measured OCR boxes."""
     rows = []
@@ -87,39 +104,79 @@ def reading_sheet(image, indexed_regions, regions=(), *, high_resolution=False):
     return output.getvalue()
 
 
-def verify_photo_readings(normalized, regions, client):
+@checked
+def verify_photo_readings(normalized, regions, client, *, _provider=None):
+    original_client = client
+    provider_name = _provider or os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower()
+    try:
+        timeout_seconds = float(os.getenv("PHOTO_READING_TIMEOUT_SECONDS", "45"))
+        if not math.isfinite(timeout_seconds) or timeout_seconds <= 0:
+            raise ValueError
+    except ValueError as error:
+        raise RuntimeError(
+            "PHOTO_READING_TIMEOUT_SECONDS must be a positive finite number"
+        ) from error
+    try:
+        max_requests = int(os.getenv("PHOTO_READING_MAX_REQUESTS", "12"))
+        if max_requests <= 0:
+            raise ValueError
+    except ValueError as error:
+        raise RuntimeError("PHOTO_READING_MAX_REQUESTS must be a positive integer") from error
+    # This deadline covers reading only, not detection or subsequent translation.
+    deadline = monotonic() + timeout_seconds
+    requests = 0
     with Image.open(io.BytesIO(normalized)) as image:
+        typhoon = provider_name == "typhoon"
         # Small thumbnails are covered by ordinary OCR. Never upscale imagined detail.
         vision_only = any(region.get("vision_only") for region in regions)
-        if max(image.size) < 600 and not vision_only:
+        if max(image.size) < 600 and not vision_only and not typhoon:
             return regions
-        candidates = [
+        eligible = [
             (index, region)
             for index, region in enumerate(regions)
             if (region.get("detected_only") or any(char.isalpha() for char in region["text"]))
             and not region.get("preserve_original")
-            and not (region.get("native_ocr") and region.get("confidence", 0) >= 80)
+            and (typhoon or not (region.get("native_ocr") and region.get("confidence", 0) >= 80))
             and not preserve_numeric_pixels(region["text"])
             and (
-                region["height"] <= 24
+                typhoon or region["height"] <= 24
                 or region.get("confidence", 100) < 80
                 or region.get("needs_visual_check")
             )
-        ][: MAX_VISION_REGIONS if vision_only else MAX_VERIFIED_REGIONS]
-        if not candidates:
+        ]
+        if not eligible:
             return regions
-        client, reading_model, reading_options = (
-            reading_provider(client)
-            if vision_only
-            else (client, VISION_MODEL, reasoning_options("none"))
-        )
+        # Spend the limited per-image request budget on uncertain readings first.
+        # Otherwise a dense menu can exhaust it on confident headings while its
+        # small descriptions never get checked.
+        if typhoon and not vision_only:
+            eligible.sort(key=lambda item: (
+                not (item[1].get("detected_only") or item[1].get("needs_visual_check")
+                     or item[1].get("confidence", 100) < 80),
+                item[0],
+            ))
+        candidates = eligible[: MAX_VISION_REGIONS if vision_only else MAX_VERIFIED_REGIONS]
+        typhoon_settings = None
+        if typhoon:
+            typhoon_settings = _typhoon_settings()
+            reading_model, url, timeout, tokens = typhoon_settings
+            api_key = os.getenv("TYPHOON_OCR_API_KEY", "").strip() or os.getenv("TYPHOON_API_KEY", "").strip()
+            if not api_key:
+                raise RuntimeError("กรุณาตั้งค่า TYPHOON_OCR_API_KEY หรือ TYPHOON_API_KEY เพื่อใช้ OCR")
+            client = _typhoon_client(api_key, url, timeout)
+            reading_options = {}
+        else:
+            client, reading_model, reading_options = (
+                (client, VISION_MODEL, reasoning_options("none"))
+                if _provider == "groq" else reading_provider(client)
+            )
         multi_image = (
             vision_only and os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower() == "gemini"
         )
         image = image.convert("RGB")
         # Bound each vision request; one tall sheet of 30 labels can exceed the
         # provider token budget or time out before returning complete readings.
-        batch_size = 20 if multi_image else 5 if vision_only else 10
+        batch_size = 1 if typhoon else 20 if multi_image else 5 if vision_only else 10
         batches = [
             candidates[start : start + batch_size]
             for start in range(0, len(candidates), batch_size)
@@ -133,6 +190,7 @@ def verify_photo_readings(normalized, regions, client):
                     for start in range(0, len(batch), 5)
                 ]
                 if multi_image
+                else [crop_bytes(image, batch[0][1], regions)] if typhoon
                 else [reading_sheet(image, batch, regions, high_resolution=vision_only)],
             )
             for batch in batches
@@ -140,10 +198,28 @@ def verify_photo_readings(normalized, regions, client):
         bounds = {index: reading_bounds(image, region, regions) for index, region in candidates}
 
     def verify_batch(item):
+        nonlocal requests
+        check_photo_budget()
         batch, batch_sheets = item
         ids = {index for index, _ in batch}
+        remaining = deadline - monotonic()
+        # Called only on a cache miss: reused batches do not spend requests.
+        if remaining <= 0 or requests >= max_requests:
+            return {index: ("", False) for index in ids}
+        requests += 1
+        if typhoon:
+            assert typhoon_settings is not None
+            _, _, timeout, tokens = typhoon_settings
+            try:
+                provider = client.with_options(timeout=photo_timeout(min(timeout, remaining)), max_retries=0) if isinstance(client, OpenAI) else client
+                text = _transcribe_page(provider, batch_sheets[0], "image/png", reading_model, tokens).strip()
+                check_photo_budget()
+                return {batch[0][0]: (text, bool(text) and len(text) <= 700)}
+            except (NoReadableTextError, ValueError):
+                return {batch[0][0]: ("", False)}
         try:
-            response = client.chat.completions.create(
+            response = photo_completion(
+                client,
                 model=reading_model,
                 temperature=0,
                 max_completion_tokens=min(8192, max(2048, len(batch) * 256))
@@ -152,7 +228,7 @@ def verify_photo_readings(normalized, regions, client):
                     2048, max(1536, 128 + sum(32 + len(region["text"]) * 3 for _, region in batch))
                 ),
                 **reading_options,
-                timeout=18,
+                timeout=min(18, remaining),
                 messages=[
                     {
                         "role": "user",
@@ -220,14 +296,26 @@ def verify_photo_readings(normalized, regions, client):
 
     def produce():
         result = [dict(region) for region in regions]
+        # Sliced-out and budget-limited candidates must never look fully reviewed.
+        for index, _ in eligible:
+            region = result[index]
+            # A confident native reading that did not fit the optional Typhoon
+            # budget is still usable; weak readings must remain visibly uncertain.
+            if typhoon and region.get("native_ocr") and region.get("confidence", 0) >= 80 and not region.get("needs_visual_check"):
+                continue
+            region["reading_review"] = True
+            region["reading_verified"] = False
         for batch, batch_sheets in sheets:
+            if typhoon and (requests >= max_requests or monotonic() >= deadline):
+                break
             originals = dict(batch)
-            readings, _ = _reading_batch_cache.run(
+            readings, _ = photo_cache_run(
+                _reading_batch_cache,
                 (
                     digest_key([hashlib.sha256(sheet).hexdigest() for sheet in batch_sheets]),
                     digest_key(batch),
                     client,
-                    reading_model,
+                    reading_model, typhoon_settings,
                 ),
                 lambda batch=batch, batch_sheets=batch_sheets: verify_batch((batch, batch_sheets)),
                 cacheable=lambda readings, originals=originals: all(
@@ -278,6 +366,7 @@ def verify_photo_readings(normalized, regions, client):
                         and SequenceMatcher(None, original, visual).ratio() < 0.8
                     ):
                         region["reading_verified"] = False
+                        region["reading_review"] = True
                         continue
                     region["text"] = text
                     region["ocr_variants"] = list(dict.fromkeys([text, region["ocr_text"]]))
@@ -286,9 +375,34 @@ def verify_photo_readings(normalized, regions, client):
                     if region["ocr_text"] and len(text) > len(region["ocr_text"]) * 1.25:
                         left, _, right, _ = bounds[index]
                         region["x"], region["width"] = left, right - left
+        if typhoon:
+            pending = [index for index, region in enumerate(result) if region.get("reading_review")]
+            if pending and os.getenv("PHOTO_READING_FALLBACK", "groq").strip().lower() == "groq":
+                # Typhoon transcribes one crop per request. Dense menus exceed
+                # that budget, so verify the remaining measured boxes in batches
+                # using the application's existing vision client.
+                fallback_regions = [{**result[index], "vision_only": True,
+                                     "needs_visual_check": True, "native_ocr": False}
+                                    for index in pending]
+                try:
+                    verified = verify_photo_readings(normalized, fallback_regions, original_client, _provider="groq")
+                except RateLimitError:
+                    # Retain successful Typhoon readings if the second provider
+                    # has no quota; never discard the entire photo's progress.
+                    return result
+                for index, region in zip(pending, verified):
+                    for flag in ("vision_only", "native_ocr", "needs_visual_check"):
+                        if flag in result[index]:
+                            region[flag] = result[index][flag]
+                        else:
+                            region.pop(flag, None)
+                    result[index] = region
         return result
 
-    key = (hashlib.sha256(normalized).digest(), digest_key(regions), client, reading_model)
-    return _reading_cache.run(
-        key, produce, cacheable=lambda result: not any(r.get("reading_review") for r in result)
+    key = (hashlib.sha256(normalized).digest(), digest_key(regions), client, reading_model, typhoon_settings)
+    return photo_cache_run(
+        _reading_cache,
+        key,
+        produce,
+        cacheable=lambda result: not any(r.get("reading_review") for r in result),
     )[0]

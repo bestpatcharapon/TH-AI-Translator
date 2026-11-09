@@ -36,6 +36,11 @@ const assert = require("node:assert/strict");
       ]) {
         await page.setViewportSize(size);
         await page.evaluate(() => switchFeature("text"));
+        // The compact reader remembers its last pane; pin the source view so this
+        // layout check does not depend on the previous iteration's state.
+        await page.evaluate(() =>
+          document.querySelector(".multilingual-reader")?.setAttribute("data-reader-pane", "source")
+        );
         await page.locator("#input").fill("");
         await noOverflow(".translator");
         const source = page.locator("#input"),
@@ -115,6 +120,22 @@ const assert = require("node:assert/strict");
         await page.evaluate(() => switchFeature("live"));
         await noOverflow(".live-composer");
         await noOverflow(".translator");
+        await noOverflow("#live-header");
+        if (size.width <= 700) {
+          const header = await page.locator("#live-header").evaluate((el) => ({
+            logo: el.querySelector(".live-title img").getBoundingClientRect().width,
+            buttons: [...el.querySelectorAll(".icon-button")].map((button) => ({
+              width: button.getBoundingClientRect().width,
+              height: button.getBoundingClientRect().height,
+              icon: button.querySelector("svg").getBoundingClientRect().width,
+            })),
+          }));
+          assert.equal(header.logo, 34);
+          for (const button of header.buttons) {
+            assert(button.width >= 44 && button.height >= 44, "Keep accessible touch targets");
+            assert.equal(button.icon, 20, "Mobile toolbar icons remain compact");
+          }
+        }
         await page.locator("#input").fill("Hello");
         await page.locator("#input").scrollIntoViewIfNeeded();
         const input = await page.locator("#input").boundingBox();

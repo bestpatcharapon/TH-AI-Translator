@@ -1,19 +1,41 @@
 @font-face {
-  font-family: "Noto Sans Thai";
-  src: url("/static/fonts/NotoSansThai-Regular.ttf") format("truetype");
-  font-weight: 400 500;
+  font-family: "IBM Plex Sans Thai";
+  src: url("/static/fonts/IBMPlexSansThai-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Noto Sans Thai";
-  src: url("/static/fonts/NotoSansThai-Bold.ttf") format("truetype");
-  font-weight: 600 800;
+  font-family: "IBM Plex Sans Thai";
+  src: url("/static/fonts/IBMPlexSansThai-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Sans Thai";
+  src: url("/static/fonts/IBMPlexSansThai-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Sans Thai";
+  src: url("/static/fonts/IBMPlexSansThai-Bold.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 :root {
   color-scheme: dark;
+  /* Latin/Thai are bundled. CJK names below refer only to installed system fonts. */
+  --font-zh: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC";
+  --font-zh-tw: "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", "Noto Sans TC";
+  --font-ja: "Hiragino Sans", "Yu Gothic", Meiryo, "Noto Sans CJK JP", "Noto Sans JP";
+  --font-ko: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", "Noto Sans KR";
+  --font-multilingual:
+    "Manrope Brand", "IBM Plex Sans Thai", "Segoe UI", system-ui, var(--font-zh), var(--font-ja),
+    var(--font-ko), sans-serif;
   /* Type scale: Thai stacked vowels/tone marks need >= 12px to stay legible. */
   --text-xs: 12px;
   --text-sm: 13px;
@@ -33,6 +55,10 @@
   --header-bg: #38352f;
   --header-border: #494338;
   --header-control: #ffffff05;
+  --ambient-sage: #c6b09218;
+  --ambient-gold: #d4b47c14;
+  --star-color: #d7c697;
+  --surface-shadow: 0 12px 36px #00000018, 0 1px 2px #00000012;
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -48,6 +74,10 @@
   --header-bg: #eee8de;
   --header-border: #d9cebe;
   --header-control: #ffffff55;
+  --ambient-sage: #c6b09220;
+  --ambient-gold: #dfc49626;
+  --star-color: #88734b;
+  --surface-shadow: 0 12px 36px #493b2910, 0 1px 2px #493b2908;
 }
 * {
   box-sizing: border-box;
@@ -57,12 +87,38 @@
 }
 body {
   margin: 0;
+  isolation: isolate;
   background: var(--bg);
   color: var(--text);
-  font-family:
-    var(--interface-font, "Noto Sans Thai"), "Noto Sans Thai", "Segoe UI", system-ui,
-    "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", sans-serif;
+  font-family: var(--interface-font, var(--font-multilingual)), var(--font-multilingual);
   font-size: var(--text-md);
+}
+/* Decoration lives behind opaque reading surfaces and never intercepts input. */
+.ambient-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 0% 12%, var(--ambient-sage), transparent 55%),
+    radial-gradient(ellipse at 100% 70%, var(--ambient-gold), transparent 55%);
+}
+.ambient-backdrop svg {
+  width: 100%;
+  height: 100%;
+  color: var(--star-color);
+  opacity: 0.36;
+  stroke-width: 1.2;
+}
+.ambient-backdrop .star-dot {
+  fill: currentColor;
+  stroke: none;
+}
+@media (max-width: 700px) {
+  .ambient-backdrop svg {
+    opacity: 0.2;
+  }
 }
 button,
 select,
@@ -155,6 +211,7 @@ select:focus-visible {
   );
   border-bottom-color: color-mix(in srgb, var(--accent) 20%, var(--header-bg));
   box-shadow: 0 4px 16px #00000008;
+  border-radius: 0 0 22px 22px;
 }
 .app-header .icon-button {
   border-color: transparent;
@@ -379,8 +436,9 @@ h1 {
   gap: 10px;
   padding: 9px 13px;
   border: 1px solid var(--border);
-  border-radius: 30px;
+  border-radius: 20px;
   background: var(--card);
+  box-shadow: 0 2px 8px #00000004;
 }
 .language-picker select {
   position: absolute;
@@ -440,12 +498,18 @@ h1 {
   flex-direction: column;
   padding: 22px 18px 17px;
   border: 1px solid var(--border);
-  border-radius: 23px;
+  border-radius: 24px;
   background: var(--card);
-  transition: border-color 0.15s;
+  box-shadow: var(--surface-shadow);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 .panel:focus-within {
-  border-color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--muted));
+  box-shadow:
+    var(--surface-shadow),
+    0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 .panel-heading {
   position: relative;
@@ -464,7 +528,7 @@ h1 {
   inset-inline: 0;
   bottom: -3px;
   height: 1px;
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  background: transparent;
   pointer-events: none;
 }
 h2 {
@@ -560,6 +624,7 @@ textarea::placeholder {
   border-radius: 999px;
   padding: 9px;
   background: var(--card);
+  box-shadow: var(--surface-shadow);
 }
 .mode {
   display: flex;
@@ -586,6 +651,9 @@ textarea::placeholder {
 .mode.active {
   color: var(--on-accent);
   background: var(--accent);
+  box-shadow:
+    inset 0 1px 0 #ffffff28,
+    0 2px 6px #00000008;
 }
 .mode svg {
   width: 22px;
@@ -966,15 +1034,19 @@ p:lang(ko),
 }
 textarea:lang(ko),
 p:lang(ko) {
-  font-family: "Noto Sans KR", "Noto Sans Thai", system-ui, sans-serif;
+  font-family: var(--font-ko), var(--font-multilingual);
 }
 textarea:lang(ja),
 p:lang(ja) {
-  font-family: "Noto Sans JP", "Noto Sans Thai", system-ui, sans-serif;
+  font-family: var(--font-ja), var(--font-multilingual);
 }
 textarea:lang(zh),
 p:lang(zh) {
-  font-family: "Noto Sans SC", "Noto Sans Thai", system-ui, sans-serif;
+  font-family: var(--font-zh), var(--font-multilingual);
+}
+textarea:lang(zh-TW),
+p:lang(zh-TW) {
+  font-family: var(--font-zh-tw), var(--font-multilingual);
 }
 /* Translation workspace and reply tools. */
 .translator {
@@ -1311,7 +1383,7 @@ p:lang(zh) {
 }
 .photo-empty h3 {
   font-family:
-    "Manrope Brand", var(--interface-font, "Noto Sans Thai"), "Noto Sans Thai", sans-serif;
+    "Manrope Brand", var(--interface-font, var(--font-multilingual)), var(--font-multilingual);
   font-size: var(--text-2xl);
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -1418,7 +1490,7 @@ p:lang(zh) {
   white-space: normal;
   overflow-wrap: anywhere;
   pointer-events: auto;
-  font-family: "Noto Sans Thai", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", sans-serif;
+  font-family: var(--font-multilingual);
 }
 .photo-label:focus-visible {
   z-index: 3;
@@ -1756,8 +1828,11 @@ p:lang(zh) {
   min-width: 0;
 }
 .live-heading h1 {
+  font-family: "Space Grotesk Brand", var(--font-multilingual);
   font-size: var(--text-xl);
-  letter-spacing: -0.3px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  line-height: 1.25;
 }
 .live-heading p {
   font-size: var(--text-xs);
@@ -4108,10 +4183,10 @@ textarea[dir="auto"],
     padding: 0 12px max(10px, env(safe-area-inset-bottom));
   }
   .live-mode .live-header {
-    min-height: 65px;
+    min-height: 60px;
     margin-top: 0;
     margin-bottom: 12px;
-    padding: 10px 12px;
+    padding: 8px 12px;
     gap: 4px;
   }
   .live-mode .live-heading p {
@@ -4122,8 +4197,8 @@ textarea[dir="auto"],
     min-width: 0;
   }
   .live-mode .live-title img {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
   }
   .live-mode .live-heading h1 {
     min-width: 0;
@@ -4133,10 +4208,31 @@ textarea[dir="auto"],
     text-overflow: ellipsis;
   }
   .live-mode .live-header .icon-button {
+    position: relative;
     width: 44px;
     height: 44px;
-    padding: 10px;
+    padding: 12px;
     border-color: transparent;
+    /* Compact 32px visual surface; keep a non-overlapping 44px touch target. */
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--text) 7%, var(--header-bg)) 16px,
+      transparent 16px
+    );
+  }
+  .live-mode .live-header .icon-button svg {
+    width: 20px;
+    height: 20px;
+  }
+  .live-mode .live-header .icon-button:is(:hover, :focus-visible) {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--text) 12%, var(--header-bg)) 16px,
+      transparent 16px
+    );
+  }
+  .live-mode #live-audio[aria-pressed="false"]::after {
+    width: 20px;
   }
   .live-mode .language-controls {
     margin-bottom: 12px;
@@ -4587,14 +4683,14 @@ textarea[dir="auto"],
 /* A distinct Latin wordmark, independent of the selected interface language. */
 @font-face {
   font-family: "Manrope Brand";
-  src: url("/static/fonts/Manrope-Variable.ttf") format("truetype");
+  src: url("/static/fonts/Manrope-Variable.woff2") format("woff2");
   font-style: normal;
   font-weight: 200 800;
   font-display: swap;
 }
 @font-face {
   font-family: "Space Grotesk Brand";
-  src: url("/static/fonts/SpaceGrotesk-Variable.ttf") format("truetype");
+  src: url("/static/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
   font-style: normal;
   font-weight: 300 700;
   font-display: swap;
@@ -4613,10 +4709,49 @@ textarea[dir="auto"],
   color: var(--accent);
   font-weight: 700;
 }
+/* A gentle side-to-side glance, never a full spin; the name stays still. */
+@keyframes brand-arrive {
+  0%,
+  100% {
+    transform: perspective(160px) rotateY(0deg);
+  }
+  30% {
+    transform: perspective(160px) rotateY(24deg);
+  }
+  70% {
+    transform: perspective(160px) rotateY(-24deg);
+  }
+}
+@keyframes brand-glance {
+  0%,
+  100% {
+    transform: perspective(160px) rotateY(0deg);
+  }
+  30% {
+    transform: perspective(160px) rotateY(24deg);
+  }
+  70% {
+    transform: perspective(160px) rotateY(-24deg);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .brand-icon img {
+    animation: brand-arrive 1600ms ease-in-out both;
+  }
+  .brand:focus-visible .brand-icon img {
+    animation: brand-glance 1600ms ease-in-out;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .brand:hover .brand-icon img {
+    animation: brand-glance 1600ms ease-in-out;
+  }
+}
 .brand-name {
   font-weight: 500;
   letter-spacing: -0.65px;
 }
+
 @media (max-width: 370px) {
   .app-header .brand h1 {
     font-size: var(--text-lg);
@@ -4631,6 +4766,47 @@ textarea[dir="auto"],
 }
 :root[data-theme="light"] .brand-ai {
   color: color-mix(in srgb, var(--text) 70%, var(--accent));
+}
+
+/* A slow repeating highlight keeps the wordmark itself stationary. */
+@keyframes brand-letter-light {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .app-header .brand h1,
+    .app-header .brand h1 span,
+    .live-title h1 {
+      background-image: linear-gradient(
+        110deg,
+        currentColor 42%,
+        color-mix(in srgb, currentColor 60%, var(--accent)) 50%,
+        currentColor 58%
+      );
+      background-size: 300% 100%;
+      background-position: 0% 0;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: brand-letter-light 4s ease-in-out infinite;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .app-header .brand h1,
+  .app-header .brand h1 span,
+  .live-title h1 {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none !important;
+  }
 }
 
 /* Use compact explanatory rows for Style, matching the Context picker. */

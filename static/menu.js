@@ -203,7 +203,7 @@ function renderPreferenceOptions() {
       select.value = option.value;
       if (changed) select.dispatchEvent(new Event("change", { bubbles: true }));
       refreshPreferenceTriggers();
-      preferenceDialog.close();
+      closePreferenceDialog();
     });
     button.addEventListener("keydown", (event) => {
       const buttons = [...preferenceOptions.querySelectorAll('[role="option"]')];
@@ -266,7 +266,15 @@ for (const id of ["tone", "translation-context"]) {
     openPreference();
   });
 }
-$("preference-close").addEventListener("click", () => preferenceDialog.close());
+function closePreferenceDialog() {
+  for (const trigger of preferenceTriggers.values()) trigger.setAttribute("aria-expanded", "false");
+  preferenceDialog.close();
+}
+$("preference-close").addEventListener("click", closePreferenceDialog);
+preferenceDialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closePreferenceDialog();
+});
 preferenceDialog.addEventListener("close", () => {
   // A queued close event must not reset a picker that has already reopened.
   if (preferenceDialog.open) return;
@@ -283,7 +291,7 @@ preferenceDialog.addEventListener("click", (event) => {
     event.clientY < box.top ||
     event.clientY > box.bottom
   )
-    preferenceDialog.close();
+    closePreferenceDialog();
 });
 refreshPreferenceTriggers();
 const menuTabs = [...document.querySelectorAll('.menu-tabs [role="tab"]')];
@@ -452,12 +460,22 @@ function renderHistory() {
 }
 function additionalFlag(code) {
   const flag = document.createElement("img");
-  flag.src = languageFlag(code);
   flag.alt = "";
   flag.width = 26;
   flag.height = 20;
   flag.loading = "lazy";
+  flag.decoding = "async";
+  // The menu is hidden on startup; creating ~90 flag requests before the first
+  // paint delays useful work for images nobody can see yet.
+  if ($("settings").open) flag.src = languageFlag(code);
+  else flag.dataset.pendingFlag = code;
   return flag;
+}
+function loadPendingFlags() {
+  for (const flag of $("settings").querySelectorAll("img[data-pending-flag]")) {
+    flag.src = languageFlag(flag.dataset.pendingFlag);
+    delete flag.dataset.pendingFlag;
+  }
 }
 function updateAdditionalSelection(code, selected) {
   const preferences = activeFeature().preferences,
@@ -588,6 +606,7 @@ document.addEventListener("menu:open", () => {
   $("additional-search").value = "";
   menuStatus();
   refreshMenu();
+  loadPendingFlags();
   $("live-settings-toggle").setAttribute("aria-expanded", "true");
 });
 document.addEventListener("history:change", renderHistory);
@@ -731,9 +750,7 @@ function renderAdditionalResults() {
 }
 function recordTranslationGroup(detail) {
   rememberTranslation(detail);
-  activeFeature().additional = detail.additional_translations || [];
-  activeFeature().additionalContext = detail;
-  for (const result of activeFeature().additional)
+  for (const result of detail.additional_translations || [])
     if (result.translation)
       rememberTranslation({
         ...detail,
@@ -741,6 +758,11 @@ function recordTranslationGroup(detail) {
         translation: result.translation,
         audit: result.audit || null,
       });
+  // Live Chat cards own their deferred requests and retries; the workspace panel must not
+  // start a second request for the same target.
+  if (detail.feature === "live") return;
+  activeFeature().additional = detail.additional_translations || [];
+  activeFeature().additionalContext = detail;
   renderAdditionalResults();
 }
 document.addEventListener("translation:complete", ({ detail }) => recordTranslationGroup(detail));

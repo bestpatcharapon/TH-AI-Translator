@@ -9,7 +9,7 @@ from test_app import completion
 
 import app as server
 from scripts.benchmark_feature_quality import speech_translation_result
-from speech_recognition import transcript_result
+from speech_recognition import compare_transcripts, transcript_result
 
 
 def result(text="สวัสดีครับ", **values):
@@ -66,6 +66,46 @@ class SpeechQualityTests(unittest.TestCase):
             "แกะมือกล่องกระดาษ",
         ):
             self.assertFalse(transcript_result(result(text=ordinary), "model")["review_required"])
+
+    def test_comparison_preserves_numeric_and_word_boundaries(self):
+        for primary, secondary in (
+            ("0.5", "05"),
+            ("0,5", "05"),
+            ("-5", "5"),
+            ("−0.5", "0.5"),
+            ("+5", "5"),
+            ("re-sign", "resign"),
+            ("re‐sign", "resign"),
+            ("a part", "apart"),
+            ("ice,cream", "icecream"),
+            ("H. M.", "HM"),
+            ("H. Man", "Hman"),
+        ):
+            with self.subTest(primary=primary, secondary=secondary):
+                reading = compare_transcripts(
+                    transcript_result(result(text=primary), "primary"),
+                    transcript_result(result(text=secondary), "secondary"),
+                )
+                self.assertEqual(reading["review_reasons"], ["model_disagreement"])
+                self.assertEqual(reading["text"], primary)
+                self.assertEqual(reading["alternative_text"], secondary)
+
+    def test_comparison_ignores_benign_formatting_without_merging_words(self):
+        for primary, secondary in (
+            ("Hello, H. M.!", "hello h.m."),
+            (" Hello,   world! ", "hello world"),
+            ("Hello,world!", "HELLO WORLD"),
+            ("ＡＢＣ ０.５", "abc 0.5"),
+            ("re‐sign", "re-sign"),
+            ("−5", "-5"),
+        ):
+            with self.subTest(primary=primary, secondary=secondary):
+                reading = compare_transcripts(
+                    transcript_result(result(text=primary), "primary"),
+                    transcript_result(result(text=secondary), "secondary"),
+                )
+                self.assertFalse(reading["review_required"])
+                self.assertNotIn("alternative_text", reading)
 
     def test_pcm_silence_is_rejected_without_requesting_the_provider(self):
         audio = io.BytesIO()

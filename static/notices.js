@@ -1,4 +1,4 @@
-/* Short notices expire together; progress and actual translation/review content remain. */
+/* Short notices expire; actions, progress and actual translation/review content remain. */
 (() => {
   const duration = 3000;
   const progressKeys = [
@@ -91,9 +91,11 @@
     )
       return;
     const entry = { message: node.textContent, workspace: activeFeature(), timer: null };
-    entry.timer = setTimeout(() => {
-      if (timers.get(node) === entry) clearNotice(node, entry);
-    }, duration);
+    // Recovery controls must remain usable until replaced or the feature is left.
+    if (!node.querySelector("button, a[href], input, select, textarea, [role='button']"))
+      entry.timer = setTimeout(() => {
+        if (timers.get(node) === entry) clearNotice(node, entry);
+      }, duration);
     timers.set(node, entry);
   }
 
@@ -110,11 +112,16 @@
     watchNotice(node);
   }
   // Do not restore expired clipboard/error notices when returning to a feature.
-  document.addEventListener("mode:leaving", () => {
-    // A status may have changed in the same task, before observer callbacks run.
-    for (const [node, observer] of observers) {
-      if (observer.takeRecords().length) watchNotice(node);
-    }
-    for (const [node, entry] of timers) clearNotice(node, entry);
-  });
+  document.addEventListener(
+    "mode:leaving",
+    () => {
+      // A status may have changed in the same task, before observer callbacks run.
+      for (const [node, observer] of observers) {
+        if (observer.takeRecords().length) watchNotice(node);
+      }
+      for (const [node, entry] of timers) clearNotice(node, entry);
+    },
+    // Clear actions before feature handlers snapshot text and discard their listeners.
+    true
+  );
 })();

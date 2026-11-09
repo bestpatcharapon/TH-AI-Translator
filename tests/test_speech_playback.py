@@ -116,6 +116,25 @@ class TranscriptVerificationTests(unittest.TestCase):
         )
         self.assertFalse(reading["review_required"])
 
+    def test_meaningful_separators_gate_transcripts_for_review(self):
+        from speech_recognition import compare_transcripts, transcript_result
+
+        for primary, secondary in (
+            ("Take 0.5 mg", "Take 05 mg"),
+            ("Temperature -5 degrees", "Temperature 5 degrees"),
+            ("Please re-sign", "Please resign"),
+            ("an ice cream", "a nice cream"),
+        ):
+            with self.subTest(primary=primary, secondary=secondary):
+                reading = compare_transcripts(
+                    transcript_result(result(text=primary), "primary"),
+                    transcript_result(result(text=secondary), "secondary"),
+                )
+                self.assertEqual(reading["text"], primary)
+                self.assertEqual(reading["alternative_text"], secondary)
+                self.assertTrue(reading["review_required"])
+                self.assertIn("model_disagreement", reading["review_reasons"])
+
     def test_live_verification_uses_another_model_and_gates_disagreement(self):
         with (
             patch.object(server, "get_client") as provider,

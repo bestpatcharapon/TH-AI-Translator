@@ -1,5 +1,4 @@
 import asyncio
-import gzip
 import io
 import json
 import math
@@ -45,7 +44,10 @@ from project_config import (
     reasoning_options,
     tone_description,
 )
+from request_limits import install_request_limits
+from request_observability import install_request_observability
 from request_validation import interface_language, settings, text_value, translation_preferences
+from response_compression import compress_response
 from semantic_review import review_translation
 from services import create_speech, detect_language, extract_file
 from speech_recognition import (
@@ -79,6 +81,8 @@ json_provider = DefaultJSONProvider(app)
 json_provider.ensure_ascii = False
 app.json = json_provider
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD + 64 * 1024
+install_request_observability(app)
+install_request_limits(app)
 _client = None
 _client_lock = threading.Lock()
 _translation_cache = ResultCache(ttl=300)
@@ -92,30 +96,32 @@ _reasoning = reasoning_options(TRANSLATION_REASONING_EFFORT)
 _chat_reasoning = reasoning_options(CHAT_REASONING_EFFORT)
 
 
-@app.before_request
-def start_request_timer():
-    request.environ["translator.started"] = time.perf_counter()
+# The page has no inline scripts or styles, so the policy can stay strict. Photo
+# previews use data: URLs and speech playback uses blob: URLs.
+_SECURITY_HEADERS = {
+    "Content-Security-Policy": (
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; "
+        "media-src 'self' blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; "
+        "worker-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; "
+        "object-src 'none'"
+    ),
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "X-Frame-Options": "DENY",
+    "Permissions-Policy": "camera=(), geolocation=(), microphone=(self)",
+}
 
 
 @app.after_request
 def request_performance_headers(response):
     started = request.environ.get("translator.started")
-    if started is not None and request.path.startswith("/api/"):
+    is_api = request.path.startswith("/api/")
+    if started is not None and is_api:
         response.headers["Server-Timing"] = f"app;dur={(time.perf_counter() - started) * 1000:.1f}"
         response.headers["Cache-Control"] = "no-store"
-        if (
-            response.status_code == 200
-            and response.mimetype in {"application/json", "application/javascript"}
-            and not response.is_streamed
-        ):
-            response.vary.add("Accept-Encoding")
-            if request.accept_encodings["gzip"] > 0 and "Content-Encoding" not in response.headers:
-                body = response.get_data()
-                if len(body) >= 1024:
-                    compressed = gzip.compress(body, compresslevel=4, mtime=0)
-                    if len(compressed) < len(body):
-                        response.set_data(compressed)
-                        response.headers["Content-Encoding"] = "gzip"
+    compress_response(response, request)
+    for name, value in _SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
     return response
 
 
@@ -870,6 +876,20 @@ def extract():
             extract_file,
             get_client,
             kind,
+            digest_key(
+                os.getenv("TYPHOON_OCR_API_KEY", "").strip()
+                or os.getenv("TYPHOON_API_KEY", "").strip()
+            ),
+            tuple(
+                os.getenv(name, "")
+                for name in (
+                    "DOCUMENT_OCR_PROVIDER",
+                    "TYPHOON_OCR_MODEL",
+                    "TYPHOON_BASE_URL",
+                    "TYPHOON_OCR_TIMEOUT_SECONDS",
+                    "TYPHOON_OCR_MAX_TOKENS",
+                )
+            ),
             str(file.filename).rsplit(".", 1)[-1].lower(),
             digest_key(data),
         )

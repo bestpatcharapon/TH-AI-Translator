@@ -133,6 +133,8 @@ function renderLanguageOptions() {
     flag.src = languageFlag(code);
     flag.alt = "";
     flag.title = LANGUAGE_CATALOG[code]?.flagName || "";
+    flag.loading = "lazy";
+    flag.decoding = "async";
     const label = document.createElement("span");
     label.className = "language-option-label";
     const name = document.createElement("span");

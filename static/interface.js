@@ -9,34 +9,35 @@ for (const code of bundledInterfaceLanguages) {
   const entry = LANGUAGE_CATALOG[code];
   interfaceSelect.add(new Option(`${entry.name} · ${entry.native}`, code));
 }
-// Load script-specific fonts only when needed, using the app's existing font CDN.
+// These are installed-system font preferences, not downloadable web fonts.
+// Only Latin/Thai are bundled; other scripts depend on the device's font coverage.
 const interfaceFontGroups = {
-  "Noto Sans Arabic": ["ar", "fa", "ps", "sd", "ur", "ug"],
-  "Noto Sans Hebrew": ["he", "yi"],
-  "Noto Sans Devanagari": ["hi", "mr", "ne", "sa"],
-  "Noto Sans Bengali": ["bn", "as"],
-  "Noto Sans Gujarati": ["gu"],
-  "Noto Sans Gurmukhi": ["pa"],
-  "Noto Sans Tamil": ["ta"],
-  "Noto Sans Telugu": ["te"],
-  "Noto Sans Kannada": ["kn"],
-  "Noto Sans Malayalam": ["ml"],
-  "Noto Sans Oriya": ["or"],
-  "Noto Sans Sinhala": ["si"],
-  "Noto Sans Myanmar": ["my"],
-  "Noto Sans Khmer": ["km"],
-  "Noto Sans Lao": ["lo"],
-  "Noto Sans Ethiopic": ["am", "ti"],
-  "Noto Sans Armenian": ["hy"],
-  "Noto Sans Georgian": ["ka"],
-  "Noto Serif Tibetan": ["bo"],
-  "Noto Sans Thaana": ["dv"],
-  "Noto Sans SC": ["zh", "yue"],
-  "Noto Sans TC": ["zh-TW"],
-  "Noto Sans JP": ["ja"],
-  "Noto Sans KR": ["ko"],
+  '"Noto Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma': ["ar", "fa", "ps", "sd", "ur", "ug"],
+  '"Noto Sans Hebrew", "Arial Hebrew", "Segoe UI", Arial': ["he", "yi"],
+  '"Noto Sans Devanagari", "Kohinoor Devanagari", Mangal': ["hi", "mr", "ne", "sa"],
+  '"Noto Sans Bengali", "Kohinoor Bangla", Vrinda': ["bn", "as"],
+  '"Noto Sans Gujarati", "Gujarati Sangam MN", Shruti': ["gu"],
+  '"Noto Sans Gurmukhi", "Gurmukhi MN", Raavi': ["pa"],
+  '"Noto Sans Tamil", "Tamil Sangam MN", Latha': ["ta"],
+  '"Noto Sans Telugu", "Telugu Sangam MN", Gautami': ["te"],
+  '"Noto Sans Kannada", "Kannada Sangam MN", Tunga': ["kn"],
+  '"Noto Sans Malayalam", "Malayalam Sangam MN", Kartika': ["ml"],
+  '"Noto Sans Oriya", "Oriya Sangam MN", Kalinga': ["or"],
+  '"Noto Sans Sinhala", "Sinhala Sangam MN", "Iskoola Pota"': ["si"],
+  '"Noto Sans Myanmar", "Myanmar MN", "Myanmar Text"': ["my"],
+  '"Noto Sans Khmer", "Khmer Sangam MN", "Leelawadee UI"': ["km"],
+  '"Noto Sans Lao", "Lao Sangam MN", "Leelawadee UI"': ["lo"],
+  '"Noto Sans Ethiopic", "Kefa", Nyala': ["am", "ti"],
+  '"Noto Sans Armenian", "Mshtakan", "Segoe UI"': ["hy"],
+  '"Noto Sans Georgian", "Arial", "Segoe UI"': ["ka"],
+  '"Noto Serif Tibetan", "Kailasa", "Microsoft Himalaya"': ["bo"],
+  '"Noto Sans Thaana", "MV Boli"': ["dv"],
+  "var(--font-zh)": ["zh", "yue"],
+  "var(--font-zh-tw)": ["zh-TW"],
+  "var(--font-ja)": ["ja"],
+  "var(--font-ko)": ["ko"],
 };
-const loadedInterfaceFonts = new Set(["Noto Sans SC", "Noto Sans JP", "Noto Sans KR"]);
+
 function applyInterfaceFont(language) {
   const family = Object.entries(interfaceFontGroups).find(([, codes]) =>
     codes.includes(language)
@@ -45,16 +46,7 @@ function applyInterfaceFont(language) {
     document.documentElement.style.removeProperty("--interface-font");
     return;
   }
-  if (!loadedInterfaceFonts.has(family)) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://fonts.googleapis.com/css2?" +
-      new URLSearchParams({ family: `${family}:wght@400;600`, display: "swap" });
-    document.head.append(link);
-    loadedInterfaceFonts.add(family);
-  }
-  document.documentElement.style.setProperty("--interface-font", `"${family}"`);
+  document.documentElement.style.setProperty("--interface-font", family);
 }
 function validInterfaceTokens(value, original) {
   const pattern = /\{[^{}]+\}|\d+(?:[.,]\d+)*/g;

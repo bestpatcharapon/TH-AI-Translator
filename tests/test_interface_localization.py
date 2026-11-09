@@ -16,6 +16,25 @@ class InterfaceLocalizationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         provider.assert_not_called()
 
+    def test_bundled_fonts_can_be_served_without_provider(self):
+        for filename in (
+            "IBMPlexSansThai-Regular.woff2",
+            "IBMPlexSansThai-Medium.woff2",
+            "IBMPlexSansThai-SemiBold.woff2",
+            "IBMPlexSansThai-Bold.woff2",
+            "Manrope-Variable.woff2",
+            "SpaceGrotesk-Variable.woff2",
+        ):
+            with self.subTest(font=filename), patch.object(server, "get_client") as provider:
+                response = server.app.test_client().get(f"/static/fonts/{filename}")
+                try:
+                    self.assertEqual(response.status_code, 200)
+                    self.assertTrue(response.data)
+                    self.assertNotIn("Location", response.headers)
+                    provider.assert_not_called()
+                finally:
+                    response.close()
+
     def test_bundled_interface_can_be_served_without_provider(self):
         with patch.object(server, "get_client") as provider:
             response = server.app.test_client().get("/static/interface-locales/zh-TW.json")

@@ -37,11 +37,27 @@ def compare_transcripts(primary, secondary):
     """Keep the original recognition; disagreement is evidence to review, not to rewrite."""
 
     def normalized(text):
-        return "".join(
-            char
-            for char in unicodedata.normalize("NFKC", text).casefold()
-            if unicodedata.category(char)[0] in {"L", "M", "N"}
+        text = unicodedata.normalize("NFKC", text).casefold()
+        # Only join dotted single-letter initials, not arbitrary words or numbers.
+        text = re.sub(
+            r"(?<!\w)(?:[a-z]\.\s*)+[a-z]\.(?!\w)",
+            lambda match: re.sub(r"\s+", "", match.group()).rstrip("."),
+            text,
         )
+        chars = []
+        for index, char in enumerate(text):
+            before = text[index - 1] if index else ""
+            after = text[index + 1] if index + 1 < len(text) else ""
+            if unicodedata.category(char)[0] in {"L", "M", "N"}:
+                chars.append(char)
+            elif char in ".," and before.isdecimal() and after.isdecimal():
+                chars.append(char)
+            elif char in "+-−" or unicodedata.category(char) == "Pd":
+                chars.append("-" if char != "+" else "+")
+            else:
+                # Punctuation can separate words; deleting it would merge them.
+                chars.append(" ")
+        return " ".join("".join(chars).split())
 
     reasons = set(primary["review_reasons"])
     if normalized(primary["text"]) != normalized(secondary["text"]):

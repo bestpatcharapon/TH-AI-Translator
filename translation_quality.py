@@ -84,12 +84,25 @@ def _numbers(text):
     normalized = "".join(
         str(unicodedata.digit(char)) if char.isdecimal() else char for char in text
     )
-    # Thousands separators are formatting, not content: 1500 and 1,500 are the same amount.
-    # Without this, routine price text triggers a needless (slow) repair request.
+
+    def canonical(number):
+        # Keep the established comma-grouping convention for 1,500. A lone
+        # point with three trailing digits stays decimal: guessing its locale
+        # would hide changes such as 1.500 -> 1500.
+        if re.fullmatch(r"[-+]?\d{1,3}(?:,\d{3})+(?:\.\d+)?(?:\s?%)?", number):
+            return number.replace(",", "")
+        if re.fullmatch(r"[-+]?\d{1,3}(?:\.\d{3})+,\d+(?:\s?%)?", number):
+            return number.replace(".", "").replace(",", ".")
+        # Treat a contiguous comma followed by one or two digits as decimal
+        # under this bounded convention, not a locale-independent guarantee:
+        # unspaced lists can look identical. Spaced lists stay separate tokens;
+        # three or more trailing digits are not converted by this rule.
+        if re.fullmatch(r"[-+]?\d+,\d{1,2}(?:\s?%)?", number):
+            return number.replace(",", ".")
+        return number
+
     return [
-        number.replace(",", "")
-        if re.fullmatch(r"[-+]?\d{1,3}(?:,\d{3})+(?:\.\d+)?(?:\s?%)?", number)
-        else number
+        canonical(number)
         for number in re.findall(r"(?<!\d)[-+]?\d+(?:[.,:/-]\d+)*(?:\s?%)?", normalized)
     ]
 
@@ -136,8 +149,33 @@ def _small_number_words(text):
     )
 
 
+# Deliberately bounded English count contexts, not a general noun/POS guess.
+_COUNT_UNITS = (
+    "people person persons group groups fandom fandoms item items ticket tickets "
+    "apple apples bottle bottles day days hour hours minute minutes second seconds "
+    "dollar dollars baht failure failures book books cat cats dog dogs chair chairs "
+    "table tables room rooms order orders unit units "
+    "pill pills tablet tablets capsule capsules dose doses"
+).split()
+
+
+def _quantity_number_words(text):
+    return Counter(
+        _SMALL_CARDINALS[match.group().lower()]
+        for match in _WORD_NUMBER_RUN.finditer(text)
+        if match.group().lower() in _SMALL_CARDINALS
+        and re.match(rf"\s+(?:{'|'.join(_COUNT_UNITS)})\b", text[match.end() :], re.I)
+    )
+
+
 def audit_translation(text, translation, target, glossary) -> AuditResult:
-    """These are review flags, not a semantic accuracy score or a guarantee."""
+    """Review flags, not an accuracy guarantee.
+
+    Word-only quantity checks require known English count nouns on both sides.
+    Other languages, bare cardinals, omitted quantities, and complex number
+    phrases still need semantic review; guessing would flag pronoun 'one'.
+    Negation is not interpreted, so unchanged counts do not certify safe dosing.
+    """
     extractors = {
         "numbers": _numbers,
         "links": lambda value: [
@@ -164,6 +202,12 @@ def audit_translation(text, translation, target, glossary) -> AuditResult:
                 missing_counts -= target_words
             if not source_words - added_counts:
                 added_counts -= source_words
+            if not original and not output:
+                source_quantities = _quantity_number_words(text)
+                target_quantities = _quantity_number_words(translation)
+                if source_quantities and target_quantities:
+                    missing_counts = source_quantities - target_quantities
+                    added_counts = target_quantities - source_quantities
         missing, added = list(missing_counts.elements()), list(added_counts.elements())
         if missing or added:
             issues.append({"kind": kind, "missing": missing[:20], "added": added[:20]})

@@ -1,6 +1,7 @@
 """Regression checks for issues found during the project cleanup."""
 
 import io
+import os
 import unittest
 from unittest.mock import patch
 
@@ -36,6 +37,7 @@ class CleanupRegressionTests(unittest.TestCase):
     def test_scanned_documents_resolve_the_client_only_when_ocr_is_needed(self):
         client = object()
         with (
+            patch.dict(os.environ, {"DOCUMENT_OCR_PROVIDER": "groq"}),
             patch.object(server, "get_client", return_value=client) as provider,
             patch("services.read_image", return_value="Scanned text") as ocr,
         ):

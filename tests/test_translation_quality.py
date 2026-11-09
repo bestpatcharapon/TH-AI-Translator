@@ -145,6 +145,52 @@ class TranslationQualityTests(unittest.TestCase):
         # Decimal commas are not grouping separators.
         self.assertEqual(audit_translation("1,5 kg", "15 kg", "en", [])["status"], "review")
 
+    def test_supported_decimal_formats_preserve_amounts(self):
+        for source, target in (
+            ("1,5 kg", "1.5 kg"),
+            ("12,50 USD", "12.50 USD"),
+            ("-0,25", "-0.25"),
+            ("+2,5%", "+2.5%"),
+            ("๑,๕", "1.5"),
+            ("1.500,50 EUR", "1,500.50 EUR"),
+            ("1.234.567,89", "1234567.89"),
+        ):
+            for original, output in ((source, target), (target, source)):
+                with self.subTest(source=original, target=output):
+                    self.assertEqual(
+                        audit_translation(original, output, "en", [])["status"], "clear"
+                    )
+
+    def test_spaced_comma_lists_are_not_normalized_as_decimals(self):
+        clean = audit_translation("1, 5", "1 and 5", "en", [])
+        self.assertEqual(clean["status"], "clear")
+        result = audit_translation("1, 5", "1.5", "en", [])
+        self.assertEqual(
+            result["issues"],
+            [{"kind": "numbers", "missing": ["1", "5"], "added": ["1.5"]}],
+        )
+
+    def test_decimal_normalization_does_not_hide_changes_or_ambiguous_grouping(self):
+        for source, target in (
+            ("0.5", "05"),
+            ("-0,5", "0.5"),
+            ("1,5", "15"),
+            ("12,50", "1250"),
+            ("1.500,50", "1500.05"),
+            ("1.500", "1500"),
+            ("1,500", "1.500"),
+            ("1,2345", "1.2345"),
+            ("12,34,56", "123456"),
+            ("1,5%", "1.5"),
+            ("1,5 and 1,5", "1.5"),
+            ("2/3", "2.3"),
+            ("10:30", "10.30"),
+        ):
+            with self.subTest(source=source, target=target):
+                result = audit_translation(source, target, "en", [])
+                self.assertEqual(result["status"], "review")
+                self.assertEqual(result["issues"][0]["kind"], "numbers")
+
     def test_audit_and_glossary_validation_need_no_model(self):
         with patch.object(server, "get_client") as client:
             result = self.client.post("/api/audit", json=self.body)

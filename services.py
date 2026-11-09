@@ -7,7 +7,7 @@ import os
 import threading
 import zipfile
 from collections import deque
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 
 import edge_tts
@@ -19,6 +19,7 @@ from langdetect import DetectorFactory, LangDetectException, detect
 from PIL import Image, ImageOps, UnidentifiedImageError
 from pillow_heif import register_heif_opener
 
+from document_ocr import NoReadableTextError, document_ocr_identity, read_typhoon_image
 from language_catalog import LANGUAGES, VOICES
 from project_config import MAX_PAGES, MAX_TEXT, VISION_MODEL
 from project_config import MAX_UPLOAD as MAX_UPLOAD  # Public compatibility export.
@@ -45,7 +46,15 @@ def image_bytes(data, lossless=False):
                 raise ValueError("รองรับรูป PNG, JPEG, WebP และ HEIC/HEIF เท่านั้น")
             if image.width * image.height > 25_000_000:
                 raise ValueError("รูปมีขนาดเกิน 25 ล้านพิกเซล กรุณาลดขนาดก่อน")
-            image = ImageOps.exif_transpose(image).convert("RGB")
+            image = ImageOps.exif_transpose(image)
+            if image.mode in {"RGBA", "LA"} or "transparency" in image.info:
+                # Transparent document backgrounds should be paper-white, not black.
+                rgba = image.convert("RGBA")
+                paper = Image.new("RGB", image.size, "white")
+                paper.paste(rgba, mask=rgba.getchannel("A"))
+                image = paper
+            else:
+                image = image.convert("RGB")
             image.thumbnail((2200, 2200))
             output = io.BytesIO()
             image.save(
@@ -60,7 +69,11 @@ def image_bytes(data, lossless=False):
 
 
 def read_image(data, client):
-    encoded = base64.b64encode(image_bytes(data)).decode("ascii")
+    typhoon = document_ocr_identity()[0] == "typhoon"
+    normalized = image_bytes(data, lossless=typhoon)
+    if typhoon:
+        return read_typhoon_image(normalized, mime_type="image/png")
+    encoded = base64.b64encode(normalized).decode("ascii")
     response = client.chat.completions.create(
         model=VISION_MODEL,
         temperature=0,
@@ -97,13 +110,18 @@ def extract_file(data, filename, kind, client=None, *, client_factory=None):
 
     client_lock = threading.Lock()
 
-    def ocr(image):
+    def ocr(image, *, allow_blank=False):
         nonlocal client
-        if client is None and client_factory is not None:
+        if document_ocr_identity()[0] == "groq" and client is None and client_factory is not None:
             with client_lock:
                 if client is None:
                     client = client_factory()
-        return read_image(image, client)
+        try:
+            return read_image(image, client)
+        except NoReadableTextError:
+            if not allow_blank:
+                raise
+            return ""
 
     suffix = Path(filename).suffix.lower()
     if kind == "image":
@@ -147,7 +165,9 @@ def extract_file(data, filename, kind, client=None, *, client_factory=None):
 
                 def finish_page():
                     item = pending.popleft()
-                    parts.append(item if isinstance(item, str) else item.result())
+                    text = item if isinstance(item, str) else item.result()
+                    if text:
+                        parts.append(text)
                     if sum(map(len, parts)) > MAX_TEXT:
                         raise ValueError(f"เอกสารยาวเกิน {MAX_TEXT:,} ตัวอักษร กรุณาแบ่งไฟล์ก่อน")
 
@@ -161,20 +181,29 @@ def extract_file(data, filename, kind, client=None, *, client_factory=None):
                         if text:
                             pending.append(text)
                         else:
-                            scale = min(2, 2200 / max(page.rect.width, page.rect.height))
+                            # Higher sampling for small scanned pages; retain the same
+                            # 2200px ceiling to bound memory and provider payload size.
+                            density = 3 if document_ocr_identity()[0] == "typhoon" else 2
+                            scale = min(density, 2200 / max(page.rect.width, page.rect.height))
                             pixmap = page.get_pixmap(
                                 matrix=pymupdf.Matrix(scale, scale), alpha=False
                             )
-                            pending.append(_pdf_ocr_pool.submit(ocr, pixmap.tobytes("png")))
+                            pending.append(
+                                _pdf_ocr_pool.submit(ocr, pixmap.tobytes("png"), allow_blank=True)
+                            )
                         # At most two pages are pending, so size/error checks stop further work early.
                         if len(pending) >= 2:
                             finish_page()
                     while pending:
                         finish_page()
                 finally:
-                    for item in pending:
-                        if not isinstance(item, str):
-                            item.cancel()
+                    siblings = [item for item in pending if not isinstance(item, str)]
+                    for item in siblings:
+                        item.cancel()
+                    # Running SDK calls cannot be cancelled. Drain them before the request
+                    # slot is released, without replacing the original error with theirs.
+                    # Cleanup relies on existing SDK timeouts, not a hard wall-clock deadline.
+                    wait(siblings)
                 return check_text("\n\n".join(parts))
         except (pymupdf.FileDataError, pymupdf.EmptyFileError) as error:
             raise ValueError("ไม่สามารถอ่าน PDF ได้ ไฟล์อาจเสียหาย") from error

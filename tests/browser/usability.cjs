@@ -59,10 +59,13 @@ const assert = require("node:assert/strict");
     );
     assert.deepEqual(tooSmall, [], "Visible text must be at least 12px");
 
-    // Offline: the app explains that translation needs a connection.
+    // Offline guidance is persistent, not an ordinary three-second status notice.
+    await page.clock.install();
     await context.setOffline(true);
     await page.evaluate(() => window.dispatchEvent(new Event("offline")));
     await page.locator("#offline-banner").waitFor();
+    await page.clock.fastForward(5000);
+    assert(await page.locator("#offline-banner").isVisible());
     await context.setOffline(false);
     await page.evaluate(() => window.dispatchEvent(new Event("online")));
     assert(await page.locator("#offline-banner").isHidden());

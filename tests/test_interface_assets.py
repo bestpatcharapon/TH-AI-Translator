@@ -1,7 +1,11 @@
 """Offline localization preserves UI limits and only publishes complete files."""
 
 import json
+import re
 import unittest
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import urlsplit
 
 from language_catalog import CATALOG
 from scripts.prepare_interface_locales import (
@@ -14,6 +18,44 @@ from scripts.prepare_interface_locales import (
 
 
 class InterfaceAssetTests(unittest.TestCase):
+    def test_font_assets_are_bundled_and_never_link_to_remote_stylesheets(self):
+        static = Path(__file__).resolve().parents[1] / "static"
+        links = []
+
+        class Links(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+                if tag == "link":
+                    links.append(dict(attrs))
+
+        Links().feed((static / "index.html").read_text(encoding="utf-8"))
+        for link in links:
+            with self.subTest(link=link):
+                self.assertFalse(urlsplit(link.get("href", "")).netloc)
+                self.assertNotIn(link.get("rel"), {"preconnect", "dns-prefetch"})
+
+        css = (static / "style.css").read_text(encoding="utf-8")
+        faces = re.findall(r"@font-face\s*\{([^}]+)\}", css)
+        sources = []
+        self.assertEqual(len(faces), 6, "Only the bundled Latin/Thai faces are declared")
+        for face in faces:
+            self.assertIn("font-display: swap", face)
+            for source in re.findall(r"url\([\"\']?([^\"\')]+)", face):
+                self.assertTrue(source.startswith("/static/fonts/"), source)
+                self.assertTrue((static / source.removeprefix("/static/")).is_file(), source)
+                sources.append(Path(source).name)
+        self.assertCountEqual(
+            sources,
+            [
+                "IBMPlexSansThai-Regular.woff2",
+                "IBMPlexSansThai-Medium.woff2",
+                "IBMPlexSansThai-SemiBold.woff2",
+                "IBMPlexSansThai-Bold.woff2",
+                "Manrope-Variable.woff2",
+                "SpaceGrotesk-Variable.woff2",
+            ],
+        )
+        self.assertNotRegex(css, r"@import\b|https?://[^\s\"')]*font")
+
     def test_bare_json_keys_are_repaired_without_executing_code(self):
         self.assertEqual(decode_labels('{\n menu: "Menu"\n}'), {"menu": "Menu"})
         self.assertEqual(decode_labels('{"menu": "Menu"}'), {"menu": "Menu"})

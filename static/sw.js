@@ -1,10 +1,11 @@
 /* App-shell cache only. Translation/API traffic is never stored here, so private text,
    photos and audio stay out of the cache and offline use cannot return stale translations. */
-const SHELL_CACHE = "th-translator-shell-v2";
+const SHELL_CACHE_PREFIX = "th-translator-shell-";
+const SHELL_CACHE = `${SHELL_CACHE_PREFIX}v2`;
 const SHELL = [
   "/",
   "/api/language-catalog.js",
-  "/static/style.css?v=appearance-restored-v9",
+  "/static/style.css?v=perf-v20",
   "/static/workspaces.js",
   "/static/app.js",
   "/static/enhancements.js",
@@ -21,10 +22,13 @@ const SHELL = [
   "/static/document.js",
   "/static/multilingual.js",
   "/static/offline.js",
-  "/static/brand/logo-v1.png",
-  "/static/fonts/NotoSansThai-Regular.ttf",
-  "/static/fonts/NotoSansThai-Bold.ttf",
-  "/static/fonts/SpaceGrotesk-Variable.ttf",
+  "/static/brand/logo-96.png",
+  "/static/brand/logo-192.png",
+  "/static/fonts/IBMPlexSansThai-Regular.woff2",
+  "/static/fonts/IBMPlexSansThai-Medium.woff2",
+  "/static/fonts/IBMPlexSansThai-SemiBold.woff2",
+  "/static/fonts/IBMPlexSansThai-Bold.woff2",
+  "/static/fonts/SpaceGrotesk-Variable.woff2",
 ];
 
 self.addEventListener("install", (event) => {
@@ -41,7 +45,11 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((key) => key !== SHELL_CACHE).map((key) => caches.delete(key)))
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith(SHELL_CACHE_PREFIX) && key !== SHELL_CACHE)
+            .map((key) => caches.delete(key))
+        )
       )
       .then(() => self.clients.claim())
   );

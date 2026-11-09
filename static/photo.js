@@ -275,7 +275,10 @@ function labelRect(region, regions, width, height) {
         right = Math.min(right, (region.x + region.width + other.x) / 2);
     }
   }
-  let bottom = region.y + region.height * (region.height < height * 0.08 ? 1.65 : 1.05);
+  // Dense menus often have only a few pixels between title and description.
+  // Keep each replacement inside its measured line instead of painting over
+  // the next line to make room for a longer translation.
+  let bottom = region.y + region.height;
   for (const other of regions) {
     if (
       other !== region &&
@@ -296,9 +299,9 @@ function labelRect(region, regions, width, height) {
 }
 function fitPhotoLabel(button, originalHeight) {
   const content = button.firstElementChild;
-  let low = 12,
+  let low = 4,
     high = Math.floor(Math.min(42, Math.max(8, originalHeight * 0.85)) * 2),
-    best = 12;
+    best = 4;
   // Find the largest fitting half-pixel size without dozens of forced layouts per label.
   while (low <= high) {
     const middle = Math.floor((low + high) / 2);

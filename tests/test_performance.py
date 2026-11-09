@@ -1,10 +1,12 @@
 import gzip
 import io
 import json
+import os
 import threading
 import time
 import unittest
 from concurrent.futures import Future, ThreadPoolExecutor
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -415,6 +417,47 @@ class PerformanceTests(unittest.TestCase):
         self.assertLess(len(compressed.data), len(plain.data))
         self.assertIn("Accept-Encoding", compressed.headers["Vary"])
 
+    def test_static_text_is_compressed_but_fonts_and_images_are_not(self):
+        client = server.app.test_client()
+        root = Path(__file__).resolve().parents[1]
+        for path in (
+            "/static/style.css",
+            "/static/app.js",
+            "/static/index.html",
+            # Under the 1 KiB floor: must stay intact even when the client supports gzip.
+            "/static/interface-locales.js",
+        ):
+            with self.subTest(path=path):
+                expected = (root / path.removeprefix("/")).read_bytes()
+                compressed = client.get(path, headers={"Accept-Encoding": "gzip"})
+                plain = client.get(path, headers={"Accept-Encoding": "gzip;q=0"})
+                try:
+                    self.assertEqual(compressed.status_code, 200)
+                    self.assertEqual(plain.data, expected)
+                    if len(expected) >= 1024:
+                        self.assertEqual(compressed.headers["Content-Encoding"], "gzip")
+                        self.assertLess(len(compressed.data), len(expected))
+                    else:
+                        self.assertNotIn("Content-Encoding", compressed.headers)
+                    self.assertEqual(
+                        gzip.decompress(compressed.data)
+                        if "Content-Encoding" in compressed.headers
+                        else compressed.data,
+                        expected,
+                    )
+                    self.assertIn("Accept-Encoding", compressed.headers["Vary"])
+                finally:
+                    compressed.close()
+                    plain.close()
+        for path in ("/static/brand/logo-96.png", "/static/fonts/IBMPlexSansThai-Regular.ttf"):
+            with self.subTest(path=path):
+                response = client.get(path, headers={"Accept-Encoding": "gzip"})
+                try:
+                    self.assertEqual(response.status_code, 200)
+                    self.assertNotIn("Content-Encoding", response.headers)
+                finally:
+                    response.close()
+
     def test_photo_returns_primary_without_waiting_for_extra_languages(self):
         client = server.app.test_client()
         photo = {
@@ -555,6 +598,7 @@ class PerformanceTests(unittest.TestCase):
             document[1].draw_rect(document[1].rect, color=None, fill=(0, 0, 0))
             data = document.tobytes()
         with (
+            patch.dict(os.environ, {"DOCUMENT_OCR_PROVIDER": "groq"}),
             patch("services.read_image", side_effect=read),
             patch.object(server, "get_client", return_value=object()) as client,
         ):

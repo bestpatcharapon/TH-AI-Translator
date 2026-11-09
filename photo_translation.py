@@ -20,6 +20,15 @@ from PIL import Image, ImageOps, ImageStat
 from dialect_references import reference_identity
 from language_catalog import LANGUAGES, OCR_LANGUAGES
 from linguistic_guidance import language_notes
+from operation_budget import (
+    bind_photo_budget,
+    check_photo_budget,
+    checked,
+    photo_cache_run,
+    photo_completion,
+    photo_timeout,
+    whole_photo_budget,
+)
 from paddle_ocr_backend import models_ready, recognition_model, recognize_image
 from performance import ResultCache, digest_key, ordered_map
 from photo_detection import numeric_text, preserve_numeric_pixels, text_boxes
@@ -58,6 +67,7 @@ def ocr_runtime():
     return command, env
 
 
+@checked
 def run_ocr(image, language, timeout: float = 45):
     command, env = ocr_runtime()
     buffer = io.BytesIO()
@@ -68,7 +78,7 @@ def run_ocr(image, language, timeout: float = 45):
             input=buffer.getvalue(),
             capture_output=True,
             env=env,
-            timeout=timeout,
+            timeout=photo_timeout(timeout),
             check=False,
         )
     except (OSError, subprocess.TimeoutExpired) as error:
@@ -242,11 +252,12 @@ def supplemental_reading(normalized, source):
                 ],
             }
 
-    return _ocr_result_cache.run(
-        ("supplement-v1", hashlib.sha256(normalized).digest(), source), produce
+    return photo_cache_run(
+        _ocr_result_cache, ("supplement-v1", hashlib.sha256(normalized).digest(), source), produce
     )[0]
 
 
+@checked
 def detect_regions(image, source):
     scale = max(1, min(3, 2200 / max(image.size)))
     enlarged = image.resize(
@@ -259,6 +270,7 @@ def detect_regions(image, source):
     white = enlarged.convert("L").point(lambda pixel: 0 if pixel > 180 else 255)
     soft_white = enlarged.convert("L").point([255] * 156 + [0] * 100)
 
+    @bind_photo_budget
     def read_variant(variant):
         return parse_tsv(
             run_ocr(variant, language, timeout=max(0.1, deadline - time.monotonic())),
@@ -361,6 +373,7 @@ def detect_regions(image, source):
     return merged
 
 
+@checked
 def recover_small_regions(image, regions, source):
     """Read overlapping enlarged tiles; all output positions remain measured OCR boxes."""
     small = any(region["height"] < max(18, image.height * 0.02) for region in regions)
@@ -379,6 +392,7 @@ def recover_small_regions(image, regions, source):
                 )
             )
 
+    @bind_photo_budget
     def read_tile(box):
         left, top, right, bottom = box
         crop = ImageOps.autocontrast(image.crop(box).convert("L"))
@@ -418,11 +432,13 @@ def recover_small_regions(image, regions, source):
     return sorted(selected, key=lambda region: (round(region["y"] / 8), region["x"]))
 
 
+@checked
 def refine_regions(image, regions, source):
     command, env = ocr_runtime()
     language = ocr_languages(source)
     deadline = time.monotonic() + 12
 
+    @bind_photo_budget
     def refine(region):
         if time.monotonic() >= deadline:
             return region
@@ -451,7 +467,7 @@ def refine_regions(image, regions, source):
                 input=buffer.getvalue(),
                 capture_output=True,
                 env=env,
-                timeout=max(0.1, min(8, deadline - time.monotonic())),
+                timeout=photo_timeout(max(0.1, min(8, deadline - time.monotonic()))),
             )
             text = " ".join(
                 line
@@ -494,6 +510,7 @@ def photo_needs_repair(region, translation, target):
     )
 
 
+@checked
 def translate_regions(regions, source, target, tone, client, model, glossary=None):
     if source == target:
         if target == "en" and any(re.search(r"[\u0e01-\u0e2e]", r["text"]) for r in regions):
@@ -502,7 +519,8 @@ def translate_regions(regions, source, target, tone, client, model, glossary=Non
             return [region["text"] for region in regions]
 
     def translate_batch(batch):
-        response = client.chat.completions.create(
+        response = photo_completion(
+            client,
             model=model,
             temperature=0.1,
             max_completion_tokens=min(
@@ -599,7 +617,8 @@ def translate_regions(regions, source, target, tone, client, model, glossary=Non
     # Sequential batches avoid a burst against one provider token budget. Keep
     # validated batches so a later 429 does not make Retry pay for them again.
     for batch in batches:
-        values, _ = _label_result_cache.run(
+        values, _ = photo_cache_run(
+            _label_result_cache,
             (digest_key(batch), source, target, tone, client, model, digest_key(glossary or [])),
             lambda batch=batch: translate_batch(batch),
             cacheable=lambda values, batch=batch: all(
@@ -648,6 +667,7 @@ def region_style(image, region):
     return background, foreground
 
 
+@checked
 def _legacy_positioned_text(normalized, source):
     with Image.open(io.BytesIO(normalized)) as image:
         image = image.convert("RGB")
@@ -657,13 +677,18 @@ def _legacy_positioned_text(normalized, source):
             if not str(error).startswith("ไม่พบข้อความ"):
                 raise
             regions = []
+        check_photo_budget()
         regions = recover_small_regions(image, regions, source)
+        check_photo_budget()
         supplement = supplemental_reading(normalized, source)
+        check_photo_budget()
         regions = list(regions)
         for candidate in supplement["regions"]:
             if not any(overlap(candidate, previous) > 0.45 for previous in regions):
                 regions.append(candidate)
+        check_photo_budget()
         detected = text_boxes(image)
+        check_photo_budget()
         # Reject number-shaped decoration: a digit's OCR box must agree in size
         # with an independently detected text line before protecting its pixels.
         seeds = [
@@ -726,6 +751,7 @@ def photo_ocr_backend():
     return backend
 
 
+@checked
 def _positioned_text(normalized, source):
     if photo_ocr_backend() == "vision":
         # The detector's ONNX model ships with RapidOCR. Coordinates are measured
@@ -742,6 +768,7 @@ def _positioned_text(normalized, source):
             "engine": "rapidocr-vision",
         }
     native = recognize_image(normalized, source)
+    check_photo_budget()
     return native if native is not None else _legacy_positioned_text(normalized, source)
 
 
@@ -755,7 +782,8 @@ class PositionedRegions(list):
 
 
 def positioned_text(normalized, source):
-    data = _ocr_result_cache.run(
+    data = photo_cache_run(
+        _ocr_result_cache,
         (
             hashlib.sha256(normalized).digest(),
             source,
@@ -768,7 +796,8 @@ def positioned_text(normalized, source):
 
 
 def cached_photo_language(normalized, client):
-    return _language_cache.run(
+    return photo_cache_run(
+        _language_cache,
         (hashlib.sha256(normalized).digest(), client, VISION_MODEL),
         lambda: _photo_language(normalized, client),
     )[0]
@@ -786,7 +815,8 @@ def _language_preview(normalized):
 
 def _photo_language(normalized, client):
     preview = _language_preview(normalized)
-    response = client.chat.completions.create(
+    response = photo_completion(
+        client,
         model=VISION_MODEL,
         temperature=0,
         max_completion_tokens=64,
@@ -828,11 +858,12 @@ def photo_language(normalized, client):
 
 
 def normalized_photo(data):
-    return _normalized_cache.run(
-        hashlib.sha256(data).digest(), lambda: image_bytes(data, lossless=True)
+    return photo_cache_run(
+        _normalized_cache, hashlib.sha256(data).digest(), lambda: image_bytes(data, lossless=True)
     )[0]
 
 
+@whole_photo_budget
 def _translate_photo(data, source, target, tone, client, model, glossary_json="[]"):
     normalized = normalized_photo(data)
     with Image.open(io.BytesIO(normalized)) as image:
@@ -845,7 +876,9 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
         # verification pass is essential before declaring an auto-English image done.
         if source == "auto" and hint == "en":
             hint, languages = "th,en", ["th", "en"]
+        check_photo_budget()
         regions = positioned_text(normalized, hint)
+        check_photo_budget()
         ocr_engine = getattr(regions, "engine", "legacy")
         protected_boxes = getattr(regions, "protected_boxes", [])
         # Older OCR protection may cover an entire price/contact line. Only bare
@@ -854,7 +887,9 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
         for region in regions:
             if any(char.isalpha() for char in region["text"]):
                 region["preserve_original"] = False
+        check_photo_budget()
         regions = verify_photo_readings(normalized, regions, client)
+        check_photo_budget()
         for region in regions:
             if preserve_numeric_pixels(region["text"]):
                 region["preserve_original"] = True
@@ -870,6 +905,7 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
             for region in regions
             if not region.get("reading_review") and not region.get("preserve_original")
         ]
+        check_photo_budget()
         translated = iter(
             translate_regions(
                 readable, translation_source, target, tone, client, model, json.loads(glossary_json)
@@ -889,6 +925,7 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
             and photo_needs_repair(regions[index], value, target)
         ]
         if bad:
+            check_photo_budget()
             repair_hint = ". Preserve all original numbers, prices, links and placeholders exactly. Follow meaning_hint and preserve the cooking method."
             if target == "en":
                 repair_hint += (
@@ -910,6 +947,7 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
                         "คำแปลบางส่วนยังไม่ผ่านการตรวจภาษา ราคา และความหมาย กรุณาลองใหม่อีกครั้ง"
                     )
                 translations[index] = value
+        check_photo_budget()
         result = []
         for index, (region, translation) in enumerate(zip(regions, translations)):
             background, foreground = region_style(image, region)
@@ -960,6 +998,7 @@ def _translate_photo(data, source, target, tone, client, model, glossary_json="[
         }
 
 
+@whole_photo_budget
 def translate_photo(data, source, target, tone, client, model, glossary_json="[]"):
     """Reuse successful results and share uploads with bounded memory and expiry."""
     key = (
@@ -974,8 +1013,11 @@ def translate_photo(data, source, target, tone, client, model, glossary_json="[]
         photo_ocr_backend(),
         os.getenv("PHOTO_READING_PROVIDER", "groq"),
         os.getenv("GEMINI_PHOTO_MODEL", ""),
+        hashlib.sha256((os.getenv("TYPHOON_OCR_API_KEY", "").strip() or os.getenv("TYPHOON_API_KEY", "").strip()).encode()).digest() if os.getenv("PHOTO_READING_PROVIDER", "groq").strip().lower() == "typhoon" else None,
+        tuple(os.getenv(name, "") for name in ("TYPHOON_OCR_MODEL", "TYPHOON_BASE_URL", "TYPHOON_OCR_TIMEOUT_SECONDS", "TYPHOON_OCR_MAX_TOKENS")),
     )
-    result, status = _photo_result_cache.run(
+    result, status = photo_cache_run(
+        _photo_result_cache,
         key,
         lambda: _translate_photo(data, source, target, tone, client, model, glossary_json),
         cacheable=lambda result: not result.get("review_required"),

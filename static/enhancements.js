@@ -68,6 +68,33 @@ const SAVED_KEY = "translator-history-v2";
 const LEGACY_SAVED_KEY = "translator-saved-v1";
 const isString = (value) => typeof value === "string";
 const validLanguage = (code) => isString(code) && Object.hasOwn(LANGUAGES, code);
+function historyRecord(item) {
+  // Persist a translation and its supported settings, never request/conversation snapshots.
+  const fields = [
+    "text",
+    "translation",
+    "source",
+    "target",
+    "tone",
+    "context",
+    "extra_context",
+    "glossary",
+    "thai_mode",
+    "thai_lexicon",
+    "thai_clarification",
+    "interface_language",
+    "sourceLanguage",
+    "feature",
+    "audit",
+    "interpretation",
+    "quality_review",
+    "favorite",
+    "savedAt",
+  ];
+  return Object.fromEntries(
+    fields.filter((field) => Object.hasOwn(item, field)).map((field) => [field, item[field]])
+  );
+}
 function readSaved() {
   try {
     const records = JSON.parse(
@@ -92,7 +119,7 @@ function readSaved() {
               )
           )
           .map((item) => ({
-            ...item,
+            ...historyRecord(item),
             favorite: item.favorite !== false,
             feature: ["text", "document", "image", "live"].includes(item.feature)
               ? item.feature
@@ -102,7 +129,20 @@ function readSaved() {
           }))
       : [];
     const counts = { text: 0, document: 0, image: 0, live: 0 };
-    return valid.filter((item) => ++counts[item.feature] <= 100);
+    const saved = valid.filter((item) => ++counts[item.feature] <= 100);
+    if (
+      localStorage.getItem(SAVED_KEY) !== null ||
+      localStorage.getItem(LEGACY_SAVED_KEY) !== null
+    ) {
+      // Rewrite on load so removing a message cannot leave it in another record's snapshot.
+      try {
+        localStorage.setItem(SAVED_KEY, JSON.stringify(saved));
+        localStorage.removeItem(LEGACY_SAVED_KEY);
+      } catch {
+        // Keep supported history available in memory if browser storage is read-only.
+      }
+    }
+    return saved;
   } catch {
     return [];
   }
@@ -122,8 +162,10 @@ function savedId(item) {
 }
 function persistSaved(records) {
   try {
-    localStorage.setItem(SAVED_KEY, JSON.stringify(records));
-    savedTranslations = records;
+    const saved = records.map(historyRecord);
+    localStorage.setItem(SAVED_KEY, JSON.stringify(saved));
+    localStorage.removeItem(LEGACY_SAVED_KEY);
+    savedTranslations = saved;
     document.dispatchEvent(new CustomEvent("history:change"));
     return true;
   } catch {
@@ -286,6 +328,7 @@ function updateSavedButton() {
 }
 function refreshFeatureLabels() {
   updateSavedButton();
+
   const labels = {
     copy: t("copyTranslation"),
     regenerate: t("regenerateTranslation"),
@@ -566,14 +609,12 @@ function rememberTranslation(detail) {
   if (!detail.text || !detail.translation) return;
   const id = savedId(detail),
     previous = savedTranslations.find((item) => savedId(item) === id);
-  const record = {
+  const record = historyRecord({
     ...detail,
     feature: detail.feature || mode,
     favorite: previous?.favorite || false,
     savedAt: Date.now(),
-  };
-  delete record.additional_translations;
-  delete record.additional_targets;
+  });
   const records = [record, ...savedTranslations.filter((item) => savedId(item) !== id)];
   const own = records.filter((item) => item.feature === record.feature);
   if (own.length > 100) {
