@@ -3214,11 +3214,13 @@ textarea[dir="auto"],
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
 }
 .history-entry.is-expanded p {
   display: block;
   -webkit-line-clamp: unset;
+  line-clamp: unset;
   white-space: pre-wrap;
   overflow: visible;
 }

@@ -33,14 +33,24 @@ def region(text="ข้าวผัด", **values):
 class PhotoReadingTests(unittest.TestCase):
     def test_dense_typhoon_menu_batches_unread_regions_with_vision(self):
         from document_ocr import NoReadableTextError
+
         vision = MagicMock()
         vision.chat.completions.create.side_effect = self.readable_batch
         with (
-            patch.dict(os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test", "PHOTO_READING_FALLBACK": "groq"}),
+            patch.dict(
+                os.environ,
+                {
+                    "PHOTO_READING_PROVIDER": "typhoon",
+                    "TYPHOON_API_KEY": "test",
+                    "PHOTO_READING_FALLBACK": "groq",
+                },
+            ),
             patch("photo_reading._typhoon_client", return_value=MagicMock()),
             patch("photo_reading._transcribe_page", side_effect=NoReadableTextError("unread")),
         ):
-            result = verify_photo_readings(large_image(), [region(y=20+i*15) for i in range(43)], vision)
+            result = verify_photo_readings(
+                large_image(), [region(y=20 + i * 15) for i in range(43)], vision
+            )
         self.assertEqual(len(result), 43)
         self.assertTrue(all(r["reading_verified"] and not r["reading_review"] for r in result))
         self.assertEqual(vision.chat.completions.create.call_count, 9)
@@ -85,7 +95,9 @@ class PhotoReadingTests(unittest.TestCase):
     def test_typhoon_reads_individual_detected_crop(self):
         client = MagicMock()
         with (
-            patch.dict(os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test"}),
+            patch.dict(
+                os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test"}
+            ),
             patch("photo_reading._typhoon_client", return_value=client),
             patch("photo_reading._transcribe_page", return_value="ข้าวผัด") as transcribe,
         ):
@@ -97,11 +109,17 @@ class PhotoReadingTests(unittest.TestCase):
     def test_typhoon_verifies_high_confidence_native_ocr(self):
         client = MagicMock()
         with (
-            patch.dict(os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test"}),
+            patch.dict(
+                os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test"}
+            ),
             patch("photo_reading._typhoon_client", return_value=client),
             patch("photo_reading._transcribe_page", return_value="กาแฟเย็น 60 บาท"),
         ):
-            result = verify_photo_readings(large_image(), [region("กาแฟเย็น 60 บาที", height=40, confidence=90, native_ocr=True)], MagicMock())
+            result = verify_photo_readings(
+                large_image(),
+                [region("กาแฟเย็น 60 บาที", height=40, confidence=90, native_ocr=True)],
+                MagicMock(),
+            )
         self.assertTrue(result[0]["reading_verified"])
         self.assertEqual(result[0]["text"], "กาแฟเย็น 60 บาท")
 
@@ -109,7 +127,14 @@ class PhotoReadingTests(unittest.TestCase):
         client = MagicMock()
         sources = [region("หัวข้อ", confidence=95, native_ocr=True), region("ข้าวผัด", y=100)]
         with (
-            patch.dict(os.environ, {"PHOTO_READING_PROVIDER": "typhoon", "TYPHOON_API_KEY": "test", "PHOTO_READING_MAX_REQUESTS": "1"}),
+            patch.dict(
+                os.environ,
+                {
+                    "PHOTO_READING_PROVIDER": "typhoon",
+                    "TYPHOON_API_KEY": "test",
+                    "PHOTO_READING_MAX_REQUESTS": "1",
+                },
+            ),
             patch("photo_reading._typhoon_client", return_value=client),
             patch("photo_reading._transcribe_page", return_value="ข้าวผัด"),
         ):
